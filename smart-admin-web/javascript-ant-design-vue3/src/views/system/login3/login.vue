@@ -12,13 +12,12 @@
   <div class="login-container">
     <div class="box-item desc">
       <div class="welcome">
-        <p>欢迎登录 SmartAdmin V3</p>
-        <p class="sub-welcome">高质量代码的快速开发平台</p>
+        <p>天传樱科管理后台</p>
+        <p class="sub-welcome">快捷高效、品质保证</p>
       </div>
       <img class="welcome-img" src="/@/assets/images/login/left-bg2.png" />
     </div>
     <div class="box-item login">
-      <img class="login-qr" :src="loginQR" />
       <div class="login-title">账号登录</div>
       <a-form ref="formRef" class="login-form" :model="loginForm" :rules="rules">
         <a-form-item name="loginName">
@@ -38,27 +37,12 @@
         </a-form-item>
         <a-form-item>
           <a-checkbox v-model:checked="rememberPwd">记住密码</a-checkbox>
-          <span> ( 账号：admin, 密码：123456)</span>
         </a-form-item>
         <a-form-item>
           <div class="btn" @click="onLogin">登录</div>
         </a-form-item>
       </a-form>
       <div class="more">
-        <div class="title-box">
-          <p class="line"></p>
-          <p class="title">其他方式登录</p>
-          <p class="line"></p>
-        </div>
-        <div class="login-type">
-          <img src="/@/assets/images/login/wechat-icon.png" />
-          <img src="/@/assets/images/login/ali-icon.png" />
-          <img src="/@/assets/images/login/douyin-icon.png" />
-          <img src="/@/assets/images/login/qq-icon.png" />
-          <img src="/@/assets/images/login/weibo-icon.png" />
-          <img src="/@/assets/images/login/feishu-icon.png" />
-          <img src="/@/assets/images/login/google-icon.png" />
-        </div>
       </div>
     </div>
   </div>
@@ -71,7 +55,6 @@
   import { SmartLoading } from '/@/components/framework/smart-loading';
   import { LOGIN_DEVICE_ENUM } from '/@/constants/system/login-device-const';
   import { useUserStore } from '/@/store/modules/system/user';
-  import loginQR from '/@/assets/images/login/login-qr.png';
 
   import { buildRoutes } from '/@/router/index';
   import { smartSentry } from '/@/lib/smart-sentry';

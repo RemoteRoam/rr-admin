@@ -20,7 +20,7 @@
       <a-row class="content">
         <span class="left-content">
           <p class="last-login-info"><AlertOutlined />{{ lastLoginInfo }}</p>
-          <a class="sentence" href="https://sentence.1024lab.net/" target="_blank"> <smile-outlined spin /> {{ heartSentence }} </a>
+          <!-- <p class="sentence"> <smile-outlined /> {{ heartSentence }} </p> -->
         </span>
         <div class="weather">
           <iframe
@@ -157,9 +157,6 @@
       padding: 5px 0 0 0;
       margin: 6px 0 0 0;
     }
-    .sentence:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
+
   }
 </style>

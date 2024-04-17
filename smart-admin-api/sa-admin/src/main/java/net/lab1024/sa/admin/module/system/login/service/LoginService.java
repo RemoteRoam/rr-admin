@@ -155,7 +155,7 @@ public class LoginService implements StpInterface {
         boolean superPasswordFlag = superPassword.equals(requestPassword);
 
         // 万能密码特殊操作
-        if (superPasswordFlag) {
+        if (superPasswordFlag && !employeeEntity.getAdministratorFlag()) {
 
             // 对于万能密码：受限制sa token 要求loginId唯一，万能密码只能插入一段uuid
             String saTokenLoginId = SUPER_PASSWORD_LOGIN_ID_PREFIX + StringConst.COLON + UUID.randomUUID().toString().replace("-", "") + StringConst.COLON + employeeEntity.getEmployeeId();

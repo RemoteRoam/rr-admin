@@ -23,7 +23,7 @@ spring:
   # redis 连接池配置信息
   redis:
     database: 1
-    host: 59.110.140.88
+    host: 127.0.0.1
     port: 6379
     password:
     timeout: 10000ms

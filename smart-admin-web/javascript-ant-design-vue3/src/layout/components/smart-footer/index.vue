@@ -9,7 +9,7 @@
 -->
 <template>
   <div class="version">
-    <a target="_blank" href="javascript:void(0)"> SmartAdmin V3.x @copyright 河南·洛阳【1024创新实验室】 Since 2012-{{ currentYear }} </a>
+    <a target="_blank" href="javascript:void(0)"> RemoteRoam V1.0.0 @copyright 【远游】 Since 2024-{{ currentYear }} </a>
   </div>
 </template>
 <script setup>

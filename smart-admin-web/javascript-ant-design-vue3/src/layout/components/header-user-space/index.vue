@@ -10,20 +10,6 @@
 <template>
   <a-space :size="10">
     <div class="setting">
-      <a-input-search
-        @click="search"
-        style="margin-right: 30px; width: 250px"
-        placeholder="搜索：六边形工程师、1024"
-        enter-button="搜索"
-        size="small"
-      />
-      <!---消息通知--->
-      <HeaderMessage ref="headerMessage" />
-      <!---国际化--->
-      <!-- <a-button type="text" @click="showSetting" class="operate-icon">
-        <template #icon><switcher-outlined /></template>
-        i18n
-      </a-button> -->
       <!---设置--->
       <a-button type="text" @click="showSetting" class="operate-icon">
         <template #icon><setting-outlined /></template>
@@ -32,11 +18,6 @@
     <!---头像信息--->
     <div class="user-space-item">
       <HeaderAvatar />
-    </div>
-    <!---帮助文档--->
-    <div class="user-space-item" @click="showHelpDoc" v-if="!showHelpDocFlag">
-      <span>帮助文档</span>
-      <DoubleLeftOutlined v-if="!showHelpDocFlag" />
     </div>
 
     <HeaderSetting ref="headerSetting" />

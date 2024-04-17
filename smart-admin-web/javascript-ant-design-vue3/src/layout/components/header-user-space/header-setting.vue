@@ -76,9 +76,9 @@
       <a-form-item :label="$t('setting.footer')">
         <a-switch @change="changeFooterFlag" v-model:checked="formState.footerFlag" checked-children="显示" un-checked-children="隐藏" />
       </a-form-item>
-      <a-form-item :label="$t('setting.helpdoc')">
+      <!-- <a-form-item :label="$t('setting.helpdoc')">
         <a-switch @change="changeHelpDocFlag" v-model:checked="formState.helpDocFlag" checked-children="显示" un-checked-children="隐藏" />
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item :label="$t('setting.watermark')">
         <a-switch @change="changeWatermarkFlag" v-model:checked="formState.watermarkFlag" checked-children="显示" un-checked-children="隐藏" />
       </a-form-item>
