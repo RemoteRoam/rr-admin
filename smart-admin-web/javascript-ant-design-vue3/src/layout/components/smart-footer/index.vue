@@ -9,7 +9,7 @@
 -->
 <template>
   <div class="version">
-    <a target="_blank" href="javascript:void(0)"> RemoteRoam V1.0.0 @copyright 【远游】 Since 2024-{{ currentYear }} </a>
+    <a target="_blank" href="javascript:void(0)"> RemoteNomadStudio V1.0.0 @copyright 【远游工作室】 Since 2024-{{ currentYear }} </a>
   </div>
 </template>
 <script setup>

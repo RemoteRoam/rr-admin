@@ -1,0 +1,12 @@
+ ${AnsiColor.BRIGHT_GREEN}
+_____________________________
+    ____     _     _     __
+    /    )   /|   /    /    )
+---/___ /---/-| -/-----\-----
+  /    |   /  | /       \
+_/_____|__/___|/____(____/___
+
+Keep moving...
+v1.0 @copyright：【 Remote Nomad Studio 】
+
+${AnsiColor.DEFAULT}

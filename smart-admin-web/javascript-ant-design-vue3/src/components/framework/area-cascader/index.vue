@@ -17,6 +17,7 @@
     :options="areaOptionData"
     :placeholder="placeholder"
     :size="size"
+    change-on-select
     @change="handleChange"
   />
 </template>
