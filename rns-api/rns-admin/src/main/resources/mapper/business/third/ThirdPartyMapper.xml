@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.third.dao.ThirdPartyDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.third.domain.vo.ThirdPartyVO">
+        SELECT
+        *
+        FROM t_third_party
+        <where>
+            <!--公司名称-->
+            <if test="queryForm.name != null and queryForm.name != ''">
+                        AND INSTR(t_third_party.name,#{queryForm.name})
+            </if>
+            <!--三方类型-->
+            <if test="queryForm.type != null">
+                AND t_third_party.type = #{queryForm.type}
+            </if>
+            <!--联系人-->
+            <if test="queryForm.contact != null and queryForm.contact != ''">
+                        AND INSTR(t_third_party.contact,#{queryForm.contact})
+            </if>
+            <!--联系人电话-->
+            <if test="queryForm.contactPhone != null and queryForm.contactPhone != ''">
+                        AND INSTR(t_third_party.contact_phone,#{queryForm.contactPhone})
+            </if>
+            <!--省份-->
+            <if test="queryForm.province != null">
+                AND t_third_party.province = #{queryForm.province}
+            </if>
+            <!--市-->
+            <if test="queryForm.city != null">
+                AND t_third_party.city = #{queryForm.city}
+            </if>
+            <!--区县-->
+            <if test="queryForm.district != null">
+                AND t_third_party.district = #{queryForm.district}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t_third_party.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t_third_party.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t_third_party.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="batchUpdateDeleted">
+        update t_third_party set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_third_party set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+</mapper>
