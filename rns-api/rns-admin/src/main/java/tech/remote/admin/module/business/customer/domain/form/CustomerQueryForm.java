@@ -4,6 +4,8 @@ import tech.remote.base.common.domain.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 /**
  * 客户表 分页查询表单
  *
@@ -44,5 +46,14 @@ public class CustomerQueryForm extends PageParam{
 
     @Schema(description = "工厂区县")
     private String factoryDistrict;
+
+    @Schema(description = "创建人")
+    private Long createUserId;
+
+    @Schema(description = "创建时间")
+    private LocalDate createTimeBegin;
+
+    @Schema(description = "创建时间")
+    private LocalDate createTimeEnd;
 
 }

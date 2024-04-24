@@ -1,8 +1,10 @@
 package tech.remote.admin.module.business.customer.domain.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.common.json.serializer.DictValueVoSerializer;
 
 /**
  * 客户表 列表VO
@@ -23,6 +25,7 @@ public class CustomerVO {
     private String customerName;
 
     @Schema(description = "客户级别")
+    @JsonSerialize(using = DictValueVoSerializer.class)
     private String customerLevel;
 
     @Schema(description = "联系人")

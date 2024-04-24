@@ -1,8 +1,10 @@
 package tech.remote.admin.module.business.third.domain.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.common.json.serializer.DictValueVoSerializer;
 
 /**
  * 三方机构 列表VO
@@ -22,7 +24,8 @@ public class ThirdPartyVO {
     @Schema(description = "公司名称")
     private String name;
 
-    @Schema(description = "三方类型")THIRD_PARTY
+    @Schema(description = "三方类型")
+    @JsonSerialize(using = DictValueVoSerializer.class)
     private String type;
 
     @Schema(description = "联系人")

@@ -15,9 +15,10 @@
     :showSearch="true"
     :allowClear="true"
     :size="size"
+    optionFilterProp="label"
     @change="onChange"
   >
-    <a-select-option v-for="item in employeeList" :key="item.employeeId" :value="item.employeeId">
+    <a-select-option v-for="item in employeeList" :key="item.employeeId" :value="item.employeeId" :label="item.actualName">
       {{ item.actualName }}
       <template v-if="item.departmentName"> （{{ item.departmentName }}） </template>
     </a-select-option>

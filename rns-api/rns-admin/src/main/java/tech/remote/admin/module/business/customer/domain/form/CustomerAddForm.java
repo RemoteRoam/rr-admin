@@ -6,6 +6,8 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import tech.remote.base.common.json.deserializer.DictValueVoDeserializer;
 
+import java.time.LocalDateTime;
+
 /**
  * 客户表 新建表单
  *
@@ -78,5 +80,11 @@ public class CustomerAddForm {
 
     @Schema(description = "主营业务")
     private String business;
+
+    @Schema(description = "创建人")
+    private Long createUserId;
+
+    @Schema(description = "创建人姓名")
+    private String createUserName;
 
 }

@@ -84,4 +84,11 @@ public class CustomerUpdateForm {
     @Schema(description = "主营业务")
     private String business;
 
+    @Schema(description = "更新人")
+    private Long updateUserId;
+
+    @Schema(description = "更新人姓名")
+    private String updateUserName;
+
+
 }

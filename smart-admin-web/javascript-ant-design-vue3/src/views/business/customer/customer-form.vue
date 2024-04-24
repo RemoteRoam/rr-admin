@@ -119,6 +119,8 @@
       let data = result.data;
       Object.assign(form, data);
       nextTick(() => {
+        console.log(data.provinceName);
+        console.log(data.factoryProvinceName);
         // 省市区不存在，不需要赋值
         if (!data.provinceName) {
           return;
@@ -155,7 +157,6 @@
             label: data.factoryDistrictName,
           },
         ];
-        console.log(area.value);
         formRef.value.clearValidate();
       });
     } catch (error) {
@@ -248,13 +249,17 @@
       district: '',
       districtName: '',
     });
+        console.log(selectedOptions);
+        console.log(area);
     if (!_.isEmpty(selectedOptions)) {
       // 地区信息
       form.province = area.value[0].value;
       form.provinceName = area.value[0].label;
 
-      form.city = area.value[1].value;
-      form.cityName = area.value[1].label;
+      if (area.value[1]) {
+        form.city = area.value[1].value;
+        form.cityName = area.value[1].label;
+      }
       if (area.value[2]) {
         form.district = area.value[2].value;
         form.districtName = area.value[2].label;
@@ -276,8 +281,10 @@
       form.factoryProvince = factoryArea.value[0].value;
       form.factoryProvinceName = factoryArea.value[0].label;
 
-      form.factoryCity = factoryArea.value[1].value;
-      form.factoryCityName = factoryArea.value[1].label;
+      if (factoryArea.value[1]) {
+        form.factoryCity = factoryArea.value[1].value;
+        form.factoryCityName = factoryArea.value[1].label;
+      }
       if (area.value[2]) {
         form.factoryDistrict = factoryArea.value[2].value;
         form.factoryDistrictName = factoryArea.value[2].label;

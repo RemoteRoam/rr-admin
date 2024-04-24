@@ -10,6 +10,7 @@ import tech.remote.admin.module.business.customer.domain.form.CustomerUpdateForm
 import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
 import tech.remote.admin.module.business.customer.service.CustomerService;
 import tech.remote.admin.module.business.oa.enterprise.domain.vo.EnterpriseVO;
+import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -46,12 +48,18 @@ public class CustomerController {
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/customer/add")
     public ResponseDTO<String> add(@RequestBody @Valid CustomerAddForm addForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        addForm.setCreateUserId(requestUser.getUserId());
+        addForm.setCreateUserName(requestUser.getUserName());
         return customerService.add(addForm);
     }
 
     @Operation(summary = "更新 @author cbh")
     @PostMapping("/customer/update")
     public ResponseDTO<String> update(@RequestBody @Valid CustomerUpdateForm updateForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        updateForm.setUpdateUserId(requestUser.getUserId());
+        updateForm.setUpdateUserName(requestUser.getUserName());
         return customerService.update(updateForm);
     }
 

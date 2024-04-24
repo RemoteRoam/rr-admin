@@ -58,23 +58,6 @@ public class ThirdPartyUpdateForm {
     @Schema(description = "详细地址")
     private String address;
 
-    @Schema(description = "禁用状态", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "禁用状态 不能为空")
-    private Integer disabledFlag;
-
-    @Schema(description = "删除状态", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "删除状态 不能为空")
-    private Integer deletedFlag;
-
-    @Schema(description = "创建人")
-    private Long createUserId;
-
-    @Schema(description = "创建人姓名")
-    private String createUserName;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
     @Schema(description = "更新人")
     private Long updateUserId;
 

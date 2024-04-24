@@ -34,10 +34,10 @@ public interface ThirdPartyDao extends BaseMapper<ThirdPartyEntity> {
     /**
      * 更新删除状态
      */
-    long updateDeleted(@Param("id")Long id,@Param("${deletedFlag}")boolean deletedFlag);
+    long updateDeleted(@Param("id")Long id,@Param("deletedFlag")boolean deletedFlag);
     /**
      * 批量更新删除状态
      */
-    void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("${deletedFlag}")boolean deletedFlag);
+    void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("deletedFlag")boolean deletedFlag);
 
 }

@@ -1,19 +1,19 @@
 <!--
-  * 客户表
+  * 三方机构
   *
   * @Author:    cbh
-  * @Date:      2024-04-23 12:10:04
+  * @Date:      2024-04-24 09:19:13
   * @Copyright  Remote Nomad Studio
 -->
 <template>
     <!---------- 查询表单form begin ----------->
     <a-form class="smart-query-form">
         <a-row class="smart-query-form-row">
-            <a-form-item label="客户名称" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.customerName" placeholder="客户名称" />
+            <a-form-item label="公司名称" class="smart-query-form-item">
+                <a-input style="width: 150px" v-model:value="queryForm.name" placeholder="公司名称" />
             </a-form-item>
-            <a-form-item label="客户级别" class="smart-query-form-item">
-                <DictSelect key-code="CUSTOMER_LEVEL" v-model:value="queryForm.customerLevel" width="150px" />
+            <a-form-item label="三方类型" class="smart-query-form-item">
+                <DictSelect width="150px" v-model:value="queryForm.type" keyCode="THIRD_PARTY" placeholder="三方类型"/>
             </a-form-item>
             <a-form-item label="联系人" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.contact" placeholder="联系人" />
@@ -21,13 +21,10 @@
             <a-form-item label="联系人电话" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.contactPhone" placeholder="联系人电话" />
             </a-form-item>
-            <a-form-item class="smart-query-form-item" label="所在城市">
-                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="area" placeholder="请选择所在城市" @change="changeArea" />
-            </a-form-item>
         </a-row>
         <a-row class="smart-query-form-row">
-            <a-form-item class="smart-query-form-item" label="工厂所在城市">
-                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="factoryArea" placeholder="请选择所在城市" @change="changeFactoryArea" />
+            <a-form-item class="smart-query-form-item" label="所在城市">
+                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="area" placeholder="请选择所在城市" @change="changeArea" />
             </a-form-item>
             <a-form-item label="创建人" class="smart-query-form-item">
                 <EmployeeSelect ref="employeeSelect" placeholder="请选择创建人" width="200px" v-model:value="queryForm.createUserId" :leaveFlag="false" />
@@ -81,14 +78,14 @@
                 size="small"
                 :dataSource="tableData"
                 :columns="columns"
-                rowKey="customerId"
+                rowKey="id"
                 bordered
                 :loading="tableLoading"
                 :pagination="false"
                 :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
         >
             <template #bodyCell="{ text, record, column }">
-                <template v-if="column.dataIndex === 'customerLevel'">
+                <template v-if="column.dataIndex === 'type'">
                     <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
@@ -117,7 +114,7 @@
             />
         </div>
 
-        <CustomerForm  ref="formRef" @reloadList="queryData"/>
+        <ThirdPartyForm  ref="formRef" @reloadList="queryData"/>
 
     </a-card>
 </template>
@@ -125,28 +122,27 @@
     import { reactive, ref, onMounted } from 'vue';
     import { message, Modal } from 'ant-design-vue';
     import { SmartLoading } from '/@/components/framework/smart-loading';
-    import { customerApi } from '/@/api/business/customer/customer-api';
+    import { thirdPartyApi } from '/@/api/business/third/third-party-api';
     import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
     import { smartSentry } from '/@/lib/smart-sentry';
-    import _ from 'lodash';
     import TableOperator from '/@/components/support/table-operator/index.vue';
-    import CustomerForm from './customer-form.vue';
+    import ThirdPartyForm from './third-party-form.vue';
+    import { defaultTimeRanges } from '/@/lib/default-time-ranges';
     import DictSelect from '/@/components/support/dict-select/index.vue';
     import AreaCascader from '/@/components/framework/area-cascader/index.vue';
     import EmployeeSelect from '/@/components/system/employee-select/index.vue';
-    import { defaultTimeRanges } from '/@/lib/default-time-ranges';
+    import _ from 'lodash';
     // ---------------------------- 表格列 ----------------------------
 
     const columns = ref([
         {
-            title: '客户名称',
-            dataIndex: 'customerName',
-            width: 150,
+            title: '公司名称',
+            dataIndex: 'name',
             ellipsis: true,
         },
         {
-            title: '客户级别',
-            dataIndex: 'customerLevel',
+            title: '三方类型',
+            dataIndex: 'type',
             ellipsis: true,
         },
         {
@@ -157,8 +153,8 @@
         {
             title: '联系人电话',
             dataIndex: 'contactPhone',
-            width: 120,
             ellipsis: true,
+            width: 120,
         },
         {
             title: '省份',
@@ -176,18 +172,8 @@
             ellipsis: true,
         },
         {
-            title: '工厂省份',
-            dataIndex: 'factoryProvinceName',
-            ellipsis: true,
-        },
-        {
-            title: '工厂城市',
-            dataIndex: 'factoryCityName',
-            ellipsis: true,
-        },
-        {
-            title: '工厂区县',
-            dataIndex: 'factoryDistrictName',
+            title: '详细地址',
+            dataIndex: 'address',
             ellipsis: true,
         },
         {
@@ -223,16 +209,13 @@
     // ---------------------------- 查询数据表单和方法 ----------------------------
 
     const queryFormState = {
-        customerName: undefined, //客户名称
-        customerLevel: undefined, //客户级别
+        name: undefined, //公司名称
+        type: undefined, //三方类型
         contact: undefined, //联系人
         contactPhone: undefined, //联系人电话
         province: undefined, //省份
         city: undefined, //市
         district: undefined, //区县
-        factoryProvince: undefined, //工厂省份
-        factoryCity: undefined, //工厂市
-        factoryDistrict: undefined, //工厂区县
         createUserId: undefined, //创建人
         createTime: [], //创建时间
         createTimeBegin: undefined, //创建时间 开始
@@ -240,9 +223,6 @@
         pageNum: 1,
         pageSize: 10,
     };
-
-    const area = ref([]);
-    const factoryArea = ref([]);
     // 查询表单form
     const queryForm = reactive({ ...queryFormState });
     // 表格加载loading
@@ -262,49 +242,11 @@
         queryData();
     }
 
-  function changeArea(value, selectedOptions) {
-    Object.assign(queryForm, {
-      province: '',
-      city: '',
-      district: '',
-    });
-    if (!_.isEmpty(selectedOptions)) {
-      // 地区信息
-      queryForm.province = area.value[0].value;
-
-      if (area.value[1]) {
-        queryForm.city = area.value[1].value;
-      }
-      if (area.value[2]) {
-        queryForm.district = area.value[2].value;
-      }
-    }
-  }
-
-  function changeFactoryArea(value, selectedOptions) {
-    Object.assign(queryForm, {
-      factoryProvince: '',
-      factoryCity: '',
-      factoryDistrict: '',
-    });
-    if (!_.isEmpty(selectedOptions)) {
-      // 地区信息
-      queryForm.factoryProvince = factoryArea.value[0].value;
-      queryForm.factoryCity = factoryArea.value[1].value;
-      queryForm.factoryDistrict = factoryArea.value[2].value;
-    }
-  }
-
-    function onChangeCreateTime(dates, dateStrings){
-        queryForm.createTimeBegin = dateStrings[0];
-        queryForm.createTimeEnd = dateStrings[1];
-    }
-
     // 查询数据
     async function queryData() {
         tableLoading.value = true;
         try {
-            let queryResult = await customerApi.queryPage(queryForm);
+            let queryResult = await thirdPartyApi.queryPage(queryForm);
             tableData.value = queryResult.data.list;
             total.value = queryResult.data.total;
         } catch (e) {
@@ -312,6 +254,11 @@
         } finally {
             tableLoading.value = false;
         }
+    }
+
+    function onChangeCreateTime(dates, dateStrings){
+        queryForm.createTimeBegin = dateStrings[0];
+        queryForm.createTimeEnd = dateStrings[1];
     }
 
 
@@ -347,7 +294,7 @@
             let deleteForm = {
                 goodsIdList: selectedRowKeyList.value,
             };
-            await customerApi.delete(data.customerId);
+            await thirdPartyApi.delete(data.id);
             message.success('删除成功');
             queryData();
         } catch (e) {
@@ -385,7 +332,7 @@
     async function requestBatchDelete() {
         try {
             SmartLoading.show();
-            await customerApi.batchDelete(selectedRowKeyList.value);
+            await thirdPartyApi.batchDelete(selectedRowKeyList.value);
             message.success('删除成功');
             queryData();
         } catch (e) {

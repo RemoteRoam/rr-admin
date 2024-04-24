@@ -2,11 +2,14 @@ package tech.remote.admin.module.business.third.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import tech.remote.admin.constant.AdminSwaggerTagConst;
+import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyAddForm;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyQueryForm;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyUpdateForm;
 import tech.remote.admin.module.business.third.domain.vo.ThirdPartyVO;
 import tech.remote.admin.module.business.third.service.ThirdPartyService;
+import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -28,7 +32,7 @@ import javax.validation.Valid;
  */
 
 @RestController
-@Tag(name = "")
+@Tag(name = AdminSwaggerTagConst.BaseManagement.CUSTOMER_THIRD_PARTY)
 public class ThirdPartyController {
 
     @Resource
@@ -43,12 +47,18 @@ public class ThirdPartyController {
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/thirdParty/add")
     public ResponseDTO<String> add(@RequestBody @Valid ThirdPartyAddForm addForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        addForm.setCreateUserId(requestUser.getUserId());
+        addForm.setCreateUserName(requestUser.getUserName());
         return thirdPartyService.add(addForm);
     }
 
     @Operation(summary = "更新 @author cbh")
     @PostMapping("/thirdParty/update")
     public ResponseDTO<String> update(@RequestBody @Valid ThirdPartyUpdateForm updateForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        updateForm.setUpdateUserId(requestUser.getUserId());
+        updateForm.setUpdateUserName(requestUser.getUserName());
         return thirdPartyService.update(updateForm);
     }
 
@@ -62,5 +72,11 @@ public class ThirdPartyController {
     @GetMapping("/thirdParty/delete/{id}")
     public ResponseDTO<String> batchDelete(@PathVariable Long id) {
         return thirdPartyService.delete(id);
+    }
+
+    @Operation(summary = "查询详情 @author cbh")
+    @GetMapping("/thirdParty/get/{id}")
+    public ResponseDTO<ThirdPartyVO> getDetail(@PathVariable Long id) {
+        return ResponseDTO.ok(thirdPartyService.getDetail(id));
     }
 }

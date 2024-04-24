@@ -19,10 +19,6 @@ import tech.remote.base.common.json.deserializer.DictValueVoDeserializer;
 @Data
 public class ThirdPartyAddForm {
 
-    @Schema(description = "三方ID", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "三方ID 不能为空")
-    private Long id;
-
     @Schema(description = "公司名称", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "公司名称 不能为空")
     private String name;
@@ -58,14 +54,6 @@ public class ThirdPartyAddForm {
     @Schema(description = "详细地址")
     private String address;
 
-    @Schema(description = "禁用状态", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "禁用状态 不能为空")
-    private Integer disabledFlag;
-
-    @Schema(description = "删除状态", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "删除状态 不能为空")
-    private Integer deletedFlag;
-
     @Schema(description = "创建人")
     private Long createUserId;
 
@@ -74,14 +62,5 @@ public class ThirdPartyAddForm {
 
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
-
-    @Schema(description = "更新人")
-    private Long updateUserId;
-
-    @Schema(description = "更新人姓名")
-    private String updateUserName;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
 
 }

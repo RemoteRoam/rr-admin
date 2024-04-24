@@ -1,6 +1,10 @@
 package tech.remote.admin.module.business.third.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+import tech.remote.admin.module.business.customer.domain.entity.CustomerEntity;
+import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
 import tech.remote.admin.module.business.third.dao.ThirdPartyDao;
 import tech.remote.admin.module.business.third.domain.entity.ThirdPartyEntity;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyAddForm;
@@ -89,5 +93,10 @@ public class ThirdPartyService {
 
         thirdPartyDao.updateDeleted(id,true);
         return ResponseDTO.ok();
+    }
+
+    public ThirdPartyVO getDetail(Long id) {
+        ThirdPartyEntity entity = thirdPartyDao.selectById(id);
+        return SmartBeanUtil.copy(entity, ThirdPartyVO.class);
     }
 }

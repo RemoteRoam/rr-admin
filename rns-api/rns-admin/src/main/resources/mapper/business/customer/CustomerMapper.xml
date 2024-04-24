@@ -49,6 +49,17 @@
             <if test="queryForm.factoryDistrict != null and queryForm.factoryDistrict != ''">
                 AND t_customer.factory_district = #{queryForm.factoryDistrict}
             </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t_customer.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t_customer.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t_customer.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
         </where>
     </select>
 
