@@ -50,4 +50,8 @@ export const customerApi = {
       return getRequest(`/customer/get/${customerId}`);
   },
 
+    queryList: () => {
+        return getRequest(`/customer/query/list`);
+    },
+
 };

@@ -68,3 +68,15 @@ export const DATA_TYPE_ENUM = {
   
 };
 
+export const SOURCE_TYPE_ENUM = {
+  EXTERNAL: {
+    value: 1,
+    desc: '外部',
+  },
+  INTERNAL: {
+    value: 2,
+    desc: '内部',
+  },
+  
+};
+

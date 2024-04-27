@@ -50,4 +50,11 @@ export const thirdPartyApi = {
       return getRequest(`/thirdParty/get/${id}`);
   },
 
+    queryList: (type) => {
+        let query = '';
+        if (type) {
+            query = `?type=${type}`;
+        }
+        return getRequest(`/thirdParty/query/list${query}`);
+    },
 };
