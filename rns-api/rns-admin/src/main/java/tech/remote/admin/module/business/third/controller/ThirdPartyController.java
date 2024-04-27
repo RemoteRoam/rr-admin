@@ -1,9 +1,8 @@
 package tech.remote.admin.module.business.third.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import tech.remote.admin.constant.AdminSwaggerTagConst;
-import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
+import tech.remote.admin.module.business.oa.enterprise.domain.vo.EnterpriseListVO;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyAddForm;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyQueryForm;
 import tech.remote.admin.module.business.third.domain.form.ThirdPartyUpdateForm;
@@ -13,15 +12,13 @@ import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 三方机构 Controller
@@ -32,7 +29,7 @@ import javax.validation.Valid;
  */
 
 @RestController
-@Tag(name = AdminSwaggerTagConst.BaseManagement.CUSTOMER_THIRD_PARTY)
+@Tag(name = AdminSwaggerTagConst.BaseManagement.THIRD_PARTY)
 public class ThirdPartyController {
 
     @Resource
@@ -78,5 +75,11 @@ public class ThirdPartyController {
     @GetMapping("/thirdParty/get/{id}")
     public ResponseDTO<ThirdPartyVO> getDetail(@PathVariable Long id) {
         return ResponseDTO.ok(thirdPartyService.getDetail(id));
+    }
+
+    @Operation(summary = "按照类型查询三方 @author cbh")
+    @GetMapping("/thirdParty/query/list")
+    public ResponseDTO<List<ThirdPartyVO>> queryList(@RequestParam(value = "type", required = false) String type) {
+        return thirdPartyService.queryList(type);
     }
 }

@@ -1,8 +1,7 @@
 package tech.remote.admin.module.business.customer.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import tech.remote.admin.constant.AdminSwaggerTagConst;
 import tech.remote.admin.module.business.customer.domain.form.CustomerAddForm;
 import tech.remote.admin.module.business.customer.domain.form.CustomerQueryForm;
@@ -10,19 +9,18 @@ import tech.remote.admin.module.business.customer.domain.form.CustomerUpdateForm
 import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
 import tech.remote.admin.module.business.customer.service.CustomerService;
 import tech.remote.admin.module.business.oa.enterprise.domain.vo.EnterpriseVO;
+import tech.remote.admin.module.business.third.domain.vo.ThirdPartyVO;
 import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 客户表 Controller
@@ -79,5 +77,11 @@ public class CustomerController {
     @GetMapping("/customer/get/{customerId}")
     public ResponseDTO<CustomerVO> getDetail(@PathVariable Long customerId) {
         return ResponseDTO.ok(customerService.getDetail(customerId));
+    }
+
+    @Operation(summary = "查询所有客户 @author cbh")
+    @GetMapping("/customer/query/list")
+    public ResponseDTO<List<CustomerVO>> queryList() {
+        return customerService.queryList();
     }
 }

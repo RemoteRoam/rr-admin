@@ -1,6 +1,7 @@
 package tech.remote.base.module.support.serialnumber.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import tech.remote.base.common.exception.BusinessException;
 import tech.remote.base.constant.RedisKeyConst;
 import tech.remote.base.module.support.redis.RedisService;
@@ -23,6 +24,7 @@ import java.util.List;
  * @Copyright <a href="http://www.remotenomad.tech">远游工作室</a>
  */
 @Slf4j
+@Service
 public class SerialNumberRedisService extends SerialNumberBaseService {
 
     private static final int MAX_GET_LOCK_COUNT = 5;

@@ -2,6 +2,8 @@ package tech.remote.admin.module.business.third.service;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.customer.domain.entity.CustomerEntity;
 import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
@@ -98,5 +100,16 @@ public class ThirdPartyService {
     public ThirdPartyVO getDetail(Long id) {
         ThirdPartyEntity entity = thirdPartyDao.selectById(id);
         return SmartBeanUtil.copy(entity, ThirdPartyVO.class);
+    }
+
+    public ResponseDTO<List<ThirdPartyVO>> queryList(String type) {
+        LambdaQueryWrapper<ThirdPartyEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(ThirdPartyEntity::getDeletedFlag, false);
+        lambdaQueryWrapper.eq(ThirdPartyEntity::getDisabledFlag, false);
+        lambdaQueryWrapper.eq(null != type , ThirdPartyEntity::getType, type);
+        lambdaQueryWrapper.orderByAsc(ThirdPartyEntity::getId);
+
+        List<ThirdPartyEntity> list = thirdPartyDao.selectList(lambdaQueryWrapper);
+        return ResponseDTO.ok(SmartBeanUtil.copyList(list, ThirdPartyVO.class));
     }
 }

@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *  
  * @Copyright  <a href="http://www.remotenomad.tech">远游工作室</a>
  */
-@Service
+
 public class SerialNumberInternService extends SerialNumberBaseService {
 
     /**

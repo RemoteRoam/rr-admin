@@ -20,6 +20,7 @@ public enum SerialNumberIdEnum implements BaseEnum {
     ORDER(1, "订单id"),
 
     CONTRACT(2, "合同id"),
+    PROJECT(3, "项目id"),
 
     ;
 

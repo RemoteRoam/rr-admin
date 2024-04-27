@@ -15,7 +15,11 @@ public class AdminSwaggerTagConst extends SwaggerTagConst {
 
     public static class BaseManagement {
         public static final String CUSTOMER_MANAGEMENT = "基础管理-客户管理";
-        public static final String CUSTOMER_THIRD_PARTY = "基础管理-三方管理";
+        public static final String THIRD_PARTY = "基础管理-三方管理";
+    }
+
+    public static class ProjectManagement {
+        public static final String SYSTEM_CERTIFICATION = "项目管理-体系认证";
     }
 
     public static class Business {

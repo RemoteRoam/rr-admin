@@ -2,6 +2,7 @@ package tech.remote.admin.module.business.customer.service;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.customer.dao.CustomerDao;
 import tech.remote.admin.module.business.customer.domain.entity.CustomerEntity;
@@ -9,6 +10,7 @@ import tech.remote.admin.module.business.customer.domain.form.CustomerAddForm;
 import tech.remote.admin.module.business.customer.domain.form.CustomerQueryForm;
 import tech.remote.admin.module.business.customer.domain.form.CustomerUpdateForm;
 import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
+import tech.remote.admin.module.business.third.domain.vo.ThirdPartyVO;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -96,5 +98,14 @@ public class CustomerService {
     public CustomerVO getDetail(Long customerId) {
         CustomerEntity entity = customerDao.selectById(customerId);
         return SmartBeanUtil.copy(entity, CustomerVO.class);
+    }
+
+    public ResponseDTO<List<CustomerVO>> queryList() {
+        LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
+        lambdaQueryWrapper.eq(CustomerEntity::getDisabledFlag, Boolean.FALSE);
+        lambdaQueryWrapper.orderByDesc(CustomerEntity::getCreateTime);
+        List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
+        return ResponseDTO.ok(SmartBeanUtil.copyList(list, CustomerVO.class));
     }
 }
