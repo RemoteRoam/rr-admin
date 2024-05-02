@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeSubListVO;
 
 /**
  * 体系认证表 列表VO
@@ -25,7 +28,7 @@ public class SystemCertificationVO {
     private String projectNo;
 
     @Schema(description = "项目类型")
-    private String projectType;
+    private Integer projectType;
 
     @Schema(description = "项目分类")
     private String category;
@@ -135,4 +138,6 @@ public class SystemCertificationVO {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "操作节点列表")
+    private List<ProjectNodeSubListVO> projectNodeSubList;
 }

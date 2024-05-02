@@ -1,1 +1,1 @@
-业务不需要此功能，故没有生成代码；
+package tech.remote.admin.module.business.typenode.domain.form;

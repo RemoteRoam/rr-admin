@@ -16,6 +16,6 @@ import lombok.Data;
 public class TypeNodeQueryForm extends PageParam{
 
     @Schema(description = "项目类型")
-    private String projectType;
+    private Integer projectType;
 
 }

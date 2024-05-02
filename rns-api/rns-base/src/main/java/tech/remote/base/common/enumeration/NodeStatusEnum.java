@@ -13,17 +13,27 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum DataTypeEnum implements BaseEnum {
+public enum NodeStatusEnum implements BaseEnum {
 
     /**
-     *普通数据
+     * 未开始
      */
-    NORMAL(1, "普通数据"),
+    INIT(0, "未开始"),
 
     /**
-     * 加密数据
+     * 处理中
      */
-    ENCRYPT(10, "加密数据"),
+    DOING(1, "处理中"),
+
+    /**
+     * 完成
+     */
+    OK(2, "完成"),
+
+    /**
+     * 跳过
+     */
+    JUMP(3, "跳过"),
     ;
     private final Integer value;
 

@@ -34,7 +34,10 @@ public class ProjectNodeVO {
     @Schema(description = "节点名称")
     private String nodeName;
 
-    @Schema(description = "状态（0未开始 1完成 2跳过）")
+    @Schema(description = "节点排序")
+    private Integer nodeSort;
+
+    @Schema(description = "状态（NodeStatusEnum）")
     private Integer status;
 
     @Schema(description = "跳过原因")

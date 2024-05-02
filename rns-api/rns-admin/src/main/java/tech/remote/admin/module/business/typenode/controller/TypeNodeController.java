@@ -1,8 +1,6 @@
 package tech.remote.admin.module.business.typenode.controller;
 
-import tech.remote.admin.module.business.typenode.domain.form.TypeNodeAddForm;
 import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQueryForm;
-import tech.remote.admin.module.business.typenode.domain.form.TypeNodeUpdateForm;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeVO;
 import tech.remote.admin.module.business.typenode.service.TypeNodeService;
 import tech.remote.base.common.domain.ResponseDTO;

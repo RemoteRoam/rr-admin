@@ -1,8 +1,9 @@
 package tech.remote.admin.module.business.projectnode.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 项目流程节点表 列表VO
@@ -13,7 +14,7 @@ import lombok.Data;
  */
 
 @Data
-public class ProjectNodeVO {
+public class ProjectNodeSubListVO {
 
 
     @Schema(description = "编号")
@@ -49,22 +50,5 @@ public class ProjectNodeVO {
     @Schema(description = "操作时间")
     private LocalDateTime operateTime;
 
-    @Schema(description = "创建人")
-    private Long createUserId;
-
-    @Schema(description = "创建人姓名")
-    private String createUserName;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新人")
-    private Long updateUserId;
-
-    @Schema(description = "更新人姓名")
-    private String updateUserName;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
 
 }

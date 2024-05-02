@@ -19,7 +19,7 @@ public class TypeNodeVO {
     private Long id;
 
     @Schema(description = "项目类型")
-    private String projectType;
+    private Integer projectType;
 
     @Schema(description = "节点ID")
     private Long nodeId;

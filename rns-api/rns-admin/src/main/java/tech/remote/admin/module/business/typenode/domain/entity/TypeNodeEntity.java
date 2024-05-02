@@ -27,7 +27,7 @@ public class TypeNodeEntity {
     /**
      * 项目类型
      */
-    private String projectType;
+    private Integer projectType;
 
     /**
      * 节点ID

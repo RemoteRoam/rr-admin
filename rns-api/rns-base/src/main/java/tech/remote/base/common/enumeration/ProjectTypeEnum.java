@@ -15,36 +15,17 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum SystemEnvironmentEnum implements BaseEnum {
-    /**
-     * dev
-     */
-    DEV(SystemEnvironmentNameConst.DEV, "开发环境"),
+public enum ProjectTypeEnum implements BaseEnum {
 
-    /**
-     * test
-     */
-    TEST(SystemEnvironmentNameConst.TEST, "测试环境"),
+    SC_INITIALIZATION(41, "体系初始"),
 
-    /**
-     * pre
-     */
-    PRE(SystemEnvironmentNameConst.PRE, "预发布环境"),
+    SC_SUPERVISION(42, "体系监督"),
 
-    /**
-     * prod
-     */
-    PROD(SystemEnvironmentNameConst.PROD, "生产环境");
+    SC_RE_CERTIFICATION(43, "再认证"),
 
-    private final String value;
+    SC_EXPANSION(44, "扩项");
+
+    private final Integer value;
 
     private final String desc;
-
-    public static final class SystemEnvironmentNameConst {
-        public static final String DEV = "dev";
-        public static final String TEST = "test";
-        public static final String PRE = "pre";
-        public static final String PROD = "prod";
-    }
-
 }

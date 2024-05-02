@@ -39,7 +39,7 @@ public class SystemCertificationEntity {
     /**
      * 项目类型
      */
-    private String projectType;
+    private Integer projectType;
 
     /**
      * 项目分类

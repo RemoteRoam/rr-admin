@@ -28,7 +28,7 @@ public class SystemCertificationUpdateForm {
     private String projectNo;
 
     @Schema(description = "项目类型")
-    private String projectType;
+    private Integer projectType;
 
     @Schema(description = "项目分类")
     private String category;

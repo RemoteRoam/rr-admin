@@ -1,11 +1,13 @@
 package tech.remote.admin.module.business.typenode.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.typenode.dao.TypeNodeDao;
 import tech.remote.admin.module.business.typenode.domain.entity.TypeNodeEntity;
-import tech.remote.admin.module.business.typenode.domain.form.TypeNodeAddForm;
+import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
 import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQueryForm;
-import tech.remote.admin.module.business.typenode.domain.form.TypeNodeUpdateForm;
+import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeVO;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
@@ -43,5 +45,14 @@ public class TypeNodeService {
         return pageResult;
     }
 
+
+    /**
+     * 根据项目类型和节点级别获取对应的节点列表
+     * @param query
+     * @return
+     */
+    public List<TypeNodeListVO> getTypeNodes(TypeNodeQuery query) {
+        return typeNodeDao.list(query);
+    }
 
 }

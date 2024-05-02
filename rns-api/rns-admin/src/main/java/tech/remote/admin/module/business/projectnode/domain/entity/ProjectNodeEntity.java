@@ -50,6 +50,11 @@ public class ProjectNodeEntity {
     private String nodeName;
 
     /**
+     * 节点排序
+     */
+    private Integer nodeSort;
+
+    /**
      * 状态（0未开始 1完成 2跳过）
      */
     private Integer status;

@@ -1,12 +1,24 @@
 package tech.remote.admin.module.business.projectnode.service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.projectnode.dao.ProjectNodeDao;
 import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
 import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeAddForm;
 import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeQueryForm;
 import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeUpdateForm;
 import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
+import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
+import tech.remote.base.common.enumeration.NodeStatusEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -25,10 +37,7 @@ import javax.annotation.Resource;
  */
 
 @Service
-public class ProjectNodeService {
-
-    @Resource
-    private ProjectNodeDao projectNodeDao;
+public class ProjectNodeService extends ServiceImpl<ProjectNodeDao, ProjectNodeEntity> {
 
     /**
      * 分页查询
@@ -38,7 +47,7 @@ public class ProjectNodeService {
      */
     public PageResult<ProjectNodeVO> queryPage(ProjectNodeQueryForm queryForm) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
-        List<ProjectNodeVO> list = projectNodeDao.queryPage(page, queryForm);
+        List<ProjectNodeVO> list = baseMapper.queryPage(page, queryForm);
         PageResult<ProjectNodeVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         return pageResult;
     }
@@ -48,7 +57,7 @@ public class ProjectNodeService {
      */
     public ResponseDTO<String> add(ProjectNodeAddForm addForm) {
         ProjectNodeEntity projectNodeEntity = SmartBeanUtil.copy(addForm, ProjectNodeEntity.class);
-        projectNodeDao.insert(projectNodeEntity);
+        baseMapper.insert(projectNodeEntity);
         return ResponseDTO.ok();
     }
 
@@ -60,8 +69,16 @@ public class ProjectNodeService {
      */
     public ResponseDTO<String> update(ProjectNodeUpdateForm updateForm) {
         ProjectNodeEntity projectNodeEntity = SmartBeanUtil.copy(updateForm, ProjectNodeEntity.class);
-        projectNodeDao.updateById(projectNodeEntity);
+        baseMapper.updateById(projectNodeEntity);
         return ResponseDTO.ok();
     }
 
+    public List<ProjectNodeEntity> getOperateNodeByProjectId(Long id) {
+        LambdaQueryWrapper<ProjectNodeEntity> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(ProjectNodeEntity::getProjectId, id);
+        wrapper.in(ProjectNodeEntity::getStatus, NodeStatusEnum.INIT.getValue(), NodeStatusEnum.DOING.getValue());
+        wrapper.orderByAsc(ProjectNodeEntity::getNodeSort);
+
+        return baseMapper.selectList(wrapper);
+    }
 }

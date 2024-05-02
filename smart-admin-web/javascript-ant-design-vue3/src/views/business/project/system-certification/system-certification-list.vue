@@ -115,9 +115,9 @@
                             </a>
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
-                                    <a-menu-item key="1">确认首款</a-menu-item>
-                                    <a-menu-item key="21">资料上报</a-menu-item>
-                                    <a-menu-item key="22">审核计划</a-menu-item>
+                            <a-menu-item v-for="node in record.projectNodeSubList" :key="node.nodeId">
+                                {{ node.nodeName }}
+                            </a-menu-item>
                                 </a-menu>
                             </template>
                         </a-dropdown>
