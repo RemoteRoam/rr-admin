@@ -91,7 +91,7 @@
 
     // ------------------------ 事件 ------------------------
 
-    const emits = defineEmits(['reloadList']);
+    const emits = defineEmits(['refresh']);
 
     // ------------------------ 显示与隐藏 ------------------------
     // 是否显示
@@ -119,8 +119,6 @@
       let data = result.data;
       Object.assign(form, data);
       nextTick(() => {
-        console.log(data.provinceName);
-        console.log(data.factoryProvinceName);
         // 省市区不存在，不需要赋值
         if (!data.provinceName) {
           return;
@@ -224,7 +222,7 @@
                 await customerApi.add(form);
             }
             message.success('操作成功');
-            emits('reloadList');
+            emits('refresh');
             onClose();
         } catch (err) {
             smartSentry.captureError(err);
@@ -285,7 +283,7 @@
         form.factoryCity = factoryArea.value[1].value;
         form.factoryCityName = factoryArea.value[1].label;
       }
-      if (area.value[2]) {
+      if (factoryArea.value[2]) {
         form.factoryDistrict = factoryArea.value[2].value;
         form.factoryDistrictName = factoryArea.value[2].label;
       }

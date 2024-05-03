@@ -47,7 +47,7 @@ public class CustomerEntity {
     /**
      * 省份
      */
-    private String province;
+    private Integer province;
 
     /**
      * 省份名称
@@ -57,7 +57,7 @@ public class CustomerEntity {
     /**
      * 市
      */
-    private String city;
+    private Integer city;
 
     /**
      * 城市名称
@@ -67,7 +67,7 @@ public class CustomerEntity {
     /**
      * 区县
      */
-    private String district;
+    private Integer district;
 
     /**
      * 区县名称
@@ -82,7 +82,7 @@ public class CustomerEntity {
     /**
      * 工厂省份
      */
-    private String factoryProvince;
+    private Integer factoryProvince;
 
     /**
      * 工厂省份名称
@@ -92,7 +92,7 @@ public class CustomerEntity {
     /**
      * 工厂市
      */
-    private String factoryCity;
+    private Integer factoryCity;
 
     /**
      * 工厂城市名称
@@ -102,7 +102,7 @@ public class CustomerEntity {
     /**
      * 工厂区县
      */
-    private String factoryDistrict;
+    private Integer factoryDistrict;
 
     /**
      * 工厂区县名称

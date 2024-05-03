@@ -34,34 +34,34 @@ public class CustomerVO {
     @Schema(description = "联系人电话")
     private String contactPhone;
 
-    private String province;
+    private Integer province;
 
     @Schema(description = "省份名称")
     private String provinceName;
 
-    private String city;
+    private Integer city;
 
     @Schema(description = "城市名称")
     private String cityName;
 
-    private String district;
+    private Integer district;
 
     @Schema(description = "区县名称")
     private String districtName;
 
     private String address;
 
-    private String factoryProvince;
+    private Integer factoryProvince;
 
     @Schema(description = "工厂省份名称")
     private String factoryProvinceName;
 
-    private String factoryCity;
+    private Integer factoryCity;
 
     @Schema(description = "工厂城市名称")
     private String factoryCityName;
 
-    private String factoryDistrict;
+    private Integer factoryDistrict;
 
     @Schema(description = "工厂区县名称")
     private String factoryDistrictName;
