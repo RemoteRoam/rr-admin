@@ -80,3 +80,23 @@ export const SOURCE_TYPE_ENUM = {
   
 };
 
+
+export const NODE_STATUS_ENUM = {
+  INIT: {
+    value: 0,
+    desc: '未开始',
+  },
+  DOING: {
+    value: 1,
+    desc: '处理中',
+  },
+  OK: {
+    value: 2,
+    desc: '完成',
+  },
+  JUMP: {
+    value: 3,
+    desc: '跳过',
+  },
+  
+};

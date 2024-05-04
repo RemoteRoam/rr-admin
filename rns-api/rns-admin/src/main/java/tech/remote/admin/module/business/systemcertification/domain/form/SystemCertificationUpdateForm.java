@@ -120,4 +120,12 @@ public class SystemCertificationUpdateForm {
     @Schema(description = "更新人姓名")
     private String updateUserName;
 
+    @Schema(description = "节点ID")
+    private Long nodeId;
+
+    @Schema(description = "状态（NodeStatusEnum）")
+    private Integer status;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 }

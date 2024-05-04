@@ -2,20 +2,21 @@ package tech.remote.admin.module.business.systemcertification.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
-import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeSubListVO;
-import tech.remote.admin.module.business.projectnode.service.ProjectNodeService;
 import tech.remote.admin.module.business.systemcertification.dao.SystemCertificationDao;
 import tech.remote.admin.module.business.systemcertification.domain.entity.SystemCertificationEntity;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationAddForm;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationQueryForm;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationUpdateForm;
 import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationVO;
+import tech.remote.admin.module.business.systemcertificationnode.domain.entity.SystemCertificationNodeEntity;
+import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
+import tech.remote.admin.module.business.systemcertificationnode.service.SystemCertificationNodeService;
+import tech.remote.admin.module.business.typenode.domain.entity.TypeNodeEntity;
 import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
 import tech.remote.admin.module.business.typenode.service.TypeNodeService;
@@ -26,7 +27,6 @@ import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections4.CollectionUtils;
-import tech.remote.base.module.support.reload.core.domain.SmartReloadItem;
 import tech.remote.base.module.support.serialnumber.constant.SerialNumberIdEnum;
 import tech.remote.base.module.support.serialnumber.service.SerialNumberService;
 
@@ -53,7 +53,7 @@ public class SystemCertificationService {
     private TypeNodeService typeNodeService;
 
     @Autowired
-    private ProjectNodeService projectNodeService;
+    private SystemCertificationNodeService systemCertificationNodeService;
 
     /**
      * 分页查询
@@ -65,8 +65,8 @@ public class SystemCertificationService {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<SystemCertificationVO> list = systemCertificationDao.queryPage(page, queryForm);
         for(SystemCertificationVO systemCertificationVO : list) {
-            List<ProjectNodeEntity> projectNodeList = projectNodeService.getOperateNodeByProjectId(systemCertificationVO.getId());
-            systemCertificationVO.setProjectNodeSubList(SmartBeanUtil.copyList(projectNodeList, ProjectNodeSubListVO.class));
+            List<SystemCertificationNodeEntity> systemCertificationNodeList = systemCertificationNodeService.getOperateNodeByProjectId(systemCertificationVO.getId());
+            systemCertificationVO.setSystemCertificationNodeList(SmartBeanUtil.copyList(systemCertificationNodeList, SystemCertificationNodeVO.class));
         }
         PageResult<SystemCertificationVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         return pageResult;
@@ -87,24 +87,24 @@ public class SystemCertificationService {
         query.setNodeLevel(1);
         query.setProjectType(addForm.getProjectType());
         List<TypeNodeListVO> typeNodeList = typeNodeService.getTypeNodes(query);
-        // 把typeNodeList插入到ProjectNode表中
-        List<ProjectNodeEntity> projectNodeList = new ArrayList<>();
+        // 把typeNodeList插入到SystemCertificationNode表中
+        List<SystemCertificationNodeEntity> systemCertificationNodeList = new ArrayList<>();
         for (TypeNodeListVO typeNode : typeNodeList) {
-            ProjectNodeEntity projectNodeEntity = new ProjectNodeEntity();
-            projectNodeEntity.setProjectId(systemCertificationEntity.getId());
-            projectNodeEntity.setNodeId(typeNode.getNodeId());
-            projectNodeEntity.setNodeName(typeNode.getNodeName());
-            projectNodeEntity.setNodeSort(typeNode.getNodeSort());
-            projectNodeEntity.setStatus(NodeStatusEnum.INIT.getValue());
-            projectNodeEntity.setOperateUserId(addForm.getCreateUserId());
-            projectNodeEntity.setOperateUserName(addForm.getCreateUserName());
-            projectNodeEntity.setOperateTime(LocalDateTime.now());
-            projectNodeEntity.setCreateUserId(addForm.getCreateUserId());
-            projectNodeEntity.setCreateUserName(addForm.getCreateUserName());
+            SystemCertificationNodeEntity systemCertificationNodeEntity = new SystemCertificationNodeEntity();
+            systemCertificationNodeEntity.setProjectId(systemCertificationEntity.getId());
+            systemCertificationNodeEntity.setNodeId(typeNode.getNodeId());
+            systemCertificationNodeEntity.setNodeName(typeNode.getNodeName());
+            systemCertificationNodeEntity.setNodeSort(typeNode.getNodeSort());
+            systemCertificationNodeEntity.setStatus(NodeStatusEnum.INIT.getValue());
+            systemCertificationNodeEntity.setOperateUserId(addForm.getCreateUserId());
+            systemCertificationNodeEntity.setOperateUserName(addForm.getCreateUserName());
+            systemCertificationNodeEntity.setOperateTime(LocalDateTime.now());
+            systemCertificationNodeEntity.setCreateUserId(addForm.getCreateUserId());
+            systemCertificationNodeEntity.setCreateUserName(addForm.getCreateUserName());
 
-            projectNodeList.add(projectNodeEntity);
+            systemCertificationNodeList.add(systemCertificationNodeEntity);
         }
-        projectNodeService.saveBatch(projectNodeList);
+        systemCertificationNodeService.saveBatch(systemCertificationNodeList);
 
         return ResponseDTO.ok();
     }
@@ -118,6 +118,20 @@ public class SystemCertificationService {
     public ResponseDTO<String> update(SystemCertificationUpdateForm updateForm) {
         SystemCertificationEntity systemCertificationEntity = SmartBeanUtil.copy(updateForm, SystemCertificationEntity.class);
         systemCertificationDao.updateById(systemCertificationEntity);
+
+        // 根据projectId和nodeId为条件，更新systemCertificationNode的状态
+        LambdaUpdateWrapper<SystemCertificationNodeEntity> updateWrapper = new LambdaUpdateWrapper<>();
+
+        // Set the condition for the update
+        updateWrapper.eq(SystemCertificationNodeEntity::getProjectId, updateForm.getId())
+                .eq(SystemCertificationNodeEntity::getNodeId, updateForm.getNodeId())
+                .in(SystemCertificationNodeEntity::getStatus, NodeStatusEnum.INIT.getValue(), NodeStatusEnum.DOING.getValue());
+
+        // Set the field and its new value to update
+        updateWrapper.set(SystemCertificationNodeEntity::getStatus, updateForm.getStatus());
+
+        // Execute the update
+        systemCertificationNodeService.update(updateWrapper);
         return ResponseDTO.ok();
     }
 

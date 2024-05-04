@@ -29,13 +29,13 @@ public class ThirdPartyQueryForm extends PageParam{
     private String contactPhone;
 
     @Schema(description = "省份")
-    private String province;
+    private Integer province;
 
     @Schema(description = "市")
-    private String city;
+    private Integer city;
 
     @Schema(description = "区县")
-    private String district;
+    private Integer district;
 
     @Schema(description = "创建人")
     private Long createUserId;

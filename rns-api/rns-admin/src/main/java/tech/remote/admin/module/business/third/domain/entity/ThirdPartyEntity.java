@@ -47,7 +47,7 @@ public class ThirdPartyEntity {
     /**
      * 省份
      */
-    private String province;
+    private Integer province;
 
     /**
      * 省份名称
@@ -57,7 +57,7 @@ public class ThirdPartyEntity {
     /**
      * 市
      */
-    private String city;
+    private Integer city;
 
     /**
      * 城市名称
@@ -67,7 +67,7 @@ public class ThirdPartyEntity {
     /**
      * 区县
      */
-    private String district;
+    private Integer district;
 
     /**
      * 区县名称

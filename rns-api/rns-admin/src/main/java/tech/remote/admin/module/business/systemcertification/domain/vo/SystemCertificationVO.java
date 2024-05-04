@@ -8,6 +8,7 @@ import java.util.List;
 
 import lombok.Data;
 import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeSubListVO;
+import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
 
 /**
  * 体系认证表 列表VO
@@ -139,5 +140,5 @@ public class SystemCertificationVO {
     private LocalDateTime updateTime;
 
     @Schema(description = "操作节点列表")
-    private List<ProjectNodeSubListVO> projectNodeSubList;
+    private List<SystemCertificationNodeVO> systemCertificationNodeList;
 }

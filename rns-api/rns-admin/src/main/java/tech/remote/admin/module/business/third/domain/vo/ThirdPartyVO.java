@@ -35,19 +35,19 @@ public class ThirdPartyVO {
     private String contactPhone;
 
     @Schema(description = "省份")
-    private String province;
+    private Integer province;
 
     @Schema(description = "省份名称")
     private String provinceName;
 
     @Schema(description = "市")
-    private String city;
+    private Integer city;
 
     @Schema(description = "城市名称")
     private String cityName;
 
     @Schema(description = "区县")
-    private String district;
+    private Integer district;
 
     @Schema(description = "区县名称")
     private String districtName;

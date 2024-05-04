@@ -1,12 +1,18 @@
 package tech.remote.admin.module.business.systemcertificationnode.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
 import tech.remote.admin.module.business.systemcertificationnode.dao.SystemCertificationNodeDao;
 import tech.remote.admin.module.business.systemcertificationnode.domain.entity.SystemCertificationNodeEntity;
 import tech.remote.admin.module.business.systemcertificationnode.domain.form.SystemCertificationNodeAddForm;
 import tech.remote.admin.module.business.systemcertificationnode.domain.form.SystemCertificationNodeQueryForm;
 import tech.remote.admin.module.business.systemcertificationnode.domain.form.SystemCertificationNodeUpdateForm;
 import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
+import tech.remote.base.common.enumeration.NodeStatusEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -25,7 +31,7 @@ import javax.annotation.Resource;
  */
 
 @Service
-public class SystemCertificationNodeService {
+public class SystemCertificationNodeService extends ServiceImpl<SystemCertificationNodeDao, SystemCertificationNodeEntity> {
 
     @Resource
     private SystemCertificationNodeDao systemCertificationNodeDao;
@@ -64,4 +70,12 @@ public class SystemCertificationNodeService {
         return ResponseDTO.ok();
     }
 
+    public List<SystemCertificationNodeEntity> getOperateNodeByProjectId(Long id) {
+        LambdaQueryWrapper<SystemCertificationNodeEntity> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(SystemCertificationNodeEntity::getProjectId, id);
+        wrapper.in(SystemCertificationNodeEntity::getStatus, NodeStatusEnum.INIT.getValue(), NodeStatusEnum.DOING.getValue());
+        wrapper.orderByAsc(SystemCertificationNodeEntity::getNodeSort);
+
+        return baseMapper.selectList(wrapper);
+    }
 }
