@@ -7,6 +7,9 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tech.remote.admin.module.business.node.domain.entity.NodeEntity;
+import tech.remote.admin.module.business.node.manager.NodeManager;
 import tech.remote.admin.module.business.systemcertification.dao.SystemCertificationDao;
 import tech.remote.admin.module.business.systemcertification.domain.entity.SystemCertificationEntity;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationAddForm;
@@ -16,17 +19,20 @@ import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCer
 import tech.remote.admin.module.business.systemcertificationnode.domain.entity.SystemCertificationNodeEntity;
 import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
 import tech.remote.admin.module.business.systemcertificationnode.service.SystemCertificationNodeService;
-import tech.remote.admin.module.business.typenode.domain.entity.TypeNodeEntity;
 import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
 import tech.remote.admin.module.business.typenode.service.TypeNodeService;
 import tech.remote.base.common.enumeration.NodeStatusEnum;
+import tech.remote.base.common.enumeration.ProjectStatusEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections4.CollectionUtils;
+import tech.remote.base.module.support.datatracer.constant.DataTracerTypeEnum;
+import tech.remote.base.module.support.datatracer.domain.form.DataTracerForm;
+import tech.remote.base.module.support.datatracer.service.DataTracerService;
 import tech.remote.base.module.support.serialnumber.constant.SerialNumberIdEnum;
 import tech.remote.base.module.support.serialnumber.service.SerialNumberService;
 
@@ -55,6 +61,12 @@ public class SystemCertificationService {
     @Autowired
     private SystemCertificationNodeService systemCertificationNodeService;
 
+    @Resource
+    private DataTracerService dataTracerService;
+
+    @Resource
+    private NodeManager nodeManager;
+
     /**
      * 分页查询
      *
@@ -65,7 +77,7 @@ public class SystemCertificationService {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<SystemCertificationVO> list = systemCertificationDao.queryPage(page, queryForm);
         for(SystemCertificationVO systemCertificationVO : list) {
-            List<SystemCertificationNodeEntity> systemCertificationNodeList = systemCertificationNodeService.getOperateNodeByProjectId(systemCertificationVO.getId());
+            List<SystemCertificationNodeEntity> systemCertificationNodeList = systemCertificationNodeService.getOperateNodesByProjectId(systemCertificationVO.getId());
             systemCertificationVO.setSystemCertificationNodeList(SmartBeanUtil.copyList(systemCertificationNodeList, SystemCertificationNodeVO.class));
         }
         PageResult<SystemCertificationVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
@@ -75,11 +87,13 @@ public class SystemCertificationService {
     /**
      * 添加
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> add(SystemCertificationAddForm addForm) {
         SystemCertificationEntity systemCertificationEntity = SmartBeanUtil.copy(addForm, SystemCertificationEntity.class);
 
-        String projectNo = serialNumberService.generate(SerialNumberIdEnum.PROJECT);
+        String projectNo = serialNumberService.generate(SerialNumberIdEnum.SYSTEM_CERTIFICATION);
         systemCertificationEntity.setProjectNo(projectNo);
+        systemCertificationEntity.setStatus(ProjectStatusEnum.DOING.getValue());
         systemCertificationDao.insert(systemCertificationEntity);
 
         // 获取该类型下的对应节点
@@ -106,6 +120,7 @@ public class SystemCertificationService {
         }
         systemCertificationNodeService.saveBatch(systemCertificationNodeList);
 
+        dataTracerService.insert(systemCertificationEntity.getId(), DataTracerTypeEnum.SYSTEM_CERTIFICATION);
         return ResponseDTO.ok();
     }
 
@@ -115,23 +130,47 @@ public class SystemCertificationService {
      * @param updateForm
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> update(SystemCertificationUpdateForm updateForm) {
+
+        SystemCertificationEntity oldEntity = systemCertificationDao.selectById(updateForm.getId());
+
         SystemCertificationEntity systemCertificationEntity = SmartBeanUtil.copy(updateForm, SystemCertificationEntity.class);
         systemCertificationDao.updateById(systemCertificationEntity);
 
-        // 根据projectId和nodeId为条件，更新systemCertificationNode的状态
-        LambdaUpdateWrapper<SystemCertificationNodeEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        // 节点操作更新
+        if(updateForm.getNodeId() != null && updateForm.getNodeStatus() != null) {
+            // 根据projectId和nodeId为条件，更新systemCertificationNode的状态
+            LambdaUpdateWrapper<SystemCertificationNodeEntity> updateWrapper = new LambdaUpdateWrapper<>();
 
-        // Set the condition for the update
-        updateWrapper.eq(SystemCertificationNodeEntity::getProjectId, updateForm.getId())
-                .eq(SystemCertificationNodeEntity::getNodeId, updateForm.getNodeId())
-                .in(SystemCertificationNodeEntity::getStatus, NodeStatusEnum.INIT.getValue(), NodeStatusEnum.DOING.getValue());
+            // Set the condition for the update
+            updateWrapper.eq(SystemCertificationNodeEntity::getProjectId, updateForm.getId())
+                    .eq(SystemCertificationNodeEntity::getNodeId, updateForm.getNodeId())
+                    .in(SystemCertificationNodeEntity::getStatus, NodeStatusEnum.INIT.getValue(), NodeStatusEnum.DOING.getValue());
 
-        // Set the field and its new value to update
-        updateWrapper.set(SystemCertificationNodeEntity::getStatus, updateForm.getStatus());
+            // Set the field and its new value to update
+            updateWrapper.set(SystemCertificationNodeEntity::getStatus, updateForm.getNodeStatus());
+            updateWrapper.set(SystemCertificationNodeEntity::getOperateUserId, updateForm.getUpdateUserId());
+            updateWrapper.set(SystemCertificationNodeEntity::getOperateUserName, updateForm.getUpdateUserName());
+            updateWrapper.set(SystemCertificationNodeEntity::getOperateTime, LocalDateTime.now());
+            updateWrapper.set(SystemCertificationNodeEntity::getPassReason, updateForm.getPassReason());
 
-        // Execute the update
-        systemCertificationNodeService.update(updateWrapper);
+            // Execute the update
+            systemCertificationNodeService.update(updateWrapper);
+            NodeEntity nodeEntity = nodeManager.getById(updateForm.getNodeId());
+            String content = "节点操作：【" + nodeEntity.getNodeName() + "】" + NodeStatusEnum.getDescByValue(updateForm.getNodeStatus());
+            dataTracerService.addTrace(systemCertificationEntity.getId(), DataTracerTypeEnum.SYSTEM_CERTIFICATION, content);
+            // 判断是否所有节点都已完成或者跳过，如果是，修改状态为已完成
+            if (systemCertificationNodeService.isAllDone(updateForm.getId())) {
+                systemCertificationEntity.setStatus(ProjectStatusEnum.DONE.getValue());
+                systemCertificationDao.updateById(systemCertificationEntity);
+                dataTracerService.addTrace(systemCertificationEntity.getId(), DataTracerTypeEnum.SYSTEM_CERTIFICATION, "项目完成");
+            }
+        } else {
+
+            //变更记录
+            dataTracerService.update(systemCertificationEntity.getId(), DataTracerTypeEnum.SYSTEM_CERTIFICATION, oldEntity, systemCertificationEntity);
+        }
         return ResponseDTO.ok();
     }
 
@@ -163,7 +202,11 @@ public class SystemCertificationService {
     }
 
     public SystemCertificationVO getDetail(Long id) {
-        SystemCertificationEntity entity = systemCertificationDao.selectById(id);
-        return SmartBeanUtil.copy(entity, SystemCertificationVO.class);
+        SystemCertificationVO vo = systemCertificationDao.getDetail(id);
+
+        List<SystemCertificationNodeEntity> systemCertificationNodeList = systemCertificationNodeService.getAllNodesByProjectId(vo.getId());
+        vo.setSystemCertificationNodeList(SmartBeanUtil.copyList(systemCertificationNodeList, SystemCertificationNodeVO.class));
+
+        return vo;
     }
 }

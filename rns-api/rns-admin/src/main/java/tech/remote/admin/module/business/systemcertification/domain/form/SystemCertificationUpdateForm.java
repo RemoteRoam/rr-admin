@@ -124,7 +124,7 @@ public class SystemCertificationUpdateForm {
     private Long nodeId;
 
     @Schema(description = "状态（NodeStatusEnum）")
-    private Integer status;
+    private Integer nodeStatus;
 
     @Schema(description = "跳过原因")
     private String passReason;

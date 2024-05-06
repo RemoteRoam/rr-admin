@@ -100,3 +100,20 @@ export const NODE_STATUS_ENUM = {
   },
   
 };
+
+
+export const PROJECT_STATUS_ENUM = {
+  INIT: {
+    value: 0,
+    desc: '未开始',
+  },
+  DOING: {
+    value: 1,
+    desc: '处理中',
+  },
+  DONE: {
+    value: 2,
+    desc: '已完成',
+  },
+  
+};

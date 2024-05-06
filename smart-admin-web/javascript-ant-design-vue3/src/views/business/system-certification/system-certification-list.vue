@@ -24,8 +24,18 @@
                     placeholder="来源分类" />
             </a-form-item>
             <a-form-item label="来源" class="smart-query-form-item">
-                <ThirdPartySelect width="150px" v-model:value="queryForm.sourceId" placeholder="请选择咨询机构"
-                    type="THIRD_3" />
+
+                <template v-if="queryForm.sourceType === 1">
+                    <ThirdPartySelect width="150px" v-model:value="queryForm.sourceId" placeholder="请选择咨询机构"
+                        type="THIRD_3" />
+                </template>
+                <template v-else-if="queryForm.sourceType === 2">
+                    <EmployeeSelect width="150px" v-model:value="queryForm.sourceId" placeholder="请选择内部员工" />
+                </template>
+                <template v-else="queryForm.sourceType === 1">
+                    <ThirdPartySelect width="150px" v-model:value="queryForm.sourceId" placeholder="请选择咨询机构"
+                        type="THIRD_3" />
+                </template>
             </a-form-item>
             <a-form-item label="认证机构" class="smart-query-form-item">
                 <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择认证机构"
@@ -102,11 +112,18 @@
             :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
+
+                <template v-if="column.dataIndex === 'projectNo'">
+                    <a @click="detail(record.id)">{{ record.projectNo }}</a>
+                </template>
                 <template v-if="column.dataIndex === 'projectType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_SYSTEM_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'sourceType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
+                </template>
+                <template v-if="column.dataIndex === 'status'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
@@ -140,6 +157,15 @@
         <SystemCertificationForm ref="formRef" @reloadList="queryData" />
         <SystemCertificationFormAdd ref="formAddRef" @reloadList="queryData" />
         <FirstPaymentForm ref="firstPaymentRef" @reloadList="queryData" />
+        <SubmitDataForm ref="submitDataFormRef" @reloadList="queryData" />
+        <ReviewPlanForm ref="reviewPlanFormRef" @reloadList="queryData" />
+        <SubmitPaperForm ref="submitPaperFormRef" @reloadList="queryData" />
+        <AssessmentDateForm ref="assessmentDateFormRef" @reloadList="queryData" />
+        <RectificationDateForm ref="rectificationDateFormRef" @reloadList="queryData" />
+        <SystemCertificateForm ref="systemCertificateFormRef" @reloadList="queryData" />
+        <FinalPaymentForm ref="finalPaymentFormRef" @reloadList="queryData" />
+        <InvoiceForm ref="invoiceFormRef" @reloadList="queryData" />
+        <MailForm ref="mailFormRef" @reloadList="queryData" />
 
     </a-card>
 </template>
@@ -150,6 +176,7 @@ import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
 import { smartSentry } from '/@/lib/smart-sentry';
+import { useRouter } from 'vue-router';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import SystemCertificationForm from './system-certification-form.vue';
@@ -158,7 +185,18 @@ import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
-import FirstPaymentForm from './nodes/first-payment/first-payment-form.vue';
+import FirstPaymentForm from '../common-nodes/first-payment/first-payment-form.vue';
+import SubmitDataForm from './nodes/submit-data/submit-data-form.vue';
+import NODE_CONST from '/@/constants/business/project/node-const';
+import ReviewPlanForm from './nodes/review-plan/review-plan-form.vue';
+import SubmitPaperForm from './nodes/submit-paper/submit-paper-form.vue';
+import AssessmentDateForm from './nodes/assessment-date/assessment-date-form.vue';
+import RectificationDateForm from './nodes/rectification-date/rectification-date-form.vue';
+import SystemCertificateForm from './nodes/system-certificate/system-certificate-form.vue';
+import FinalPaymentForm from '../common-nodes/final-payment/final-payment-form.vue';
+import InvoiceForm from '../common-nodes/invoice/invoice-form.vue';
+import MailForm from '../common-nodes/mail/mail-form.vue';
+
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -167,42 +205,44 @@ const columns = ref([
         title: '项目编号',
         dataIndex: 'projectNo',
         ellipsis: false,
+        width: 150,
     },
     {
         title: '项目类型',
         dataIndex: 'projectType',
-        ellipsis: true,
+        width: 80,
     },
     {
         title: '客户',
         dataIndex: 'customerName',
         ellipsis: true,
+        width: 150,
     },
     {
         title: '来源分类',
         dataIndex: 'sourceType',
-        ellipsis: true,
+        width: 80,
     },
     {
         title: '来源',
         dataIndex: 'sourceName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '认证机构',
         dataIndex: 'thirdPartyName',
-        ellipsis: true,
+        width: 120,
     },
-    {
-        title: '合同号',
-        dataIndex: 'contractNo',
-        ellipsis: true,
-    },
-    {
-        title: '合同日',
-        dataIndex: 'contractDate',
-        ellipsis: true,
-    },
+    // {
+    //     title: '合同号',
+    //     dataIndex: 'contractNo',
+    //     ellipsis: true,
+    // },
+    // {
+    //     title: '合同日',
+    //     dataIndex: 'contractDate',
+    //     ellipsis: true,
+    // },
     {
         title: '合同金额',
         dataIndex: 'contractAmount',
@@ -212,6 +252,7 @@ const columns = ref([
         title: '客户预期日期',
         dataIndex: 'expectedDate',
         ellipsis: true,
+        width: 110,
     },
     // {
     //     title: '备注',
@@ -314,7 +355,7 @@ const columns = ref([
         ellipsis: true,
     },
     {
-        title: '创建人姓名',
+        title: '创建人',
         dataIndex: 'createUserName',
         ellipsis: true,
     },
@@ -322,22 +363,23 @@ const columns = ref([
         title: '创建时间',
         dataIndex: 'createTime',
         ellipsis: true,
+        width: 170,
     },
-    {
-        title: '更新人姓名',
-        dataIndex: 'updateUserName',
-        ellipsis: true,
-    },
-    {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        ellipsis: true,
-    },
+    // {
+    //     title: '更新人姓名',
+    //     dataIndex: 'updateUserName',
+    //     ellipsis: true,
+    // },
+    // {
+    //     title: '更新时间',
+    //     dataIndex: 'updateTime',
+    //     ellipsis: true,
+    // },
     {
         title: '操作',
         dataIndex: 'action',
         fixed: 'right',
-        width: 190,
+        width: 120,
     },
 ]);
 
@@ -418,13 +460,18 @@ onMounted(queryData);
 const formRef = ref();
 const formAddRef = ref();
 const firstPaymentRef = ref();
+const submitDataFormRef = ref();
+const reviewPlanFormRef = ref();
+const submitPaperFormRef = ref();
+const assessmentDateFormRef = ref();
+const rectificationDateFormRef = ref();
+const systemCertificateFormRef = ref();
+const finalPaymentFormRef = ref();
+const invoiceFormRef = ref();
+const mailFormRef = ref();
 
 function showFormAdd() {
     formAddRef.value.show();
-}
-
-function showFirstPayment(rowData) {
-    firstPaymentRef.value.show(rowData);
 }
 
 function showForm() {
@@ -435,23 +482,27 @@ function showForm() {
     }
 }
 
-// // const onClick = ({ key }) => {
-// //     console.log(`Click on item ${key}`);
-// // };
-// function onClick(record, key) {
-//     // return function(event) {
-//     //     const key = event.key;
-//         console.log("Clicked key:", key);
-//         console.log("Record:", record);
-//     // };
-// }
-
 const handleMenuClick = (e, param) => {
-    console.log("Clicked key:", e.key);
-    if (e.key === 1) {
-        showFirstPayment(param);
-    } else if (e.key === 21) {
-
+    if (e.key === NODE_CONST.first_payment) {
+        firstPaymentRef.value.show(param);
+    } else if (e.key === NODE_CONST.submit_data) {
+        submitDataFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.review_plan) {
+        reviewPlanFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.submit_paper) {
+        submitPaperFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.assessment_date) {
+        assessmentDateFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.rectification_date) {
+        rectificationDateFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.certificate) {
+        systemCertificateFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.final_payment) {
+        finalPaymentFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.invoice) {
+        invoiceFormRef.value.show(param);
+    } else if (e.key === NODE_CONST.mail) {
+        mailFormRef.value.show(param);
     }
 };
 
@@ -524,5 +575,11 @@ async function requestBatchDelete() {
     } finally {
         SmartLoading.hide();
     }
+}
+
+let router = useRouter();
+
+function detail(id) {
+    router.push({ path: '/system-certification/detail', query: { id: id } });
 }
 </script>

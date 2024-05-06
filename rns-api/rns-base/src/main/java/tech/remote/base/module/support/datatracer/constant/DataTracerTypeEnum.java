@@ -32,6 +32,10 @@ public enum DataTracerTypeEnum implements BaseEnum {
      * 企业信息
      */
     OA_ENTERPRISE(3, "OA-企业信息"),
+    /**
+     * 体系认证
+     */
+    SYSTEM_CERTIFICATION(4, "体系认证"),
 
     ;
 

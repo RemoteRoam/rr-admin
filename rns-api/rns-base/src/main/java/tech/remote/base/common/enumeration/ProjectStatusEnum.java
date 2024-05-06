@@ -13,7 +13,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum NodeStatusEnum implements BaseEnum {
+public enum ProjectStatusEnum implements BaseEnum {
 
     /**
      * 未开始
@@ -23,17 +23,12 @@ public enum NodeStatusEnum implements BaseEnum {
     /**
      * 处理中
      */
-    DOING(1, "处理中"),
+    DOING(1, "进行中"),
 
     /**
      * 完成
      */
-    OK(2, "完成"),
-
-    /**
-     * 跳过
-     */
-    SKIP(3, "跳过"),
+    DONE(2, "已完成"),
     ;
     private final Integer value;
 
@@ -41,7 +36,7 @@ public enum NodeStatusEnum implements BaseEnum {
 
     // 根据value获取desc
     public static String getDescByValue(Integer value) {
-        for (NodeStatusEnum e : NodeStatusEnum.values()) {
+        for (ProjectStatusEnum e : ProjectStatusEnum.values()) {
             if (e.value.equals(value)) {
                 return e.desc;
             }

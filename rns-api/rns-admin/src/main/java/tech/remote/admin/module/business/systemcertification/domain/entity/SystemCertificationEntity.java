@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldBigDecimal;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 体系认证表 实体类
@@ -69,116 +71,143 @@ public class SystemCertificationEntity {
     /**
      * 合同号
      */
+    @DataTracerFieldLabel("合同号")
     private String contractNo;
 
     /**
      * 合同日
      */
+    @DataTracerFieldLabel("合同日")
     private LocalDate contractDate;
 
     /**
      * 合同金额
      */
+    @DataTracerFieldLabel("合同金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal contractAmount;
 
     /**
      * 客户预期日期
      */
+    @DataTracerFieldLabel("客户预期日期")
     private LocalDate expectedDate;
 
     /**
      * 备注
      */
+    @DataTracerFieldLabel("备注")
     private String remark;
 
     /**
      * 首款金额
      */
+    @DataTracerFieldLabel("首款金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal firstPaymentAmount;
 
     /**
      * 首款收款日期
      */
+    @DataTracerFieldLabel("首款收款日期")
     private LocalDate firstPaymentDate;
 
     /**
      * 资料上报日期
      */
+    @DataTracerFieldLabel("资料上报日期")
     private LocalDate dataReportDate;
 
     /**
      * 审核老师
      */
+    @DataTracerFieldLabel("审核老师")
     private String auditTeacher;
 
     /**
      * 审核日期
      */
+    @DataTracerFieldLabel("审核日期")
     private LocalDate auditDate;
 
     /**
      * 咨询老师
      */
+    @DataTracerFieldLabel("咨询老师")
     private String consultationTeacher;
 
     /**
      * 交卷日期
      */
+    @DataTracerFieldLabel("交卷日期")
     private LocalDate submissionDate;
 
     /**
      * 评定日期
      */
+    @DataTracerFieldLabel("评定日期")
     private LocalDate assessmentDate;
 
     /**
      * 整改日期
      */
+    @DataTracerFieldLabel("整改日期")
     private LocalDate rectificationDate;
 
     /**
      * 证书发送日期
      */
+    @DataTracerFieldLabel("证书发送日期")
     private LocalDate certificateSendDate;
 
     /**
      * 证书有效期截止日期
      */
+    @DataTracerFieldLabel("有效期截止日期")
     private LocalDate certificateExpiryDate;
 
     /**
      * 尾款金额
      */
+    @DataTracerFieldLabel("尾款金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal finalPaymentAmount;
 
     /**
      * 尾款收款日期
      */
+    @DataTracerFieldLabel("尾款收款日期")
     private LocalDate finalPaymentDate;
 
     /**
      * 开票日期
      */
+    @DataTracerFieldLabel("开票日期")
     private LocalDate invoiceDate;
 
     /**
      * 发票金额
      */
+    @DataTracerFieldLabel("发票金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal invoiceAmount;
 
     /**
      * 发票号
      */
+    @DataTracerFieldLabel("发票号")
     private String invoiceNumber;
 
     /**
      * 邮寄日期
      */
+    @DataTracerFieldLabel("邮寄日期")
     private LocalDate mailingDate;
 
     /**
      * 快递单号
      */
+    @DataTracerFieldLabel("快递单号")
     private String trackingNumber;
 
     /**

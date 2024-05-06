@@ -289,8 +289,12 @@ public class DataTracerChangeContentService {
             log.error("bean operate log: reflect field value error " + field.getName());
             return null;
         }
+        DataTracerContentBO dataTracerContentBO = new DataTracerContentBO();
+        dataTracerContentBO.setField(field);
         if (fieldValue == null) {
-            return null;
+            dataTracerContentBO.setFieldValue("");
+            dataTracerContentBO.setFieldContent("");
+            return dataTracerContentBO;
         }
 
         String fieldContent = "";
@@ -322,8 +326,6 @@ public class DataTracerChangeContentService {
         } else {
             fieldContent = JSON.toJSONString(fieldValue);
         }
-        DataTracerContentBO dataTracerContentBO = new DataTracerContentBO();
-        dataTracerContentBO.setField(field);
         dataTracerContentBO.setFieldValue(fieldValue);
         dataTracerContentBO.setFieldContent(fieldContent);
         return dataTracerContentBO;

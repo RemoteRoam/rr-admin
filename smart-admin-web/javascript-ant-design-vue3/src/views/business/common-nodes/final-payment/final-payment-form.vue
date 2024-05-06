@@ -6,20 +6,22 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="确认首款" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="确认尾款" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
-        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
+        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="收款日期" name="firstPaymentDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.firstPaymentDate"
-                            style="width: 100%" placeholder="首款收款日期" />
+                    <a-form-item label="收款日期" name="finalPaymentDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.finalPaymentDate"
+                            style="width: 100%" placeholder="尾款收款日期" />
                     </a-form-item>
                 </a-col>
+            </a-row>
+            <a-row>
                 <a-col :span="24">
-                    <a-form-item label="首款金额" name="firstPaymentAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.firstPaymentAmount"
-                            placeholder="首款金额" />
+                    <a-form-item label="尾款金额" name="finalPaymentAmount">
+                        <a-input-number style="width: 100%" v-model:value="form.finalPaymentAmount"
+                            placeholder="尾款金额" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -43,6 +45,7 @@ import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { smartSentry } from '/@/lib/smart-sentry';
+import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
 
 // ------------------------ 事件 ------------------------
@@ -80,11 +83,11 @@ const formRef = ref();
 const formDefault = {
     id: undefined, //项目ID
     projectType: undefined, //项目类型
-    nodeId: 1, //节点ID
-    status: undefined, //节点状态
+    nodeId: NODE_CONST.final_payment, //节点ID
+    nodeStatus: undefined, //节点状态
     passReason: undefined, //跳过原因
-    firstPaymentDate: undefined, //首款日期
-    firstPaymentAmount: undefined, //首款金额
+    finalPaymentDate: undefined, //尾款日期
+    finalPaymentAmount: undefined, //尾款金额
 };
 
 let form = reactive({ ...formDefault });
@@ -103,43 +106,43 @@ async function onSubmit() {
     }
 }
 
-// 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数status传3
+// 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数nodeStatus传3
 
 function onJump() {
+    // 用另一种方式处理，暂时有问题，后续再调查
     // jumpNodeRef.value.show(form);
 
-    // Modal.confirm({
-    //     title: '跳过',
-    //     content: 
-    //         h('textarea', {
-    //             style: { marginTop: '20px', width: '80%' },
-    //             placeholder: '请输入跳过原因',
-    //             'onUpdate:modelValue': value => {
-    //                 form.passReason = value;
-    //             },
-    //             value: form.passReason,
-    //             onInput: event => {
-    //                 form.passReason = event.target.value;
-    //             }
-    //         }),
-    //     okText: '确认',
-    //     cancelText: '取消',
-    //     onOk() {
-    //         console.log('OK', form.passReason);
-    //         //save(3);
-    //     },
-    //     onCancel() {
-    //         console.log('Cancel');
-    //     },
-    // });
+    Modal.confirm({
+        title: '跳过',
+        content:
+            h('textarea', {
+                style: { marginTop: '20px', width: '80%' },
+                placeholder: '请输入跳过原因',
+                'onUpdate:modelValue': value => {
+                    form.passReason = value;
+                },
+                value: form.passReason,
+                onInput: event => {
+                    form.passReason = event.target.value;
+                }
+            }),
+        okText: '确认',
+        cancelText: '取消',
+        onOk() {
+            save(3);
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
 }
 
 
 
 // 新建、编辑API
-async function save(status) {
+async function save(nodeStatus) {
     SmartLoading.show();
-    form.status = status;
+    form.nodeStatus = nodeStatus;
     try {
         // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
         console.log('form', form);

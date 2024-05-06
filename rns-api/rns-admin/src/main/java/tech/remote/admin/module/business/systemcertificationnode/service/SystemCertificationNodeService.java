@@ -5,7 +5,6 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
 import tech.remote.admin.module.business.systemcertificationnode.dao.SystemCertificationNodeDao;
 import tech.remote.admin.module.business.systemcertificationnode.domain.entity.SystemCertificationNodeEntity;
 import tech.remote.admin.module.business.systemcertificationnode.domain.form.SystemCertificationNodeAddForm;
@@ -18,7 +17,6 @@ import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.commons.collections4.CollectionUtils;
 
 import javax.annotation.Resource;
 
@@ -70,12 +68,45 @@ public class SystemCertificationNodeService extends ServiceImpl<SystemCertificat
         return ResponseDTO.ok();
     }
 
-    public List<SystemCertificationNodeEntity> getOperateNodeByProjectId(Long id) {
+    /**
+     * 获取体系列表下需要处理的节点列表
+     * @param id
+     * @return
+     */
+    public List<SystemCertificationNodeEntity> getOperateNodesByProjectId(Long id) {
         LambdaQueryWrapper<SystemCertificationNodeEntity> wrapper = new LambdaQueryWrapper();
         wrapper.eq(SystemCertificationNodeEntity::getProjectId, id);
         wrapper.in(SystemCertificationNodeEntity::getStatus, NodeStatusEnum.INIT.getValue(), NodeStatusEnum.DOING.getValue());
         wrapper.orderByAsc(SystemCertificationNodeEntity::getNodeSort);
 
         return baseMapper.selectList(wrapper);
+    }
+
+    /**
+     * 获取体系认证项目下所有节点列表
+     * @param id
+     * @return
+     */
+    public List<SystemCertificationNodeEntity> getAllNodesByProjectId(Long id) {
+        LambdaQueryWrapper<SystemCertificationNodeEntity> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(SystemCertificationNodeEntity::getProjectId, id);
+        wrapper.orderByAsc(SystemCertificationNodeEntity::getNodeSort);
+
+        return baseMapper.selectList(wrapper);
+    }
+
+    /**
+     * 判断是否所有节点都已完成或者跳过
+     * @param id
+     * @return
+     */
+    public boolean isAllDone(Long id) {
+        List<SystemCertificationNodeEntity> list = getAllNodesByProjectId(id);
+        for (SystemCertificationNodeEntity entity : list) {
+            if (entity.getStatus() != NodeStatusEnum.OK.getValue() && entity.getStatus() != NodeStatusEnum.SKIP.getValue()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

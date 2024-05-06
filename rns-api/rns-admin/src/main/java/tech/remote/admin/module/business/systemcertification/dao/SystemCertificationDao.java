@@ -40,4 +40,10 @@ public interface SystemCertificationDao extends BaseMapper<SystemCertificationEn
      */
     void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("deletedFlag")boolean deletedFlag);
 
+    /**
+     * 获取详情
+     * @param id
+     * @return
+     */
+    SystemCertificationVO getDetail(@Param("id")Long id);
 }

@@ -22,6 +22,10 @@ export const DATA_TRACER_TYPE_ENUM = {
     value: 3,
     desc: 'OA-企业信息',
   },
+  SYSTEM_CERTIFICATION: {
+    value: 4,
+    desc: '体系认证',
+  },
 };
 
 export default {
