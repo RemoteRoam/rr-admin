@@ -30,6 +30,16 @@ public class ProjectNodeEntity {
     private Long projectId;
 
     /**
+     * 项目编号
+     */
+    private String projectNo;
+
+    /**
+     * 项目类型
+     */
+    private Integer projectType;
+
+    /**
      * 实验室任务ID
      */
     private Long taskId;
@@ -50,12 +60,17 @@ public class ProjectNodeEntity {
     private String nodeName;
 
     /**
+     * 节点级别（1项目 2任务 3产品）
+     */
+    private Integer nodeLevel;
+
+    /**
      * 节点排序
      */
     private Integer nodeSort;
 
     /**
-     * 状态（0未开始 1完成 2跳过）
+     * 状态（NodeStatusEnum）
      */
     private Integer status;
 

@@ -20,6 +20,7 @@ public class AdminSwaggerTagConst extends SwaggerTagConst {
 
     public static class ProjectManagement {
         public static final String SYSTEM_CERTIFICATION = "项目管理-体系认证";
+        public static final String MEASUREMENT = "项目管理-仪器计量";
     }
 
     public static class Business {

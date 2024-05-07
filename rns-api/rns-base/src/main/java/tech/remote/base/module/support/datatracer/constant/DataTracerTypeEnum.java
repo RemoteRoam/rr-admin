@@ -36,6 +36,10 @@ public enum DataTracerTypeEnum implements BaseEnum {
      * 体系认证
      */
     SYSTEM_CERTIFICATION(4, "体系认证"),
+    /**
+     * 仪器计量
+     */
+    MEASUREMENT(5, "仪器计量"),
 
     ;
 

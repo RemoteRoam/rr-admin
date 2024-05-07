@@ -20,8 +20,9 @@ public enum SerialNumberIdEnum implements BaseEnum {
     ORDER(1, "订单id"),
 
     CONTRACT(2, "合同id"),
-    PROJECT(3, "项目编号"),
+    PROJECT(3, "产品项目编号"),
     SYSTEM_CERTIFICATION(4, "体系认证项目编号"),
+    MEASUREMENT(5, "仪器计量项目编号"),
 
     ;
 

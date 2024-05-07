@@ -2,11 +2,13 @@ package tech.remote.admin.module.business.measurement.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import tech.remote.admin.constant.AdminSwaggerTagConst;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementAddForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementQueryForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementUpdateForm;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import tech.remote.admin.module.business.measurement.service.MeasurementService;
+import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -28,7 +31,7 @@ import javax.validation.Valid;
  */
 
 @RestController
-@Tag(name = "")
+@Tag(name = AdminSwaggerTagConst.ProjectManagement.MEASUREMENT)
 public class MeasurementController {
 
     @Resource
@@ -43,12 +46,18 @@ public class MeasurementController {
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/measurement/add")
     public ResponseDTO<String> add(@RequestBody @Valid MeasurementAddForm addForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        addForm.setCreateUserId(requestUser.getUserId());
+        addForm.setCreateUserName(requestUser.getUserName());
         return measurementService.add(addForm);
     }
 
     @Operation(summary = "更新 @author cbh")
     @PostMapping("/measurement/update")
     public ResponseDTO<String> update(@RequestBody @Valid MeasurementUpdateForm updateForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        updateForm.setUpdateUserId(requestUser.getUserId());
+        updateForm.setUpdateUserName(requestUser.getUserName());
         return measurementService.update(updateForm);
     }
 

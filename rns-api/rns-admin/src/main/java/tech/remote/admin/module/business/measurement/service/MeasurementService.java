@@ -1,18 +1,35 @@
 package tech.remote.admin.module.business.measurement.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.measurement.dao.MeasurementDao;
 import tech.remote.admin.module.business.measurement.domain.entity.MeasurementEntity;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementAddForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementQueryForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementUpdateForm;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
+import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
+import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeQueryForm;
+import tech.remote.admin.module.business.projectnode.manager.ProjectNodeManager;
+import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
+import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
+import tech.remote.admin.module.business.typenode.service.TypeNodeService;
+import tech.remote.base.common.enumeration.NodeStatusEnum;
+import tech.remote.base.common.enumeration.ProjectStatusEnum;
+import tech.remote.base.common.enumeration.ProjectTypeEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections4.CollectionUtils;
+import tech.remote.base.module.support.datatracer.constant.DataTracerTypeEnum;
+import tech.remote.base.module.support.datatracer.service.DataTracerService;
+import tech.remote.base.module.support.serialnumber.constant.SerialNumberIdEnum;
+import tech.remote.base.module.support.serialnumber.service.SerialNumberService;
 
 import javax.annotation.Resource;
 
@@ -30,6 +47,18 @@ public class MeasurementService {
     @Resource
     private MeasurementDao measurementDao;
 
+    @Autowired
+    private SerialNumberService serialNumberService;
+
+    @Autowired
+    private TypeNodeService typeNodeService;
+
+    @Resource
+    private ProjectNodeManager projectNodeManager;
+
+    @Resource
+    private DataTracerService dataTracerService;
+
     /**
      * 分页查询
      *
@@ -39,6 +68,15 @@ public class MeasurementService {
     public PageResult<MeasurementVO> queryPage(MeasurementQueryForm queryForm) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<MeasurementVO> list = measurementDao.queryPage(page, queryForm);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(MeasurementVO measurementVO : list){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(measurementVO.getId());
+                nodeQueryForm.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
+                nodeQueryForm.setNodeLevel(1);
+                measurementVO.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+            }
+        }
         PageResult<MeasurementVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         return pageResult;
     }
@@ -48,7 +86,31 @@ public class MeasurementService {
      */
     public ResponseDTO<String> add(MeasurementAddForm addForm) {
         MeasurementEntity measurementEntity = SmartBeanUtil.copy(addForm, MeasurementEntity.class);
+        String projectNo = serialNumberService.generate(SerialNumberIdEnum.MEASUREMENT);
+        measurementEntity.setProjectNo(projectNo);
+        measurementEntity.setStatus(ProjectStatusEnum.DOING.getValue());
         measurementDao.insert(measurementEntity);
+
+        // 获取该类型下的对应节点
+        TypeNodeQuery query = new TypeNodeQuery();
+        query.setNodeLevel(1);
+        query.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
+        List<TypeNodeListVO> typeNodeList = typeNodeService.getTypeNodes(query);
+
+        List<ProjectNodeEntity> projectNodeList = SmartBeanUtil.copyList(typeNodeList, ProjectNodeEntity.class);
+        for(ProjectNodeEntity projectNode : projectNodeList){
+            projectNode.setId(null);
+            projectNode.setProjectId(measurementEntity.getId());
+            projectNode.setProjectNo(projectNo);
+            projectNode.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
+            projectNode.setStatus(NodeStatusEnum.INIT.getValue());
+            projectNode.setCreateUserId(addForm.getCreateUserId());
+            projectNode.setCreateUserName(addForm.getCreateUserName());
+        }
+        projectNodeManager.saveBatch(projectNodeList);
+
+        dataTracerService.insert(measurementEntity.getId(), DataTracerTypeEnum.MEASUREMENT);
+
         return ResponseDTO.ok();
     }
 

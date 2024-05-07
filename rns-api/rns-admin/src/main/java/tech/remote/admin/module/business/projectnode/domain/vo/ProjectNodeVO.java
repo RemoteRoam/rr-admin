@@ -22,6 +22,12 @@ public class ProjectNodeVO {
     @Schema(description = "项目ID")
     private Long projectId;
 
+    @Schema(description = "项目编号")
+    private String projectNo;
+
+    @Schema(description = "项目类型")
+    private Integer projectType;
+
     @Schema(description = "实验室任务ID")
     private Long taskId;
 
@@ -33,6 +39,9 @@ public class ProjectNodeVO {
 
     @Schema(description = "节点名称")
     private String nodeName;
+
+    @Schema(description = "节点级别（1项目 2任务 3产品）")
+    private Integer nodeLevel;
 
     @Schema(description = "节点排序")
     private Integer nodeSort;

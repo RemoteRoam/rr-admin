@@ -18,4 +18,23 @@ public class ProjectNodeQueryForm extends PageParam{
     @Schema(description = "项目ID")
     private Long projectId;
 
+    /**
+     * 项目类型
+     */
+    private Integer projectType;
+
+    /**
+     * 实验室任务ID
+     */
+    private Long taskId;
+
+    /**
+     * 产品ID
+     */
+    private Long productId;
+
+    /**
+     * 节点级别（1项目 2任务 3产品）
+     */
+    private Integer nodeLevel;
 }

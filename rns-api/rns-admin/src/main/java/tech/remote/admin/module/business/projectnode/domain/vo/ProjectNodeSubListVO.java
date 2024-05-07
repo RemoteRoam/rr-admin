@@ -35,7 +35,7 @@ public class ProjectNodeSubListVO {
     @Schema(description = "节点名称")
     private String nodeName;
 
-    @Schema(description = "状态（0未开始 1完成 2跳过）")
+    @Schema(description = "状态")
     private Integer status;
 
     @Schema(description = "跳过原因")

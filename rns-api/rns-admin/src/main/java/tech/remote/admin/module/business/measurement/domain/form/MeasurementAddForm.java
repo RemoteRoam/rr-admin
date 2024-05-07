@@ -16,10 +16,6 @@ import lombok.Data;
 @Data
 public class MeasurementAddForm {
 
-    @Schema(description = "编号", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "编号 不能为空")
-    private Long id;
-
     @Schema(description = "客户ID")
     private Long customerId;
 

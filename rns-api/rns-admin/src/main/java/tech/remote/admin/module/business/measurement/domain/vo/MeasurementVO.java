@@ -4,7 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
+import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
 
 /**
  * 仪器计量表 列表VO
@@ -80,5 +84,8 @@ public class MeasurementVO {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "操作节点列表")
+    private List<ProjectNodeVO> projectNodeList;
 
 }
