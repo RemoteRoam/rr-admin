@@ -1,0 +1,129 @@
+package tech.remote.admin.module.business.measurement.domain.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import lombok.Data;
+
+/**
+ * 仪器计量表 实体类
+ *
+ * @Author cbh
+ * @Date 2024-05-07 14:42:35
+ * @Copyright Remote Nomad Studio
+ */
+
+@Data
+@TableName("t_measurement")
+public class MeasurementEntity {
+
+    /**
+     * 编号
+     */
+    @TableId(type = IdType.AUTO)
+    private Long id;
+
+    /**
+     * 项目编号
+     */
+    private String projectNo;
+
+    /**
+     * 项目类型
+     */
+    private Integer projectType;
+
+    /**
+     * 客户ID
+     */
+    private Long customerId;
+
+    /**
+     * 负责人ID
+     */
+    private Long managerId;
+
+    /**
+     * 收款金额
+     */
+    private BigDecimal paymentAmount;
+
+    /**
+     * 收款日期
+     */
+    private LocalDate paymentDate;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 开票日期
+     */
+    private LocalDate invoiceDate;
+
+    /**
+     * 发票金额
+     */
+    private BigDecimal invoiceAmount;
+
+    /**
+     * 发票号
+     */
+    private String invoiceNumber;
+
+    /**
+     * 邮寄日期
+     */
+    private LocalDate mailingDate;
+
+    /**
+     * 快递单号
+     */
+    private String trackingNumber;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
+     * 删除状态
+     */
+    private Integer deletedFlag;
+
+    /**
+     * 创建人
+     */
+    private Long createUserId;
+
+    /**
+     * 创建人姓名
+     */
+    private String createUserName;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+
+    /**
+     * 更新人
+     */
+    private Long updateUserId;
+
+    /**
+     * 更新人姓名
+     */
+    private String updateUserName;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
+
+}
