@@ -45,4 +45,9 @@ export const measurementApi = {
       return postRequest('/measurement/batchDelete', idList);
   },
 
+  // 查询详情 @author cbh
+  detail: (id) => {
+      return getRequest(`/measurement/get/${id}`);
+  },
+
 };

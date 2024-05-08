@@ -19,7 +19,7 @@
             <a-row>
                 <a-col :span="24">
                     <a-form-item label="负责人" name="managerId">
-                        <EmployeeSelect width="70%" v-model:value="form.sourceId" placeholder="请选择负责人" />
+                        <EmployeeSelect width="70%" v-model:value="form.managerId" placeholder="请选择负责人" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -74,8 +74,6 @@ function onClose() {
 const formRef = ref();
 
 const formDefault = {
-    id: undefined,
-    id: undefined, //编号
     customerId: undefined, //客户ID
     managerId: undefined, //负责人ID
     paymentAmount: undefined, //收款金额

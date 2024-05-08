@@ -6,28 +6,28 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="开票" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="收款" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="开票日期" name="invoiceDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.invoiceDate" style="width: 100%"
-                            placeholder="开票日期" />
+                    <a-form-item label="收款日期" name="paymentDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.paymentDate" style="width: 100%"
+                            placeholder="收款日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="发票金额" name="invoiceAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.invoiceAmount" placeholder="发票金额" />
+                    <a-form-item label="收款金额" name="paymentAmount">
+                        <a-input-number style="width: 100%" v-model:value="form.paymentAmount" placeholder="收款金额" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="发票号" name="invoiceNumber">
-                        <a-input style="width: 100%" v-model:value="form.invoiceNumber" placeholder="发票号" />
+                    <a-form-item label="备注" name="remark">
+                        <a-input v-model:value="form.remark" placeholder="备注" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -66,6 +66,7 @@ const visibleFlag = ref(false);
 const jumpNodeRef = ref();
 
 function show(rowData, projectNodeId) {
+    console.log('rowData', rowData);
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);
@@ -91,12 +92,12 @@ const formDefault = {
     id: undefined, //项目ID
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
-    nodeId: NODE_CONST.invoice, //节点ID
+    nodeId: NODE_CONST.first_payment, //节点ID
     nodeStatus: undefined, //节点状态
     passReason: undefined, //跳过原因
-    invoiceDate: undefined, //开票日期
-    invoiceAmount: undefined, //发票金额
-    invoiceNumber: undefined, //发票号
+    paymentDate: undefined, //收款日期
+    paymentAmount: undefined, //收款金额
+    remark: undefined, //备注
 };
 
 let form = reactive({ ...formDefault });

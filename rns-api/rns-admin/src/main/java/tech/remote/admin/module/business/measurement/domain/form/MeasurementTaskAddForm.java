@@ -18,10 +18,6 @@ import lombok.Data;
 @Data
 public class MeasurementTaskAddForm {
 
-    @Schema(description = "实验室任务编号", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank(message = "实验室任务编号 不能为空")
-    private String taskdNo;
-
     @Schema(description = "项目ID")
     private Long projectId;
 
@@ -42,12 +38,6 @@ public class MeasurementTaskAddForm {
 
     @Schema(description = "计量日期")
     private LocalDate measurementDate;
-
-    @Schema(description = "完成日期")
-    private LocalDate finishDate;
-
-    @Schema(description = "状态（ProjectStatusEnum）")
-    private Integer status;
 
     @Schema(description = "创建人")
     private Long createUserId;

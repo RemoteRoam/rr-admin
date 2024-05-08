@@ -23,9 +23,8 @@ public class MeasurementTaskUpdateForm {
     @NotNull(message = "编号 不能为空")
     private Long id;
 
-    @Schema(description = "实验室任务编号", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank(message = "实验室任务编号 不能为空")
-    private String taskdNo;
+    @Schema(description = "实验室任务编号")
+    private String taskNo;
 
     @Schema(description = "项目ID")
     private Long projectId;
@@ -71,5 +70,16 @@ public class MeasurementTaskUpdateForm {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+    @Schema(description = "项目节点ID")
+    private Long projectNodeId;
+
+    @Schema(description = "节点ID")
+    private Long nodeId;
+
+    @Schema(description = "状态（NodeStatusEnum）")
+    private Integer nodeStatus;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 
 }

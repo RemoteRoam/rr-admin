@@ -1,22 +1,18 @@
 package tech.remote.admin.module.business.measurement.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 import tech.remote.admin.constant.AdminSwaggerTagConst;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementAddForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementQueryForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementUpdateForm;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import tech.remote.admin.module.business.measurement.service.MeasurementService;
-import tech.remote.base.common.domain.RequestUser;
-import tech.remote.base.common.domain.ValidateList;
-import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.domain.RequestUser;
+import tech.remote.base.common.domain.ResponseDTO;
+import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
@@ -71,5 +67,11 @@ public class MeasurementController {
     @GetMapping("/measurement/delete/{id}")
     public ResponseDTO<String> batchDelete(@PathVariable Long id) {
         return measurementService.delete(id);
+    }
+
+    @Operation(summary = "查询详情 @author cbh")
+    @GetMapping("/measurement/get/{id}")
+    public ResponseDTO<MeasurementVO> getDetail(@PathVariable Long id) {
+        return ResponseDTO.ok(measurementService.getDetail(id));
     }
 }

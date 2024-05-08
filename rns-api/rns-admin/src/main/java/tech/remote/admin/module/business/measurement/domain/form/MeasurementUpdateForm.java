@@ -22,6 +22,9 @@ public class MeasurementUpdateForm {
     @NotNull(message = "编号 不能为空")
     private Long id;
 
+    @Schema(description = "项目类型")
+    private Integer projectType;
+
     @Schema(description = "客户ID")
     private Long customerId;
 
@@ -67,4 +70,15 @@ public class MeasurementUpdateForm {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "项目节点ID")
+    private Long projectNodeId;
+
+    @Schema(description = "节点ID")
+    private Long nodeId;
+
+    @Schema(description = "状态（NodeStatusEnum）")
+    private Integer nodeStatus;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 }

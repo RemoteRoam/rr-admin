@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
  * 仪器计量实验室任务表 列表VO
@@ -22,13 +25,16 @@ public class MeasurementTaskVO {
     private Long id;
 
     @Schema(description = "实验室任务编号")
-    private String taskdNo;
+    private String taskNo;
 
     @Schema(description = "项目ID")
     private Long projectId;
 
     @Schema(description = "三方机构ID（实验室ID）")
     private Long thirdPartyId;
+
+    @Schema(description = "实验室名称")
+    private String thirdPartyName;
 
     @Schema(description = "仪器名称")
     private String instrument;
@@ -78,4 +84,6 @@ public class MeasurementTaskVO {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "操作节点列表")
+    private List<ProjectNodeVO> projectNodeList;
 }

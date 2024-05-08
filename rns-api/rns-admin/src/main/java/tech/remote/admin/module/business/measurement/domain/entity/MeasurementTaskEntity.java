@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldBigDecimal;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 仪器计量实验室任务表 实体类
@@ -29,7 +31,7 @@ public class MeasurementTaskEntity {
     /**
      * 实验室任务编号
      */
-    private String taskdNo;
+    private String taskNo;
 
     /**
      * 项目ID
@@ -44,31 +46,39 @@ public class MeasurementTaskEntity {
     /**
      * 仪器名称
      */
+    @DataTracerFieldLabel("仪器名称")
     private String instrument;
 
     /**
      * 有效期
      */
+    @DataTracerFieldLabel("有效期")
     private LocalDate expiryDate;
 
     /**
      * 实验费金额
      */
+    @DataTracerFieldLabel("实验费金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal experimentAmount;
 
     /**
      * 成本价
      */
+    @DataTracerFieldLabel("成本价")
+    @DataTracerFieldBigDecimal
     private BigDecimal costAmount;
 
     /**
      * 计量日期
      */
+    @DataTracerFieldLabel("计量日期")
     private LocalDate measurementDate;
 
     /**
      * 完成日期
      */
+    @DataTracerFieldLabel("完成日期")
     private LocalDate finishDate;
 
     /**

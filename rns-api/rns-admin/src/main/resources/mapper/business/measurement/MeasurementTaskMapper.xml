@@ -5,14 +5,23 @@
     <!-- 分页查询 -->
     <select id="queryPage" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementTaskVO">
         SELECT
-        *
-        FROM t_measurement_task
+        t.*,p1.name as thirdPartyName
+        FROM t_measurement_task t
+        left join t_third_party p1 on t.third_party_id = p1.id
         <where>
             <!--项目ID-->
             <if test="queryForm.projectId != null">
-                AND t_measurement_task.project_id = #{queryForm.projectId}
+                AND t.project_id = #{queryForm.projectId}
             </if>
         </where>
+    </select>
+    <select id="getDetail"
+            resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementTaskVO">
+        SELECT
+            t.*,p1.name as thirdPartyName
+        FROM t_measurement_task t
+                 left join t_third_party p1 on t.third_party_id = p1.id
+        WHERE t.id = #{id}
     </select>
 
 

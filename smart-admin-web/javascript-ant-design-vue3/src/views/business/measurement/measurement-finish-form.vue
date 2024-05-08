@@ -1,33 +1,19 @@
 <!--
-  * 体系认证表
+  * 计量完成日期
   *
   * @Author:    cbh
   * @Date:      2024-04-25 14:53:11
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="开票" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="完成日期" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="开票日期" name="invoiceDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.invoiceDate" style="width: 100%"
-                            placeholder="开票日期" />
-                    </a-form-item>
-                </a-col>
-            </a-row>
-            <a-row>
-                <a-col :span="24">
-                    <a-form-item label="发票金额" name="invoiceAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.invoiceAmount" placeholder="发票金额" />
-                    </a-form-item>
-                </a-col>
-            </a-row>
-            <a-row>
-                <a-col :span="24">
-                    <a-form-item label="发票号" name="invoiceNumber">
-                        <a-input style="width: 100%" v-model:value="form.invoiceNumber" placeholder="发票号" />
+                    <a-form-item label="完成日期" name="finishDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.finishDate" style="width: 100%"
+                            placeholder="完成日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -49,8 +35,7 @@ import { reactive, ref, nextTick, h } from 'vue';
 import _ from 'lodash';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
-import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
-import { measurementApi } from '/@/api/business/measurement/measurement-api';
+import { measurementTaskApi } from '/@/api/business/measurement/measurement-task-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
@@ -66,6 +51,8 @@ const visibleFlag = ref(false);
 const jumpNodeRef = ref();
 
 function show(rowData, projectNodeId) {
+    console.log('rowData', rowData);
+    console.log('projectNodeId', projectNodeId);
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);
@@ -91,12 +78,10 @@ const formDefault = {
     id: undefined, //项目ID
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
-    nodeId: NODE_CONST.invoice, //节点ID
+    nodeId: NODE_CONST.submit_data, //节点ID
     nodeStatus: undefined, //节点状态
     passReason: undefined, //跳过原因
-    invoiceDate: undefined, //开票日期
-    invoiceAmount: undefined, //发票金额
-    invoiceNumber: undefined, //发票号
+    dataReportDate: undefined, //资料上报日期
 };
 
 let form = reactive({ ...formDefault });
@@ -118,7 +103,6 @@ async function onSubmit() {
 // 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数nodeStatus传3
 
 function onJump() {
-    // 用另一种方式处理，暂时有问题，后续再调查
     // jumpNodeRef.value.show(form);
 
     Modal.confirm({
@@ -154,10 +138,11 @@ async function save(nodeStatus) {
     form.nodeStatus = nodeStatus;
     try {
         // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
-        if (form.projectType >= 40 && form.projectType < 50) {
-            await systemCertificationApi.update(form);
-        } else if (form.projectType >= 50 && form.projectType < 60) {
-            await measurementApi.update(form);
+        console.log('form', form);
+        if (form.id) {
+            await measurementTaskApi.update(form);
+        } else {
+            // await systemCertificationApi.add(form);
         }
         message.success('操作成功');
         emits('reloadList');

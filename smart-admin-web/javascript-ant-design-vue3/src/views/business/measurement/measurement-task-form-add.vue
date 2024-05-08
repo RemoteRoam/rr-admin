@@ -11,8 +11,9 @@
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验室任务编号" name="taskNo">
-                        <a-input style="width: 100%" v-model:value="form.taskNo" placeholder="实验室任务编号" disabled />
+                    <a-form-item label="项目编号" name="projectNo">
+                        <a-input-number style="width: 100%" v-model:value="form.projectNo" placeholder="项目编号"
+                            disabled />
                     </a-form-item>
                 </a-col>
                 <a-col :span="24">
@@ -48,13 +49,8 @@
                             placeholder="计量日期" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="24">
-                    <a-form-item label="完成日期" name="finishDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.finishDate" style="width: 100%"
-                            placeholder="完成日期" />
-                    </a-form-item>
-                </a-col>
             </a-row>
+
 
         </a-form>
 
@@ -83,25 +79,15 @@ const emits = defineEmits(['reloadList']);
 // 是否显示
 const visibleFlag = ref(false);
 
-function show(id) {
+function show(rowData) {
     Object.assign(form, formDefault);
-    detail(id);
-    visibleFlag.value = true;
-}
-
-async function detail(id) {
-    try {
-        let result = await measurementTaskApi.detail(id);
-        let data = result.data;
-        Object.assign(form, data);
-        nextTick(() => {
-            formRef.value.clearValidate();
-        });
-    } catch (error) {
-        smartSentry.captureError(error);
-    } finally {
-        SmartLoading.hide();
+    if (rowData && !_.isEmpty(rowData)) {
+        Object.assign(form, rowData);
     }
+    visibleFlag.value = true;
+    nextTick(() => {
+        formRef.value.clearValidate();
+    });
 }
 
 function onClose() {
@@ -140,8 +126,8 @@ const formDefault = {
 let form = reactive({ ...formDefault });
 
 const rules = {
-    id: [{ required: true, message: '编号 必填' }],
-    taskNo: [{ required: true, message: '实验室任务编号 必填' }],
+    // id: [{ required: true, message: '编号 必填' }],
+    // taskNo: [{ required: true, message: '实验室任务编号 必填' }],
 };
 
 // 点击确定，验证表单
@@ -158,11 +144,9 @@ async function onSubmit() {
 async function save() {
     SmartLoading.show();
     try {
-        if (form.id) {
-            await measurementTaskApi.update(form);
-        } else {
-            await measurementTaskApi.add(form);
-        }
+        console.log('form', form);
+        await measurementTaskApi.add(form);
+
         message.success('操作成功');
         emits('reloadList');
         onClose();

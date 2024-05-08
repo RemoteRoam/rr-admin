@@ -26,6 +26,14 @@ export const DATA_TRACER_TYPE_ENUM = {
     value: 4,
     desc: '体系认证',
   },
+  MEASUREMENT: {
+    value: 5,
+    desc: '仪器计量',
+  },
+  MEASUREMENT_TASK: {
+    value: 6,
+    desc: '仪器计量实验室任务',
+  },
 };
 
 export default {

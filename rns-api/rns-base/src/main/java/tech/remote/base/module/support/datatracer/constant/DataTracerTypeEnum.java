@@ -40,6 +40,10 @@ public enum DataTracerTypeEnum implements BaseEnum {
      * 仪器计量
      */
     MEASUREMENT(5, "仪器计量"),
+    /**
+     * 仪器计量实验室任务
+     */
+    MEASUREMENT_TASK(6, "仪器计量实验室任务"),
 
     ;
 

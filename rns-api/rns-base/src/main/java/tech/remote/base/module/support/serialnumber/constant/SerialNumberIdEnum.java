@@ -23,6 +23,7 @@ public enum SerialNumberIdEnum implements BaseEnum {
     PROJECT(3, "产品项目编号"),
     SYSTEM_CERTIFICATION(4, "体系认证项目编号"),
     MEASUREMENT(5, "仪器计量项目编号"),
+    MEASUREMENT_TASK(6, "仪器计量项目实验室任务编号"),
 
     ;
 

@@ -40,4 +40,5 @@ public interface MeasurementDao extends BaseMapper<MeasurementEntity> {
      */
     void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("${deletedFlag}")boolean deletedFlag);
 
+    MeasurementVO getDetail(@Param("id")Long id);
 }

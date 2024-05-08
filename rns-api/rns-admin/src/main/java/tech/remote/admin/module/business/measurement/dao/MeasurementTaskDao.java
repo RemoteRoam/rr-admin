@@ -32,4 +32,5 @@ public interface MeasurementTaskDao extends BaseMapper<MeasurementTaskEntity> {
     List<MeasurementTaskVO> queryPage(Page page, @Param("queryForm") MeasurementTaskQueryForm queryForm);
 
 
+    MeasurementTaskVO getDetail(Long id);
 }

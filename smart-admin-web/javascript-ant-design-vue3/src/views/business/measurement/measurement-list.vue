@@ -53,13 +53,19 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="confirmBatchDelete" type="danger" size="small"
+                <a-button @click="showForm" type="primary" size="small">
+                    <template #icon>
+                        <EditOutlined />
+                    </template>
+                    编辑
+                </a-button>
+                <!-- <a-button @click="confirmBatchDelete" type="danger" size="small"
                     :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <DeleteOutlined />
                     </template>
                     批量删除
-                </a-button>
+                </a-button> -->
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -69,12 +75,35 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
+            :pagination="false"
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
+                <template v-if="column.dataIndex === 'projectNo'">
+                    <a @click="detail(record.id)">{{ record.projectNo }}</a>
+                </template>
+                <template v-if="column.dataIndex === 'status'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
+                </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
-                        <a-button @click="showForm(record)" type="link">编辑</a-button>
-                        <a-button @click="onDelete(record)" danger type="link">删除</a-button>
+                        <a-dropdown>
+                            <a class="ant-dropdown-link" @click.prevent>
+                                节点操作
+                            </a>
+                            <template #overlay>
+                                <a-menu @click="handleMenuClick($event, record)">
+                                    <a-menu-item>
+                                        实验室任务
+                                    </a-menu-item>
+                                    <a-menu-divider />
+                                    <a-menu-item v-for="node in record.projectNodeList" :key="node">
+                                        {{ node.nodeName }}
+                                    </a-menu-item>
+                                </a-menu>
+                            </template>
+                        </a-dropdown>
+                        <!-- <a-button @click="showForm(record)" type="link">编辑</a-button>
+                        <a-button @click="onDelete(record)" danger type="link">删除</a-button> -->
                     </div>
                 </template>
             </template>
@@ -91,6 +120,10 @@
         <MeasurementFormAdd ref="formAddRef" @reloadList="queryData" />
         <MeasurementForm ref="formRef" @reloadList="queryData" />
 
+        <ReceivePayment ref="receivePaymentFormRef" @reloadList="queryData" />
+        <InvoiceForm ref="invoiceFormRef" @reloadList="queryData" />
+        <MailForm ref="mailFormRef" @reloadList="queryData" />
+
     </a-card>
 </template>
 <script setup>
@@ -100,12 +133,17 @@ import { SmartLoading } from '/@/components/framework/smart-loading';
 import { measurementApi } from '/@/api/business/measurement/measurement-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
 import { smartSentry } from '/@/lib/smart-sentry';
+import { useRouter } from 'vue-router';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import MeasurementForm from './measurement-form.vue';
 import MeasurementFormAdd from './measurement-form-add.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import NODE_CONST from '/@/constants/business/project/node-const';
+import InvoiceForm from '../common-nodes/invoice/invoice-form.vue';
+import MailForm from '../common-nodes/mail/mail-form.vue';
+import ReceivePayment from '../common-nodes/receive-payment/receive-payment.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -118,6 +156,7 @@ const columns = ref([
         title: '项目编号',
         dataIndex: 'projectNo',
         ellipsis: true,
+        width: 150,
     },
     // {
     //     title: '项目类型',
@@ -125,13 +164,13 @@ const columns = ref([
     //     ellipsis: true,
     // },
     {
-        title: '客户ID',
-        dataIndex: 'customerId',
+        title: '客户',
+        dataIndex: 'customerName',
         ellipsis: true,
     },
     {
-        title: '负责人ID',
-        dataIndex: 'managerId',
+        title: '负责人',
+        dataIndex: 'managerName',
         ellipsis: true,
     },
     {
@@ -278,8 +317,16 @@ onMounted(queryData);
 const formRef = ref();
 const formAddRef = ref();
 
-function showForm(data) {
-    formRef.value.show(data);
+const receivePaymentFormRef = ref();
+const invoiceFormRef = ref();
+const mailFormRef = ref();
+
+function showForm() {
+    if (selectedRowKeyList.value.length === 1) {
+        formRef.value.show(selectedRowKeyList.value[0]);
+    } else {
+        message.error('请选择一条数据');
+    }
 }
 function showFormAdd() {
     formAddRef.value.show();
@@ -354,5 +401,32 @@ async function requestBatchDelete() {
     } finally {
         SmartLoading.hide();
     }
+}
+
+
+const handleMenuClick = (e, param) => {
+    // console.log("key", e.key);
+    // console.log("param", param);
+    if (e.key === null) {
+        console.log("param", param);
+        router.push({
+            path: '/measurement/task/list', query: {
+                projectId: param.id, projectNo: param.projectNo, customerName: param.customerName,
+                managerName: param.managerName, createUserName: param.createUserName, createTime: param.createTime, date: new Date().getTime()
+            }
+        });
+    } else if (e.key.nodeId === NODE_CONST.receive_payment) {
+        receivePaymentFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.invoice) {
+        invoiceFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.mail) {
+        mailFormRef.value.show(param, e.key.id);
+    }
+};
+
+let router = useRouter();
+
+function detail(id) {
+    router.push({ path: '/measurement/detail', query: { id: id, date: new Date().getTime() } });
 }
 </script>

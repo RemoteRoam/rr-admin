@@ -30,6 +30,10 @@ export const measurementTaskApi = {
       return postRequest('/measurementTask/update', param);
   },
 
+  // 查询详情 @author cbh
+  detail: (id) => {
+      return getRequest(`/measurementTask/get/${id}`);
+  },
 
 
 };

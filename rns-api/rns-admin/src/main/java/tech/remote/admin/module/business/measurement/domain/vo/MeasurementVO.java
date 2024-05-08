@@ -34,8 +34,14 @@ public class MeasurementVO {
     @Schema(description = "客户ID")
     private Long customerId;
 
+    @Schema(description = "客户")
+    private String customerName;
+
     @Schema(description = "负责人ID")
     private Long managerId;
+
+    @Schema(description = "负责人")
+    private String managerName;
 
     @Schema(description = "收款金额")
     private BigDecimal paymentAmount;

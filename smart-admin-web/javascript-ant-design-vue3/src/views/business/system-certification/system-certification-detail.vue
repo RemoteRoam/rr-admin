@@ -1,5 +1,5 @@
 <!--
-  * 公司 详情
+  * 体系认证 详情
   * 
   * @Author:    1024创新实验室-主任：卓大 
   * @Date:      2022-08-15 20:15:49
@@ -233,7 +233,7 @@
 
 <script setup>
 import _ from 'lodash';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onActivated, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -246,6 +246,13 @@ const route = useRoute();
 let id = ref();
 onMounted(() => {
   console.log('route', route);
+  if (route.query.id) {
+    id.value = Number(route.query.id);
+    getDetail();
+  }
+});
+
+onActivated(() => {
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();

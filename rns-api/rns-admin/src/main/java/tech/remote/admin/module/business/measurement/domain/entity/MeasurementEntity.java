@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldBigDecimal;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 仪器计量表 实体类
@@ -44,46 +46,57 @@ public class MeasurementEntity {
     /**
      * 负责人ID
      */
+    @DataTracerFieldLabel("负责人")
     private Long managerId;
 
     /**
      * 收款金额
      */
+    @DataTracerFieldLabel("收款金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal paymentAmount;
 
     /**
      * 收款日期
      */
+    @DataTracerFieldLabel("收款日期")
     private LocalDate paymentDate;
 
     /**
      * 备注
      */
+    @DataTracerFieldLabel("备注")
     private String remark;
 
     /**
      * 开票日期
      */
+    @DataTracerFieldLabel("开票日期")
     private LocalDate invoiceDate;
 
     /**
      * 发票金额
      */
+    @DataTracerFieldLabel("发票金额")
+    @DataTracerFieldBigDecimal
     private BigDecimal invoiceAmount;
 
     /**
      * 发票号
      */
+    @DataTracerFieldLabel("发票号")
     private String invoiceNumber;
 
     /**
      * 邮寄日期
      */
+    @DataTracerFieldLabel("邮寄日期")
     private LocalDate mailingDate;
 
     /**
      * 快递单号
      */
+    @DataTracerFieldLabel("快递单号")
     private String trackingNumber;
 
     /**
