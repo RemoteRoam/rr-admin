@@ -58,7 +58,7 @@
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
-                    <a-dropdown>
+                    <a-dropdown v-if="record.projectNodeList.length > 0">
                         <a class="ant-dropdown-link" @click.prevent>
                             节点操作
                         </a>
@@ -131,11 +131,6 @@ const columns = ref([
         ellipsis: true,
     },
     {
-        title: '有效期',
-        dataIndex: 'expiryDate',
-        ellipsis: true,
-    },
-    {
         title: '实验费金额',
         dataIndex: 'experimentAmount',
         ellipsis: true,
@@ -148,6 +143,11 @@ const columns = ref([
     {
         title: '计量日期',
         dataIndex: 'measurementDate',
+        ellipsis: true,
+    },
+    {
+        title: '有效期',
+        dataIndex: 'expiryDate',
         ellipsis: true,
     },
     {
@@ -172,21 +172,6 @@ const columns = ref([
         ellipsis: true,
         width: 160,
     },
-    // {
-    //     title: '更新人',
-    //     dataIndex: 'updateUserId',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '更新人姓名',
-    //     dataIndex: 'updateUserName',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '更新时间',
-    //     dataIndex: 'updateTime',
-    //     ellipsis: true,
-    // },
     {
         title: '操作',
         dataIndex: 'action',

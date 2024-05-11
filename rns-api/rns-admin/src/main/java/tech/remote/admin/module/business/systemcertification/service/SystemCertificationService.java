@@ -110,9 +110,6 @@ public class SystemCertificationService {
             systemCertificationNodeEntity.setNodeName(typeNode.getNodeName());
             systemCertificationNodeEntity.setNodeSort(typeNode.getNodeSort());
             systemCertificationNodeEntity.setStatus(NodeStatusEnum.INIT.getValue());
-            systemCertificationNodeEntity.setOperateUserId(addForm.getCreateUserId());
-            systemCertificationNodeEntity.setOperateUserName(addForm.getCreateUserName());
-            systemCertificationNodeEntity.setOperateTime(LocalDateTime.now());
             systemCertificationNodeEntity.setCreateUserId(addForm.getCreateUserId());
             systemCertificationNodeEntity.setCreateUserName(addForm.getCreateUserName());
 

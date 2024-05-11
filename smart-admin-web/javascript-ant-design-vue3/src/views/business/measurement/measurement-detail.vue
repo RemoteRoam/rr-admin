@@ -9,8 +9,7 @@
 -->
 <template>
   <div class="detail-header">
-    <a-page-header
-      :title="$smartEnumPlugin.getDescByValue('PROJECT_TYPE_SYSTEM_ENUM', detail.projectType) + '(' + detail.projectNo + ')'">
+    <a-page-header :title="'仪器计量(' + detail.projectNo + ')'">
 
       <div>
         <a-descriptions size="small" :column="4">

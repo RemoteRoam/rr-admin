@@ -224,6 +224,7 @@
         pageSize: 10,
     };
     // 查询表单form
+    const area = ref([]);
     const queryForm = reactive({ ...queryFormState });
     // 表格加载loading
     const tableLoading = ref(false);
@@ -240,6 +241,25 @@
         Object.assign(queryForm, queryFormState);
         queryForm.pageSize = pageSize;
         queryData();
+    }
+
+    function changeArea(value, selectedOptions) {
+        Object.assign(queryForm, {
+            province: '',
+            city: '',
+            district: '',
+        });
+        if (!_.isEmpty(selectedOptions)) {
+            // 地区信息
+            queryForm.province = area.value[0].value;
+
+            if (area.value[1]) {
+                queryForm.city = area.value[1].value;
+            }
+            if (area.value[2]) {
+                queryForm.district = area.value[2].value;
+            }
+        }
     }
 
     // 查询数据

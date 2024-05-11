@@ -127,7 +127,7 @@
                 </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
-                        <a-dropdown>
+                        <a-dropdown v-if="record.systemCertificationNodeList.length > 0">
                             <a class="ant-dropdown-link" @click.prevent>
                                 节点操作
                             </a>
@@ -219,16 +219,6 @@ const columns = ref([
         width: 150,
     },
     {
-        title: '来源分类',
-        dataIndex: 'sourceType',
-        width: 80,
-    },
-    {
-        title: '来源',
-        dataIndex: 'sourceName',
-        width: 120,
-    },
-    {
         title: '认证机构',
         dataIndex: 'thirdPartyName',
         width: 120,
@@ -248,17 +238,6 @@ const columns = ref([
         dataIndex: 'contractAmount',
         ellipsis: true,
     },
-    {
-        title: '客户预期日期',
-        dataIndex: 'expectedDate',
-        ellipsis: true,
-        width: 110,
-    },
-    // {
-    //     title: '备注',
-    //     dataIndex: 'remark',
-    //     ellipsis: true,
-    // },
     // {
     //     title: '首款金额',
     //     dataIndex: 'firstPaymentAmount',
@@ -274,21 +253,21 @@ const columns = ref([
     //     dataIndex: 'dataReportDate',
     //     ellipsis: true,
     // },
-    // {
-    //     title: '审核老师',
-    //     dataIndex: 'auditTeacher',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '审核日期',
-    //     dataIndex: 'auditDate',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '咨询老师',
-    //     dataIndex: 'consultationTeacher',
-    //     ellipsis: true,
-    // },
+    {
+        title: '审核老师',
+        dataIndex: 'auditTeacher',
+        width: 80,
+    },
+    {
+        title: '审核日期',
+        dataIndex: 'auditDate',
+        ellipsis: true,
+    },
+    {
+        title: '咨询老师',
+        dataIndex: 'consultationTeacher',
+        width: 80,
+    },
     // {
     //     title: '交卷日期',
     //     dataIndex: 'submissionDate',
@@ -304,11 +283,11 @@ const columns = ref([
     //     dataIndex: 'rectificationDate',
     //     ellipsis: true,
     // },
-    // {
-    //     title: '证书发送日期',
-    //     dataIndex: 'certificateSendDate',
-    //     ellipsis: true,
-    // },
+    {
+        title: '证书发送日期',
+        dataIndex: 'certificateSendDate',
+        ellipsis: true,
+    },
     // {
     //     title: '证书有效期截止日期',
     //     dataIndex: 'certificateExpiryDate',
@@ -334,30 +313,15 @@ const columns = ref([
     //     dataIndex: 'invoiceAmount',
     //     ellipsis: true,
     // },
-    // {
-    //     title: '发票号',
-    //     dataIndex: 'invoiceNumber',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '邮寄日期',
-    //     dataIndex: 'mailingDate',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '快递单号',
-    //     dataIndex: 'trackingNumber',
-    //     ellipsis: true,
-    // },
     {
-        title: '状态',
-        dataIndex: 'status',
+        title: '邮寄日期',
+        dataIndex: 'mailingDate',
         ellipsis: true,
     },
     {
-        title: '创建人',
-        dataIndex: 'createUserName',
-        ellipsis: true,
+        title: '状态',
+        dataIndex: 'status',
+        width: 70,
     },
     {
         title: '创建时间',
@@ -365,16 +329,6 @@ const columns = ref([
         ellipsis: true,
         width: 170,
     },
-    // {
-    //     title: '更新人姓名',
-    //     dataIndex: 'updateUserName',
-    //     ellipsis: true,
-    // },
-    // {
-    //     title: '更新时间',
-    //     dataIndex: 'updateTime',
-    //     ellipsis: true,
-    // },
     {
         title: '操作',
         dataIndex: 'action',

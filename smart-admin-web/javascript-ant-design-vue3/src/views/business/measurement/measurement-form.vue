@@ -16,12 +16,6 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="项目类型" name="projectType">
-                        <SmartEnumSelect width="100%" v-model:value="form.projectType"
-                            enumName="PROJECT_TYPE_SYSTEM_ENUM" placeholder="项目类型" disabled />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
                     <a-form-item label="客户" name="customerId">
                         <CustomerSelect width="100%" v-model:value="form.customerId" placeholder="" disabled />
                     </a-form-item>

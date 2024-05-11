@@ -24,10 +24,6 @@ export const PROJECT_TYPE_SYSTEM_ENUM = {
     value: 44,
     desc: '扩项',
   },
-  MEASUREMENT: {
-    value: 51,
-    desc: '仪器计量',
-  },
 };
 
 export default {

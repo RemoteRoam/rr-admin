@@ -24,7 +24,7 @@
                 </a-col>
                 <a-col :span="24">
                     <a-form-item label="仪器名称" name="instrument">
-                        <a-input style="width: 100%" v-model:value="form.instrument" placeholder="仪器名称" />
+                        <a-textarea rows="4" style="width: 100%" v-model:value="form.instrument" placeholder="仪器名称" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="24">
