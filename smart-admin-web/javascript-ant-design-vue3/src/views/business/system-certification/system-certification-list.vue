@@ -88,11 +88,25 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="showForm" type="primary" size="small">
+                <a-button @click="showForm" type="primary" size="small" :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <EditOutlined />
                     </template>
                     编辑
+                </a-button>
+                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION.value)" type="primary" size="small"
+                    :disabled="toSupervision">
+                    <template #icon>
+                        <ArrowRightOutlined />
+                    </template>
+                    转监督
+                </a-button>
+                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.RE_CERTIFICATION.value)" type="primary"
+                    size="small" :disabled="reCertification">
+                    <template #icon>
+                        <RollbackOutlined />
+                    </template>
+                    再认证
                 </a-button>
                 <!-- <a-button @click="confirmBatchDelete" type="danger" size="small" :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
@@ -110,7 +124,7 @@
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
             :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
             <template #bodyCell="{ text, record, column }">
 
                 <template v-if="column.dataIndex === 'projectNo'">
@@ -175,6 +189,7 @@ import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+import { PROJECT_TYPE_SYSTEM_ENUM } from '/@/constants/business/project/system-certification-const';
 import { smartSentry } from '/@/lib/smart-sentry';
 import { useRouter } from 'vue-router';
 import TableOperator from '/@/components/support/table-operator/index.vue';
@@ -428,6 +443,13 @@ function showFormAdd() {
     formAddRef.value.show();
 }
 
+function showFormAddTo(projectType) {
+    let rowData = selectedRowsList.value[0];
+    rowData.projectType = projectType;
+    rowData.id = undefined;
+    formAddRef.value.show(rowData);
+}
+
 function showForm() {
     if (selectedRowKeyList.value.length === 1) {
         formRef.value.show(selectedRowKeyList.value[0]);
@@ -497,10 +519,28 @@ async function requestDelete(data) {
 
 // 选择表格行
 const selectedRowKeyList = ref([]);
+const selectedRowsList = ref([]);
+const toSupervision = ref(true);
+const reCertification = ref(true);
 
-function onSelectChange(selectedRowKeys) {
+function onSelectChange(selectedRowKeys, selections) {
     selectedRowKeyList.value = selectedRowKeys;
+    selectedRowsList.value = selections;
+    if (selectedRowsList.value.length == 1) {
+        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.INITIALIZATION.value) {
+            toSupervision.value = false;
+        }
+        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION.value) {
+            reCertification.value = false;
+        }
+    } else {
+        toSupervision.value = true;
+        reCertification.value = true;
+    }
+
 }
+
+
 
 // 批量删除
 function confirmBatchDelete() {

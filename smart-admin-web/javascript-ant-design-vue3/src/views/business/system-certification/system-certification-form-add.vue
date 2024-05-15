@@ -164,11 +164,7 @@ async function onSubmit() {
 async function save() {
     SmartLoading.show();
     try {
-        if (form.id) {
-            await systemCertificationApi.update(form);
-        } else {
-            await systemCertificationApi.add(form);
-        }
+        await systemCertificationApi.add(form);
         message.success('操作成功');
         emits('reloadList');
         onClose();
