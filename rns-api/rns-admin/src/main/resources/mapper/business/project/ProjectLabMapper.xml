@@ -5,19 +5,28 @@
     <!-- 分页查询 -->
     <select id="queryPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabVO">
         SELECT
-        *
-        FROM t_project_lab
+        t.*,p1.name as thirdPartyName
+        FROM t_project_lab t
+        left join t_third_party p1 on t.third_party_id = p1.id
         <where>
             <!--项目ID-->
             <if test="queryForm.projectId != null">
-                AND t_project_lab.project_id = #{queryForm.projectId}
+                AND t.project_id = #{queryForm.projectId}
             </if>
             <!--三方机构ID（实验室ID）-->
             <if test="queryForm.thirdPartyId != null">
-                AND t_project_lab.third_party_id = #{queryForm.thirdPartyId}
+                AND t.third_party_id = #{queryForm.thirdPartyId}
             </if>
         </where>
     </select>
 
+    <select id="getDetail"
+            resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabVO">
+        SELECT
+            t.*,p1.name as thirdPartyName
+        FROM t_project_lab t
+                 left join t_third_party p1 on t.third_party_id = p1.id
+        WHERE t.id = #{id}
+    </select>
 
 </mapper>

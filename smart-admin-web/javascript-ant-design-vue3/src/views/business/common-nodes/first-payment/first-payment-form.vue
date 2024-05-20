@@ -44,6 +44,8 @@ import _ from 'lodash';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
+import { measurementApi } from '/@/api/business/measurement/measurement-api';
+import { projectApi } from '/@/api/business/project/project-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
@@ -58,11 +60,11 @@ const visibleFlag = ref(false);
 
 const jumpNodeRef = ref();
 
-function show(rowData) {
-    console.log('rowData', rowData);
+function show(rowData, projectNodeId) {
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);
+        form.projectNodeId = projectNodeId;
     }
     visibleFlag.value = true;
     nextTick(() => {
@@ -83,6 +85,7 @@ const formRef = ref();
 const formDefault = {
     id: undefined, //项目ID
     projectType: undefined, //项目类型
+    projectNodeId: undefined, //项目节点ID
     nodeId: NODE_CONST.first_payment, //节点ID
     nodeStatus: undefined, //节点状态
     passReason: undefined, //跳过原因
@@ -146,10 +149,13 @@ async function save(nodeStatus) {
     try {
         // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
         console.log('form', form);
-        if (form.id) {
+
+        if (form.projectType < 40) {
+            await projectApi.update(form);
+        } else if (form.projectType >= 40 && form.projectType < 50) {
             await systemCertificationApi.update(form);
-        } else {
-            // await systemCertificationApi.add(form);
+        } else if (form.projectType >= 50 && form.projectType < 60) {
+            await measurementApi.update(form);
         }
         message.success('操作成功');
         emits('reloadList');

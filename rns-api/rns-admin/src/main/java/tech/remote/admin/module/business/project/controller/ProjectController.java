@@ -7,6 +7,7 @@ import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.service.ProjectService;
+import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -43,12 +45,18 @@ public class ProjectController {
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/project/add")
     public ResponseDTO<String> add(@RequestBody @Valid ProjectAddForm addForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        addForm.setCreateUserId(requestUser.getUserId());
+        addForm.setCreateUserName(requestUser.getUserName());
         return projectService.add(addForm);
     }
 
     @Operation(summary = "更新 @author cbh")
     @PostMapping("/project/update")
     public ResponseDTO<String> update(@RequestBody @Valid ProjectUpdateForm updateForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        updateForm.setUpdateUserId(requestUser.getUserId());
+        updateForm.setUpdateUserName(requestUser.getUserName());
         return projectService.update(updateForm);
     }
 
@@ -62,5 +70,11 @@ public class ProjectController {
     @GetMapping("/project/delete/{id}")
     public ResponseDTO<String> batchDelete(@PathVariable Long id) {
         return projectService.delete(id);
+    }
+
+    @Operation(summary = "查询详情 @author cbh")
+    @GetMapping("/project/get/{id}")
+    public ResponseDTO<ProjectVO> getDetail(@PathVariable Long id) {
+        return ResponseDTO.ok(projectService.getDetail(id));
     }
 }

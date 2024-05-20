@@ -18,6 +18,9 @@ public class ProjectLabQueryForm extends PageParam{
     @Schema(description = "项目ID")
     private Long projectId;
 
+    @Schema(description = "项目类型")
+    private Integer projectType;
+
     @Schema(description = "三方机构ID（实验室ID）")
     private Long thirdPartyId;
 

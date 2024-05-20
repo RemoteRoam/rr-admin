@@ -1,6 +1,8 @@
 package tech.remote.admin.module.business.project.dao;
 
 import java.util.List;
+
+import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
@@ -40,4 +42,5 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
      */
     void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("${deletedFlag}")boolean deletedFlag);
 
+    ProjectVO getDetail(@Param("id")Long id);
 }

@@ -56,16 +56,19 @@ public class SystemCertificationEntity {
     /**
      * 来源分类
      */
+    @DataTracerFieldLabel("来源分类")
     private Integer sourceType;
 
     /**
      * 来源ID
      */
+    @DataTracerFieldLabel("来源ID")
     private Long sourceId;
 
     /**
      * 认证机构ID
      */
+    @DataTracerFieldLabel("认证机构ID")
     private Long thirdPartyId;
 
     /**

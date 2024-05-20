@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import tech.remote.base.common.enumeration.BaseEnum;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 数据业务类型
  *
@@ -44,10 +47,35 @@ public enum DataTracerTypeEnum implements BaseEnum {
      * 仪器计量实验室任务
      */
     MEASUREMENT_TASK(6, "仪器计量实验室任务"),
+    /**
+     * 产品认证实验室任务
+     */
+    PRODUCT_LAB_TASK(111, "产品认证实验室任务"),
+    PC_CCC(11, "CCC自我声明"),
+    PC_CERTIFICATION(12, "产品认证"),
+    LAB_PROJECT(21, "试验项目"),
+    PC_SUPERVISION(31, "产品监督"),
 
     ;
 
     private final Integer value;
 
     private final String desc;
+    private static final Map<Integer, DataTracerTypeEnum> enumMap = new HashMap<>();
+
+    static {
+        for (DataTracerTypeEnum enumType : DataTracerTypeEnum.values()) {
+            enumMap.put(enumType.getValue(), enumType);
+        }
+    }
+
+    /**
+     * 通过value获取对应的枚举值
+     *
+     * @param value 枚举值
+     * @return 对应的枚举对象
+     */
+    public static DataTracerTypeEnum fromValue(Integer value) {
+        return enumMap.get(value);
+    }
 }

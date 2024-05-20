@@ -52,7 +52,7 @@ public class ProjectNodeManager extends ServiceImpl<ProjectNodeDao, ProjectNodeE
     public List<ProjectNodeVO> getAllNodes(ProjectNodeQueryForm queryForm) {
         LambdaQueryWrapper<ProjectNodeEntity> wrapper = new LambdaQueryWrapper();
         wrapper.eq(ProjectNodeEntity::getProjectId, queryForm.getProjectId());
-        wrapper.eq(ProjectNodeEntity::getProjectType, queryForm.getProjectType());
+//        wrapper.eq(ProjectNodeEntity::getProjectType, queryForm.getProjectType());
         wrapper.eq(ProjectNodeEntity::getNodeLevel, queryForm.getNodeLevel());
         wrapper.eq(queryForm.getTaskId() != null, ProjectNodeEntity::getTaskId, queryForm.getTaskId());
         wrapper.eq(queryForm.getProductId() != null, ProjectNodeEntity::getProductId, queryForm.getProductId());

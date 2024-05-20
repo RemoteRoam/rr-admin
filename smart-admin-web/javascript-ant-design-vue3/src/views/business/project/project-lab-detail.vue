@@ -1,0 +1,399 @@
+<!--
+  * 项目 详情
+  * 
+-->
+<template>
+  <div class="detail-header">
+    <a-page-header :title="'实验室任务编号(' + detail.taskNo + ')'">
+
+      <div>
+        <a-descriptions size="small" :column="4">
+          <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
+          <a-descriptions-item label="项目类型">{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM',
+            detail.projectType) }}</a-descriptions-item>
+          <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
+            detail.category) }}</a-descriptions-item>
+          <a-descriptions-item label="创建时间">{{ detail.createTime }}</a-descriptions-item>
+          <a-descriptions-item label="创建人">{{ detail.createUserName }}</a-descriptions-item>
+
+        </a-descriptions>
+      </div>
+    </a-page-header>
+  </div>
+  <a-card class="smart-margin-top10" size="small">
+    <a-tabs>
+      <a-tab-pane key="nodeList" tab="流程节点">
+        <a-row class="row-title">
+          <a-col :span="1">
+          </a-col>
+          <a-col :span="1">
+            状态
+          </a-col>
+          <a-col :span="2">节点名称</a-col>
+          <a-col :span="3">操作时间</a-col>
+          <a-col :span="2">操作人</a-col>
+          <a-col :span="15">跳过原因</a-col>
+        </a-row>
+        <template v-for="(node, index) in detail.projectNodeList" key="index">
+          <a-row style="margin-bottom: 10px">
+            <a-col :span="1">
+            </a-col>
+            <a-col :span="1">
+              <ClockCircleOutlined v-if="node.status === 0" />
+              <RightCircleOutlined v-else-if="node.status === 1" style="color: blue" />
+              <DownCircleOutlined v-else-if="node.status === 2" style="color: green" />
+              <CloseCircleOutlined v-else-if="node.status === 3" style="color: red" />
+            </a-col>
+            <a-col :span="2">{{ node.nodeName }}</a-col>
+            <a-col :span="3">{{ node.operateTime }}</a-col>
+            <a-col :span="2">{{ node.operateUserName }}</a-col>
+            <a-col :span="15">{{ node.passReason }}</a-col>
+          </a-row>
+        </template>
+      </a-tab-pane>
+      <a-tab-pane key="content" tab="详细信息">
+        <a-form :label-col="{ span: 8 }">
+          <a-row>
+            <a-col :span="8">
+              <a-form-item label="实验室任务编号" name="taskNo">
+                <a-input style="width: 95%" v-model:value="detail.taskNo" placeholder="实验室任务编号" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="实验室" name="thirdPartyId">
+                <ThirdPartySelect width="95%" v-model:value="detail.thirdPartyId" placeholder="请选择实验室" type="THIRD_1"
+                  disabled />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="8">
+              <a-form-item label="实验室合同号" name="labContractNo">
+                <a-input style="width: 95%" v-model:value="detail.labContractNo" placeholder="实验室合同号" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="实验室合同日期" name="labContractDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labContractDate" style="width: 95%"
+                  placeholder="实验室合同日期" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="实验费金额" name="labContractAmount">
+                <a-input-number style="width: 95%" v-model:value="detail.labContractAmount" placeholder="实验费金额"
+                  disabled />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="16">
+              <a-form-item label="实验合同备注" name="labContractRemark">
+                <a-textarea style="width: 95%" v-model:value="detail.labContractRemark" placeholder="实验合同备注" disabled />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="8">
+              <a-form-item label="客户要求完成日期" name="labExpectedDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labExpectedDate" style="width: 95%"
+                  placeholder="客户要求完成日期" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="资料发送日期" name="dataSendDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataSendDate" style="width: 95%"
+                  placeholder="资料发送日期" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="资料接收日期" name="dataReceiveDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataReceiveDate" style="width: 95%"
+                  placeholder="资料接收日期" disabled />
+              </a-form-item>
+
+            </a-col>
+
+          </a-row>
+          <a-row>
+            <a-col :span="8">
+              <a-form-item label="是否付款" name="isPaid">
+                <a-input-number style="width: 95%" v-model:value="detail.isPaid" placeholder="是否付款" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="付款方" name="payParty">
+                <a-input-number style="width: 95%" v-model:value="detail.payParty" placeholder="付款方(客户/我方)" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="实验费付款日期" name="labPayDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labPayDate" style="width: 95%"
+                  placeholder="实验费付款日期" disabled />
+              </a-form-item>
+
+            </a-col>
+
+          </a-row>
+          <a-row>
+            <a-col :span="16">
+              <a-form-item label="实验费备注" name="labPayRemark">
+                <a-textarea style="width: 95%" v-model:value="detail.labPayRemark" placeholder="实验费备注" disabled />
+              </a-form-item>
+
+            </a-col>
+
+          </a-row>
+          <a-row>
+            <a-col :span="8">
+              <a-form-item label="实验室下达任务日期" name="assignTaskDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.assignTaskDate" style="width: 95%"
+                  placeholder="实验室下达任务日期" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="预计完成日期" name="expectedCompletionDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.expectedCompletionDate" style="width: 95%"
+                  placeholder="预计完成日期" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="报告完成日期" name="reportCompletionDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.reportCompletionDate" style="width: 95%"
+                  placeholder="报告完成日期" disabled />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </a-form>
+      </a-tab-pane>
+      <a-tab-pane key="productList" tab="产品列表">
+        <!---------- 表格 begin ----------->
+        <a-table size="small" :dataSource="detail.projectProductList" :columns="columns" rowKey="id" bordered
+          :loading="tableLoading" :pagination="false">
+          <template #bodyCell="{ text, record, column }">
+            <template v-if="column.dataIndex === 'taskNo'">
+              <a @click="detailTask(record.id)">{{ record.taskNo }}</a>
+            </template>
+            <template v-if="column.dataIndex === 'status'">
+              <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
+            </template>
+            <template v-if="column.dataIndex === 'action'">
+              <a-dropdown>
+                <a class="ant-dropdown-link" @click.prevent>
+                  节点操作
+                </a>
+                <template #overlay>
+                  <a-menu @click="handleMenuClick($event, record)">
+                    <a-menu-item v-for="node in record.projectNodeList" :key="node">
+                      {{ node.nodeName }}
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
+          </template>
+        </a-table>
+        <!---------- 表格 end ----------->
+      </a-tab-pane>
+
+      <a-tab-pane key="dataTracer" tab="变更记录">
+        <DataTracer :dataId="id" :type="111" />
+      </a-tab-pane>
+    </a-tabs>
+  </a-card>
+</template>
+
+<script setup>
+import _ from 'lodash';
+import { reactive, onMounted, onActivated, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { projectApi } from '/@/api/business/project/project-api';
+import { projectLabApi } from '/@/api/business/project/project-lab-api';
+import { SmartLoading } from '/@/components/framework/smart-loading';
+import DataTracer from '/@/components/support/data-tracer/index.vue';
+import { DATA_TRACER_TYPE_ENUM } from '/@/constants/support/data-tracer-const';
+import { smartSentry } from '/@/lib/smart-sentry';
+import { useRouter } from 'vue-router';
+import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
+
+const route = useRoute();
+let id = ref();
+// 详情
+let detail = ref({});
+onMounted(() => {
+  console.log('route', route.query);
+  if (route.query.id) {
+    id.value = Number(route.query.id);
+    getDetail();
+    queryForm.projectId = route.query.id;
+    queryData();
+  }
+});
+onActivated(() => {
+  if (route.query.id) {
+    id.value = Number(route.query.id);
+    getDetail();
+    queryForm.projectId = route.query.id;
+    queryData();
+  }
+});
+
+//编辑
+const operateRef = ref();
+function showUpdate() {
+  operateRef.value.showModal(id.value);
+}
+
+
+async function getDetail() {
+  try {
+    let result = await projectLabApi.detail(id.value);
+    detail.value = result.data;
+    detail.value.customerName = route.query.customerName;
+    detail.value.projectType = Number(route.query.projectType);
+    detail.value.category = Number(route.query.category);
+    console.log("get detail:", detail.value)
+  } catch (error) {
+    smartSentry.captureError(error);
+  } finally {
+    SmartLoading.hide();
+  }
+}
+
+// ---------------------------- 表格列 ----------------------------
+
+const columns = ref([
+  // {
+  //   title: '编号',
+  //   dataIndex: 'id',
+  //   ellipsis: true,
+  // },
+  // {
+  //   title: '项目ID',
+  //   dataIndex: 'projectId',
+  //   ellipsis: true,
+  // },
+  // {
+  //   title: '实验室任务ID',
+  //   dataIndex: 'taskId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '产品名称',
+    dataIndex: 'productName',
+    ellipsis: true,
+  },
+  {
+    title: '产品型号',
+    dataIndex: 'productModel',
+    ellipsis: true,
+  },
+  {
+    title: '实验室上报日期',
+    dataIndex: 'labReportDate',
+    ellipsis: true,
+  },
+  {
+    title: '自我声明日期',
+    dataIndex: 'selfDeclarationDate',
+    ellipsis: true,
+  },
+  {
+    title: '证书编号',
+    dataIndex: 'certificateNo',
+    ellipsis: true,
+  },
+  {
+    title: '证书发送日期',
+    dataIndex: 'certificateSendDate',
+    ellipsis: true,
+  },
+  {
+    title: '证书有效期截止日期',
+    dataIndex: 'certificateExpiryDate',
+    ellipsis: true,
+  },
+  {
+    title: '项目认证费表ID',
+    dataIndex: 'certificationFeeId',
+    ellipsis: true,
+  },
+  {
+    title: '项目归档表ID',
+    dataIndex: 'archiveId',
+    ellipsis: true,
+  },
+  {
+    title: '项目邮寄表ID',
+    dataIndex: 'mail',
+    ellipsis: true,
+  },
+
+  {
+    title: '创建人姓名',
+    dataIndex: 'createUserName',
+    ellipsis: true,
+  },
+
+  {
+    title: '操作',
+    dataIndex: 'action',
+    fixed: 'right',
+    width: 90,
+  },
+]);
+
+const queryFormState = {
+  projectId: undefined, //项目ID
+  pageNum: 1,
+  pageSize: 10,
+};
+// 查询表单form
+const queryForm = reactive({ ...queryFormState });
+// 表格加载loading
+const tableLoading = ref(false);
+// 表格数据
+const tableData = ref([]);
+// 总数
+const total = ref(0);
+
+// 重置查询条件
+function resetQuery() {
+  let pageSize = queryForm.pageSize;
+  Object.assign(queryForm, queryFormState);
+  queryForm.pageSize = pageSize;
+  queryData();
+}
+
+// 查询数据
+async function queryData() {
+  tableLoading.value = true;
+  try {
+    let queryResult = await projectLabApi.queryPage(queryForm);
+    tableData.value = queryResult.data.list;
+    total.value = queryResult.data.total;
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    tableLoading.value = false;
+  }
+}
+
+let router = useRouter();
+
+function detailTask(id) {
+  router.push({ path: '/project/lab-detail', query: { id: id } });
+}
+</script>
+
+<style lang="less" scoped>
+.detail-header {
+  background-color: #fff;
+  padding: 10px;
+}
+
+.row-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px
+}
+</style>

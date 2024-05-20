@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
  * 项目实验室任务表 列表VO
@@ -29,6 +32,9 @@ public class ProjectLabVO {
 
     @Schema(description = "三方机构ID（实验室ID）")
     private Long thirdPartyId;
+
+    @Schema(description = "实验室名称")
+    private String thirdPartyName;
 
     @Schema(description = "实验室合同号")
     private String labContractNo;
@@ -72,6 +78,9 @@ public class ProjectLabVO {
     @Schema(description = "报告完成日期")
     private LocalDate reportCompletionDate;
 
+    @Schema(description = "状态")
+    private Integer status;
+
     @Schema(description = "创建人")
     private Long createUserId;
 
@@ -90,4 +99,9 @@ public class ProjectLabVO {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "产品列表")
+    private List<ProjectProductVO> projectProductList;
+
+    @Schema(description = "操作节点列表")
+    private List<ProjectNodeVO> projectNodeList;
 }

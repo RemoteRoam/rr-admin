@@ -29,7 +29,7 @@ public class ProjectUpdateForm {
     private Integer projectType;
 
     @Schema(description = "项目分类")
-    private String category;
+    private Integer category;
 
     @Schema(description = "客户ID")
     private Long customerId;
@@ -108,5 +108,17 @@ public class ProjectUpdateForm {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "项目节点ID")
+    private Long projectNodeId;
+
+    @Schema(description = "节点ID")
+    private Long nodeId;
+
+    @Schema(description = "状态（NodeStatusEnum）")
+    private Integer nodeStatus;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 
 }

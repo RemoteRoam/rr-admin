@@ -147,7 +147,7 @@
                             </a>
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
-                                    <a-menu-item v-for="node in record.systemCertificationNodeList" :key="node.nodeId">
+                                    <a-menu-item v-for="node in record.systemCertificationNodeList" :key="node">
                                         {{ node.nodeName }}
                                     </a-menu-item>
                                 </a-menu>
@@ -459,26 +459,26 @@ function showForm() {
 }
 
 const handleMenuClick = (e, param) => {
-    if (e.key === NODE_CONST.first_payment) {
-        firstPaymentRef.value.show(param);
-    } else if (e.key === NODE_CONST.submit_data) {
-        submitDataFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.review_plan) {
-        reviewPlanFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.submit_paper) {
-        submitPaperFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.assessment_date) {
-        assessmentDateFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.rectification_date) {
-        rectificationDateFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.certificate) {
-        systemCertificateFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.final_payment) {
-        finalPaymentFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.invoice) {
-        invoiceFormRef.value.show(param);
-    } else if (e.key === NODE_CONST.mail) {
-        mailFormRef.value.show(param);
+    if (e.key.nodeId === NODE_CONST.first_payment) {
+        firstPaymentRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.submit_data) {
+        submitDataFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.review_plan) {
+        reviewPlanFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.submit_paper) {
+        submitPaperFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.assessment_date) {
+        assessmentDateFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.rectification_date) {
+        rectificationDateFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.certificate) {
+        systemCertificateFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.final_payment) {
+        finalPaymentFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.invoice) {
+        invoiceFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.mail) {
+        mailFormRef.value.show(param, e.key.id);
     }
 };
 

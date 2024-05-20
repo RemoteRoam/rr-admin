@@ -25,6 +25,9 @@ public class ProjectLabUpdateForm {
     @Schema(description = "项目ID")
     private Long projectId;
 
+    @Schema(description = "项目类型")
+    private Integer projectType;
+
     @Schema(description = "实验室任务编号")
     private String taskNo;
 
@@ -81,5 +84,17 @@ public class ProjectLabUpdateForm {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "项目节点ID")
+    private Long projectNodeId;
+
+    @Schema(description = "节点ID")
+    private Long nodeId;
+
+    @Schema(description = "状态（NodeStatusEnum）")
+    private Integer nodeStatus;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 
 }

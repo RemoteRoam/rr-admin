@@ -91,9 +91,8 @@
 </template>
 <script setup>
 import { reactive, ref, onMounted, onActivated } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
-import { useRouter } from 'vue-router';
 import { measurementTaskApi } from '/@/api/business/measurement/measurement-task-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
 import { smartSentry } from '/@/lib/smart-sentry';

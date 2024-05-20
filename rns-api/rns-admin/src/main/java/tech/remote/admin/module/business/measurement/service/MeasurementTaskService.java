@@ -131,7 +131,7 @@ public class MeasurementTaskService {
         measurementTaskDao.updateById(measurementTaskEntity);
 
         // 节点操作更新
-        if(updateForm.getNodeId() != null && updateForm.getNodeStatus() != null) {
+        if(updateForm.getProjectNodeId() != null && updateForm.getNodeStatus() != null) {
             // 根据projectId和nodeId为条件，更新systemCertificationNode的状态
 
             ProjectNodeEntity projectNodeEntity = projectNodeManager.getById(updateForm.getProjectNodeId());

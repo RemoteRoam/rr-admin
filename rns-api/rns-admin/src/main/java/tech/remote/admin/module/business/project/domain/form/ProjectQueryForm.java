@@ -23,7 +23,7 @@ public class ProjectQueryForm extends PageParam{
     private Integer projectType;
 
     @Schema(description = "项目分类")
-    private String category;
+    private Integer category;
 
     @Schema(description = "客户ID")
     private Long customerId;

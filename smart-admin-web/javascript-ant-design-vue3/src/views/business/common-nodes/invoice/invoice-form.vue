@@ -51,6 +51,7 @@ import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { measurementApi } from '/@/api/business/measurement/measurement-api';
+import { projectApi } from '/@/api/business/project/project-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
@@ -153,8 +154,9 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
-        if (form.projectType >= 40 && form.projectType < 50) {
+        if (form.projectType < 40) {
+            await projectApi.update(form);
+        } else if (form.projectType >= 40 && form.projectType < 50) {
             await systemCertificationApi.update(form);
         } else if (form.projectType >= 50 && form.projectType < 60) {
             await measurementApi.update(form);

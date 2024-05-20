@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 
 /**
  * 项目实验室任务表 Dao
@@ -32,4 +33,5 @@ public interface ProjectLabDao extends BaseMapper<ProjectLabEntity> {
     List<ProjectLabVO> queryPage(Page page, @Param("queryForm") ProjectLabQueryForm queryForm);
 
 
+    ProjectLabVO getDetail(@Param("id")Long id);
 }

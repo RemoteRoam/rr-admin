@@ -20,6 +20,7 @@ import enterprise from './business/oa/enterprise-const';
 import codeGeneratorConst from './support/code-generator-const';
 import changeLogConst from './support/change-log-const';
 import systemCertificationConst from './business/project/system-certification-const';
+import projectConst from './business/project/project-const';
 
 export default {
   FLAG_NUMBER_ENUM,
@@ -39,4 +40,5 @@ export default {
   ...codeGeneratorConst,
   ...changeLogConst,
   ...systemCertificationConst,
+  ...projectConst,
 };

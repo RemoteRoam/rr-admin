@@ -3,7 +3,10 @@ package tech.remote.admin.module.business.project.domain.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
  * 项目产品表 列表VO
@@ -73,5 +76,8 @@ public class ProjectProductVO {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "操作节点列表")
+    private List<ProjectNodeVO> projectNodeList;
 
 }

@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
  * 项目表 列表VO
@@ -31,16 +34,22 @@ public class ProjectVO {
     private Integer projectType;
 
     @Schema(description = "项目分类")
-    private String category;
+    private Integer category;
 
     @Schema(description = "客户ID")
     private Long customerId;
+
+    @Schema(description = "客户")
+    private String customerName;
 
     @Schema(description = "来源分类")
     private Integer sourceType;
 
     @Schema(description = "来源ID")
     private Long sourceId;
+
+    @Schema(description = "来源")
+    private String sourceName;
 
     @Schema(description = "合同号")
     private String contractNo;
@@ -119,5 +128,11 @@ public class ProjectVO {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "实验室任务列表")
+    private List<ProjectLabVO> projectLabList;
+
+    @Schema(description = "操作节点列表")
+    private List<ProjectNodeVO> projectNodeList;
 
 }

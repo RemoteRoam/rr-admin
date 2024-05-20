@@ -5,43 +5,54 @@
     <!-- 分页查询 -->
     <select id="queryPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
         SELECT
-        *
-        FROM t_project
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.source_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
         <where>
             <!--项目编号-->
             <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
-                        AND INSTR(t_project.project_no,#{queryForm.projectNo})
+                        AND INSTR(t.project_no,#{queryForm.projectNo})
             </if>
             <!--项目类型-->
             <if test="queryForm.projectType != null">
-                AND t_project.project_type = #{queryForm.projectType}
+                AND t.project_type = #{queryForm.projectType}
             </if>
             <!--项目分类-->
             <if test="queryForm.category != null">
-                AND t_project.category = #{queryForm.category}
+                AND t.category = #{queryForm.category}
             </if>
             <!--客户ID-->
             <if test="queryForm.customerId != null">
-                AND t_project.customer_id = #{queryForm.customerId}
+                AND t.customer_id = #{queryForm.customerId}
             </if>
             <!--来源分类-->
             <if test="queryForm.sourceType != null">
-                AND t_project.source_type = #{queryForm.sourceType}
+                AND t.source_type = #{queryForm.sourceType}
             </if>
             <!--来源ID-->
             <if test="queryForm.sourceId != null">
-                AND t_project.source_id = #{queryForm.sourceId}
+                AND t.source_id = #{queryForm.sourceId}
             </if>
             <!--创建人-->
             <if test="queryForm.createUserId != null">
-                AND t_project.create_user_id = #{queryForm.createUserId}
+                AND t.create_user_id = #{queryForm.createUserId}
             </if>
             <!--创建时间-->
             <if test="queryForm.createTimeBegin != null">
-                AND DATE_FORMAT(t_project.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
             </if>
             <if test="queryForm.createTimeEnd != null">
-                AND DATE_FORMAT(t_project.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
         </where>
     </select>
@@ -60,4 +71,22 @@
         update t_project set deleted_flag = #{deletedFlag}
         where id = #{id}
     </update>
+
+    <select id="getDetail" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+            t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+            CASE
+                WHEN t.source_type = 1 THEN p2.name
+                WHEN t.source_type = 2 THEN e.actual_name
+                ELSE NULL
+                END AS sourceName
+        FROM t_project t
+                 left join t_customer c on t.customer_id = c.customer_id
+                 left join t_third_party p1 on t.source_id = p1.id
+                 LEFT JOIN
+             t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+                 LEFT JOIN
+             t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        where t.id = #{id}
+    </select>
 </mapper>
