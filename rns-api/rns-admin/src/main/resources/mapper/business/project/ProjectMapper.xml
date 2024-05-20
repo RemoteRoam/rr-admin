@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.project.dao.ProjectDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+        *
+        FROM t_project
+        <where>
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                        AND INSTR(t_project.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t_project.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t_project.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t_project.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t_project.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t_project.source_id = #{queryForm.sourceId}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t_project.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t_project.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t_project.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="batchUpdateDeleted">
+        update t_project set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_project set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+</mapper>
