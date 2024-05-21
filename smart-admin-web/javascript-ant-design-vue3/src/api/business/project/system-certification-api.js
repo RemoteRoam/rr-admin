@@ -5,7 +5,7 @@
  * @Date:      2024-04-25 14:53:11
  * @Copyright  Remote Nomad Studio
  */
-import { postRequest, getRequest } from '/@/lib/axios';
+import { postRequest, getRequest, postDownload } from '/@/lib/axios';
 
 export const systemCertificationApi = {
 
@@ -49,5 +49,10 @@ export const systemCertificationApi = {
   detail: (id) => {
       return getRequest(`/systemCertification/get/${id}`);
   },
+
+    // 导出excel @author cbh
+    exportExcel: (param) => {
+        return postDownload('/systemCertification/exportExcel', param);
+    },
 
 };

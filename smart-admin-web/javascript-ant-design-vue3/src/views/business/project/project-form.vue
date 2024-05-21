@@ -23,7 +23,7 @@
                 </a-col>
                 <a-col :span="8">
                     <a-form-item label="项目分类" name="category">
-                        <SmartEnumSelect width="95%" v-model:value="form.category" enumName="PROJECT_CATEGORY_ENUM"
+                        <SmartEnumSelect width="95%" v-model:value="form.category" :enumName="enumName"
                             placeholder="项目分类" />
                     </a-form-item>
                 </a-col>
@@ -176,7 +176,7 @@
     </a-modal>
 </template>
 <script setup>
-import { reactive, ref, nextTick } from 'vue';
+import { reactive, ref, nextTick, computed } from 'vue';
 import _ from 'lodash';
 import { message } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -208,6 +208,7 @@ async function detail(id) {
         console.log(result);
         let data = result.data;
         Object.assign(form, data);
+        projectTypeGlobal.value = data.projectType;
         nextTick(() => {
             formRef.value.clearValidate();
         });
@@ -222,6 +223,12 @@ function onClose() {
     Object.assign(form, formDefault);
     visibleFlag.value = false;
 }
+
+const projectTypeGlobal = ref(null);
+
+const enumName = computed(() => {
+    return projectTypeGlobal.value == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
+});
 
 // ------------------------ 表单 ------------------------
 

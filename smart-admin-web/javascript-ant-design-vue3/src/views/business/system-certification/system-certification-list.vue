@@ -108,12 +108,12 @@
                     </template>
                     再认证
                 </a-button>
-                <!-- <a-button @click="confirmBatchDelete" type="danger" size="small" :disabled="selectedRowKeyList.length == 0">
+                <a-button @click="exportExcel()" type="primary" size="small">
                     <template #icon>
-                        <DeleteOutlined />
+                        <FileExcelOutlined />
                     </template>
-                    批量删除
-                </a-button> -->
+                    导出数据
+                </a-button>
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -576,4 +576,10 @@ let router = useRouter();
 function detail(id) {
     router.push({ path: '/system-certification/detail', query: { id: id } });
 }
+
+// --------------------------- 导出 ---------------------------
+async function exportExcel() {
+    await systemCertificationApi.exportExcel(queryForm);
+}
+
 </script>

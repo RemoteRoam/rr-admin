@@ -8,14 +8,8 @@
   * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
 -->
 <template>
-  <a-menu
-    v-model:openKeys="openKeys"
-    v-model:selectedKeys="selectedKeys"
-    class="smart-menu"
-    mode="inline"
-    :theme="theme"
-    :inlineCollapsed="collapsed"
-  >
+  <a-menu v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys" class="smart-menu" mode="inline"
+    :theme="theme" :inlineCollapsed="collapsed">
     <template v-for="item in menuTree" :key="item.menuId">
       <template v-if="item.visibleFlag && !item.disabledFlag">
         <template v-if="$lodash.isEmpty(item.children)">
@@ -34,76 +28,102 @@
   </a-menu>
 </template>
 <script setup>
-  import _ from 'lodash';
-  import { computed, ref, watch } from 'vue';
-  import { useRoute } from 'vue-router';
-  import SubMenu from './sub-menu.vue';
-  import { router } from '/@/router/index';
-  import { useAppConfigStore } from '/@/store/modules/system/app-config';
-  import { useUserStore } from '/@/store/modules/system/user';
+import _ from 'lodash';
+import { computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import SubMenu from './sub-menu.vue';
+import { router } from '/@/router/index';
+import { useAppConfigStore } from '/@/store/modules/system/app-config';
+import { useUserStore } from '/@/store/modules/system/user';
 
-  const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
+const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
 
-  const props = defineProps({
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
-  });
+const props = defineProps({
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  const menuTree = computed(() => useUserStore().getMenuTree || []);
+const menuTree = computed(() => useUserStore().getMenuTree || []);
 
-  //展开的菜单
-  let currentRoute = useRoute();
-  const selectedKeys = ref([]);
-  const openKeys = ref([]);
+//展开的菜单
+let currentRoute = useRoute();
+const selectedKeys = ref([]);
+const openKeys = ref([]);
 
-  // 页面跳转
-  function turnToPage(menu) {
-    useUserStore().deleteKeepAliveIncludes(menu.menuId.toString());
-    router.push({ path: menu.path });
-  }
+// 页面跳转
+function turnToPage(menu) {
+  useUserStore().deleteKeepAliveIncludes(menu.menuId.toString());
+  // console.log("menu:", menu);
+  router.push({ path: menu.path });
+  // const queryParamStart = menu.path.indexOf('?');
+  // let path = menu.path;
+  // let query = { projectType: 12 };
+
+  // // 如果路径包含?，则提取查询参数
+  // if (queryParamStart !== -1) {
+  //   path = path.substring(0, queryParamStart); // 提取路径部分
+  //   const queryStr = menu.path.substring(queryParamStart + 1); // 提取查询字符串
+  //   console.log("queryStr:", queryStr)
+  //   query = parseQuery(queryStr); // 解析查询字符串为对象
+  // }
+  // console.log("path:", path);
+  // console.log("query:", query);
+
+  // // 使用解析后的查询参数进行导航
+  // router.push({ path, query });
+}
+
+// 解析查询字符串为对象
+function parseQuery(queryStr) {
+  return queryStr.split('&').reduce((params, param) => {
+    const [key, value] = param.split('=');
+    params[key] = decodeURIComponent(value);
+    return params;
+  }, {});
+}
+
+/**
+ * SmartAdmin中 router的name 就是 后端存储menu的id
+ * 所以此处可以直接监听路由，根据路由更新菜单的选中和展开
+ */
+function updateOpenKeysAndSelectKeys() {
+  // 更新选中
+  selectedKeys.value = [_.toNumber(currentRoute.name)];
 
   /**
-   * SmartAdmin中 router的name 就是 后端存储menu的id
-   * 所以此处可以直接监听路由，根据路由更新菜单的选中和展开
+   * 更新展开（1、获取新展开的menu key集合；2、保留原有的openkeys，然后把新展开的与之合并）
    */
-  function updateOpenKeysAndSelectKeys() {
-    // 更新选中
-    selectedKeys.value = [_.toNumber(currentRoute.name)];
+  //获取需要展开的menu key集合
+  let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
+  let parentList = menuParentIdListMap.get(currentRoute.name) || [];
 
-    /**
-     * 更新展开（1、获取新展开的menu key集合；2、保留原有的openkeys，然后把新展开的与之合并）
-     */
-    //获取需要展开的menu key集合
-    let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
-    let parentList = menuParentIdListMap.get(currentRoute.name) || [];
-
-    // 如果是折叠菜单的话，则不需要设置openkey
-    if(!props.collapsed){
-      // 使用lodash的union函数，进行 去重合并两个数组
-      let needOpenKeys = _.map(parentList, 'name').map(Number);
-      openKeys.value = _.union(openKeys.value, needOpenKeys);
-    }
+  // 如果是折叠菜单的话，则不需要设置openkey
+  if (!props.collapsed) {
+    // 使用lodash的union函数，进行 去重合并两个数组
+    let needOpenKeys = _.map(parentList, 'name').map(Number);
+    openKeys.value = _.union(openKeys.value, needOpenKeys);
   }
+}
 
-  watch(
-    currentRoute,
-    () => {
-      updateOpenKeysAndSelectKeys();
-    },
-    {
-      immediate: true,
-    }
-  );
+watch(
+  currentRoute,
+  () => {
+    updateOpenKeysAndSelectKeys();
+  },
+  {
+    immediate: true,
+  }
+);
 
-  defineExpose({
-    updateOpenKeysAndSelectKeys,
-  });
+defineExpose({
+  updateOpenKeysAndSelectKeys,
+});
 </script>
 
 <style lang="less" scoped>
-  .smart-menu {
-    position: relative;
-  }
+.smart-menu {
+  position: relative;
+}
 </style>

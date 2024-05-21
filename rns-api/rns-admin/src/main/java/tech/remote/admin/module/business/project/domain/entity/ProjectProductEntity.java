@@ -83,7 +83,12 @@ public class ProjectProductEntity {
     /**
      * 项目邮寄表ID
      */
-    private Long mail;
+    private Long mailId;
+
+    /**
+     * 状态
+     */
+    private Integer status;
 
     /**
      * 创建人

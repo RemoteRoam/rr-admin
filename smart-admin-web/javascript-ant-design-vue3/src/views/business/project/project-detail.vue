@@ -11,7 +11,7 @@
           <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
           <a-descriptions-item label="项目类型">{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM',
             detail.projectType) }}</a-descriptions-item>
-          <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
+          <a-descriptions-item label="项目分类" v-if="projectTypeGlobal != 31">{{ $smartEnumPlugin.getDescByValue(enumName,
             detail.category) }}</a-descriptions-item>
           <a-descriptions-item label="来源分类">{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM',
             detail.sourceType) }}</a-descriptions-item>
@@ -219,7 +219,7 @@
 
 <script setup>
 import _ from 'lodash';
-import { reactive, onMounted, onActivated, ref } from 'vue';
+import { reactive, onMounted, onActivated, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { projectApi } from '/@/api/business/project/project-api';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
@@ -249,6 +249,12 @@ onActivated(() => {
   }
 });
 
+const projectTypeGlobal = ref(null);
+
+const enumName = computed(() => {
+  return projectTypeGlobal.value == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
+});
+
 //编辑
 const operateRef = ref();
 function showUpdate() {
@@ -262,6 +268,7 @@ async function getDetail() {
   try {
     let result = await projectApi.detail(id.value);
     detail.value = result.data;
+    projectTypeGlobal.value = result.data.projectType;
   } catch (error) {
     smartSentry.captureError(error);
   } finally {
@@ -285,48 +292,49 @@ const columns = ref([
   {
     title: '实验室任务编号',
     dataIndex: 'taskNo',
-    ellipsis: true,
+    width: 170,
   },
   {
     title: '实验室',
     dataIndex: 'thirdPartyName',
-    ellipsis: true,
+    width: 150,
   },
   {
     title: '实验室合同号',
     dataIndex: 'labContractNo',
-    ellipsis: true,
+    width: 120,
   },
   {
     title: '实验室合同日期',
     dataIndex: 'labContractDate',
     ellipsis: true,
+    width: 120,
   },
   {
     title: '实验费金额',
     dataIndex: 'labContractAmount',
-    ellipsis: true,
+    width: 90,
   },
   {
     title: '客户要求完成日期',
     dataIndex: 'labExpectedDate',
-    ellipsis: true,
+    width: 130,
   },
   // {
   //     title: '实验合同备注',
   //     dataIndex: 'labContractRemark',
   //     ellipsis: true,
   // },
-  {
-    title: '资料发送日期',
-    dataIndex: 'dataSendDate',
-    ellipsis: true,
-  },
-  {
-    title: '资料接收日期',
-    dataIndex: 'dataReceiveDate',
-    ellipsis: true,
-  },
+  // {
+  //     title: '资料发送日期',
+  //     dataIndex: 'dataSendDate',
+  //     ellipsis: true,
+  // },
+  // {
+  //     title: '资料接收日期',
+  //     dataIndex: 'dataReceiveDate',
+  //     ellipsis: true,
+  // },
   // {
   //     title: '是否付款',
   //     dataIndex: 'isPaid',
@@ -350,18 +358,18 @@ const columns = ref([
   {
     title: '实验室下达任务日期',
     dataIndex: 'assignTaskDate',
-    ellipsis: true,
+    width: 150,
   },
-  {
-    title: '预计完成日期',
-    dataIndex: 'expectedCompletionDate',
-    ellipsis: true,
-  },
-  {
-    title: '报告完成日期',
-    dataIndex: 'reportCompletionDate',
-    ellipsis: true,
-  },
+  // {
+  //     title: '预计完成日期',
+  //     dataIndex: 'expectedCompletionDate',
+  //     ellipsis: true,
+  // },
+  // {
+  //     title: '报告完成日期',
+  //     dataIndex: 'reportCompletionDate',
+  //     ellipsis: true,
+  // },
   {
     title: '状态',
     dataIndex: 'status',
@@ -375,7 +383,7 @@ const columns = ref([
   {
     title: '创建时间',
     dataIndex: 'createTime',
-    ellipsis: true,
+    width: 170,
   },
   // {
   //     title: '更新人',
@@ -438,7 +446,7 @@ async function queryData() {
 let router = useRouter();
 
 function detailTask(id) {
-  router.push({ path: '/project/lab-detail', query: { id: id } });
+  router.push({ path: '/project/lab-detail', query: { id: id, customerName: detail.value.customerName, projectType: detail.value.projectType, category: detail.value.category } });
 }
 </script>
 

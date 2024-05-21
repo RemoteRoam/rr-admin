@@ -13,7 +13,8 @@
             <a-row v-if="form.isPaid">
                 <a-col :span="24">
                     <a-form-item label="付款方" name="payParty">
-                        <a-input style="width: 95%" v-model:value="form.payParty" placeholder="付款方" />
+                        <SmartEnumSelect width="95%" v-model:value="form.payParty" enumName="PAY_PARTY_ENUM"
+                            placeholder="付款方" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -54,6 +55,7 @@ import { SmartLoading } from '/@/components/framework/smart-loading';
 import { projectApi } from '/@/api/business/project/project-api';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { smartSentry } from '/@/lib/smart-sentry';
+import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
 
@@ -118,16 +120,13 @@ async function onSubmit() {
         message.error('参数验证错误，请仔细填写表单数据!');
     }
 };
-function handleChange(checked) {
-    console.log(checked);
-    form.isPaid = checked; // 直接将checked的值（0或1）赋给isPaid
-};
+
 const formattedValue = computed(() => {
     return form.isPaid ? 1 : 0;
 });
 const onChange = (event) => {
     form.isPaid = event.target.checked ? 1 : 0;
-    console.log(form.isPaid);
+    // console.log(form.isPaid);
 };
 
 // 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数nodeStatus传3

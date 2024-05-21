@@ -15,11 +15,11 @@ import lombok.Data;
 @Data
 public class ProjectProductAddForm {
 
-    @Schema(description = "编号")
-    private Long id;
-
     @Schema(description = "项目ID")
     private Long projectId;
+
+    @Schema(description = "项目类型")
+    private Integer projectType;
 
     @Schema(description = "实验室任务ID")
     private Long taskId;

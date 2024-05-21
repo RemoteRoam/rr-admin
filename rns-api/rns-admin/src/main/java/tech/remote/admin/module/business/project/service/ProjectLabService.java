@@ -14,10 +14,8 @@ import tech.remote.admin.module.business.project.domain.entity.ProjectProductEnt
 import tech.remote.admin.module.business.project.domain.form.ProjectLabAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabUpdateForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectProductQueryForm;
 import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
-import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.manager.ProjectManager;
 import tech.remote.admin.module.business.project.manager.ProjectProductManager;
 import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
@@ -138,10 +136,35 @@ public class ProjectLabService {
             projectProduct.setId(null);
             projectProduct.setTaskId(projectLabEntity.getId());
             projectProduct.setProjectId(projectLabEntity.getProjectId());
+            projectProduct.setStatus(ProjectStatusEnum.DOING.getValue());
+            projectProduct.setCreateUserId(addForm.getCreateUserId());
+            projectProduct.setCreateUserName(addForm.getCreateUserName());
         }
         projectProductManager.saveBatch(projectProductList);
 
-        dataTracerService.insert(projectLabEntity.getId(), DataTracerTypeEnum.PRODUCT_LAB_TASK);
+        // 获取该类型下的对应节点
+        TypeNodeQuery query2 = new TypeNodeQuery();
+        query2.setNodeLevel(3);
+        query2.setProjectType(addForm.getProjectType());
+        List<TypeNodeListVO> typeNodeList2 = typeNodeService.getTypeNodes(query2);
+
+        for(ProjectProductEntity projectProduct : projectProductList){
+            List<ProjectNodeEntity> projectNodeList2 = SmartBeanUtil.copyList(typeNodeList2, ProjectNodeEntity.class);
+            for(ProjectNodeEntity projectNode : projectNodeList2){
+                projectNode.setId(null);
+                projectNode.setProjectId(addForm.getProjectId());
+                projectNode.setProjectNo(projectNo);
+                projectNode.setTaskId(projectLabEntity.getId());
+                projectNode.setProductId(projectProduct.getId());
+                projectNode.setProjectType(addForm.getProjectType());
+                projectNode.setStatus(NodeStatusEnum.INIT.getValue());
+                projectNode.setCreateUserId(addForm.getCreateUserId());
+                projectNode.setCreateUserName(addForm.getCreateUserName());
+            }
+            projectNodeManager.saveBatch(projectNodeList2);
+        }
+
+        dataTracerService.insert(projectLabEntity.getId(), DataTracerTypeEnum.PROJECT_LAB_TASK);
 
         return ResponseDTO.ok();
     }
@@ -216,7 +239,19 @@ public class ProjectLabService {
         queryWrapper.eq(ProjectProductEntity::getProjectId, vo.getProjectId());
         queryWrapper.eq(ProjectProductEntity::getTaskId, id);
         List<ProjectProductEntity> projectProductList = projectProductManager.list(queryWrapper);
-        vo.setProjectProductList(SmartBeanUtil.copyList(projectProductList, ProjectProductVO.class));
+
+        List<ProjectProductVO> projectProductVOList = SmartBeanUtil.copyList(projectProductList, ProjectProductVO.class);
+//        for(ProjectProductVO productVO : projectProductVOList){
+//
+//            ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+//            nodeQueryForm.setProjectId(vo.getProjectId());
+//            nodeQueryForm.setProjectType(queryForm.getProjectType());
+//            nodeQueryForm.setTaskId(vo.getId());
+//            nodeQueryForm.setProductId(productVO.getId());
+//            nodeQueryForm.setNodeLevel(3);
+//            productVO.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+//        }
+        vo.setProjectProductList(projectProductVOList);
 
         return vo;
     }

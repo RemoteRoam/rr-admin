@@ -12,12 +12,12 @@
             <a-form-item label="项目编号" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.projectNo" placeholder="项目编号" />
             </a-form-item>
-            <a-form-item label="项目类型" class="smart-query-form-item">
+            <!-- <a-form-item label="项目类型" class="smart-query-form-item">
                 <SmartEnumSelect width="190px" v-model:value="queryForm.projectType"
                     enumName="PROJECT_TYPE_PRODUCT_ENUM" placeholder="项目类型" />
-            </a-form-item>
-            <a-form-item label="项目分类" class="smart-query-form-item">
-                <SmartEnumSelect width="150px" v-model:value="queryForm.category" enumName="PROJECT_CATEGORY_ENUM"
+            </a-form-item> -->
+            <a-form-item label="项目分类" class="smart-query-form-item" v-if="queryForm.projectType != 31">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.category" :enumName="enumName"
                     placeholder="项目分类" />
             </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
@@ -103,7 +103,7 @@
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'category'">
-                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM', text) }}</span>
+                    <span>{{ $smartEnumPlugin.getDescByValue(enumName, text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'sourceType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
@@ -119,10 +119,10 @@
                             </a>
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
-                                    <a-menu-item>
+                                    <a-menu-item v-if="record.projectType != 31">
                                         实验室任务
                                     </a-menu-item>
-                                    <a-menu-divider />
+                                    <a-menu-divider v-if="record.projectType != 31" />
                                     <a-menu-item v-for="node in record.projectNodeList" :key="node">
                                         {{ node.nodeName }}
                                     </a-menu-item>
@@ -157,9 +157,9 @@
 
 </template>
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, computed } from 'vue';
 import { message, Modal } from 'ant-design-vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { projectApi } from '/@/api/business/project/project-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
@@ -186,7 +186,7 @@ const columns = ref([
     {
         title: '项目编号',
         dataIndex: 'projectNo',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '项目类型',
@@ -281,7 +281,7 @@ const columns = ref([
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        ellipsis: true,
+        width: 170,
     },
     {
         title: '操作',
@@ -321,6 +321,7 @@ function resetQuery() {
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
+    queryForm.projectType = projectType;
     queryData();
 }
 
@@ -343,8 +344,23 @@ function onChangeCreateTime(dates, dateStrings) {
     queryForm.createTimeEnd = dateStrings[1];
 }
 
+let route = useRoute();
+const projectType = ref(null); // 定义单独的 projectType 变量
 
-onMounted(queryData);
+onMounted(() => {
+    // 获取最后一个"/"之后的值
+    const lastSlashIndex = route.path.lastIndexOf('/');
+    if (lastSlashIndex !== -1) {
+        const type = route.path.slice(lastSlashIndex + 1);
+        queryForm.projectType = type;
+        projectType.value = type;
+    }
+    queryData();
+});
+
+const enumName = computed(() => {
+    return projectType.value == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
+});
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();
@@ -366,7 +382,7 @@ function showForm() {
 }
 
 function showFormAdd() {
-    formAddRef.value.show(1);
+    formAddRef.value.show(queryForm.projectType);
 }
 
 

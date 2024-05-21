@@ -77,7 +77,8 @@
                 </a-col>
                 <a-col :span="8">
                     <a-form-item label="付款方" name="payParty">
-                        <a-input-number style="width: 95%" v-model:value="form.payParty" placeholder="付款方(客户/我方)" />
+                        <SmartEnumSelect width="95%" v-model:value="form.payParty" enumName="PAY_PARTY_ENUM"
+                            placeholder="" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -137,6 +138,7 @@ import { SmartLoading } from '/@/components/framework/smart-loading';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
+import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 
 // ------------------------ 事件 ------------------------
 

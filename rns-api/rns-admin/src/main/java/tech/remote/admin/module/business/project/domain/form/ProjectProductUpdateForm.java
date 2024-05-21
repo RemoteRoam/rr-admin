@@ -55,7 +55,7 @@ public class ProjectProductUpdateForm {
     private Long archiveId;
 
     @Schema(description = "项目邮寄表ID")
-    private Long mail;
+    private Long mailId;
 
     @Schema(description = "更新人")
     private Long updateUserId;
@@ -66,4 +66,15 @@ public class ProjectProductUpdateForm {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "项目节点ID")
+    private Long projectNodeId;
+
+    @Schema(description = "节点ID")
+    private Long nodeId;
+
+    @Schema(description = "状态（NodeStatusEnum）")
+    private Integer nodeStatus;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 }

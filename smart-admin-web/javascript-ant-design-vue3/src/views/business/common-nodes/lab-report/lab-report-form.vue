@@ -6,14 +6,14 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="实验检测" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="试验室上报" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
-        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
+        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 10 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="报告完成日期" name="reportCompletionDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.reportCompletionDate"
-                            style="width: 95%" placeholder="报告完成日期" />
+                    <a-form-item label="实验室上报日期" name="labReportDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labReportDate" style="width: 95%"
+                            placeholder="实验室上报日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -35,7 +35,7 @@ import { reactive, ref, nextTick, h } from 'vue';
 import _ from 'lodash';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
-import { projectLabApi } from '/@/api/business/project/project-lab-api';
+import { projectProductApi } from '/@/api/business/project/project-product-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
@@ -77,10 +77,10 @@ const formDefault = {
     projectId: undefined, //项目类型
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
-    nodeId: NODE_CONST.experiment_check, //节点ID
+    nodeId: NODE_CONST.assign_task, //节点ID
     nodeStatus: 0, //节点状态
     passReason: undefined, //跳过原因
-    reportCompletionDate: undefined, //报告完成日期
+    labReportDate: undefined, //实验室上报日期
 };
 
 let form = reactive({ ...formDefault });
@@ -137,7 +137,7 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        await projectLabApi.update(form);
+        await projectProductApi.update(form);
         message.success('操作成功');
         emits('reloadList');
         onClose();

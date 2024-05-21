@@ -15,6 +15,7 @@ import tech.remote.admin.module.business.systemcertification.domain.entity.Syste
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationAddForm;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationQueryForm;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationUpdateForm;
+import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationExcelVO;
 import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationVO;
 import tech.remote.admin.module.business.systemcertificationnode.domain.entity.SystemCertificationNodeEntity;
 import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
@@ -205,5 +206,10 @@ public class SystemCertificationService {
         vo.setSystemCertificationNodeList(SmartBeanUtil.copyList(systemCertificationNodeList, SystemCertificationNodeVO.class));
 
         return vo;
+    }
+
+    public List<SystemCertificationExcelVO> getExcelExportData(SystemCertificationQueryForm queryForm) {
+        List<SystemCertificationExcelVO> excelList = systemCertificationDao.selectExcelList(queryForm);
+        return excelList;
     }
 }

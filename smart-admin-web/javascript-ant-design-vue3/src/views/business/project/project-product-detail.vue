@@ -13,6 +13,14 @@
             detail.projectType) }}</a-descriptions-item>
           <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
             detail.category) }}</a-descriptions-item>
+          <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
+          <a-descriptions-item label="产品名称">{{ detail.productName }}</a-descriptions-item>
+          <a-descriptions-item label="产品型号">{{ detail.productModel }}</a-descriptions-item>
+          <a-descriptions-item label="实验室上报日期">{{ detail.labReportDate }}</a-descriptions-item>
+          <a-descriptions-item label="自我声明日期">{{ detail.selfDeclarationDate }}</a-descriptions-item>
+          <a-descriptions-item label="证书编号">{{ detail.certificateNo }}</a-descriptions-item>
+          <a-descriptions-item label="证书发送日期">{{ detail.certificateSendDate }}</a-descriptions-item>
+          <a-descriptions-item label="证书有效期截止日期">{{ detail.certificateExpiryDate }}</a-descriptions-item>
           <a-descriptions-item label="创建时间">{{ detail.createTime }}</a-descriptions-item>
           <a-descriptions-item label="创建人">{{ detail.createUserName }}</a-descriptions-item>
 
@@ -51,7 +59,7 @@
           </a-row>
         </template>
       </a-tab-pane>
-      <a-tab-pane key="content" tab="详细信息">
+      <!-- <a-tab-pane key="content" tab="详细信息">
         <a-form :label-col="{ span: 8 }">
           <a-row>
             <a-col :span="8">
@@ -117,14 +125,12 @@
           <a-row>
             <a-col :span="8">
               <a-form-item label="是否付款" name="isPaid">
-                <a-checkbox v-model:value="detail.isPaid" disabled />
-                <!-- <a-input-number style="width: 95%" v-model:value="detail.isPaid" placeholder="是否付款" disabled /> -->
+                <a-input-number style="width: 95%" v-model:value="detail.isPaid" placeholder="是否付款" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="付款方" name="payParty">
-                <SmartEnumSelect width="95%" v-model:value="detail.payParty" enumName="PAY_PARTY_ENUM" placeholder=""
-                  disabled />
+                <a-input-number style="width: 95%" v-model:value="detail.payParty" placeholder="付款方(客户/我方)" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
@@ -166,26 +172,10 @@
             </a-col>
           </a-row>
         </a-form>
-      </a-tab-pane>
-      <a-tab-pane key="productList" tab="产品列表">
-        <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="detail.projectProductList" :columns="columns" rowKey="id" bordered
-          :loading="tableLoading" :pagination="false">
-          <template #bodyCell="{ text, record, column }">
-            <template v-if="column.dataIndex === 'productName'">
-              <a @click="detailProduct(record.id)">{{ record.productName }}</a>
-            </template>
-            <template v-if="column.dataIndex === 'status'">
-              <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
-            </template>
-
-          </template>
-        </a-table>
-        <!---------- 表格 end ----------->
-      </a-tab-pane>
+      </a-tab-pane> -->
 
       <a-tab-pane key="dataTracer" tab="变更记录">
-        <DataTracer :dataId="id" :type="111" />
+        <DataTracer :dataId="id" :type="112" />
       </a-tab-pane>
     </a-tabs>
   </a-card>
@@ -197,13 +187,13 @@ import { reactive, onMounted, onActivated, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { projectApi } from '/@/api/business/project/project-api';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
+import { projectProductApi } from '/@/api/business/project/project-product-api';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import DataTracer from '/@/components/support/data-tracer/index.vue';
 import { DATA_TRACER_TYPE_ENUM } from '/@/constants/support/data-tracer-const';
 import { smartSentry } from '/@/lib/smart-sentry';
 import { useRouter } from 'vue-router';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
-import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 
 const route = useRoute();
 let id = ref();
@@ -214,16 +204,12 @@ onMounted(() => {
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();
-    queryForm.projectId = route.query.id;
-    queryData();
   }
 });
 onActivated(() => {
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();
-    queryForm.projectId = route.query.id;
-    queryData();
   }
 });
 
@@ -236,11 +222,13 @@ function showUpdate() {
 
 async function getDetail() {
   try {
-    let result = await projectLabApi.detail(id.value);
+    let result = await projectProductApi.detail(id.value);
     detail.value = result.data;
     detail.value.customerName = route.query.customerName;
     detail.value.projectType = Number(route.query.projectType);
     detail.value.category = Number(route.query.category);
+    detail.value.taskNo = route.query.taskNo;
+    detail.value.thirdPartyName = route.query.thirdPartyName;
     console.log("get detail:", detail.value)
   } catch (error) {
     smartSentry.captureError(error);
@@ -249,111 +237,7 @@ async function getDetail() {
   }
 }
 
-// ---------------------------- 表格列 ----------------------------
 
-const columns = ref([
-  // {
-  //   title: '编号',
-  //   dataIndex: 'id',
-  //   ellipsis: true,
-  // },
-  // {
-  //   title: '项目ID',
-  //   dataIndex: 'projectId',
-  //   ellipsis: true,
-  // },
-  // {
-  //   title: '实验室任务ID',
-  //   dataIndex: 'taskId',
-  //   ellipsis: true,
-  // },
-  {
-    title: '产品名称',
-    dataIndex: 'productName',
-    ellipsis: true,
-  },
-  {
-    title: '产品型号',
-    dataIndex: 'productModel',
-    ellipsis: true,
-  },
-  {
-    title: '实验室上报日期',
-    dataIndex: 'labReportDate',
-    ellipsis: true,
-  },
-  {
-    title: '自我声明日期',
-    dataIndex: 'selfDeclarationDate',
-    ellipsis: true,
-  },
-  {
-    title: '证书编号',
-    dataIndex: 'certificateNo',
-    ellipsis: true,
-  },
-  {
-    title: '证书发送日期',
-    dataIndex: 'certificateSendDate',
-    ellipsis: true,
-  },
-  {
-    title: '证书有效期截止日期',
-    dataIndex: 'certificateExpiryDate',
-    ellipsis: true,
-  },
-
-  {
-    title: '创建人姓名',
-    dataIndex: 'createUserName',
-    ellipsis: true,
-  },
-
-
-]);
-
-const queryFormState = {
-  projectId: undefined, //项目ID
-  pageNum: 1,
-  pageSize: 10,
-};
-// 查询表单form
-const queryForm = reactive({ ...queryFormState });
-// 表格加载loading
-const tableLoading = ref(false);
-// 表格数据
-const tableData = ref([]);
-// 总数
-const total = ref(0);
-
-// 重置查询条件
-function resetQuery() {
-  let pageSize = queryForm.pageSize;
-  Object.assign(queryForm, queryFormState);
-  queryForm.pageSize = pageSize;
-  queryData();
-}
-
-// 查询数据
-async function queryData() {
-  tableLoading.value = true;
-  try {
-    let queryResult = await projectLabApi.queryPage(queryForm);
-    tableData.value = queryResult.data.list;
-    total.value = queryResult.data.total;
-  } catch (e) {
-    smartSentry.captureError(e);
-  } finally {
-    tableLoading.value = false;
-  }
-}
-
-let router = useRouter();
-
-function detailProduct(id) {
-  router.push({ path: '/project/product-detail', query: { id: id } });
-  router.push({ path: '/project/product-detail', query: { id: id, customerName: detail.value.customerName, projectType: detail.value.projectType, category: detail.value.category, taskNo: detail.value.taskNo, thirdPartyName: detail.value.thirdPartyName } });
-}
 </script>
 
 <style lang="less" scoped>

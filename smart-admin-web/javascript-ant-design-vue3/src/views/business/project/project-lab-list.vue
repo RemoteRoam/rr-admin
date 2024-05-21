@@ -32,7 +32,7 @@
         </a-page-header>
     </div>
 
-    <a-card size="small" :bordered="false" :hoverable="true">
+    <a-card class="smart-margin-top10" size="small" :bordered="false" :hoverable="true">
         <!---------- 表格操作行 begin ----------->
         <a-row class="smart-table-btn-block">
             <div class="smart-table-operate-block">
@@ -74,6 +74,10 @@
                         </a>
                         <template #overlay>
                             <a-menu @click="handleMenuClick($event, record)">
+                                <a-menu-item>
+                                    产品列表
+                                </a-menu-item>
+                                <a-menu-divider />
                                 <a-menu-item v-for="node in record.projectNodeList" :key="node">
                                     {{ node.nodeName }}
                                 </a-menu-item>
@@ -141,48 +145,49 @@ const columns = ref([
     {
         title: '实验室任务编号',
         dataIndex: 'taskNo',
-        ellipsis: true,
+        width: 170,
     },
     {
         title: '实验室',
         dataIndex: 'thirdPartyName',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '实验室合同号',
         dataIndex: 'labContractNo',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '实验室合同日期',
         dataIndex: 'labContractDate',
         ellipsis: true,
+        width: 120,
     },
     {
         title: '实验费金额',
         dataIndex: 'labContractAmount',
-        ellipsis: true,
+        width: 90,
     },
     {
         title: '客户要求完成日期',
         dataIndex: 'labExpectedDate',
-        ellipsis: true,
+        width: 130,
     },
     // {
     //     title: '实验合同备注',
     //     dataIndex: 'labContractRemark',
     //     ellipsis: true,
     // },
-    {
-        title: '资料发送日期',
-        dataIndex: 'dataSendDate',
-        ellipsis: true,
-    },
-    {
-        title: '资料接收日期',
-        dataIndex: 'dataReceiveDate',
-        ellipsis: true,
-    },
+    // {
+    //     title: '资料发送日期',
+    //     dataIndex: 'dataSendDate',
+    //     ellipsis: true,
+    // },
+    // {
+    //     title: '资料接收日期',
+    //     dataIndex: 'dataReceiveDate',
+    //     ellipsis: true,
+    // },
     // {
     //     title: '是否付款',
     //     dataIndex: 'isPaid',
@@ -206,18 +211,18 @@ const columns = ref([
     {
         title: '实验室下达任务日期',
         dataIndex: 'assignTaskDate',
-        ellipsis: true,
+        width: 150,
     },
-    {
-        title: '预计完成日期',
-        dataIndex: 'expectedCompletionDate',
-        ellipsis: true,
-    },
-    {
-        title: '报告完成日期',
-        dataIndex: 'reportCompletionDate',
-        ellipsis: true,
-    },
+    // {
+    //     title: '预计完成日期',
+    //     dataIndex: 'expectedCompletionDate',
+    //     ellipsis: true,
+    // },
+    // {
+    //     title: '报告完成日期',
+    //     dataIndex: 'reportCompletionDate',
+    //     ellipsis: true,
+    // },
     {
         title: '状态',
         dataIndex: 'status',
@@ -231,7 +236,7 @@ const columns = ref([
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        ellipsis: true,
+        width: 170,
     },
     // {
     //     title: '更新人',
@@ -350,7 +355,15 @@ function onSelectChange(selectedRowKeys) {
 const handleMenuClick = (e, param) => {
 
     param.projectType = 111;
-    if (e.key.nodeId === NODE_CONST.enter_contract) {
+    if (e.key === null) {
+        router.push({
+            path: '/project/product-list', query: {
+                projectId: route.query.projectId,
+                customerName: detail.value.customerName, projectType: detail.value.projectType, category: detail.value.category,
+                taskId: param.id
+            }
+        });
+    } else if (e.key.nodeId === NODE_CONST.enter_contract) {
         enterContractFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.send_data) {
         sendDataFormRef.value.show(param, e.key.id);
@@ -385,3 +398,9 @@ function detailTask(record) {
     router.push({ path: '/project/lab-detail', query: { id: record.id, customerName: detail.value.customerName, projectType: detail.value.projectType, category: detail.value.category } });
 }
 </script>
+<style lang="less" scoped>
+.detail-header {
+    background-color: #fff;
+    padding: 10px;
+}
+</style>

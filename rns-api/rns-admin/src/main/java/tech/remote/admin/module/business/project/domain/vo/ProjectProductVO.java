@@ -57,7 +57,10 @@ public class ProjectProductVO {
     private Long archiveId;
 
     @Schema(description = "项目邮寄表ID")
-    private Long mail;
+    private Long mailId;
+
+    @Schema(description = "状态")
+    private Integer status;
 
     @Schema(description = "创建人")
     private Long createUserId;

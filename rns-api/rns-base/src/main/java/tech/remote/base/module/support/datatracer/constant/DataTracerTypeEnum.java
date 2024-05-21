@@ -50,7 +50,8 @@ public enum DataTracerTypeEnum implements BaseEnum {
     /**
      * 产品认证实验室任务
      */
-    PRODUCT_LAB_TASK(111, "产品认证实验室任务"),
+    PROJECT_LAB_TASK(111, "项目实验室任务"),
+    PROJECT_PRODUCT(112, "项目产品"),
     PC_CCC(11, "CCC自我声明"),
     PC_CERTIFICATION(12, "产品认证"),
     LAB_PROJECT(21, "试验项目"),

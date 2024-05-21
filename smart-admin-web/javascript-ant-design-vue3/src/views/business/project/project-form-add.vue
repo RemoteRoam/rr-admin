@@ -10,15 +10,15 @@
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
             <a-row>
-                <a-col :span="24">
+                <!-- <a-col :span="24">
                     <a-form-item label="项目类型" name="projectType">
                         <SmartEnumSelect width="100%" v-model:value="form.projectType"
                             enumName="PROJECT_TYPE_PRODUCT_ENUM" placeholder="项目类型" />
                     </a-form-item>
-                </a-col>
-                <a-col :span="24">
+                </a-col> -->
+                <a-col :span="24" v-if="form.projectType != 31">
                     <a-form-item label="项目分类" name="category">
-                        <SmartEnumSelect width="100%" v-model:value="form.category" enumName="PROJECT_CATEGORY_ENUM"
+                        <SmartEnumSelect width="100%" v-model:value="form.category" :enumName="enumName"
                             placeholder="项目分类" />
                     </a-form-item>
                 </a-col>
@@ -85,7 +85,7 @@
     </a-modal>
 </template>
 <script setup>
-import { reactive, ref, nextTick } from 'vue';
+import { reactive, ref, nextTick, computed } from 'vue';
 import _ from 'lodash';
 import { message } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -105,11 +105,11 @@ const emits = defineEmits(['reloadList']);
 // 是否显示
 const visibleFlag = ref(false);
 
-function show(rowData) {
+function show(projectType) {
+    console.log('projectType:', projectType);
     Object.assign(form, formDefault);
-    if (rowData && !_.isEmpty(rowData)) {
-        Object.assign(form, rowData);
-    }
+    form.projectType = projectType;
+    projectTypeGlobal.value = projectType;
     visibleFlag.value = true;
     nextTick(() => {
         formRef.value.clearValidate();
@@ -120,6 +120,12 @@ function onClose() {
     Object.assign(form, formDefault);
     visibleFlag.value = false;
 }
+
+const projectTypeGlobal = ref(null);
+
+const enumName = computed(() => {
+    return projectTypeGlobal.value == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
+});
 
 // ------------------------ 表单 ------------------------
 

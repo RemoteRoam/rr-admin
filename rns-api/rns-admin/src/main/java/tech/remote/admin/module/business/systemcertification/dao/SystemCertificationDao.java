@@ -3,6 +3,7 @@ package tech.remote.admin.module.business.systemcertification.dao;
 import java.util.List;
 import tech.remote.admin.module.business.systemcertification.domain.entity.SystemCertificationEntity;
 import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationQueryForm;
+import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationExcelVO;
 import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -46,4 +47,6 @@ public interface SystemCertificationDao extends BaseMapper<SystemCertificationEn
      * @return
      */
     SystemCertificationVO getDetail(@Param("id")Long id);
+
+    List<SystemCertificationExcelVO> selectExcelList(@Param("queryForm")SystemCertificationQueryForm queryForm);
 }

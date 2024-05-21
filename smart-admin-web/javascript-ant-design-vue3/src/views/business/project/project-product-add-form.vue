@@ -15,38 +15,10 @@
                         <a-input style="width: 100%" v-model:value="form.productName" placeholder="产品名称" />
                     </a-form-item>
                 </a-col>
+
                 <a-col :span="18">
                     <a-form-item label="产品型号" name="productModel">
                         <a-input style="width: 100%" v-model:value="form.productModel" placeholder="产品型号" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="18">
-                    <a-form-item label="实验室上报日期" name="labReportDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labReportDate" style="width: 100%"
-                            placeholder="实验室上报日期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="18">
-                    <a-form-item label="自我声明日期" name="selfDeclarationDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.selfDeclarationDate"
-                            style="width: 100%" placeholder="自我声明日期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="18">
-                    <a-form-item label="证书编号" name="certificateNo">
-                        <a-input style="width: 100%" v-model:value="form.certificateNo" placeholder="证书编号" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="18">
-                    <a-form-item label="证书发送日期" name="certificateSendDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.certificateSendDate"
-                            style="width: 100%" placeholder="证书发送日期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="18">
-                    <a-form-item label="证书有效期" name="certificateExpiryDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.certificateExpiryDate"
-                            style="width: 100%" placeholder="证书有效期截止日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -77,25 +49,15 @@ const emits = defineEmits(['reloadList']);
 // 是否显示
 const visibleFlag = ref(false);
 
-function show(id) {
+function show(rowData) {
     Object.assign(form, formDefault);
-    detail(id);
+    form.projectId = rowData.projectId;
+    form.projectType = rowData.projectType;
+    form.taskId = rowData.id;
     visibleFlag.value = true;
-}
-
-async function detail(id) {
-    try {
-        let result = await projectProductApi.detail(id);
-        let data = result.data;
-        Object.assign(form, data);
-        nextTick(() => {
-            formRef.value.clearValidate();
-        });
-    } catch (error) {
-        smartSentry.captureError(error);
-    } finally {
-        SmartLoading.hide();
-    }
+    nextTick(() => {
+        formRef.value.clearValidate();
+    });
 }
 
 function onClose() {
@@ -109,16 +71,11 @@ function onClose() {
 const formRef = ref();
 
 const formDefault = {
-    id: undefined, //编号
     projectId: undefined, //项目ID
+    projectType: undefined, //项目类型
     taskId: undefined, //实验室任务ID
     productName: undefined, //产品名称
     productModel: undefined, //产品型号
-    labReportDate: undefined, //实验室上报日期
-    selfDeclarationDate: undefined, //自我声明日期
-    certificateNo: undefined, //证书编号
-    certificateSendDate: undefined, //证书发送日期
-    certificateExpiryDate: undefined, //证书有效期截止日期
 };
 
 let form = reactive({ ...formDefault });
@@ -140,7 +97,7 @@ async function onSubmit() {
 async function save() {
     SmartLoading.show();
     try {
-        await projectProductApi.update(form);
+        await projectProductApi.add(form);
         message.success('操作成功');
         emits('reloadList');
         onClose();

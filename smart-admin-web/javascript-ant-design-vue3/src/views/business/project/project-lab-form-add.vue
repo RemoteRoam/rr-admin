@@ -71,10 +71,16 @@ function show(rowData) {
     nextTick(() => {
         formRef.value.clearValidate();
     });
+    console.log(dataSource);
 }
 
 function onClose() {
     Object.assign(form, formDefault);
+    dataSource.value = [{
+        key: '1',
+        productName: '',
+        productModel: '',
+    }];
     visibleFlag.value = false;
 }
 

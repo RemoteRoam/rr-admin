@@ -80,6 +80,18 @@ export const SOURCE_TYPE_ENUM = {
   
 };
 
+export const PAY_PARTY_ENUM = {
+  EXTERNAL: {
+    value: 1,
+    desc: '客户',
+  },
+  INTERNAL: {
+    value: 2,
+    desc: '我方',
+  },
+  
+};
+
 
 export const NODE_STATUS_ENUM = {
   INIT: {

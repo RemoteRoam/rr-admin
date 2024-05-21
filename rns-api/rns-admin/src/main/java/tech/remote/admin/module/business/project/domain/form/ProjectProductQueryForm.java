@@ -18,6 +18,9 @@ public class ProjectProductQueryForm extends PageParam{
     @Schema(description = "项目ID")
     private Long projectId;
 
+    @Schema(description = "项目类型")
+    private Integer projectType;
+
     @Schema(description = "实验室任务ID")
     private Long taskId;
 
