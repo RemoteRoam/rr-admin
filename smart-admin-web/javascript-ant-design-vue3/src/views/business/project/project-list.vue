@@ -45,7 +45,7 @@
                 <a-input style="width: 150px" v-model:value="queryForm.createUserId" placeholder="创建人" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
-                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 150px"
+                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeCreateTime" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">

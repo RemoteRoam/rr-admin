@@ -55,6 +55,7 @@
                 AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
         </where>
+        order by t.create_time desc
     </select>
 
 
