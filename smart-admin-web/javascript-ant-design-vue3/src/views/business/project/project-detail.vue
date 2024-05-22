@@ -179,6 +179,55 @@
             </a-col>
           </a-row>
         </a-form>
+        <div class="smart-margin-top10" width="500px">
+          <!---------- 认证费表格 begin ----------->
+          <div v-if="detail.projectType === 11 || detail.projectType === 12">
+            <h3 class="table-title smart-margin-top10">认证费</h3>
+            <a-table size="small" :dataSource="tableDataCertificationFee" :columns="columnsCertificationFee" rowKey="id"
+              bordered :pagination="false">
+              <template #bodyCell="{ text, record, column }">
+                <template v-if="column.dataIndex === 'id'">
+                  <a @click="showCertificationFeeProduct(record.id)">{{ record.id }}</a>
+                </template>
+                <template v-if="column.dataIndex === 'isPaid'">
+                  {{ record.isPaid ? '是' : '否' }}
+                </template>
+                <template v-if="column.dataIndex === 'payParty'">
+                  <span>{{ $smartEnumPlugin.getDescByValue('PAY_PARTY_ENUM', text) }}</span>
+                </template>
+              </template>
+            </a-table>
+          </div>
+          <!---------- 表格 end ----------->
+          <!---------- 归档表格 begin ----------->
+          <h3 class="table-title smart-margin-top10">归档</h3>
+          <a-table size="small" :dataSource="tableDataArchive" :columns="columnsArchive" rowKey="id" bordered
+            :pagination="false">
+            <template #bodyCell="{ text, record, column }">
+              <template v-if="column.dataIndex === 'id'">
+                <a @click="showArchiveProduct(record.id)">{{ record.id }}</a>
+              </template>
+              <!-- <template v-if="column.dataIndex === 'projectId'">
+              <a @click="detailTask(record.id)">{{ record.projectId }}</a>
+            </template> -->
+            </template>
+          </a-table>
+          <!---------- 表格 end ----------->
+          <!---------- 邮寄表格 begin ----------->
+          <h3 class="table-title smart-margin-top10">邮寄</h3>
+          <a-table size="small" :dataSource="tableDataMail" :columns="columnsMail" rowKey="id" bordered
+            :pagination="false">
+            <template #bodyCell="{ text, record, column }">
+              <template v-if="column.dataIndex === 'id'">
+                <a @click="showMailProduct(record.id)">{{ record.id }}</a>
+              </template>
+              <!-- <template v-if="column.dataIndex === 'projectId'">
+              <a @click="detailTask(record.id)">{{ record.projectId }}</a>
+            </template> -->
+            </template>
+          </a-table>
+          <!---------- 表格 end ----------->
+        </div>
       </a-tab-pane>
       <a-tab-pane key="labtask" tab="实验室任务">
         <!---------- 表格 begin ----------->
@@ -191,20 +240,6 @@
             <template v-if="column.dataIndex === 'status'">
               <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
             </template>
-            <template v-if="column.dataIndex === 'action'">
-              <a-dropdown>
-                <a class="ant-dropdown-link" @click.prevent>
-                  节点操作
-                </a>
-                <template #overlay>
-                  <a-menu @click="handleMenuClick($event, record)">
-                    <a-menu-item v-for="node in record.projectNodeList" :key="node">
-                      {{ node.nodeName }}
-                    </a-menu-item>
-                  </a-menu>
-                </template>
-              </a-dropdown>
-            </template>
           </template>
         </a-table>
         <!---------- 表格 end ----------->
@@ -214,6 +249,8 @@
         <DataTracer :dataId="id" :type="detail.projectType" />
       </a-tab-pane>
     </a-tabs>
+
+    <ProductListForm ref="productListFormRef" />
   </a-card>
 </template>
 
@@ -223,16 +260,18 @@ import { reactive, onMounted, onActivated, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { projectApi } from '/@/api/business/project/project-api';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
+import { projectCertificationFeeApi } from '/@/api/business/project/project-certification-fee-api';
+import { projectArchiveApi } from '/@/api/business/project/project-archive-api';
+import { projectMailApi } from '/@/api/business/project/project-mail-api';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import DataTracer from '/@/components/support/data-tracer/index.vue';
-import { DATA_TRACER_TYPE_ENUM } from '/@/constants/support/data-tracer-const';
 import { smartSentry } from '/@/lib/smart-sentry';
 import { useRouter } from 'vue-router';
+import ProductListForm from './product-list-form.vue';
 
 const route = useRoute();
 let id = ref();
 onMounted(() => {
-  console.log('route', route);
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();
@@ -276,6 +315,20 @@ async function getDetail() {
   }
 }
 
+
+const productListFormRef = ref();
+
+function showCertificationFeeProduct(feeId) {
+  productListFormRef.value.show(id.value, feeId, null, null);
+}
+
+function showArchiveProduct(archiveId) {
+  productListFormRef.value.show(id.value, null, archiveId, null);
+}
+
+function showMailProduct(mailId) {
+  productListFormRef.value.show(id.value, null, null, mailId);
+}
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -400,13 +453,129 @@ const columns = ref([
   //     dataIndex: 'updateTime',
   //     ellipsis: true,
   // },
+  // {
+  //   title: '操作',
+  //   dataIndex: 'action',
+  //   fixed: 'right',
+  //   width: 90,
+  // },
+]);
+
+
+const columnsCertificationFee = ref([
   {
-    title: '操作',
-    dataIndex: 'action',
-    fixed: 'right',
-    width: 90,
+    title: '编号',
+    dataIndex: 'id',
+    ellipsis: true,
+  },
+  // {
+  //   title: '项目ID',
+  //   dataIndex: 'projectId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '是否付款',
+    dataIndex: 'isPaid',
+    ellipsis: true,
+  },
+  {
+    title: '付款方(客户/我方)',
+    dataIndex: 'payParty',
+    ellipsis: true,
+  },
+  {
+    title: '认证费付款日期',
+    dataIndex: 'payDate',
+    ellipsis: true,
+  },
+  {
+    title: '认证费备注',
+    dataIndex: 'payRemark',
+    ellipsis: true,
+  },
+  // {
+  //   title: '创建人',
+  //   dataIndex: 'createUserId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '创建人',
+    dataIndex: 'createUserName',
+    ellipsis: true,
+  },
+
+]);
+
+
+const columnsArchive = ref([
+  {
+    title: '编号',
+    dataIndex: 'id',
+    ellipsis: true,
+  },
+  // {
+  //   title: '项目ID',
+  //   dataIndex: 'projectId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '归档位置',
+    dataIndex: 'archivePosition',
+    ellipsis: true,
+  },
+  {
+    title: '归档日期',
+    dataIndex: 'archiveDate',
+    ellipsis: true,
+  },
+  // {
+  //   title: '创建人',
+  //   dataIndex: 'createUserId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '创建人',
+    dataIndex: 'createUserName',
+    ellipsis: true,
   },
 ]);
+
+
+const columnsMail = ref([
+  {
+    title: '编号',
+    dataIndex: 'id',
+    ellipsis: true,
+  },
+  // {
+  //   title: '项目ID',
+  //   dataIndex: 'projectId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '邮寄日期',
+    dataIndex: 'mailingDate',
+    ellipsis: true,
+  },
+  {
+    title: '快递单号',
+    dataIndex: 'trackingNumber',
+    ellipsis: true,
+  },
+  // {
+  //   title: '创建人',
+  //   dataIndex: 'createUserId',
+  //   ellipsis: true,
+  // },
+  {
+    title: '创建人',
+    dataIndex: 'createUserName',
+    ellipsis: true,
+  },
+
+]);
+
+
 const queryFormState = {
   projectId: undefined, //项目ID
   pageNum: 1,
@@ -418,6 +587,9 @@ const queryForm = reactive({ ...queryFormState });
 const tableLoading = ref(false);
 // 表格数据
 const tableData = ref([]);
+const tableDataCertificationFee = ref([]);
+const tableDataArchive = ref([]);
+const tableDataMail = ref([]);
 // 总数
 const total = ref(0);
 
@@ -436,6 +608,16 @@ async function queryData() {
     let queryResult = await projectLabApi.queryPage(queryForm);
     tableData.value = queryResult.data.list;
     total.value = queryResult.data.total;
+
+    let queryResultCertificationFee = await projectCertificationFeeApi.queryPage(queryForm);
+    tableDataCertificationFee.value = queryResultCertificationFee.data.list;
+
+    let queryResultArichve = await projectArchiveApi.queryPage(queryForm);
+    tableDataArchive.value = queryResultArichve.data.list;
+
+    let queryResultMail = await projectMailApi.queryPage(queryForm);
+    tableDataMail.value = queryResultMail.data.list;
+
   } catch (e) {
     smartSentry.captureError(e);
   } finally {

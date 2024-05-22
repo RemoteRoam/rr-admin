@@ -16,6 +16,15 @@
             <if test="queryForm.taskId != null">
                 AND t_project_product.task_id = #{queryForm.taskId}
             </if>
+            <if test="queryForm.certificationFeeId != null">
+                AND t_project_product.certification_fee_id = #{queryForm.certificationFeeId}
+            </if>
+            <if test="queryForm.archiveId != null">
+                AND t_project_product.archive_id = #{queryForm.archiveId}
+            </if>
+            <if test="queryForm.mailId != null">
+                AND t_project_product.mail_id = #{queryForm.mailId}
+            </if>
         </where>
     </select>
 

@@ -50,4 +50,9 @@ export const projectApi = {
   detail: (id) => {
       return getRequest(`/project/get/${id}`);
   },
+
+  // 获取待处理的产品列表
+  getPendingProduct:(id, nodeId) => {
+      return getRequest(`/project/getPendingProduct/${id}/${nodeId}`);
+  },
 };

@@ -16,9 +16,6 @@ import lombok.Data;
 @Data
 public class ProjectCertificationFeeAddForm {
 
-    @Schema(description = "编号")
-    private Long id;
-
     @Schema(description = "项目ID")
     private Long projectId;
 

@@ -3,15 +3,22 @@ package tech.remote.admin.module.business.project.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.project.dao.ProjectDao;
-import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
+import tech.remote.admin.module.business.project.domain.entity.*;
 import tech.remote.admin.module.business.project.domain.form.ProjectAddForm;
+import tech.remote.admin.module.business.project.domain.form.ProjectCertificationFeeAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
+import tech.remote.admin.module.business.project.manager.ProjectArchiveManager;
+import tech.remote.admin.module.business.project.manager.ProjectCertificationFeeManager;
+import tech.remote.admin.module.business.project.manager.ProjectMailManager;
+import tech.remote.admin.module.business.project.manager.ProjectProductManager;
 import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
 import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeQueryForm;
 import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
@@ -61,6 +68,19 @@ public class ProjectService {
 
     @Resource
     private DataTracerService dataTracerService;
+
+    @Resource
+    private ProjectProductManager projectProductManager;
+
+    @Resource
+    private ProjectCertificationFeeManager projectCertificationFeeManager;
+
+    @Resource
+    private ProjectArchiveManager projectArchiveManager;
+
+    @Resource
+    private ProjectMailManager projectMailManager;
+
     /**
      * 分页查询
      *
@@ -131,11 +151,22 @@ public class ProjectService {
         projectDao.updateById(projectEntity);
 
         // 节点操作更新
-        if(updateForm.getProjectNodeId() != null && updateForm.getNodeStatus() != null) {
-            // 根据projectId和nodeId为条件，更新systemCertificationNode的状态
+        if( updateForm.getProjectNodeId() != null && updateForm.getNodeStatus() != null) {
 
+            // 交认证费、归档、邮寄，三个节点要处理产品列表
+            if(updateForm.getNodeStatus().equals(NodeStatusEnum.OK.getValue()) && CollectionUtils.isNotEmpty(updateForm.getProductIdList())){
+
+                boolean isAllDone = isProductAllDone(updateForm);
+                if(isAllDone){
+                    updateForm.setNodeStatus(NodeStatusEnum.OK.getValue());
+                } else {
+                    updateForm.setNodeStatus(NodeStatusEnum.DOING.getValue());
+                }
+            }
+
+            // 根据projectNodeId为条件，更新systemCertificationNode的状态
             ProjectNodeEntity projectNodeEntity = projectNodeManager.getById(updateForm.getProjectNodeId());
-            if(projectNodeEntity.getStatus() == NodeStatusEnum.INIT.getValue() || projectNodeEntity.getStatus() == NodeStatusEnum.DOING.getValue()){
+            if(projectNodeEntity.getStatus().equals(NodeStatusEnum.INIT.getValue()) || projectNodeEntity.getStatus().equals(NodeStatusEnum.DOING.getValue())){
                 projectNodeEntity.setOperateTime(LocalDateTime.now());
                 projectNodeEntity.setOperateUserId(updateForm.getUpdateUserId());
                 projectNodeEntity.setOperateUserName(updateForm.getUpdateUserName());
@@ -150,16 +181,18 @@ public class ProjectService {
             projectNodeManager.updateById(projectNodeEntity);
             String content = "节点操作：【" + projectNodeEntity.getNodeName() + "】" + NodeStatusEnum.getDescByValue(updateForm.getNodeStatus());
             dataTracerService.addTrace(updateForm.getId(), DataTracerTypeEnum.fromValue(updateForm.getProjectType()), content);
-            // 判断是否所有节点都已完成或者跳过，如果是，修改状态为已完成
-            ProjectNodeQueryForm queryForm = new ProjectNodeQueryForm();
-            queryForm.setProjectId(updateForm.getId());
-            queryForm.setProjectType(updateForm.getProjectType());
-            queryForm.setNodeLevel(1);
+            if(updateForm.getNodeStatus().equals(NodeStatusEnum.OK.getValue()) || updateForm.getNodeStatus().equals(NodeStatusEnum.SKIP.getValue())) {
+                // 判断是否所有节点都已完成或者跳过，如果是，修改状态为已完成
+                ProjectNodeQueryForm queryForm = new ProjectNodeQueryForm();
+                queryForm.setProjectId(updateForm.getId());
+                queryForm.setProjectType(updateForm.getProjectType());
+                queryForm.setNodeLevel(1);
 
-            if (projectNodeManager.isAllDone(queryForm)) {
-                projectEntity.setStatus(ProjectStatusEnum.DONE.getValue());
-                projectDao.updateById(projectEntity);
-                dataTracerService.addTrace(projectEntity.getId(), DataTracerTypeEnum.fromValue(updateForm.getProjectType()), "项目完成");
+                if (projectNodeManager.isAllDone(queryForm)) {
+                    projectEntity.setStatus(ProjectStatusEnum.DONE.getValue());
+                    projectDao.updateById(projectEntity);
+                    dataTracerService.addTrace(projectEntity.getId(), DataTracerTypeEnum.fromValue(updateForm.getProjectType()), "项目完成");
+                }
             }
         } else {
 
@@ -168,6 +201,84 @@ public class ProjectService {
         }
 
         return ResponseDTO.ok();
+    }
+
+    private boolean isProductAllDone(ProjectUpdateForm updateForm) {
+
+        if(updateForm.getNodeId() == 15){
+            //交认证费
+            ProjectCertificationFeeEntity projectCertificationFee = SmartBeanUtil.copy(updateForm, ProjectCertificationFeeEntity.class);
+            projectCertificationFee.setId(null);
+            projectCertificationFee.setProjectId(updateForm.getId());
+            projectCertificationFeeManager.save(projectCertificationFee);
+
+            for(Long productId : updateForm.getProductIdList()){
+                ProjectProductEntity productEntity = new ProjectProductEntity();
+                productEntity.setId(productId);
+                productEntity.setCertificationFeeId(projectCertificationFee.getId());
+
+                projectProductManager.updateById(productEntity);
+            }
+
+            List<ProjectProductVO> allProducts = getAllProduct(updateForm.getId());
+            // 判断所有product中的CertificationFeeId都不为空
+            for(ProjectProductVO product : allProducts){
+                if(product.getCertificationFeeId() == null){
+                    return false;
+                }
+            }
+            return true;
+
+        } else if(updateForm.getNodeId() == 19){
+            // 归档
+            ProjectArchiveEntity projectArchive = SmartBeanUtil.copy(updateForm, ProjectArchiveEntity.class);
+            projectArchive.setId(null);
+            projectArchive.setProjectId(updateForm.getId());
+            projectArchiveManager.save(projectArchive);
+
+            for(Long productId : updateForm.getProductIdList()){
+                ProjectProductEntity productEntity = new ProjectProductEntity();
+                productEntity.setId(productId);
+                productEntity.setArchiveId(projectArchive.getId());
+
+                projectProductManager.updateById(productEntity);
+            }
+
+            List<ProjectProductVO> allProducts = getAllProduct(updateForm.getId());
+            // 判断所有product中的ArchiveId都不为空
+            for(ProjectProductVO product : allProducts){
+                if(product.getArchiveId() == null){
+                    return false;
+                }
+            }
+            return true;
+
+        } else if(updateForm.getNodeId() == 20){
+            // 邮寄
+            ProjectMailEntity projectMail = SmartBeanUtil.copy(updateForm, ProjectMailEntity.class);
+            projectMail.setId(null);
+            projectMail.setProjectId(updateForm.getId());
+            projectMailManager.save(projectMail);
+
+            for(Long productId : updateForm.getProductIdList()){
+                ProjectProductEntity productEntity = new ProjectProductEntity();
+                productEntity.setId(productId);
+                productEntity.setMailId(projectMail.getId());
+
+                projectProductManager.updateById(productEntity);
+            }
+
+            List<ProjectProductVO> allProducts = getAllProduct(updateForm.getId());
+            // 判断所有product中的MailId都不为空
+            for(ProjectProductVO product : allProducts){
+                if(product.getMailId() == null){
+                    return false;
+                }
+            }
+            return true;
+
+        }
+        return true;
     }
 
     /**
@@ -207,5 +318,29 @@ public class ProjectService {
         List<ProjectNodeVO> projectNodeList = projectNodeManager.getAllNodes(queryForm);
         vo.setProjectNodeList(projectNodeList);
         return vo;
+    }
+
+    public List<ProjectProductVO> getAllProduct(Long projectId) {
+        // 根据projectID获取产品列表
+        LambdaQueryWrapper<ProjectProductEntity> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(ProjectProductEntity::getProjectId, projectId);
+        List<ProjectProductEntity> productList = projectProductManager.list(wrapper);
+        return SmartBeanUtil.copyList(productList, ProjectProductVO.class);
+    }
+
+    public List<ProjectProductVO> getPendingProduct(Long projectId, Integer nodeId) {
+        // 根据projectID和nodeId获取待处理的产品列表
+        LambdaQueryWrapper<ProjectProductEntity> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(ProjectProductEntity::getProjectId, projectId);
+        if(nodeId == 15){
+            wrapper.isNull(ProjectProductEntity::getCertificationFeeId);
+        } else if(nodeId == 19){
+            wrapper.isNull(ProjectProductEntity::getArchiveId);
+        } else if(nodeId == 20){
+            wrapper.isNull(ProjectProductEntity::getMailId);
+        }
+
+        List<ProjectProductEntity> productList = projectProductManager.list(wrapper);
+        return SmartBeanUtil.copyList(productList, ProjectProductVO.class);
     }
 }

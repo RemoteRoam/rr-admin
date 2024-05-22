@@ -24,4 +24,13 @@ public class ProjectProductQueryForm extends PageParam{
     @Schema(description = "实验室任务ID")
     private Long taskId;
 
+    @Schema(description = "项目认证费表ID")
+    private Long certificationFeeId;
+
+    @Schema(description = "项目归档表ID")
+    private Long archiveId;
+
+    @Schema(description = "项目邮寄表ID")
+    private Long mailId;
+
 }

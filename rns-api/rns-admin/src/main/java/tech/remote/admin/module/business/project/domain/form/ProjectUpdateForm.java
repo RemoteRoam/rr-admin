@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -79,6 +80,18 @@ public class ProjectUpdateForm {
     @Schema(description = "整改日期")
     private LocalDate rectificationDate;
 
+    @Schema(description = "是否付款")
+    private Integer isPaid;
+
+    @Schema(description = "付款方(客户/我方)")
+    private Integer payParty;
+
+    @Schema(description = "认证费付款日期")
+    private LocalDate payDate;
+
+    @Schema(description = "认证费备注")
+    private String payRemark;
+
     @Schema(description = "尾款金额")
     private BigDecimal finalPaymentAmount;
 
@@ -93,6 +106,18 @@ public class ProjectUpdateForm {
 
     @Schema(description = "发票号")
     private String invoiceNumber;
+
+    @Schema(description = "归档位置")
+    private String archivePosition;
+
+    @Schema(description = "归档日期")
+    private LocalDate archiveDate;
+
+    @Schema(description = "邮寄日期")
+    private LocalDate mailingDate;
+
+    @Schema(description = "快递单号")
+    private String trackingNumber;
 
     @Schema(description = "状态")
     private Integer status;
@@ -121,4 +146,6 @@ public class ProjectUpdateForm {
     @Schema(description = "跳过原因")
     private String passReason;
 
+    @Schema(description = "产品ID列表")
+    private List<Long> productIdList;
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import tech.remote.admin.module.business.project.domain.form.ProjectAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.service.ProjectService;
 import tech.remote.base.common.domain.RequestUser;
@@ -20,6 +21,7 @@ import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 项目表 Controller
@@ -76,5 +78,17 @@ public class ProjectController {
     @GetMapping("/project/get/{id}")
     public ResponseDTO<ProjectVO> getDetail(@PathVariable Long id) {
         return ResponseDTO.ok(projectService.getDetail(id));
+    }
+
+    @Operation(summary = "查询所有产品列表 @author cbh")
+    @GetMapping("/project/getAllProduct/{id}")
+    public ResponseDTO<List<ProjectProductVO>> getAllProduct(@PathVariable Long id) {
+        return ResponseDTO.ok(projectService.getAllProduct(id));
+    }
+
+    @Operation(summary = "查询待处理的产品列表 @author cbh")
+    @GetMapping("/project/getPendingProduct/{id}/{nodeId}")
+    public ResponseDTO<List<ProjectProductVO>> getPendingProduct(@PathVariable Long id, @PathVariable Integer nodeId) {
+        return ResponseDTO.ok(projectService.getPendingProduct(id, nodeId));
     }
 }

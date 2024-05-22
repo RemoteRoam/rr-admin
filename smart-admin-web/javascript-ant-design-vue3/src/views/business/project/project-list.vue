@@ -152,6 +152,9 @@
         <FactoryAuditTaskForm ref="factoryAuditTaskFormRef" @reloadList="queryData" />
         <FactoryAuditForm ref="factoryAuditFormRef" @reloadList="queryData" />
         <CorrectionForm ref="correctionFormRef" @reloadList="queryData" />
+        <SubmitCertificationFeeForm ref="submitCertificationFeeFormRef" @reloadList="queryData" />
+        <ArchiveForm ref="archiveFormRef" @reloadList="queryData" />
+        <ProjectMailForm ref="projectMailFormRef" @reloadList="queryData" />
 
     </a-card>
 
@@ -179,6 +182,9 @@ import InvoiceForm from '../common-nodes/invoice/invoice-form.vue';
 import FactoryAuditTaskForm from '../common-nodes/factory-audit-task/factory-audit-task-form.vue';
 import FactoryAuditForm from '../common-nodes/factory-audit/factory-audit-form.vue';
 import CorrectionForm from '../common-nodes/correction/correction-form.vue';
+import SubmitCertificationFeeForm from '../common-nodes/submit-certification-fee/submit-certification-fee-form.vue';
+import ArchiveForm from '../common-nodes/archive/archive-form.vue';
+import ProjectMailForm from '../common-nodes/project-mail/project-mail-form.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -372,6 +378,9 @@ const invoiceFormRef = ref();
 const factoryAuditTaskFormRef = ref();
 const factoryAuditFormRef = ref();
 const correctionFormRef = ref();
+const submitCertificationFeeFormRef = ref();
+const archiveFormRef = ref();
+const projectMailFormRef = ref();
 
 function showForm() {
     if (selectedRowKeyList.value.length === 1) {
@@ -460,7 +469,8 @@ async function requestBatchDelete() {
 
 const handleMenuClick = (e, param) => {
 
-    if (e.key === null) {
+    console.log(e.key);
+    if (typeof e.key.nodeId === 'undefined') {
         router.push({
             path: '/project/lab-list', query: {
                 projectId: param.id,
@@ -479,6 +489,12 @@ const handleMenuClick = (e, param) => {
         factoryAuditFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.non_conformity_correction) {
         correctionFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.submit_certification_fee) {
+        submitCertificationFeeFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.archive) {
+        archiveFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.mail) {
+        projectMailFormRef.value.show(param, e.key.id);
     }
 
 };
