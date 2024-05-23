@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import tech.remote.admin.module.business.project.domain.form.ProjectAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
+import tech.remote.admin.module.business.project.domain.form.ProjectToDoQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
@@ -42,6 +43,12 @@ public class ProjectController {
     @PostMapping("/project/queryPage")
     public ResponseDTO<PageResult<ProjectVO>> queryPage(@RequestBody @Valid ProjectQueryForm queryForm) {
         return ResponseDTO.ok(projectService.queryPage(queryForm));
+    }
+
+    @Operation(summary = "待办列表分页查询 @author cbh")
+    @PostMapping("/project/queryToDoPage")
+    public ResponseDTO<PageResult<ProjectVO>> queryToDoPage(@RequestBody @Valid ProjectToDoQueryForm queryForm) {
+        return ResponseDTO.ok(projectService.queryToDoPage(queryForm));
     }
 
     @Operation(summary = "添加 @author cbh")

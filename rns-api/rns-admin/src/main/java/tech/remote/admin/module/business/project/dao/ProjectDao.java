@@ -5,6 +5,7 @@ import java.util.List;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
+import tech.remote.admin.module.business.project.domain.form.ProjectToDoQueryForm;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -32,6 +33,14 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
      * @return
      */
     List<ProjectVO> queryPage(Page page, @Param("queryForm") ProjectQueryForm queryForm);
+
+    /**
+     * 待办列表分页查询
+     * @param page
+     * @param queryForm
+     * @return
+     */
+    List<ProjectVO> queryToDoPage(Page page, @Param("queryForm") ProjectToDoQueryForm queryForm);
 
     /**
      * 更新删除状态

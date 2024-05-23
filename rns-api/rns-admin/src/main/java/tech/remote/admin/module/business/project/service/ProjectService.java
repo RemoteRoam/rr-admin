@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.project.dao.ProjectDao;
 import tech.remote.admin.module.business.project.domain.entity.*;
-import tech.remote.admin.module.business.project.domain.form.ProjectAddForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectCertificationFeeAddForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
+import tech.remote.admin.module.business.project.domain.form.*;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.manager.ProjectArchiveManager;
@@ -90,6 +87,28 @@ public class ProjectService {
     public PageResult<ProjectVO> queryPage(ProjectQueryForm queryForm) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<ProjectVO> list = projectDao.queryPage(page, queryForm);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(ProjectVO vo : list){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(vo.getId());
+                nodeQueryForm.setProjectType(vo.getProjectType());
+                nodeQueryForm.setNodeLevel(1);
+                vo.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+            }
+        }
+        PageResult<ProjectVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        return pageResult;
+    }
+
+    /**
+     * 待办列表分页查询
+     *
+     * @param queryForm
+     * @return
+     */
+    public PageResult<ProjectVO> queryToDoPage(ProjectToDoQueryForm queryForm) {
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<ProjectVO> list = projectDao.queryToDoPage(page, queryForm);
         if(CollectionUtils.isNotEmpty(list)){
             for(ProjectVO vo : list){
                 ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
