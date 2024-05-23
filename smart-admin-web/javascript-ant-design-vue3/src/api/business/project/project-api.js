@@ -5,7 +5,7 @@
  * @Date:      2024-05-15 13:54:05
  * @Copyright  Remote Nomad Studio
  */
-import { postRequest, getRequest } from '/@/lib/axios';
+import { postRequest, getRequest, postDownload } from '/@/lib/axios';
 
 export const projectApi = {
 
@@ -63,4 +63,10 @@ export const projectApi = {
   getPendingProduct:(id, nodeId) => {
       return getRequest(`/project/getPendingProduct/${id}/${nodeId}`);
   },
+
+    // 导出excel @author cbh
+    exportExcel: (param) => {
+        return postDownload('/project/exportExcel', param);
+    },
+
 };

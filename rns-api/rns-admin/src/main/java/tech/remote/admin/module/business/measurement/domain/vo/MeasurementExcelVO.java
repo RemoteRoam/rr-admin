@@ -1,14 +1,15 @@
 package tech.remote.admin.module.business.measurement.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.Data;
-import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
-import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
 
 /**
  * 仪器计量表 列表VO
@@ -19,79 +20,79 @@ import tech.remote.admin.module.business.systemcertificationnode.domain.vo.Syste
  */
 
 @Data
-public class MeasurementVO {
+@ColumnWidth(15)
+public class MeasurementExcelVO {
 
-
-    @Schema(description = "编号")
-    private Long id;
-
-    @Schema(description = "项目编号")
+    @ExcelProperty("项目编号")
     private String projectNo;
 
-    @Schema(description = "项目类型")
+    @ExcelProperty("项目类型")
     private Integer projectType;
 
-    @Schema(description = "客户ID")
-    private Long customerId;
-
-    @Schema(description = "客户")
+    @ExcelProperty("客户")
     private String customerName;
 
-    @Schema(description = "负责人ID")
-    private Long managerId;
-
-    @Schema(description = "负责人")
+    @ExcelProperty("负责人")
     private String managerName;
 
-    @Schema(description = "收款金额")
+    @ExcelProperty("实验室名称")
+    private String thirdPartyName;
+
+    @ExcelProperty("仪器名称")
+    @ColumnWidth(30)
+    private String instrument;
+
+    @ExcelProperty("有效期")
+    private LocalDate expiryDate;
+
+    @ExcelProperty("实验费金额")
+    private BigDecimal experimentAmount;
+
+    @ExcelProperty("成本价")
+    private BigDecimal costAmount;
+
+    @ExcelProperty("计量日期")
+    private LocalDate measurementDate;
+
+    @ExcelProperty("完成日期")
+    private LocalDate finishDate;
+
+    @ExcelProperty("收款金额")
     private BigDecimal paymentAmount;
 
-    @Schema(description = "收款日期")
+    @ExcelProperty("收款日期")
     private LocalDate paymentDate;
 
-    @Schema(description = "备注")
+    @ExcelProperty("备注")
     private String remark;
 
-    @Schema(description = "开票日期")
+    @ExcelProperty("开票日期")
     private LocalDate invoiceDate;
 
-    @Schema(description = "发票金额")
+    @ExcelProperty("发票金额")
     private BigDecimal invoiceAmount;
 
-    @Schema(description = "发票号")
+    @ExcelProperty("发票号")
     private String invoiceNumber;
 
-    @Schema(description = "邮寄日期")
+    @ExcelProperty("邮寄日期")
     private LocalDate mailingDate;
 
-    @Schema(description = "快递单号")
+    @ExcelProperty("快递单号")
     private String trackingNumber;
 
-    @Schema(description = "状态")
-    private Integer status;
-
-    @Schema(description = "删除状态")
-    private Integer deletedFlag;
-
-    @Schema(description = "创建人")
-    private Long createUserId;
-
-    @Schema(description = "创建人姓名")
+    @ExcelProperty("创建人")
     private String createUserName;
 
-    @Schema(description = "创建时间")
+    @ExcelProperty("创建时间")
+    @ColumnWidth(20)
     private LocalDateTime createTime;
 
-    @Schema(description = "更新人")
-    private Long updateUserId;
-
-    @Schema(description = "更新人姓名")
+    @ExcelProperty("更新人")
     private String updateUserName;
 
-    @Schema(description = "更新时间")
+    @ExcelProperty("更新时间")
+    @ColumnWidth(20)
     private LocalDateTime updateTime;
-
-    @Schema(description = "操作节点列表")
-    private List<ProjectNodeVO> projectNodeList;
 
 }

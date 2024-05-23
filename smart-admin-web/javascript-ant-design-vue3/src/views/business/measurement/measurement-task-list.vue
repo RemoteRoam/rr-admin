@@ -33,7 +33,7 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="showForm" type="primary" size="small">
+                <a-button @click="showForm" type="primary" size="small" :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <EditOutlined />
                     </template>

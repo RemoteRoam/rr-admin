@@ -3,6 +3,7 @@ package tech.remote.admin.module.business.measurement.dao;
 import java.util.List;
 import tech.remote.admin.module.business.measurement.domain.entity.MeasurementEntity;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementQueryForm;
+import tech.remote.admin.module.business.measurement.domain.vo.MeasurementExcelVO;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -41,4 +42,12 @@ public interface MeasurementDao extends BaseMapper<MeasurementEntity> {
     void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("${deletedFlag}")boolean deletedFlag);
 
     MeasurementVO getDetail(@Param("id")Long id);
+
+    /**
+     * 导出
+     *
+     * @param queryForm
+     * @return
+     */
+    List<MeasurementExcelVO> selectExcelList(@Param("queryForm") MeasurementQueryForm queryForm);
 }

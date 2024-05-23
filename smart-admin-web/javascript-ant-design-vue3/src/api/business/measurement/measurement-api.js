@@ -5,7 +5,7 @@
  * @Date:      2024-05-07 14:42:35
  * @Copyright  Remote Nomad Studio
  */
-import { postRequest, getRequest } from '/@/lib/axios';
+import { postRequest, getRequest, postDownload } from '/@/lib/axios';
 
 export const measurementApi = {
 
@@ -49,5 +49,10 @@ export const measurementApi = {
   detail: (id) => {
       return getRequest(`/measurement/get/${id}`);
   },
+
+    // 导出excel @author cbh
+    exportExcel: (param) => {
+        return postDownload('/measurement/exportExcel', param);
+    },
 
 };

@@ -82,6 +82,12 @@
                     </template>
                     编辑
                 </a-button>
+                <a-button @click="exportExcel()" type="primary" size="small">
+                    <template #icon>
+                        <FileExcelOutlined />
+                    </template>
+                    导出数据
+                </a-button>
 
             </div>
             <div class="smart-table-setting-block">
@@ -503,5 +509,10 @@ let router = useRouter();
 
 function detail(id) {
     router.push({ path: '/project/product-certification-detail', query: { id: id } });
+}
+
+// --------------------------- 导出 ---------------------------
+async function exportExcel() {
+    await projectApi.exportExcel(queryForm);
 }
 </script>

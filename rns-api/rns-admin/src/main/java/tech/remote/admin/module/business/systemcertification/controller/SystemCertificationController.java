@@ -1,5 +1,6 @@
 package tech.remote.admin.module.business.systemcertification.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,7 +90,7 @@ public class SystemCertificationController {
         return ResponseDTO.ok(systemCertificationService.getDetail(id));
     }
 
-    @Operation(summary = "导出企业信息 @author 卓大")
+    @Operation(summary = "导出 @author cbh")
     @PostMapping("/systemCertification/exportExcel")
     public void exportExcel(@RequestBody @Valid SystemCertificationQueryForm queryForm, HttpServletResponse response) throws IOException {
         List<SystemCertificationExcelVO> data = systemCertificationService.getExcelExportData(queryForm);
@@ -98,8 +99,9 @@ public class SystemCertificationController {
             return;
         }
 
+        String fileName = "体系认证-" + DateUtil.today() + ".xls";
         // 设置下载消息头
-        SmartResponseUtil.setDownloadFileHeader(response, "体系认证.xls", null);
+        SmartResponseUtil.setDownloadFileHeader(response, fileName, null);
 
         // 下载
         EasyExcel.write(response.getOutputStream(), SystemCertificationExcelVO.class)

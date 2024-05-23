@@ -23,6 +23,9 @@ import java.util.List;
 @ColumnWidth(15)
 public class SystemCertificationExcelVO {
 
+    @ExcelProperty("项目编号")
+    private String projectNo;
+
     @ExcelProperty("项目类型")
     private String projectTypeName;
 
@@ -108,14 +111,14 @@ public class SystemCertificationExcelVO {
     private String createUserName;
 
     @ExcelProperty("创建时间")
-    @ColumnWidth(25)
+    @ColumnWidth(20)
     private LocalDateTime createTime;
 
     @ExcelProperty("更新人")
     private String updateUserName;
 
     @ExcelProperty("更新时间")
-    @ColumnWidth(25)
+    @ColumnWidth(20)
     private LocalDateTime updateTime;
 
 }

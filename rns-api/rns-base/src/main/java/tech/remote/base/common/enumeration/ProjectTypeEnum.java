@@ -30,4 +30,14 @@ public enum ProjectTypeEnum implements BaseEnum {
     private final Integer value;
 
     private final String desc;
+
+    // 根据value获取desc
+    public static String getDescByValue(Integer value) {
+        for (ProjectTypeEnum e : ProjectTypeEnum.values()) {
+            if (e.value.equals(value)) {
+                return e.desc;
+            }
+        }
+        return null;
+    }
 }

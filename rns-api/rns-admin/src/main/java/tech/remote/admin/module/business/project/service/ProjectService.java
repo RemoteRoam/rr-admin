@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.project.dao.ProjectDao;
 import tech.remote.admin.module.business.project.domain.entity.*;
 import tech.remote.admin.module.business.project.domain.form.*;
+import tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.manager.ProjectArchiveManager;
@@ -361,5 +362,10 @@ public class ProjectService {
 
         List<ProjectProductEntity> productList = projectProductManager.list(wrapper);
         return SmartBeanUtil.copyList(productList, ProjectProductVO.class);
+    }
+
+    public List<ProjectExcelVO> getExcelExportData(ProjectQueryForm queryForm) {
+        List<ProjectExcelVO> excelList = projectDao.selectExcelList(queryForm);
+        return excelList;
     }
 }

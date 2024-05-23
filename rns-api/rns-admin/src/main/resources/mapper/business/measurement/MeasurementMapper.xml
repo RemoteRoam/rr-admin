@@ -58,4 +58,41 @@
         update t_measurement set deleted_flag = #{deletedFlag}
         where id = #{id}
     </update>
+
+    <!-- 导出excel -->
+    <select id="selectExcelList" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementExcelVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName,mt.*,p1.name as thirdPartyName
+        FROM t_measurement t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        left join t_measurement_task mt on t.id = mt.project_id
+        left join t_third_party p1 on mt.third_party_id = p1.id
+        <where>
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--负责人ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.id, mt.id
+    </select>
 </mapper>

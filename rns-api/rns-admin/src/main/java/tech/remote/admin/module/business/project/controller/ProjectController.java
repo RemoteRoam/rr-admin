@@ -1,11 +1,15 @@
 package tech.remote.admin.module.business.project.controller;
 
+import cn.hutool.core.date.DateUtil;
+import com.alibaba.excel.EasyExcel;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import tech.remote.admin.module.business.project.domain.form.ProjectAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectToDoQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.service.ProjectService;
@@ -18,10 +22,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.enumeration.ProjectTypeEnum;
 import tech.remote.base.common.util.SmartRequestUtil;
+import tech.remote.base.common.util.SmartResponseUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -97,5 +105,27 @@ public class ProjectController {
     @GetMapping("/project/getPendingProduct/{id}/{nodeId}")
     public ResponseDTO<List<ProjectProductVO>> getPendingProduct(@PathVariable Long id, @PathVariable Integer nodeId) {
         return ResponseDTO.ok(projectService.getPendingProduct(id, nodeId));
+    }
+
+    @Operation(summary = "导出 @author cbh")
+    @PostMapping("/project/exportExcel")
+    public void exportExcel(@RequestBody @Valid ProjectQueryForm queryForm, HttpServletResponse response) throws IOException {
+        List<ProjectExcelVO> data = projectService.getExcelExportData(queryForm);
+        if (CollectionUtils.isEmpty(data)) {
+            SmartResponseUtil.write(response, ResponseDTO.userErrorParam("暂无数据"));
+            return;
+        }
+
+        String projectTypeName = ProjectTypeEnum.getDescByValue(queryForm.getProjectType());
+        String fileName = projectTypeName + "-" + DateUtil.today() + ".xls";
+
+        // 设置下载消息头
+        SmartResponseUtil.setDownloadFileHeader(response, fileName, null);
+
+        // 下载
+        EasyExcel.write(response.getOutputStream(), ProjectExcelVO.class)
+                .autoCloseStream(Boolean.FALSE)
+                .sheet(projectTypeName)
+                .doWrite(data);
     }
 }

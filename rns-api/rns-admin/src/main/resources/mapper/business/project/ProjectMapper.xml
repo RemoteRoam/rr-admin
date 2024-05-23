@@ -188,4 +188,112 @@
              t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
         where t.id = #{id}
     </select>
+
+    <!-- 导出 -->
+    <select id="selectExcelList" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO">
+        SELECT
+        t.*, c.customer_name as customerName,
+        l.third_party_id,p3.name as thirdPartyName, l.lab_contract_no, l.lab_contract_date, l.lab_contract_amount, l.lab_expected_date, l.lab_contract_remark, l.data_send_date, l.data_receive_date,
+
+        CASE
+        WHEN l.is_paid = 1 THEN '是'
+        WHEN l.is_paid = 0 THEN '否'
+        ELSE NULL
+        END AS isPaid,
+
+        CASE
+        WHEN l.pay_party = 1 THEN '客户'
+        WHEN l.pay_party = 2 THEN '我方'
+        ELSE NULL
+        END AS payParty,
+        l.lab_pay_date, l.lab_pay_remark, l.assign_task_date, l.expected_completion_date, l.report_completion_date,
+        p.product_name, p.product_model, p.lab_report_date, p.self_declaration_date, p.certificate_no, p.certificate_send_date, p.certificate_expiry_date,
+        a.archive_position,a.archive_date,m.mailing_date,m.tracking_number,
+
+        CASE
+        WHEN f.is_paid = 1 THEN '是'
+        WHEN f.is_paid = 0 THEN '否'
+        ELSE NULL
+        END AS feeIsPaid,
+
+        CASE
+        WHEN f.pay_party = 1 THEN '客户'
+        WHEN f.pay_party = 2 THEN '我方'
+        ELSE NULL
+        END AS feePayParty,
+        f.pay_date,f.pay_remark,
+        CASE
+        WHEN t.project_type = 11 THEN 'CCC自我声明'
+        WHEN t.project_type = 12 THEN '产品认证'
+        WHEN t.project_type = 21 THEN '试验项目'
+        WHEN t.project_type = 31 THEN '产品监督'
+        ELSE NULL
+        END AS projectTypeName,
+        CASE
+        WHEN t.project_type = 11 and t.category = 1 THEN '初始'
+        WHEN t.project_type = 11 and t.category = 2 THEN '变更'
+        WHEN t.project_type = 11 and t.category = 3 THEN '增项'
+        WHEN t.project_type = 12 and t.category = 1 THEN '初始'
+        WHEN t.project_type = 12 and t.category = 2 THEN '变更'
+        WHEN t.project_type = 12 and t.category = 3 THEN '增项'
+        WHEN t.project_type = 21 and t.category = 1 THEN '委托'
+        WHEN t.project_type = 21 and t.category = 2 THEN '型式'
+        WHEN t.project_type = 21 and t.category = 3 THEN '监督抽样'
+        WHEN t.project_type = 31 THEN ''
+        ELSE NULL
+        END AS categoryName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        LEFT JOIN t_project_lab l on t.id = l.project_id
+        left join t_third_party p3 on l.third_party_id = p3.id
+        left join t_project_product p on t.id = p.project_id and l.id = p.task_id
+        left join t_project_archive a on p.archive_id = a.id
+        left join t_project_mail m on p.mail_id = m.id
+        left join t_project_certification_fee f on p.certification_fee_id = f.id
+        <where>
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.id, l.id, p.id
+    </select>
 </mapper>

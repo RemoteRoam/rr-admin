@@ -10,11 +10,14 @@ import tech.remote.admin.module.business.measurement.domain.entity.MeasurementEn
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementAddForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementQueryForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementUpdateForm;
+import tech.remote.admin.module.business.measurement.domain.vo.MeasurementExcelVO;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
 import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeQueryForm;
 import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 import tech.remote.admin.module.business.projectnode.manager.ProjectNodeManager;
+import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationQueryForm;
+import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationExcelVO;
 import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
 import tech.remote.admin.module.business.typenode.service.TypeNodeService;
@@ -207,5 +210,10 @@ public class MeasurementService {
         vo.setProjectNodeList(projectNodeList);
 
         return vo;
+    }
+
+    public List<MeasurementExcelVO> getExcelExportData(MeasurementQueryForm queryForm) {
+        List<MeasurementExcelVO> excelList = measurementDao.selectExcelList(queryForm);
+        return excelList;
     }
 }
