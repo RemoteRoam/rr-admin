@@ -144,7 +144,6 @@ async function onSubmit() {
 async function save() {
     SmartLoading.show();
     try {
-        console.log('form', form);
         await measurementTaskApi.add(form);
 
         message.success('操作成功');

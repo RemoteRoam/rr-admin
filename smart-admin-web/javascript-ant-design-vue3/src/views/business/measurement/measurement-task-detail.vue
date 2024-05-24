@@ -41,7 +41,7 @@
           <a-col :span="2">操作人</a-col>
           <a-col :span="15">跳过原因</a-col>
         </a-row>
-        <template v-for="(node, index) in detail.projectNodeList" key="index">
+        <template v-for="(node, index) in detail.measurementNodeList" key="index">
           <a-row style="margin-bottom: 10px">
             <a-col :span="1">
             </a-col>
@@ -81,7 +81,6 @@ import ThirdPartySelect from '/@/components/business/project/third-party-select/
 const route = useRoute();
 let id = ref();
 onMounted(() => {
-  console.log('route', route);
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();

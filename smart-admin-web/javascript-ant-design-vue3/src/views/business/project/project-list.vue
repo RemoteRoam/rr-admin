@@ -475,7 +475,6 @@ async function requestBatchDelete() {
 
 const handleMenuClick = (e, param) => {
 
-    console.log(e.key);
     if (typeof e.key.nodeId === 'undefined') {
         router.push({
             path: '/project/lab-list', query: {

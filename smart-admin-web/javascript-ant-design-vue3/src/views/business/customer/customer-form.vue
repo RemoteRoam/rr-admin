@@ -247,8 +247,7 @@ function changeArea(value, selectedOptions) {
     district: '',
     districtName: '',
   });
-  console.log(selectedOptions);
-  console.log(area);
+
   if (!_.isEmpty(selectedOptions)) {
     // 地区信息
     form.province = area.value[0].value;

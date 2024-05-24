@@ -60,18 +60,17 @@
         </template>
       </a-tab-pane>
       <a-tab-pane key="content" tab="详细信息">
-        <a-form :label-col="{ span: 8 }">
+        <a-form :label-col="{ style: { width: '150px' } }">
           <a-row>
             <a-col :span="8">
               <a-form-item label="首款金额" name="firstPaymentAmount">
-                <a-input-number style="width: 95%" v-model:value="detail.firstPaymentAmount" placeholder="首款金额"
-                  disabled />
+                <a-input-number style="width: 95%" v-model:value="detail.firstPaymentAmount" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="首款收款日期" name="firstPaymentDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.firstPaymentDate" style="width: 95%"
-                  placeholder="首款收款日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
@@ -79,17 +78,17 @@
             <a-col :span="8">
               <a-form-item label="审核任务时间" name="auditTaskDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.auditTaskDate" style="width: 95%"
-                  placeholder="审核任务时间" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="审核老师" name="auditTeacher">
-                <a-input style="width: 95%" v-model:value="detail.auditTeacher" placeholder="审核老师" disabled />
+                <a-input style="width: 95%" v-model:value="detail.auditTeacher" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="咨询老师" name="consultationTeacher">
-                <a-input style="width: 95%" v-model:value="detail.consultationTeacher" placeholder="咨询老师" disabled />
+                <a-input style="width: 95%" v-model:value="detail.consultationTeacher" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
@@ -97,32 +96,31 @@
             <a-col :span="8">
               <a-form-item label="审核日期" name="auditDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.auditDate" style="width: 95%"
-                  placeholder="审核日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="整改内容" name="rectificationContent">
-                <a-input style="width: 95%" v-model:value="detail.rectificationContent" placeholder="整改内容" disabled />
+                <a-input style="width: 95%" v-model:value="detail.rectificationContent" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="整改日期" name="rectificationDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.rectificationDate" style="width: 95%"
-                  placeholder="整改日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="8">
               <a-form-item label="尾款金额" name="finalPaymentAmount">
-                <a-input-number style="width: 95%" v-model:value="detail.finalPaymentAmount" placeholder="尾款金额"
-                  disabled />
+                <a-input-number style="width: 95%" v-model:value="detail.finalPaymentAmount" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="尾款收款日期" name="finalPaymentDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.finalPaymentDate" style="width: 95%"
-                  placeholder="尾款收款日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
@@ -130,43 +128,43 @@
             <a-col :span="8">
               <a-form-item label="开票日期" name="invoiceDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.invoiceDate" style="width: 95%"
-                  placeholder="开票日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="发票金额" name="invoiceAmount">
-                <a-input-number style="width: 95%" v-model:value="detail.invoiceAmount" placeholder="发票金额" disabled />
+                <a-input-number style="width: 95%" v-model:value="detail.invoiceAmount" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="发票号" name="invoiceNumber">
-                <a-input style="width: 95%" v-model:value="detail.invoiceNumber" placeholder="发票号" disabled />
+                <a-input style="width: 95%" v-model:value="detail.invoiceNumber" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="8">
               <a-form-item label="创建人" name="createUserName">
-                <a-input style="width: 95%" v-model:value="detail.createUserName" placeholder="创建人姓名" disabled />
+                <a-input style="width: 95%" v-model:value="detail.createUserName" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="创建时间" name="createTime">
                 <a-date-picker show-time valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="detail.createTime"
-                  style="width: 95%" placeholder="创建时间" disabled />
+                  style="width: 95%" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="8">
               <a-form-item label=" 更新人" name="updateUserName">
-                <a-input style="width: 95%" v-model:value="detail.updateUserName" placeholder="更新人姓名" disabled />
+                <a-input style="width: 95%" v-model:value="detail.updateUserName" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="更新时间" name="updateTime">
                 <a-date-picker show-time valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="detail.updateTime"
-                  style="width: 95%" placeholder="更新时间" disabled />
+                  style="width: 95%" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
@@ -174,7 +172,7 @@
           <a-row>
             <a-col :span="16">
               <a-form-item label="备注" name="remark">
-                <a-textarea style="width: 95%" v-model:value="detail.remark" placeholder="备注" disabled />
+                <a-textarea style="width: 95%" v-model:value="detail.remark" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>

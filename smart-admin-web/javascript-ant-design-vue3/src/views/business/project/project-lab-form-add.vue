@@ -64,14 +64,12 @@ const visibleFlag = ref(false);
 
 function show(rowData) {
     Object.assign(form, formDefault);
-    console.log(rowData);
     form.projectId = rowData.id;
     form.projectType = rowData.projectType;
     visibleFlag.value = true;
     nextTick(() => {
         formRef.value.clearValidate();
     });
-    console.log(dataSource);
 }
 
 function onClose() {
@@ -107,7 +105,6 @@ async function onSubmit() {
     try {
         await formRef.value.validateFields();
         form.products = cloneDeep(dataSource.value);
-        console.log(form);
         submit();
     } catch (err) {
         message.error('参数验证错误，请仔细填写表单数据!');

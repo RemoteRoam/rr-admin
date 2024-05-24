@@ -48,8 +48,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
+            :pagination="false">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'projectNo'">
                     <a @click="detail(record.id)">{{ record.projectNo }}</a>
@@ -379,10 +378,8 @@ async function requestBatchDelete() {
 
 
 const handleMenuClick = (e, param) => {
-    // console.log("key", e.key);
-    // console.log("param", param);
+
     if (e.key === null) {
-        console.log("param", param);
         router.push({
             path: '/measurement/task/list', query: {
                 projectId: param.id, projectNo: param.projectNo, customerName: param.customerName,

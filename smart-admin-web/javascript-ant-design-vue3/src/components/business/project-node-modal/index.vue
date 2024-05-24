@@ -42,7 +42,6 @@ const rules = {};
 
 
 const show = (rowData) => {
-    console.log('rowData', rowData);
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);
@@ -96,7 +95,6 @@ const save = async (status) => {
     SmartLoading.show();
     form.status = status;
     try {
-        console.log('form', form);
         if (form.id) {
             await systemCertificationApi.update(form);
         } else {

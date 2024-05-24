@@ -1,60 +1,44 @@
 package tech.remote.admin.module.business.measurement.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-
 import lombok.Data;
 
 /**
- * 仪器计量实验室任务表 列表VO
+ * 仪器计量流程节点表 列表VO
  *
  * @Author cbh
- * @Date 2024-05-07 14:44:51
+ * @Date 2024-05-07 14:42:44
  * @Copyright Remote Nomad Studio
  */
 
 @Data
-public class MeasurementTaskVO {
+public class MeasurementNodeVO {
 
 
     @Schema(description = "编号")
     private Long id;
 
-    @Schema(description = "实验室任务编号")
-    private String taskNo;
-
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "三方机构ID（实验室ID）")
-    private Long thirdPartyId;
+    @Schema(description = "实验室任务ID")
+    private Long taskId;
 
-    @Schema(description = "实验室名称")
-    private String thirdPartyName;
+    @Schema(description = "节点ID")
+    private Long nodeId;
 
-    @Schema(description = "仪器名称")
-    private String instrument;
+    @Schema(description = "节点名称")
+    private String nodeName;
 
-    @Schema(description = "有效期")
-    private LocalDate expiryDate;
+    @Schema(description = "节点排序")
+    private Integer nodeSort;
 
-    @Schema(description = "实验费金额")
-    private BigDecimal experimentAmount;
-
-    @Schema(description = "成本价")
-    private BigDecimal costAmount;
-
-    @Schema(description = "计量日期")
-    private LocalDate measurementDate;
-
-    @Schema(description = "完成日期")
-    private LocalDate finishDate;
-
-    @Schema(description = "状态（ProjectStatusEnum）")
+    @Schema(description = "状态（NodeStatusEnum）")
     private Integer status;
+
+    @Schema(description = "跳过原因")
+    private String passReason;
 
     @Schema(description = "操作人")
     private Long operateUserId;
@@ -82,8 +66,5 @@ public class MeasurementTaskVO {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
-
-    @Schema(description = "操作节点列表")
-    private List<MeasurementNodeVO> measurementNodeList;
 
 }

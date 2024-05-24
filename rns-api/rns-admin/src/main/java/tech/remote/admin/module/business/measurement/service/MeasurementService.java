@@ -7,17 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.measurement.dao.MeasurementDao;
 import tech.remote.admin.module.business.measurement.domain.entity.MeasurementEntity;
+import tech.remote.admin.module.business.measurement.domain.entity.MeasurementNodeEntity;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementAddForm;
+import tech.remote.admin.module.business.measurement.domain.form.MeasurementNodeQueryForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementQueryForm;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementUpdateForm;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementExcelVO;
+import tech.remote.admin.module.business.measurement.domain.vo.MeasurementNodeVO;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
-import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
-import tech.remote.admin.module.business.projectnode.domain.form.ProjectNodeQueryForm;
-import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
-import tech.remote.admin.module.business.projectnode.manager.ProjectNodeManager;
-import tech.remote.admin.module.business.systemcertification.domain.form.SystemCertificationQueryForm;
-import tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationExcelVO;
+import tech.remote.admin.module.business.measurement.manager.MeasurementNodeManager;
 import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
 import tech.remote.admin.module.business.typenode.service.TypeNodeService;
@@ -59,7 +57,7 @@ public class MeasurementService {
     private TypeNodeService typeNodeService;
 
     @Resource
-    private ProjectNodeManager projectNodeManager;
+    private MeasurementNodeManager measurementNodeManager;
 
     @Resource
     private DataTracerService dataTracerService;
@@ -75,11 +73,10 @@ public class MeasurementService {
         List<MeasurementVO> list = measurementDao.queryPage(page, queryForm);
         if(CollectionUtils.isNotEmpty(list)){
             for(MeasurementVO measurementVO : list){
-                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                MeasurementNodeQueryForm nodeQueryForm = new MeasurementNodeQueryForm();
                 nodeQueryForm.setProjectId(measurementVO.getId());
-                nodeQueryForm.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
                 nodeQueryForm.setNodeLevel(1);
-                measurementVO.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+                measurementVO.setMeasurementNodeList(measurementNodeManager.getOperateNodes(nodeQueryForm));
             }
         }
         PageResult<MeasurementVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
@@ -97,11 +94,10 @@ public class MeasurementService {
         List<MeasurementVO> list = measurementDao.queryAlarmPage(page, queryForm);
         if(CollectionUtils.isNotEmpty(list)){
             for(MeasurementVO measurementVO : list){
-                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                MeasurementNodeQueryForm nodeQueryForm = new MeasurementNodeQueryForm();
                 nodeQueryForm.setProjectId(measurementVO.getId());
-                nodeQueryForm.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
                 nodeQueryForm.setNodeLevel(1);
-                measurementVO.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+                measurementVO.setMeasurementNodeList(measurementNodeManager.getOperateNodes(nodeQueryForm));
             }
         }
         PageResult<MeasurementVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
@@ -126,17 +122,15 @@ public class MeasurementService {
         query.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
         List<TypeNodeListVO> typeNodeList = typeNodeService.getTypeNodes(query);
 
-        List<ProjectNodeEntity> projectNodeList = SmartBeanUtil.copyList(typeNodeList, ProjectNodeEntity.class);
-        for(ProjectNodeEntity projectNode : projectNodeList){
-            projectNode.setId(null);
-            projectNode.setProjectId(measurementEntity.getId());
-            projectNode.setProjectNo(projectNo);
-            projectNode.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
-            projectNode.setStatus(NodeStatusEnum.INIT.getValue());
-            projectNode.setCreateUserId(addForm.getCreateUserId());
-            projectNode.setCreateUserName(addForm.getCreateUserName());
+        List<MeasurementNodeEntity> nodeList = SmartBeanUtil.copyList(typeNodeList, MeasurementNodeEntity.class);
+        for(MeasurementNodeEntity node : nodeList){
+            node.setId(null);
+            node.setProjectId(measurementEntity.getId());
+            node.setStatus(NodeStatusEnum.INIT.getValue());
+            node.setCreateUserId(addForm.getCreateUserId());
+            node.setCreateUserName(addForm.getCreateUserName());
         }
-        projectNodeManager.saveBatch(projectNodeList);
+        measurementNodeManager.saveBatch(nodeList);
 
         dataTracerService.insert(measurementEntity.getId(), DataTracerTypeEnum.MEASUREMENT);
 
@@ -159,29 +153,28 @@ public class MeasurementService {
         if(updateForm.getProjectNodeId() != null && updateForm.getNodeStatus() != null) {
             // 根据projectId和nodeId为条件，更新systemCertificationNode的状态
 
-            ProjectNodeEntity projectNodeEntity = projectNodeManager.getById(updateForm.getProjectNodeId());
-            if(projectNodeEntity.getStatus() == NodeStatusEnum.INIT.getValue() || projectNodeEntity.getStatus() == NodeStatusEnum.DOING.getValue()){
-                projectNodeEntity.setOperateTime(LocalDateTime.now());
-                projectNodeEntity.setOperateUserId(updateForm.getUpdateUserId());
-                projectNodeEntity.setOperateUserName(updateForm.getUpdateUserName());
-                projectNodeEntity.setPassReason(updateForm.getPassReason());
-                projectNodeEntity.setStatus(updateForm.getNodeStatus());
+            MeasurementNodeEntity nodeEntity = measurementNodeManager.getById(updateForm.getProjectNodeId());
+            if(nodeEntity.getStatus() == NodeStatusEnum.INIT.getValue() || nodeEntity.getStatus() == NodeStatusEnum.DOING.getValue()){
+                nodeEntity.setOperateTime(LocalDateTime.now());
+                nodeEntity.setOperateUserId(updateForm.getUpdateUserId());
+                nodeEntity.setOperateUserName(updateForm.getUpdateUserName());
+                nodeEntity.setPassReason(updateForm.getPassReason());
+                nodeEntity.setStatus(updateForm.getNodeStatus());
 
             } else {
                 return ResponseDTO.error(BusinessErrorCode.PROJECT_NODE_ALREADY_PROCESSED);
             }
 
             // Execute the update
-            projectNodeManager.updateById(projectNodeEntity);
-            String content = "节点操作：【" + projectNodeEntity.getNodeName() + "】" + NodeStatusEnum.getDescByValue(updateForm.getNodeStatus());
+            measurementNodeManager.updateById(nodeEntity);
+            String content = "节点操作：【" + nodeEntity.getNodeName() + "】" + NodeStatusEnum.getDescByValue(updateForm.getNodeStatus());
             dataTracerService.addTrace(measurementEntity.getId(), DataTracerTypeEnum.MEASUREMENT, content);
             // 判断是否所有节点都已完成或者跳过，如果是，修改状态为已完成
-            ProjectNodeQueryForm queryForm = new ProjectNodeQueryForm();
+            MeasurementNodeQueryForm queryForm = new MeasurementNodeQueryForm();
             queryForm.setProjectId(updateForm.getId());
-            queryForm.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
             queryForm.setNodeLevel(1);
 
-            if (projectNodeManager.isAllDone(queryForm)) {
+            if (measurementNodeManager.isAllDone(queryForm)) {
                 measurementEntity.setStatus(ProjectStatusEnum.DONE.getValue());
                 measurementDao.updateById(measurementEntity);
                 dataTracerService.addTrace(measurementEntity.getId(), DataTracerTypeEnum.MEASUREMENT, "项目完成");
@@ -224,12 +217,11 @@ public class MeasurementService {
     public MeasurementVO getDetail(Long id) {
         MeasurementVO vo = measurementDao.getDetail(id);
 
-        ProjectNodeQueryForm queryForm = new ProjectNodeQueryForm();
+        MeasurementNodeQueryForm queryForm = new MeasurementNodeQueryForm();
         queryForm.setProjectId(id);
-        queryForm.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
         queryForm.setNodeLevel(1);
-        List<ProjectNodeVO> projectNodeList = projectNodeManager.getAllNodes(queryForm);
-        vo.setProjectNodeList(projectNodeList);
+        List<MeasurementNodeVO> nodeList = measurementNodeManager.getAllNodes(queryForm);
+        vo.setMeasurementNodeList(nodeList);
 
         return vo;
     }

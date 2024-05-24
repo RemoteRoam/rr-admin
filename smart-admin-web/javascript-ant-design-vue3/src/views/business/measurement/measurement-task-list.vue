@@ -58,13 +58,13 @@
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
-                    <a-dropdown v-if="record.projectNodeList.length > 0">
+                    <a-dropdown v-if="record.measurementNodeList.length > 0">
                         <a class="ant-dropdown-link" @click.prevent>
                             节点操作
                         </a>
                         <template #overlay>
                             <a-menu @click="handleMenuClick($event, record)">
-                                <a-menu-item v-for="node in record.projectNodeList" :key="node">
+                                <a-menu-item v-for="node in record.measurementNodeList" :key="node">
                                     {{ node.nodeName }}
                                 </a-menu-item>
                             </a-menu>

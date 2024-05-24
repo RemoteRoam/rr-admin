@@ -8,7 +8,7 @@
 <template>
     <a-modal :title="form.id ? '编辑' : '添加'" width="60%" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
-        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
+        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ style: { width: '150px' } }">
             <a-row>
                 <a-col :span="8">
                     <a-form-item label="项目编号" name="projectNo">
@@ -205,7 +205,6 @@ function show(id) {
 async function detail(id) {
     try {
         let result = await projectApi.detail(id);
-        console.log(result);
         let data = result.data;
         Object.assign(form, data);
         projectTypeGlobal.value = data.projectType;

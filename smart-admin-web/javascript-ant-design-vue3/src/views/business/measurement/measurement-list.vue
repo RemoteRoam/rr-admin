@@ -95,7 +95,7 @@
                                         实验室任务
                                     </a-menu-item>
                                     <a-menu-divider />
-                                    <a-menu-item v-for="node in record.projectNodeList" :key="node">
+                                    <a-menu-item v-for="node in record.measurementNodeList" :key="node">
                                         {{ node.nodeName }}
                                     </a-menu-item>
                                 </a-menu>
@@ -404,10 +404,8 @@ async function requestBatchDelete() {
 
 
 const handleMenuClick = (e, param) => {
-    // console.log("key", e.key);
-    // console.log("param", param);
+
     if (e.key === null) {
-        console.log("param", param);
         router.push({
             path: '/measurement/task/list', query: {
                 projectId: param.id, projectNo: param.projectNo, customerName: param.customerName,
