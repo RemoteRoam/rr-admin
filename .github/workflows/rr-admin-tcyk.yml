@@ -22,9 +22,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build:prod
+      - name: npm ci
+        run: npm ci
+        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
+      - name: npm run build
+        run: npm run build:prod
+        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
 
   web-server-job:
     needs: web-vue-job
