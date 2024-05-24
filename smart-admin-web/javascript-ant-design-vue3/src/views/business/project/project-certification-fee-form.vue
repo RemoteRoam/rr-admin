@@ -67,7 +67,7 @@ import { reactive, ref, nextTick } from 'vue';
 import _ from 'lodash';
 import { message } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
-import { projectCertificationFeeApi } from '/@/api/business/project-certification-fee/project-certification-fee-api';
+import { projectCertificationFeeApi } from '/@/api/business/project/project-certification-fee-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 
