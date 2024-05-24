@@ -63,7 +63,7 @@
     import _ from 'lodash';
     import { message } from 'ant-design-vue';
     import { SmartLoading } from '/@/components/framework/smart-loading';
-    import { projectArchiveApi } from '/@/api/business/project-archive/project-archive-api';
+    import { projectArchiveApi } from '/@/api/business/project/project-archive-api';
     import { smartSentry } from '/@/lib/smart-sentry';
 
     // ------------------------ 事件 ------------------------
