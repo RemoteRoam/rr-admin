@@ -17,6 +17,8 @@ jobs:
         run: ls -la
       - name: Set up work directory
         run: cd ./smart-admin-web/javascript-ant-design-vue3
+      - name: list path2
+        run: ls -la
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
