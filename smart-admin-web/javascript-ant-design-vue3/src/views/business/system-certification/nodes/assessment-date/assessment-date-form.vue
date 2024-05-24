@@ -133,8 +133,6 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
-        console.log('form', form);
         if (form.id) {
             await systemCertificationApi.update(form);
         } else {

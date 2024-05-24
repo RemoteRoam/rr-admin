@@ -1,6 +1,8 @@
 package tech.remote.admin.module.business.measurement.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.measurement.dao.MeasurementNodeDao;
 import tech.remote.admin.module.business.measurement.domain.entity.MeasurementNodeEntity;
 import tech.remote.admin.module.business.measurement.domain.form.MeasurementNodeAddForm;

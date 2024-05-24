@@ -92,6 +92,6 @@ public class MeasurementVO {
     private LocalDateTime updateTime;
 
     @Schema(description = "操作节点列表")
-    private List<ProjectNodeVO> projectNodeList;
+    private List<MeasurementNodeVO> measurementNodeList;
 
 }

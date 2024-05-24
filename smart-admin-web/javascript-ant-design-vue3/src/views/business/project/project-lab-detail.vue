@@ -52,16 +52,16 @@
         </template>
       </a-tab-pane>
       <a-tab-pane key="content" tab="详细信息">
-        <a-form :label-col="{ span: 8 }">
+        <a-form :label-col="{ style: { width: '150px' } }">
           <a-row>
             <a-col :span="8">
               <a-form-item label="实验室任务编号" name="taskNo">
-                <a-input style="width: 95%" v-model:value="detail.taskNo" placeholder="实验室任务编号" disabled />
+                <a-input style="width: 95%" v-model:value="detail.taskNo" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="实验室" name="thirdPartyId">
-                <ThirdPartySelect width="95%" v-model:value="detail.thirdPartyId" placeholder="请选择实验室" type="THIRD_1"
+                <ThirdPartySelect width="95%" v-model:value="detail.thirdPartyId" placeholder="" type="THIRD_1"
                   disabled />
               </a-form-item>
             </a-col>
@@ -69,26 +69,25 @@
           <a-row>
             <a-col :span="8">
               <a-form-item label="实验室合同号" name="labContractNo">
-                <a-input style="width: 95%" v-model:value="detail.labContractNo" placeholder="实验室合同号" disabled />
+                <a-input style="width: 95%" v-model:value="detail.labContractNo" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="实验室合同日期" name="labContractDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labContractDate" style="width: 95%"
-                  placeholder="实验室合同日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="实验费金额" name="labContractAmount">
-                <a-input-number style="width: 95%" v-model:value="detail.labContractAmount" placeholder="实验费金额"
-                  disabled />
+                <a-input-number style="width: 95%" v-model:value="detail.labContractAmount" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="16">
               <a-form-item label="实验合同备注" name="labContractRemark">
-                <a-textarea style="width: 95%" v-model:value="detail.labContractRemark" placeholder="实验合同备注" disabled />
+                <a-textarea style="width: 95%" v-model:value="detail.labContractRemark" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
@@ -96,19 +95,19 @@
             <a-col :span="8">
               <a-form-item label="客户要求完成日期" name="labExpectedDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labExpectedDate" style="width: 95%"
-                  placeholder="客户要求完成日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="资料发送日期" name="dataSendDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataSendDate" style="width: 95%"
-                  placeholder="资料发送日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="资料接收日期" name="dataReceiveDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataReceiveDate" style="width: 95%"
-                  placeholder="资料接收日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
 
             </a-col>
@@ -130,7 +129,7 @@
             <a-col :span="8">
               <a-form-item label="实验费付款日期" name="labPayDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labPayDate" style="width: 95%"
-                  placeholder="实验费付款日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
 
             </a-col>
@@ -139,7 +138,7 @@
           <a-row>
             <a-col :span="16">
               <a-form-item label="实验费备注" name="labPayRemark">
-                <a-textarea style="width: 95%" v-model:value="detail.labPayRemark" placeholder="实验费备注" disabled />
+                <a-textarea style="width: 95%" v-model:value="detail.labPayRemark" placeholder="" disabled />
               </a-form-item>
 
             </a-col>
@@ -149,19 +148,19 @@
             <a-col :span="8">
               <a-form-item label="实验室下达任务日期" name="assignTaskDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.assignTaskDate" style="width: 95%"
-                  placeholder="实验室下达任务日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="预计完成日期" name="expectedCompletionDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.expectedCompletionDate" style="width: 95%"
-                  placeholder="预计完成日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item label="报告完成日期" name="reportCompletionDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.reportCompletionDate" style="width: 95%"
-                  placeholder="报告完成日期" disabled />
+                  placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
@@ -220,7 +219,6 @@ let detail = ref({});
 const qrCodeUrl = ref();
 onMounted(() => {
   baseUrl = window.location.origin
-  console.log('baseUrl', baseUrl);
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();
@@ -252,7 +250,6 @@ async function getDetail() {
     detail.value.projectType = Number(route.query.projectType);
     detail.value.category = Number(route.query.category);
     qrCodeUrl.value = baseUrl + "/#/project/progress?progressCode=" + result.data.progressCode;
-    console.log('qrCodeUrl', qrCodeUrl.value);
   } catch (error) {
     smartSentry.captureError(error);
   } finally {

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Data;
-import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
  * 仪器计量实验室任务表 列表VO
@@ -85,5 +84,6 @@ public class MeasurementTaskVO {
     private LocalDateTime updateTime;
 
     @Schema(description = "操作节点列表")
-    private List<ProjectNodeVO> projectNodeList;
+    private List<MeasurementNodeVO> measurementNodeList;
+
 }

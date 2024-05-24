@@ -63,7 +63,7 @@
         </template>
       </a-tab-pane>
       <a-tab-pane key="content" tab="详细信息">
-        <a-form :label-col="{ span: 8 }">
+        <a-form :label-col="{ style: { width: '150px' } }">
           <a-row>
             <a-col :span="8">
               <a-form-item label="合同号" name="contractNo">
@@ -245,7 +245,6 @@ import ThirdPartySelect from '/@/components/business/project/third-party-select/
 const route = useRoute();
 let id = ref();
 onMounted(() => {
-  console.log('route', route);
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();

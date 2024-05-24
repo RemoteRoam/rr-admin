@@ -21,4 +21,6 @@ public class MeasurementNodeQueryForm extends PageParam{
     @Schema(description = "实验室任务ID")
     private Long taskId;
 
+    @Schema(description = "节点级别")
+    private Integer nodeLevel;
 }

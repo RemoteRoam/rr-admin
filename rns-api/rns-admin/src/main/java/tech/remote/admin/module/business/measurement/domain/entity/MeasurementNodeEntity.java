@@ -45,6 +45,11 @@ public class MeasurementNodeEntity {
     private String nodeName;
 
     /**
+     * 节点级别（1项目 2任务）
+     */
+    private Integer nodeLevel;
+
+    /**
      * 节点排序
      */
     private Integer nodeSort;

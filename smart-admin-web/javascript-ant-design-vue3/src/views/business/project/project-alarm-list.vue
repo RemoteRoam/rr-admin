@@ -63,8 +63,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
+            :pagination="false">
             <template #bodyCell="{ text, record, column }">
 
                 <template v-if="column.dataIndex === 'projectNo'">
@@ -348,7 +347,6 @@ const projectMailFormRef = ref();
 
 const handleMenuClick = (e, param) => {
 
-    console.log(e.key);
     if (typeof e.key.nodeId === 'undefined') {
         router.push({
             path: '/project/lab-list', query: {

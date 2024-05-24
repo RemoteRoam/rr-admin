@@ -58,7 +58,7 @@
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
-                    <a-dropdown v-if="record.projectNodeList.length > 0">
+                    <a-dropdown v-if="record.projectNodeList && record.projectNodeList.length > 0">
                         <a class="ant-dropdown-link" @click.prevent>
                             节点操作
                         </a>
@@ -387,7 +387,6 @@ async function getTaskDetail(taskId) {
         detail.value.customerName = route.query.customerName;
         detail.value.projectType = Number(route.query.projectType);
         detail.value.category = Number(route.query.category);
-        console.log("get detail:", detail.value)
     } catch (error) {
         smartSentry.captureError(error);
     } finally {

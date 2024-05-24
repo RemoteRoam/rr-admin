@@ -74,7 +74,7 @@ public class ProjectProductService {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<ProjectProductVO> list = projectProductDao.queryPage(page, queryForm);
         if(CollectionUtils.isNotEmpty(list) &&
-                (queryForm.getCertificationFeeId() != null || queryForm.getArchiveId() != null || queryForm.getMailId() != null)){
+                (queryForm.getCertificationFeeId() == null && queryForm.getArchiveId() == null && queryForm.getMailId() == null)){
             for(ProjectProductVO productVO : list){
 
                 ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();

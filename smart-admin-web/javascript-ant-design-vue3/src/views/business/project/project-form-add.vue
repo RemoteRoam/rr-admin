@@ -106,7 +106,6 @@ const emits = defineEmits(['reloadList']);
 const visibleFlag = ref(false);
 
 function show(projectType) {
-    console.log('projectType:', projectType);
     Object.assign(form, formDefault);
     form.projectType = projectType;
     projectTypeGlobal.value = projectType;

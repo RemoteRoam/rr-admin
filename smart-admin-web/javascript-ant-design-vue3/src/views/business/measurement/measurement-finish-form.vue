@@ -51,8 +51,7 @@ const visibleFlag = ref(false);
 const jumpNodeRef = ref();
 
 function show(rowData, projectNodeId) {
-    console.log('rowData', rowData);
-    console.log('projectNodeId', projectNodeId);
+
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);
@@ -137,8 +136,6 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
-        console.log('form', form);
         if (form.id) {
             await measurementTaskApi.update(form);
         } else {

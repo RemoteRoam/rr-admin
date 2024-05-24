@@ -66,7 +66,6 @@ const visibleFlag = ref(false);
 const jumpNodeRef = ref();
 
 function show(rowData, projectNodeId) {
-    console.log('rowData', rowData);
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);

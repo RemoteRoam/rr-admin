@@ -59,11 +59,9 @@ const projectData = ref({
 // 查询数据
 async function queryData(progressCode) {
   try {
-    console.log('progressCode', progressCode);
     let queryResult = await projectLabApi.getProgress(progressCode);
     projectData.value = queryResult.data;
-    // tableData.value = queryResult.data;
-    console.log(queryResult);
+
   } catch (e) {
     smartSentry.captureError(e);
   }
