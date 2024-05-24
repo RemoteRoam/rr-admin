@@ -16,7 +16,7 @@ jobs:
       - name: list path
         run: ls -la
       - name: Set up work directory
-        run: cd ./smart-admin-web/javascript-ant-design-vue3
+        run: cd ./smart-admin-web/javascript-ant-design-vue3/
       - name: list path2
         run: ls -la
       - name: Use Node.js ${{ matrix.node-version }}
@@ -25,11 +25,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Set up work directory
-        run: cd ./smart-admin-web/javascript-ant-design-vue3
+        run: cd ./smart-admin-web/javascript-ant-design-vue3/
       - run: npm ci
-        working-directory: ./smart-admin-web/javascript-ant-design-vue3
+        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
       - run: npm run build:prod
-        working-directory: ./smart-admin-web/javascript-ant-design-vue3
+        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
 
   web-server-job:
     needs: web-vue-job
