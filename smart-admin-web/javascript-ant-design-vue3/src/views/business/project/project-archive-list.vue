@@ -91,7 +91,7 @@
     import { reactive, ref, onMounted } from 'vue';
     import { message, Modal } from 'ant-design-vue';
     import { SmartLoading } from '/@/components/framework/smart-loading';
-    import { projectArchiveApi } from '/@/api/business/project-archive/project-archive-api';
+    import { projectArchiveApi } from '/@/api/business/project/project-archive-api';
     import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
     import { smartSentry } from '/@/lib/smart-sentry';
     import TableOperator from '/@/components/support/table-operator/index.vue';
