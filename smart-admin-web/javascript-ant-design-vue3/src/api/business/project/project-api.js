@@ -69,4 +69,16 @@ export const projectApi = {
         return postDownload('/project/exportExcel', param);
     },
 
+  /**
+   * 预警列表分页查询  @author  cbh
+   */
+  queryAlarmPage : (param) => {
+    return postRequest('/project/queryAlarmPage', param);
+  },
+
+  // 预警数量 @author cbh
+  getAlarmCount: () => {
+      return getRequest(`/project/getAlarmCount`);
+  },
+
 };

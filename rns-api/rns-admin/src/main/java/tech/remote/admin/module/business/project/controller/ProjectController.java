@@ -5,14 +5,13 @@ import com.alibaba.excel.EasyExcel;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import tech.remote.admin.module.business.project.domain.form.ProjectAddForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectToDoQueryForm;
-import tech.remote.admin.module.business.project.domain.form.ProjectUpdateForm;
+import tech.remote.admin.module.business.project.domain.form.*;
+import tech.remote.admin.module.business.project.domain.vo.ProjectAlarmCountVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.service.ProjectService;
+import tech.remote.base.common.annoation.NoNeedLogin;
 import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -128,4 +127,17 @@ public class ProjectController {
                 .sheet(projectTypeName)
                 .doWrite(data);
     }
+
+    @Operation(summary = "预警列表分页查询 @author cbh")
+    @PostMapping("/project/queryAlarmPage")
+    public ResponseDTO<PageResult<ProjectVO>> queryAlarmPage(@RequestBody @Valid ProjectAlarmQueryForm queryForm) {
+        return ResponseDTO.ok(projectService.queryAlarmPage(queryForm));
+    }
+
+    @Operation(summary = "获取预警数量 @author cbh")
+    @GetMapping("/project/getAlarmCount")
+    public ResponseDTO<ProjectAlarmCountVO> getAlarmCount() {
+        return ResponseDTO.ok(projectService.getAlarmCount());
+    }
+
 }

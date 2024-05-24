@@ -17,6 +17,13 @@ export const systemCertificationApi = {
   },
 
   /**
+   * 预警分页查询  @author  cbh
+   */
+  queryAlarmPage : (param) => {
+    return postRequest('/systemCertification/queryAlarmPage', param);
+  },
+
+  /**
    * 增加  @author  cbh
    */
   add: (param) => {

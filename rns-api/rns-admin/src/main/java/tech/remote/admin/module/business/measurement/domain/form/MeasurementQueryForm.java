@@ -34,4 +34,6 @@ public class MeasurementQueryForm extends PageParam{
     @Schema(description = "创建时间")
     private LocalDate createTimeEnd;
 
+    @Schema(description = "预警类型 7：仪器计量预警")
+    private Integer alarmType;
 }

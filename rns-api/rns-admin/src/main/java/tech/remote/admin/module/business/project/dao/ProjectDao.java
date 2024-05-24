@@ -6,6 +6,7 @@ import tech.remote.admin.module.business.measurement.domain.form.MeasurementQuer
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementExcelVO;
 import tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO;
 import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
+import tech.remote.admin.module.business.project.domain.form.ProjectAlarmQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectToDoQueryForm;
 import tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO;
@@ -63,4 +64,20 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
      * @return
      */
     List<ProjectExcelVO> selectExcelList(@Param("queryForm") ProjectQueryForm queryForm);
+
+
+    /**
+     * 预警列表分页查询
+     * @param page
+     * @param queryForm
+     * @return
+     */
+    List<ProjectVO> queryAlarmPage(Page page, @Param("queryForm") ProjectAlarmQueryForm queryForm);
+
+    /**
+     * 预警数量
+     * @param alarmType
+     * @return
+     */
+    int queryAlarmCount(@Param("alarmType")Integer alarmType);
 }

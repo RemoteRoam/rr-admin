@@ -61,4 +61,6 @@ public class SystemCertificationQueryForm extends PageParam{
     @Schema(description = "创建时间")
     private LocalDate createTimeEnd;
 
+    @Schema(description = "预警类型 5:体系审核到期预警 6:证书有效期预警")
+    private Integer alarmType;
 }

@@ -55,4 +55,10 @@ export const measurementApi = {
         return postDownload('/measurement/exportExcel', param);
     },
 
+  /**
+   * 预警分页查询  @author  cbh
+   */
+  queryAlarmPage : (param) => {
+    return postRequest('/measurement/queryAlarmPage', param);
+  },
 };

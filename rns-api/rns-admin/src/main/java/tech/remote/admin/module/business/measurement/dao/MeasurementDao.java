@@ -33,6 +33,16 @@ public interface MeasurementDao extends BaseMapper<MeasurementEntity> {
     List<MeasurementVO> queryPage(Page page, @Param("queryForm") MeasurementQueryForm queryForm);
 
     /**
+     * 预警分页 查询
+     *
+     * @param page
+     * @param queryForm
+     * @return
+     */
+    List<MeasurementVO> queryAlarmPage(Page page, @Param("queryForm") MeasurementQueryForm queryForm);
+
+
+    /**
      * 更新删除状态
      */
     long updateDeleted(@Param("id")Long id,@Param("${deletedFlag}")boolean deletedFlag);

@@ -5,7 +5,6 @@ import lombok.Data;
 import tech.remote.base.common.domain.PageParam;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * 项目表 分页查询表单
@@ -16,7 +15,7 @@ import java.util.List;
  */
 
 @Data
-public class ProjectToDoQueryForm extends PageParam{
+public class ProjectAlarmQueryForm extends PageParam{
 
     @Schema(description = "项目编号")
     private String projectNo;
@@ -42,8 +41,8 @@ public class ProjectToDoQueryForm extends PageParam{
     @Schema(description = "创建时间")
     private LocalDate createTimeEnd;
 
-    @Schema(description = "待办类型：1 办公室待办，2 实验室待办，3 审核待办，4 取证书待办，5 尾款待办")
-    private Integer toDoType;
+    @Schema(description = "预警类型：1 客户合同预期完成时间预警，2 实验室任务预警，3 工厂审核监督预警，4 不符合项整改预警")
+    private Integer alarmType;
 
 
 }

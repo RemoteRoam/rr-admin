@@ -35,5 +35,10 @@ export const projectLabApi = {
       return getRequest(`/projectLab/get/${id}`);
   },
 
+  // 获取实验室项目进度 @author cbh
+  getProgress: (progressCode) => {
+      return getRequest(`/project/getProgress/${progressCode}`);
+  },
+
 
 };

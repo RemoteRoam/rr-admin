@@ -3,6 +3,7 @@ package tech.remote.admin.module.business.project.dao;
 import java.util.List;
 import tech.remote.admin.module.business.project.domain.entity.ProjectLabEntity;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabQueryForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectLabProgressVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -34,4 +35,6 @@ public interface ProjectLabDao extends BaseMapper<ProjectLabEntity> {
 
 
     ProjectLabVO getDetail(@Param("id")Long id);
+
+    ProjectLabProgressVO getByCode(@Param("progressCode")String progressCode);
 }

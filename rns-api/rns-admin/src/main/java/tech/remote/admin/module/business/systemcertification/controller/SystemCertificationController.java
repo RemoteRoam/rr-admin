@@ -54,6 +54,12 @@ public class SystemCertificationController {
         return ResponseDTO.ok(systemCertificationService.queryPage(queryForm));
     }
 
+    @Operation(summary = "预警分页查询 @author cbh")
+    @PostMapping("/systemCertification/queryAlarmPage")
+    public ResponseDTO<PageResult<SystemCertificationVO>> queryAlarmPage(@RequestBody @Valid SystemCertificationQueryForm queryForm) {
+        return ResponseDTO.ok(systemCertificationService.queryAlarmPage(queryForm));
+    }
+
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/systemCertification/add")
     public ResponseDTO<String> add(@RequestBody @Valid SystemCertificationAddForm addForm) {

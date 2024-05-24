@@ -296,4 +296,124 @@
         </where>
         order by t.id, l.id, p.id
     </select>
+
+    <!-- 预警分页查询 -->
+    <select id="queryAlarmPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.source_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            <if test="queryForm.alarmTYPE == 1">
+                <!--客户合同预期完成时间提前10天预警-->
+                AND t.expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+                AND t.status != 2
+            </if>
+            <if test="queryForm.alarmTYPE == 2">
+                <!--实验室任务客户要求完成日期提前3天预警-->
+                AND t.id in (
+                    select distinct l.project_id
+                    from t_project_lab l
+                    where l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+                    AND l.status != 2
+                )
+            </if>
+            <if test="queryForm.alarmTYPE == 3">
+                <!--工厂审核监督预警，审核时间提前3个月预警-->
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
+            </if>
+            <if test="queryForm.alarmTYPE == 4">
+                <!--工厂审核不符合项整改预警，审核日期之后，超过30天还没有整改的话预警。-->
+                AND t.id in (
+                    SELECT distinct n.project_id
+                    FROM t_project p
+                    left join t_project_node n on p.id = n.project_id
+                    WHERE DATE_ADD(p.audit_date, INTERVAL 30 DAY) &lt;=  CURDATE()
+                    and n.node_id = 14 and n.status = 0
+                )
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+
+    <!-- 预警数量查询 -->
+    <select id="queryAlarmCount" resultType="Integer">
+        SELECT
+        count(1)
+        FROM t_project t
+        <where>
+            <if test="alarmTYPE == 1">
+                <!--客户合同预期完成时间提前10天预警-->
+                AND t.expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+                AND t.status != 2
+            </if>
+            <if test="alarmTYPE == 2">
+                <!--实验室任务客户要求完成日期提前3天预警-->
+                AND t.id in (
+                    select distinct l.project_id
+                    from t_project_lab l
+                    where l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+                    AND l.status != 2
+                )
+            </if>
+            <if test="alarmTYPE == 3">
+                <!--工厂审核监督预警，审核时间提前3个月预警-->
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
+            </if>
+            <if test="alarmTYPE == 4">
+                <!--工厂审核不符合项整改预警，审核日期之后，超过30天还没有整改的话预警。-->
+                AND t.id in (
+                    SELECT distinct n.project_id
+                    FROM t_project p
+                    left join t_project_node n on p.id = n.project_id
+                    WHERE DATE_ADD(p.audit_date, INTERVAL 30 DAY) &lt;=  CURDATE()
+                    and n.node_id = 14 and n.status = 0
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -2,19 +2,24 @@ package tech.remote.admin.module.business.project.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.project.dao.ProjectLabDao;
+import tech.remote.admin.module.business.project.dao.ProjectProductDao;
 import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
 import tech.remote.admin.module.business.project.domain.entity.ProjectLabEntity;
 import tech.remote.admin.module.business.project.domain.entity.ProjectProductEntity;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabUpdateForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectLabProgressVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
+import tech.remote.admin.module.business.project.domain.vo.ProjectProductProgressVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.manager.ProjectManager;
 import tech.remote.admin.module.business.project.manager.ProjectProductManager;
@@ -26,6 +31,7 @@ import tech.remote.admin.module.business.typenode.domain.form.TypeNodeQuery;
 import tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO;
 import tech.remote.admin.module.business.typenode.service.TypeNodeService;
 import tech.remote.base.common.code.BusinessErrorCode;
+import tech.remote.base.common.constant.StringConst;
 import tech.remote.base.common.enumeration.NodeStatusEnum;
 import tech.remote.base.common.enumeration.ProjectStatusEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
@@ -68,7 +74,7 @@ public class ProjectLabService {
     private ProjectProductManager projectProductManager;
 
     @Resource
-    private ProjectProductService projectProductService;
+    private ProjectProductDao projectProductDao;
 
     @Resource
     private DataTracerService dataTracerService;
@@ -109,6 +115,10 @@ public class ProjectLabService {
         String projectNo = serialNumberService.generate(SerialNumberIdEnum.PROJECT_TASK);
         projectLabEntity.setTaskNo(projectNo);
         projectLabEntity.setStatus(ProjectStatusEnum.DOING.getValue());
+
+        String uuid = UUID.randomUUID().toString().replace("-", StringConst.EMPTY);
+        projectLabEntity.setProgressCode(uuid);
+
         projectLabDao.insert(projectLabEntity);
 
         // 获取该类型下的对应节点
@@ -253,6 +263,17 @@ public class ProjectLabService {
 //        }
         vo.setProjectProductList(projectProductVOList);
 
+        return vo;
+    }
+
+    public ProjectLabProgressVO getProgress(String progressCode) {
+        if(StringUtils.isEmpty(progressCode)){
+            return null;
+        }
+        ProjectLabProgressVO vo = projectLabDao.getByCode(progressCode);
+        List<ProjectProductProgressVO> projectProductList = projectProductDao.list(vo.getProjectId(), vo.getId());
+
+        vo.setProjectProductList(projectProductList);
         return vo;
     }
 }

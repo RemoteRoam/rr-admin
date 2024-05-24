@@ -78,6 +78,9 @@ public class ProjectLabVO {
     @Schema(description = "报告完成日期")
     private LocalDate reportCompletionDate;
 
+    @Schema(description = "进度查询CODE")
+    private String progressCode;
+
     @Schema(description = "状态")
     private Integer status;
 

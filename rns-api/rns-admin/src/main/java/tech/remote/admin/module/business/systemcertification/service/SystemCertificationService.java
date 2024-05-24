@@ -86,6 +86,23 @@ public class SystemCertificationService {
     }
 
     /**
+     * 预警分页查询
+     *
+     * @param queryForm
+     * @return
+     */
+    public PageResult<SystemCertificationVO> queryAlarmPage(SystemCertificationQueryForm queryForm) {
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<SystemCertificationVO> list = systemCertificationDao.queryAlarmPage(page, queryForm);
+        for(SystemCertificationVO systemCertificationVO : list) {
+            List<SystemCertificationNodeEntity> systemCertificationNodeList = systemCertificationNodeService.getOperateNodesByProjectId(systemCertificationVO.getId());
+            systemCertificationVO.setSystemCertificationNodeList(SmartBeanUtil.copyList(systemCertificationNodeList, SystemCertificationNodeVO.class));
+        }
+        PageResult<SystemCertificationVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        return pageResult;
+    }
+
+    /**
      * 添加
      */
     @Transactional(rollbackFor = Exception.class)

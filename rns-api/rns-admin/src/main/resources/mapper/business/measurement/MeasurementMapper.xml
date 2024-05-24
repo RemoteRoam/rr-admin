@@ -36,6 +36,52 @@
         </where>
         order by t.create_time desc
     </select>
+
+
+    <!-- 预警分页查询 -->
+    <select id="queryAlarmPage" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName
+        FROM t_measurement t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        <where>
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--负责人ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            <if test="queryForm.alarmTYPE == 7">
+                <!--仪器计量日期提前1个月预警-->
+                AND t.id in (
+                    select distinct m.project_id
+                    from t_measurement_task m
+                    where m.measurement_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+                    and m.measurement_date > CURDATE()
+                )
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
     <select id="getDetail" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO">
         SELECT
             t.*, c.customer_name as customerName, e.actual_name as managerName

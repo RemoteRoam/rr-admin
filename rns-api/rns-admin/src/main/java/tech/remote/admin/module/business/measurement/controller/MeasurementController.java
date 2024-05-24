@@ -47,6 +47,12 @@ public class MeasurementController {
         return ResponseDTO.ok(measurementService.queryPage(queryForm));
     }
 
+    @Operation(summary = "预警分页查询 @author cbh")
+    @PostMapping("/measurement/queryAlarmPage")
+    public ResponseDTO<PageResult<MeasurementVO>> queryAlarmPage(@RequestBody @Valid MeasurementQueryForm queryForm) {
+        return ResponseDTO.ok(measurementService.queryAlarmPage(queryForm));
+    }
+
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/measurement/add")
     public ResponseDTO<String> add(@RequestBody @Valid MeasurementAddForm addForm) {

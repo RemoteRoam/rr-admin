@@ -87,6 +87,28 @@ public class MeasurementService {
     }
 
     /**
+     * 预警分页查询
+     *
+     * @param queryForm
+     * @return
+     */
+    public PageResult<MeasurementVO> queryAlarmPage(MeasurementQueryForm queryForm) {
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<MeasurementVO> list = measurementDao.queryAlarmPage(page, queryForm);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(MeasurementVO measurementVO : list){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(measurementVO.getId());
+                nodeQueryForm.setProjectType(ProjectTypeEnum.MEASUREMENT.getValue());
+                nodeQueryForm.setNodeLevel(1);
+                measurementVO.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+            }
+        }
+        PageResult<MeasurementVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        return pageResult;
+    }
+
+    /**
      * 添加
      */
     @Transactional(rollbackFor = Exception.class)

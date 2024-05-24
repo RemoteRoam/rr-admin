@@ -12,7 +12,7 @@ import 'nprogress/nprogress.css';
 import { nextTick } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { routerArray } from './routers';
-import { PAGE_PATH_404, PAGE_PATH_LOGIN } from '/@/constants/common-const';
+import { PAGE_PATH_404, PAGE_PATH_LOGIN, PAGE_PATH_PROGRESS } from '/@/constants/common-const';
 import { HOME_PAGE_NAME } from '/@/constants/system/home-const';
 import SmartLayout from '../layout/index.vue';
 import { useUserStore } from '/@/store/modules/system/user';
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
   nProgress.start();
 
   // 公共页面，任何时候都可以跳转
-  if (to.path === PAGE_PATH_404 || to.path === PAGE_PATH_LOGIN) {
+  if (to.path === PAGE_PATH_404 || to.path === PAGE_PATH_LOGIN || to.path === PAGE_PATH_PROGRESS) {
     next();
     return;
   }

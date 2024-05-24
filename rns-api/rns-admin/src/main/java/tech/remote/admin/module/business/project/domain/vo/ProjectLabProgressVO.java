@@ -1,16 +1,16 @@
 package tech.remote.admin.module.business.project.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.Data;
-import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
-
 /**
- * 项目实验室任务表 列表VO
+ * 项目实验室进度VO
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -18,8 +18,7 @@ import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
  */
 
 @Data
-public class ProjectLabVO {
-
+public class ProjectLabProgressVO {
 
     @Schema(description = "编号")
     private Long id;
@@ -27,50 +26,23 @@ public class ProjectLabVO {
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "实验室任务编号")
-    private String taskNo;
-
-    @Schema(description = "三方机构ID（实验室ID）")
-    private Long thirdPartyId;
+    @Schema(description = "客户名称")
+    private String customerName;
 
     @Schema(description = "实验室名称")
     private String thirdPartyName;
 
-    @Schema(description = "实验室合同号")
-    private String labContractNo;
-
-    @Schema(description = "实验室合同日期")
-    private LocalDate labContractDate;
-
-    @Schema(description = "实验费金额")
-    private BigDecimal labContractAmount;
-
-    @Schema(description = "客户要求完成日期")
-    private LocalDate labExpectedDate;
-
-    @Schema(description = "实验合同备注")
-    private String labContractRemark;
-
-    @Schema(description = "资料发送日期")
-    private LocalDate dataSendDate;
+//    @Schema(description = "资料发送日期")
+//    private LocalDate dataSendDate;
 
     @Schema(description = "资料接收日期")
     private LocalDate dataReceiveDate;
 
-    @Schema(description = "是否付款")
-    private Integer isPaid;
-
-    @Schema(description = "付款方(客户/我方)")
-    private Integer payParty;
-
     @Schema(description = "实验费付款日期")
     private LocalDate labPayDate;
 
-    @Schema(description = "实验费备注")
-    private String labPayRemark;
-
-    @Schema(description = "实验室下达任务日期")
-    private LocalDate assignTaskDate;
+//    @Schema(description = "实验室下达任务日期")
+//    private LocalDate assignTaskDate;
 
     @Schema(description = "预计完成日期")
     private LocalDate expectedCompletionDate;
@@ -78,30 +50,10 @@ public class ProjectLabVO {
     @Schema(description = "报告完成日期")
     private LocalDate reportCompletionDate;
 
-    @Schema(description = "状态")
-    private Integer status;
-
-    @Schema(description = "创建人")
-    private Long createUserId;
-
-    @Schema(description = "创建人姓名")
-    private String createUserName;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新人")
-    private Long updateUserId;
-
-    @Schema(description = "更新人姓名")
-    private String updateUserName;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    @Schema(description = "审核任务时间")
+    private LocalDate auditTaskDate;
 
     @Schema(description = "产品列表")
-    private List<ProjectProductVO> projectProductList;
+    private List<ProjectProductProgressVO> projectProductList;
 
-    @Schema(description = "操作节点列表")
-    private List<ProjectNodeVO> projectNodeList;
 }

@@ -33,6 +33,14 @@ public interface SystemCertificationDao extends BaseMapper<SystemCertificationEn
     List<SystemCertificationVO> queryPage(Page page, @Param("queryForm") SystemCertificationQueryForm queryForm);
 
     /**
+     * 预警列表分页 查询
+     *
+     * @param page
+     * @param queryForm
+     * @return
+     */
+    List<SystemCertificationVO> queryAlarmPage(Page page, @Param("queryForm") SystemCertificationQueryForm queryForm);
+    /**
      * 更新删除状态
      */
     long updateDeleted(@Param("id")Long id,@Param("deletedFlag")boolean deletedFlag);

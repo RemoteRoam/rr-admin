@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.project.dao.ProjectDao;
 import tech.remote.admin.module.business.project.domain.entity.*;
 import tech.remote.admin.module.business.project.domain.form.*;
+import tech.remote.admin.module.business.project.domain.vo.ProjectAlarmCountVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
@@ -27,7 +28,6 @@ import tech.remote.admin.module.business.typenode.service.TypeNodeService;
 import tech.remote.base.common.code.BusinessErrorCode;
 import tech.remote.base.common.enumeration.NodeStatusEnum;
 import tech.remote.base.common.enumeration.ProjectStatusEnum;
-import tech.remote.base.common.enumeration.ProjectTypeEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -367,5 +367,38 @@ public class ProjectService {
     public List<ProjectExcelVO> getExcelExportData(ProjectQueryForm queryForm) {
         List<ProjectExcelVO> excelList = projectDao.selectExcelList(queryForm);
         return excelList;
+    }
+
+    /**
+     * 预警分页查询
+     *
+     * @param queryForm
+     * @return
+     */
+    public PageResult<ProjectVO> queryAlarmPage(ProjectAlarmQueryForm queryForm) {
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<ProjectVO> list = projectDao.queryAlarmPage(page, queryForm);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(ProjectVO vo : list){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(vo.getId());
+                nodeQueryForm.setProjectType(vo.getProjectType());
+                nodeQueryForm.setNodeLevel(1);
+                vo.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+            }
+        }
+        PageResult<ProjectVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        return pageResult;
+    }
+
+    public ProjectAlarmCountVO getAlarmCount(){
+
+        ProjectAlarmCountVO vo = new ProjectAlarmCountVO();
+        vo.setExpectedDateAlarm(projectDao.queryAlarmCount(1));
+        vo.setLabExpectedDateAlarm(projectDao.queryAlarmCount(2));
+        vo.setAuditDateAlarm(projectDao.queryAlarmCount(3));
+        vo.setNonConformityCorrectionAlarm(projectDao.queryAlarmCount(4));
+
+        return vo;
     }
 }

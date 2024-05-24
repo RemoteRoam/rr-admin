@@ -3,6 +3,7 @@ package tech.remote.admin.module.business.project.dao;
 import java.util.List;
 import tech.remote.admin.module.business.project.domain.entity.ProjectProductEntity;
 import tech.remote.admin.module.business.project.domain.form.ProjectProductQueryForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectProductProgressVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -32,4 +33,5 @@ public interface ProjectProductDao extends BaseMapper<ProjectProductEntity> {
     List<ProjectProductVO> queryPage(Page page, @Param("queryForm") ProjectProductQueryForm queryForm);
 
 
+    List<ProjectProductProgressVO> list(@Param("projectId")Long projectId, @Param("taskId")Long taskId);
 }

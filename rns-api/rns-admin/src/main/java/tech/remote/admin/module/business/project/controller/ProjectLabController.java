@@ -4,9 +4,12 @@ import org.springframework.web.bind.annotation.*;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabAddForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabUpdateForm;
+import tech.remote.admin.module.business.project.domain.vo.ProjectAlarmCountVO;
+import tech.remote.admin.module.business.project.domain.vo.ProjectLabProgressVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
 import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 import tech.remote.admin.module.business.project.service.ProjectLabService;
+import tech.remote.base.common.annoation.NoNeedLogin;
 import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -60,5 +63,12 @@ public class ProjectLabController {
     @GetMapping("/projectLab/get/{id}")
     public ResponseDTO<ProjectLabVO> getDetail(@PathVariable Long id) {
         return ResponseDTO.ok(projectLabService.getDetail(id));
+    }
+
+    @NoNeedLogin
+    @Operation(summary = "获取项目进度 @author cbh")
+    @GetMapping("/project/getProgress/{progressCode}")
+    public ResponseDTO<ProjectLabProgressVO> getProgress(@PathVariable String progressCode) {
+        return ResponseDTO.ok(projectLabService.getProgress(progressCode));
     }
 }

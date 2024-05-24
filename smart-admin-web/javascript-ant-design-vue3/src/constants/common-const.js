@@ -18,6 +18,9 @@ export const PAGE_PATH_LOGIN = '/login';
 //404页面名字
 export const PAGE_PATH_404 = '/404';
 
+//外部页面名字
+export const PAGE_PATH_PROGRESS = '/project/progress';
+
 export const showTableTotal = function (total) {
   return `共${total}条`;
 };

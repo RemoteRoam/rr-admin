@@ -187,6 +187,12 @@
       <a-tab-pane key="dataTracer" tab="变更记录">
         <DataTracer :dataId="id" :type="111" />
       </a-tab-pane>
+
+      <a-tab-pane v-if="detail.projectType == 12" key="qrcode" tab="二维码">
+        <div class="flex-box">
+          <vue-qr class="qr-code" :text="qrCodeUrl" :size="150" />
+        </div>
+      </a-tab-pane>
     </a-tabs>
   </a-card>
 </template>
@@ -204,13 +210,17 @@ import { smartSentry } from '/@/lib/smart-sentry';
 import { useRouter } from 'vue-router';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 const route = useRoute();
 let id = ref();
+let baseUrl = ref();
 // 详情
 let detail = ref({});
+const qrCodeUrl = ref();
 onMounted(() => {
-  console.log('route', route.query);
+  baseUrl = window.location.origin
+  console.log('baseUrl', baseUrl);
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();
@@ -241,7 +251,8 @@ async function getDetail() {
     detail.value.customerName = route.query.customerName;
     detail.value.projectType = Number(route.query.projectType);
     detail.value.category = Number(route.query.category);
-    console.log("get detail:", detail.value)
+    qrCodeUrl.value = baseUrl + "/#/project/progress?progressCode=" + result.data.progressCode;
+    console.log('qrCodeUrl', qrCodeUrl.value);
   } catch (error) {
     smartSentry.captureError(error);
   } finally {

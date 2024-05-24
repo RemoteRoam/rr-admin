@@ -1,12 +1,13 @@
 package tech.remote.admin.module.business.project.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
- * 项目归档表 列表VO
+ * 项目预警数量VO
  *
  * @Author cbh
  * @Date 2024-05-15 13:46:16
@@ -14,37 +15,27 @@ import lombok.Data;
  */
 
 @Data
-public class ProjectArchiveVO {
+public class ProjectAlarmCountVO {
 
+    @Schema(description = "客户合同预期完成时间预警")
+    private Integer expectedDateAlarm;
 
-    @Schema(description = "编号")
-    private Long id;
+    @Schema(description = "实验室任务预警")
+    private Integer labExpectedDateAlarm;
 
-    @Schema(description = "项目ID")
-    private Long projectId;
+    @Schema(description = "工厂审核监督预警")
+    private Integer auditDateAlarm;
 
-    @Schema(description = "归档位置")
-    private String archivePosition;
+    @Schema(description = "不符合项整改预警")
+    private Integer nonConformityCorrectionAlarm;
 
-    @Schema(description = "归档日期")
-    private LocalDate archiveDate;
+    @Schema(description = "体系审核到期预警")
+    private Integer systemCertificationAuditDateAlarm;
 
-    @Schema(description = "创建人")
-    private Long createUserId;
+    @Schema(description = "证书有效期预警")
+    private Integer certificateExpiryDateAlarm;
 
-    @Schema(description = "创建人姓名")
-    private String createUserName;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新人")
-    private Long updateUserId;
-
-    @Schema(description = "更新人姓名")
-    private String updateUserName;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    @Schema(description = "仪器计量预警")
+    private Integer measurementDateAlarm;
 
 }

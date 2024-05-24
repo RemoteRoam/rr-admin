@@ -23,7 +23,7 @@ import javax.validation.Valid;
  */
 
 @RestController
-@Tag(name = "")
+@Tag(name = "节点")
 public class NodeController {
 
     @Resource

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
@@ -125,6 +127,9 @@ public class ProjectLabEntity {
      */
     @DataTracerFieldLabel("报告完成日期")
     private LocalDate reportCompletionDate;
+
+    @Schema(description = "进度查询CODE")
+    private String progressCode;
 
     /**
      * 状态

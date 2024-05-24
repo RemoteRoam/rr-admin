@@ -25,8 +25,18 @@
         SELECT
             t.*,p1.name as thirdPartyName
         FROM t_project_lab t
-                 left join t_third_party p1 on t.third_party_id = p1.id
+        left join t_third_party p1 on t.third_party_id = p1.id
         WHERE t.id = #{id}
+    </select>
+    <select id="getByCode"
+            resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabProgressVO">
+        SELECT
+            t.*,p1.name as thirdPartyName,c.customer_name as customerName
+        FROM t_project_lab t
+                 left join t_third_party p1 on t.third_party_id = p1.id
+                 left join t_project p on t.project_id = p.id
+                 left join t_customer c on p.customer_id = c.customer_id
+        WHERE t.progress_code = #{progressCode}
     </select>
 
 </mapper>

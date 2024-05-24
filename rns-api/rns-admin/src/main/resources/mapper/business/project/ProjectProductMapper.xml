@@ -27,6 +27,14 @@
             </if>
         </where>
     </select>
+    <select id="list"
+            resultType="tech.remote.admin.module.business.project.domain.vo.ProjectProductProgressVO">
+        SELECT
+            p.*, c.pay_date as payDate
+        FROM t_project_product p
+        left join t_project_certification_fee c on p.certification_fee_id = c.id
+        where p.project_id = #{projectId} and p.task_id = #{taskId}
+    </select>
 
 
 </mapper>
