@@ -6,44 +6,43 @@ on: workflow_dispatch
 #      - tcyk_v0.0.1
 
 jobs:
-  web-vue-job:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    defaults:
-      run:
-        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
-    steps:
-      - uses: actions/checkout@v4
-      - name: list path
-        run: ls -la
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm ci
-        run: npm ci
-        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
-      - name: npm run build
-        run: npm run build:prod
-        working-directory: ./smart-admin-web/javascript-ant-design-vue3/
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  # web-vue-job:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [18.x]
+  #       # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  #   defaults:
+  #     run:
+  #       working-directory: ./smart-admin-web/javascript-ant-design-vue3/
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: list path
+  #       run: ls -la
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #     - name: npm ci
+  #       run: npm ci
+  #       working-directory: ./smart-admin-web/javascript-ant-design-vue3/
+  #     - name: npm run build
+  #       run: npm run build:prod
+  #       working-directory: ./smart-admin-web/javascript-ant-design-vue3/
+  #     - name: Install SSH key
+  #       uses: webfactory/ssh-agent@v0.5.3
+  #       with:
+  #        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
          
-      - name: Add Alibaba Cloud server to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan 47.105.50.110 >> ~/.ssh/known_hosts
+  #     - name: Add Alibaba Cloud server to known_hosts
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         ssh-keyscan 47.105.50.110 >> ~/.ssh/known_hosts
           
-      - name: Copy dist to Alibaba Cloud
-        run: scp -r dist root@47.105.50.110:/usr/local/springboot/app/view/
+  #     - name: Copy dist to Alibaba Cloud
+  #       run: scp -r dist root@47.105.50.110:/usr/local/springboot/app/view/
 
   web-server-job:
-    needs: web-vue-job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,4 +71,4 @@ jobs:
         with:
          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Execute restart on server
-        run: ssh root@47.105.50.110 'bash -s' < /usr/local/springboot/app/server/bin/server.sh restart
+        run: ssh root@47.105.50.110 'bash /usr/local/springboot/app/server/bin/server.sh restart'
