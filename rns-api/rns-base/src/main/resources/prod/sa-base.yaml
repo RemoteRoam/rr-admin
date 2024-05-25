@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/smart_admin_v3?autoReconnect=true&useServerPreparedStmts=false&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
-    password: Zhuoda#1024lab
+    password: Remote2024
     initial-size: 10
     min-idle: 10
     max-active: 100
@@ -108,7 +108,7 @@ http:
     keep-alive: 300000
 
 # 跨域配置
-access-control-allow-origin: 'smartadmin.vip'
+access-control-allow-origin: 'mcolife.cn'
 
 # 心跳配置
 heart-beat:
