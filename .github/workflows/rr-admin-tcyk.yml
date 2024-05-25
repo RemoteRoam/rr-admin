@@ -32,6 +32,11 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+         
+      - name: Add Alibaba Cloud server to known_hosts
+        run: |
+          ssh-keyscan 47.105.50.110 >> ~/.ssh/known_hosts
+          
       - name: Copy dist to Alibaba Cloud
         run: scp -r dist root@47.105.50.110:/usr/local/springboot/app/view/
 
