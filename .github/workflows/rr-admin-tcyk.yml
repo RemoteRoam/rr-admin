@@ -57,7 +57,7 @@ jobs:
          - name: Copy jar to Alibaba Cloud
            env:
             SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-            working-directory: ./rns-api/rns-admin/target
+           working-directory: ./rns-api/rns-admin/target
            run: |
              mkdir -p ~/.ssh
              echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
