@@ -28,15 +28,12 @@ jobs:
       - name: npm run build
         run: npm run build:prod
         working-directory: ./smart-admin-web/javascript-ant-design-vue3/
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Copy dist to Alibaba Cloud
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 47.105.50.110 >> ~/.ssh/known_hosts
-          scp -r dist root@47.105.50.110:/usr/local/springboot/app/view/
+        run: scp -r dist root@47.105.50.110:/usr/local/springboot/app/view/
 
   web-server-job:
     needs: web-vue-job
