@@ -62,9 +62,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 47.105.50.110 >> ~/.ssh/known_hosts
           scp -r *.jar root@47.105.50.110:/usr/local/springboot/app/server/
-        - name: Install SSH key
-         uses: webfactory/ssh-agent@v0.5.3
-         with:
-           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        - name: Execute restart on server
-          run: ssh root@47.105.50.110 'bash -s' < /usr/local/springboot/app/server/bin/server.sh restart
+          
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Execute restart on server
+        run: ssh root@47.105.50.110 'bash -s' < /usr/local/springboot/app/server/bin/server.sh restart
