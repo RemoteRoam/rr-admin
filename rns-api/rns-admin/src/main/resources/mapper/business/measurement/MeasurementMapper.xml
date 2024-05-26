@@ -22,9 +22,13 @@
             <if test="queryForm.managerId != null">
                 AND t.manager_id = #{queryForm.managerId}
             </if>
-            <!--创建人-->
+            <!--操作人-->
             <if test="queryForm.createUserId != null">
-                AND t.create_user_id = #{queryForm.createUserId}
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_measurement_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
             </if>
             <!--创建时间-->
             <if test="queryForm.createTimeBegin != null">
@@ -58,9 +62,13 @@
             <if test="queryForm.managerId != null">
                 AND t.manager_id = #{queryForm.managerId}
             </if>
-            <!--创建人-->
+            <!--操作人-->
             <if test="queryForm.createUserId != null">
-                AND t.create_user_id = #{queryForm.createUserId}
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_measurement_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
             </if>
             <!--创建时间-->
             <if test="queryForm.createTimeBegin != null">
@@ -127,9 +135,13 @@
             <if test="queryForm.managerId != null">
                 AND t.manager_id = #{queryForm.managerId}
             </if>
-            <!--创建人-->
+            <!--操作人-->
             <if test="queryForm.createUserId != null">
-                AND t.create_user_id = #{queryForm.createUserId}
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_measurement_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
             </if>
             <!--创建时间-->
             <if test="queryForm.createTimeBegin != null">

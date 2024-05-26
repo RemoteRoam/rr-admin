@@ -210,7 +210,7 @@ public class ProjectLabService {
             // Execute the update
             projectNodeManager.updateById(projectNodeEntity);
             String content = "节点操作：【" + projectNodeEntity.getNodeName() + "】" + NodeStatusEnum.getDescByValue(updateForm.getNodeStatus());
-            dataTracerService.addTrace(updateForm.getId(), DataTracerTypeEnum.fromValue(updateForm.getProjectType()), content);
+            dataTracerService.addTrace(updateForm.getId(), DataTracerTypeEnum.PROJECT_LAB_TASK, content);
             // 判断是否所有节点都已完成或者跳过，如果是，修改状态为已完成
             ProjectNodeQueryForm queryForm = new ProjectNodeQueryForm();
             queryForm.setProjectId(updateForm.getProjectId());
@@ -221,12 +221,12 @@ public class ProjectLabService {
             if (projectNodeManager.isAllDone(queryForm)) {
                 projectLabEntity.setStatus(ProjectStatusEnum.DONE.getValue());
                 projectLabDao.updateById(projectLabEntity);
-                dataTracerService.addTrace(projectLabEntity.getId(), DataTracerTypeEnum.fromValue(updateForm.getProjectType()), "项目完成");
+                dataTracerService.addTrace(projectLabEntity.getId(), DataTracerTypeEnum.PROJECT_LAB_TASK, "项目完成");
             }
         } else {
 
             //变更记录
-            dataTracerService.update(projectLabEntity.getId(), DataTracerTypeEnum.fromValue(updateForm.getProjectType()), oldEntity, projectLabEntity);
+            dataTracerService.update(projectLabEntity.getId(), DataTracerTypeEnum.PROJECT_LAB_TASK, oldEntity, projectLabEntity);
         }
 
         return ResponseDTO.ok();

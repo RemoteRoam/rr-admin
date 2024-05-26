@@ -52,10 +52,10 @@
                 <a-range-picker v-model:value="queryForm.expectedDate" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeExpectedDate" />
             </a-form-item>
-            <a-form-item label="创建人" class="smart-query-form-item">
+            <!-- <a-form-item label="创建人" class="smart-query-form-item">
                 <EmployeeSelect ref="employeeSelect" placeholder="请选择创建人" width="200px"
                     v-model:value="queryForm.createUserId" :leaveFlag="false" />
-            </a-form-item>
+            </a-form-item> -->
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeCreateTime" />

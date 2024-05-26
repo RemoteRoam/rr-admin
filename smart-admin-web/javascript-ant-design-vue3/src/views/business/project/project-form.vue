@@ -37,7 +37,7 @@
                 <a-col :span="8">
                     <a-form-item label="来源分类" name="sourceType">
                         <SmartEnumSelect width="95%" v-model:value="form.sourceType" enumName="SOURCE_TYPE_ENUM"
-                            placeholder="来源分类" />
+                            @change="onChangeSourceType" placeholder="来源分类" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -191,6 +191,10 @@ import EmployeeSelect from '/@/components/system/employee-select/index.vue';
 // ------------------------ 事件 ------------------------
 
 const emits = defineEmits(['reloadList']);
+// -------------------  监听数据变化 -------------------
+function onChangeSourceType(value) {
+    form.sourceId = null;
+}
 
 // ------------------------ 显示与隐藏 ------------------------
 // 是否显示

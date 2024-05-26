@@ -25,7 +25,7 @@
             </a-form-item>
             <a-form-item label="来源分类" class="smart-query-form-item">
                 <SmartEnumSelect width="150px" v-model:value="queryForm.sourceType" enumName="SOURCE_TYPE_ENUM"
-                    placeholder="来源分类" />
+                    @change="onChangeSourceType" placeholder="来源分类" />
             </a-form-item>
             <a-form-item label="来源" class="smart-query-form-item">
 
@@ -41,8 +41,8 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
-            <a-form-item label="创建人" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.createUserId" placeholder="创建人" />
+            <a-form-item label="操作人" class="smart-query-form-item">
+                <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
@@ -330,10 +330,11 @@ const total = ref(0);
 
 // 重置查询条件
 function resetQuery() {
+    console.log("projectType", projectType.value);
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
-    queryForm.projectType = projectType;
+    queryForm.projectType = projectType.value;
     queryData();
 }
 
@@ -354,6 +355,10 @@ async function queryData() {
 function onChangeCreateTime(dates, dateStrings) {
     queryForm.createTimeBegin = dateStrings[0];
     queryForm.createTimeEnd = dateStrings[1];
+}
+// -------------------  监听数据变化 -------------------
+function onChangeSourceType(value) {
+    queryForm.sourceId = null;
 }
 
 let route = useRoute();

@@ -8,7 +8,7 @@
 <template>
     <a-modal title="工厂审核任务" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
-        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
+        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
                 <a-col :span="24">
                     <a-form-item label="审核老师" name="auditTeacher">

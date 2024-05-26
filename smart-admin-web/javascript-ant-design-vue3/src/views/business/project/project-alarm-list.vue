@@ -33,8 +33,8 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
-            <a-form-item label="创建人" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.createUserId" placeholder="创建人" />
+            <a-form-item label="操作人" class="smart-query-form-item">
+                <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
