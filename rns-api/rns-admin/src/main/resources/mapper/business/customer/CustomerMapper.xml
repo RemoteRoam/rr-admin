@@ -77,4 +77,25 @@
         update t_customer set deleted_flag = #{deletedFlag}
         where customer_id = #{customerId}
     </update>
+
+    <select id="getGrandTotal" parameterType="java.lang.Long" resultType="tech.remote.admin.module.business.customer.domain.vo.GrandTotalResult">
+        SELECT SUM(total_amount) AS grand_total_amount, SUM(total_count) AS grand_total_count
+        FROM (
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_project
+                 WHERE customer_id = #{customerId}
+
+                 UNION ALL
+
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_system_certification
+                 WHERE customer_id = #{customerId}
+
+                 UNION ALL
+
+                 SELECT SUM(payment_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_measurement
+                 WHERE customer_id = #{customerId}
+             ) AS combined_totals
+    </select>
 </mapper>

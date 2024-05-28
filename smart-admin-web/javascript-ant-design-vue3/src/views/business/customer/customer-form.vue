@@ -172,7 +172,7 @@ const formRef = ref();
 const formDefault = {
   customerId: undefined,
   customerName: undefined, //客户名称
-  customerLevel: undefined, //客户级别
+  customerLevel: 'LEVEL_C', //客户级别
   contact: undefined, //联系人
   contactPhone: undefined, //联系人电话
   province: undefined, //省份

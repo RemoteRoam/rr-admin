@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.remote.admin.module.business.customer.service.CustomerService;
 import tech.remote.admin.module.business.project.dao.ProjectDao;
 import tech.remote.admin.module.business.project.domain.entity.*;
 import tech.remote.admin.module.business.project.domain.form.*;
@@ -78,6 +79,9 @@ public class ProjectService {
 
     @Resource
     private ProjectMailManager projectMailManager;
+
+    @Resource
+    private CustomerService customerService;
 
     /**
      * 分页查询
@@ -155,6 +159,11 @@ public class ProjectService {
         projectNodeManager.saveBatch(projectNodeList);
 
         dataTracerService.insert(projectEntity.getId(), DataTracerTypeEnum.fromValue(addForm.getProjectType()));
+
+        // 判断addForm.getContractAmount() 不为空
+        if(addForm.getContractAmount() != null && addForm.getCustomerId() != null){
+            customerService.upgradeLevel(addForm.getCustomerId());
+        }
         return ResponseDTO.ok();
     }
 
