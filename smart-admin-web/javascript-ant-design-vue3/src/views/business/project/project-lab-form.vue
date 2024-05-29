@@ -77,13 +77,13 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="付款方" name="payParty" v-if="form.isPaid">
+                    <a-form-item label="付款方" name="payParty">
                         <SmartEnumSelect width="95%" v-model:value="form.payParty" enumName="PAY_PARTY_ENUM"
                             placeholder="" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="实验费付款日期" name="labPayDate" v-if="form.isPaid">
+                    <a-form-item label="实验费付款日期" name="labPayDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labPayDate" style="width: 95%"
                             placeholder="实验费付款日期" />
                     </a-form-item>

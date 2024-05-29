@@ -116,7 +116,7 @@
           <a-row>
             <a-col :span="8">
               <a-form-item label="是否付款" name="isPaid">
-                <a-checkbox v-model:value="detail.isPaid" disabled />
+                <a-checkbox v-model:checked="detail.isPaid" disabled />
                 <!-- <a-input-number style="width: 95%" v-model:value="detail.isPaid" placeholder="是否付款" disabled /> -->
               </a-form-item>
             </a-col>
@@ -250,6 +250,7 @@ async function getDetail() {
     detail.value.customerName = route.query.customerName;
     detail.value.projectType = Number(route.query.projectType);
     detail.value.category = Number(route.query.category);
+    detail.isPaid = detail.value.isPaid == 1 ? true : false;
     qrCodeUrl.value = baseUrl + "/#/project/progress?progressCode=" + result.data.progressCode;
   } catch (error) {
     smartSentry.captureError(error);

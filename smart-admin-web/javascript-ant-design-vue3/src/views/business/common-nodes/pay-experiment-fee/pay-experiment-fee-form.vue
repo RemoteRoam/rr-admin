@@ -6,7 +6,7 @@
                 <a-col :span="24">
                     <a-form-item label="是否付款" name="isPaid">
                         <!-- <a-checkbox :true-value="1" :false-value="0" v-model:checked="form.isPaid">是否付款</a-checkbox> -->
-                        <a-checkbox v-model:checked="form.isPaid" />
+                        <a-checkbox v-model:checked="form.isPaid" @change="onChange" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -120,14 +120,12 @@ async function onSubmit() {
         message.error('参数验证错误，请仔细填写表单数据!');
     }
 };
-
-// const formattedValue = computed(() => {
-//     return form.isPaid ? 1 : 0;
-// });
-// const onChange = (event) => {
-//     form.isPaid = event.target.checked ? 1 : 0;
-//     // console.log(form.isPaid);
-// };
+const onChange = (event) => {
+    if (!event.target.checked) {
+        form.payParty = undefined;
+        form.payDate = undefined;
+    }
+};
 
 // 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数nodeStatus传3
 
