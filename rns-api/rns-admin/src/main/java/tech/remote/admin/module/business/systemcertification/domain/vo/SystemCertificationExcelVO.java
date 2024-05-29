@@ -2,9 +2,11 @@ package tech.remote.admin.module.business.systemcertification.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
+import tech.remote.base.common.json.serializer.DictValueVoSerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,6 +30,10 @@ public class SystemCertificationExcelVO {
 
     @ExcelProperty("项目类型")
     private String projectTypeName;
+
+    @ExcelProperty("类别")
+    @JsonSerialize(using = DictValueVoSerializer.class)
+    private String category;
 
     @ExcelProperty("客户")
     private String customerName;

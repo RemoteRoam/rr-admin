@@ -27,6 +27,12 @@
                             enumName="PROJECT_TYPE_SYSTEM_ENUM" placeholder="项目类型" disabled />
                     </a-form-item>
                 </a-col>
+                <a-col :span="8">
+                    <a-form-item label="类别" name="category">
+                        <DictSelect width="100%" v-model:value="form.category" keyCode="SYSTEM_CATEGORY"
+                            placeholder="类别" />
+                    </a-form-item>
+                </a-col>
             </a-row>
             <a-row>
                 <a-col :span="8">
@@ -236,6 +242,7 @@ import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import DictSelect from '/@/components/support/dict-select/index.vue';
 
 // ------------------------ 事件 ------------------------
 
@@ -258,6 +265,10 @@ async function detail(id) {
         let data = result.data;
         Object.assign(form, data);
         nextTick(() => {
+
+            if (form.category && form.category.length > 0) {
+                form.category = form.category[0].valueCode;
+            }
             formRef.value.clearValidate();
         });
     } catch (error) {
@@ -282,7 +293,7 @@ const formDefault = {
     orgProjectId: undefined, //原始项目ID
     projectNo: undefined, //项目编号
     projectType: undefined, //项目类型
-    category: undefined, //项目分类
+    category: undefined, //类别
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID

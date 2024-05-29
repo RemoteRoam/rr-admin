@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-  <a-modal :title="form.customerId ? '编辑' : '添加'" width="500px" :open="visibleFlag" @cancel="onClose"
+  <a-modal :title="form.customerId ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose"
     :maskClosable="false" :destroyOnClose="true">
     <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
 

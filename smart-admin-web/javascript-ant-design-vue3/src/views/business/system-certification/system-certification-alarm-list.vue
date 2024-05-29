@@ -16,6 +16,10 @@
                 <SmartEnumSelect width="150px" v-model:value="queryForm.projectType" enumName="PROJECT_TYPE_SYSTEM_ENUM"
                     placeholder="项目类型" />
             </a-form-item>
+            <a-form-item label="类别" class="smart-query-form-item">
+                <DictSelect width="150px" v-model:value="queryForm.category" keyCode="SYSTEM_CATEGORY"
+                    placeholder="类别" />
+            </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
                 <CustomerSelect width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
@@ -82,15 +86,15 @@
         <!---------- 表格操作行 begin ----------->
         <a-row class="smart-table-btn-block">
             <div class="smart-table-operate-block">
-                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION.value)" type="primary" size="small"
-                    :disabled="toSupervision">
+                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION1.value)" type="primary"
+                    size="small">
                     <template #icon>
                         <ArrowRightOutlined />
                     </template>
                     转监督
                 </a-button>
                 <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.RE_CERTIFICATION.value)" type="primary"
-                    size="small" :disabled="reCertification">
+                    size="small">
                     <template #icon>
                         <RollbackOutlined />
                     </template>
@@ -114,6 +118,9 @@
                 </template>
                 <template v-if="column.dataIndex === 'projectType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_SYSTEM_ENUM', text) }}</span>
+                </template>
+                <template v-if="column.dataIndex === 'category'">
+                    <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'sourceType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
@@ -180,6 +187,7 @@ import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import DictSelect from '/@/components/support/dict-select/index.vue';
 import FirstPaymentForm from '../common-nodes/first-payment/first-payment-form.vue';
 import SubmitDataForm from './nodes/submit-data/submit-data-form.vue';
 import NODE_CONST from '/@/constants/business/project/node-const';
@@ -205,7 +213,12 @@ const columns = ref([
     {
         title: '项目类型',
         dataIndex: 'projectType',
-        width: 80,
+        width: 90,
+    },
+    {
+        title: '类别',
+        dataIndex: 'category',
+        width: 90,
     },
     {
         title: '客户',
@@ -371,6 +384,7 @@ function resetQuery() {
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
+    queryForm.alarmType = type.value;
     queryData();
 }
 
@@ -409,8 +423,8 @@ onMounted(() => {
     // 获取最后一个"/"之后的值
     const lastSlashIndex = route.path.lastIndexOf('/');
     if (lastSlashIndex !== -1) {
-        const type = route.path.slice(lastSlashIndex + 1);
-        queryForm.alarmType = type;
+        type.value = route.path.slice(lastSlashIndex + 1);
+        queryForm.alarmType = type.value;
         queryData();
     }
 
@@ -429,6 +443,8 @@ const systemCertificateFormRef = ref();
 const finalPaymentFormRef = ref();
 const invoiceFormRef = ref();
 const mailFormRef = ref();
+
+const type = ref();
 
 function showFormAdd() {
     formAddRef.value.show();
@@ -486,7 +502,7 @@ function onSelectChange(selectedRowKeys, selections) {
         if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.INITIALIZATION.value) {
             toSupervision.value = false;
         }
-        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION.value) {
+        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION1.value) {
             reCertification.value = false;
         }
     } else {

@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
             <a-row>
@@ -16,11 +16,12 @@
                             enumName="PROJECT_TYPE_SYSTEM_ENUM" placeholder="项目类型" />
                     </a-form-item>
                 </a-col>
-                <!-- <a-col :span="24">
-                    <a-form-item label="项目分类"  name="category">
-                        <SmartEnumSelect width="100%" v-model:value="form.category" enumName="" placeholder="项目分类"/>
+                <a-col :span="24">
+                    <a-form-item label="类别" name="category">
+                        <DictSelect width="100%" v-model:value="form.category" keyCode="SYSTEM_CATEGORY"
+                            placeholder="类别" />
                     </a-form-item>
-                </a-col> -->
+                </a-col>
                 <a-col :span="24">
                     <a-form-item label="客户" name="customerId">
                         <CustomerSelect width="100%" v-model:value="form.customerId" placeholder="请选择客户" />
@@ -100,6 +101,7 @@ import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import DictSelect from '/@/components/support/dict-select/index.vue';
 
 // ------------------------ 事件 ------------------------
 
@@ -132,7 +134,7 @@ const formRef = ref();
 
 const formDefault = {
     projectType: undefined, //项目类型
-    category: undefined, //项目分类
+    category: undefined, //类别
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID

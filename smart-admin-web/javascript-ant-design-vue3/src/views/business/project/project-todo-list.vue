@@ -291,7 +291,8 @@ function resetQuery() {
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
-    queryForm.projectType = projectType;
+    // queryForm.projectType = projectType;
+    queryForm.toDoType = type.value;
     queryData();
 }
 
@@ -321,8 +322,8 @@ onMounted(() => {
     // 获取最后一个"/"之后的值
     const lastSlashIndex = route.path.lastIndexOf('/');
     if (lastSlashIndex !== -1) {
-        const type = route.path.slice(lastSlashIndex + 1);
-        queryForm.toDoType = type;
+        type.value = route.path.slice(lastSlashIndex + 1);
+        queryForm.toDoType = type.value;
         queryData();
     }
 
@@ -343,6 +344,8 @@ const correctionFormRef = ref();
 const submitCertificationFeeFormRef = ref();
 const archiveFormRef = ref();
 const projectMailFormRef = ref();
+
+const type = ref();
 
 
 const handleMenuClick = (e, param) => {

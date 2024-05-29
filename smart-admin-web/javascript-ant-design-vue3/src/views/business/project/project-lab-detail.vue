@@ -187,7 +187,8 @@
         <DataTracer :dataId="id" :type="111" />
       </a-tab-pane>
 
-      <a-tab-pane v-if="detail.projectType == 12" key="qrcode" tab="二维码">
+      <a-tab-pane v-if="detail.projectType == 12 || detail.projectType == 11 || detail.projectType == 21" key="qrcode"
+        tab="二维码">
         <div class="flex-box">
           <vue-qr class="qr-code" :text="qrCodeUrl" :size="150" />
         </div>

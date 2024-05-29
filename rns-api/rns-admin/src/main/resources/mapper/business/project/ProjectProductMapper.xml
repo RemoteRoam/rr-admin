@@ -30,9 +30,10 @@
     <select id="list"
             resultType="tech.remote.admin.module.business.project.domain.vo.ProjectProductProgressVO">
         SELECT
-            p.*, c.pay_date as payDate
+            p.*, c.pay_date as payDate, m.tracking_number as trackingNumber
         FROM t_project_product p
         left join t_project_certification_fee c on p.certification_fee_id = c.id
+        left join t_project_mail m on p.mail_id = m.id
         where p.project_id = #{projectId} and p.task_id = #{taskId}
     </select>
 

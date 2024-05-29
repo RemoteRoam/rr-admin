@@ -26,6 +26,7 @@
       <a-descriptions-item label="自我声明日期">{{ product.selfDeclarationDate }}</a-descriptions-item>
       <a-descriptions-item label="证书发送日期">{{ product.certificateSendDate }}</a-descriptions-item>
       <a-descriptions-item label="认证费付款日期">{{ product.payDate }}</a-descriptions-item>
+      <a-descriptions-item label="快递单号">{{ product.trackingNumber }}</a-descriptions-item>
     </a-descriptions>
 
   </div>

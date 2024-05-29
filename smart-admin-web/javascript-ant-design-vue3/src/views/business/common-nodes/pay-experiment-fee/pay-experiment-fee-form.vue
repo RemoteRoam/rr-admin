@@ -1,7 +1,7 @@
 <template>
-    <a-modal title="实验费付款" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="实验费付款" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
-        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
+        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
                 <a-col :span="24">
                     <a-form-item label="是否付款" name="isPaid">

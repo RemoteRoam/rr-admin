@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
             <a-row>
@@ -25,7 +25,7 @@
                         <a-input v-model:value="record.productName" />
                     </template>
                     <template v-if="column.dataIndex === 'productModel'">
-                        <a-input v-model:value="record.productModel" />
+                        <a-textarea v-model:value="record.productModel" />
                     </template>
                     <template v-else-if="column.dataIndex === 'operation'">
                         <a-popconfirm v-if="dataSource.length" title="确认删除?" @confirm="onDelete(record.key)">

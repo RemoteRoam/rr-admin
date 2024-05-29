@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="'产品列表'" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="true"
+    <a-modal :title="'产品列表'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="true"
         :destroyOnClose="true">
 
         <!---------- 表格 begin ----------->

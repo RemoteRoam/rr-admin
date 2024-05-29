@@ -126,9 +126,11 @@
         END AS sourceName,
         CASE
         WHEN t.project_type = 41 THEN '体系初始'
-        WHEN t.project_type = 42 THEN '体系监督'
+        WHEN t.project_type = 421 THEN '体系监督一'
+        WHEN t.project_type = 422 THEN '体系监督二'
         WHEN t.project_type = 43 THEN '再认证'
         WHEN t.project_type = 44 THEN '扩项'
+        WHEN t.project_type = 45 THEN '产品认证'
         ELSE NULL
         END AS projectTypeName
         FROM t_system_certification t

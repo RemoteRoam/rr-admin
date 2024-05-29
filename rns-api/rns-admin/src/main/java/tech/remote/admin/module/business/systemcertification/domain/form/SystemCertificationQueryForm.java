@@ -22,7 +22,7 @@ public class SystemCertificationQueryForm extends PageParam{
     @Schema(description = "项目类型")
     private Integer projectType;
 
-    @Schema(description = "项目分类")
+    @Schema(description = "类别")
     private String category;
 
     @Schema(description = "客户ID")

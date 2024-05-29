@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
@@ -18,7 +18,7 @@
 
                 <a-col :span="18">
                     <a-form-item label="产品型号" name="productModel">
-                        <a-input style="width: 100%" v-model:value="form.productModel" placeholder="产品型号" />
+                        <a-textarea style="width: 100%" v-model:value="form.productModel" placeholder="产品型号" />
                     </a-form-item>
                 </a-col>
             </a-row>

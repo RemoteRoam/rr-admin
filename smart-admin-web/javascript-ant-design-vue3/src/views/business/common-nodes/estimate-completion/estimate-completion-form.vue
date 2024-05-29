@@ -1,5 +1,5 @@
 <template>
-    <a-modal title="预计完成" width="400px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="预计完成" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
