@@ -2,15 +2,14 @@ package tech.remote.admin.module.business.project.dao;
 
 import java.util.List;
 import tech.remote.admin.module.business.project.domain.entity.ProjectLabEntity;
+import tech.remote.admin.module.business.project.domain.form.ProjectLabListQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabQueryForm;
-import tech.remote.admin.module.business.project.domain.vo.ProjectLabProgressVO;
-import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
+import tech.remote.admin.module.business.project.domain.vo.*;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-import tech.remote.admin.module.business.project.domain.vo.ProjectVO;
 
 /**
  * 项目实验室任务表 Dao
@@ -37,4 +36,8 @@ public interface ProjectLabDao extends BaseMapper<ProjectLabEntity> {
     ProjectLabVO getDetail(@Param("id")Long id);
 
     ProjectLabProgressVO getByCode(@Param("progressCode")String progressCode);
+
+    List<ProjectLabListVO> selectProjectLabs(Page page, @Param("queryForm") ProjectLabListQueryForm queryForm);
+
+    List<ProjectLabExcelVO> selectExcelList(@Param("queryForm") ProjectLabListQueryForm queryForm);
 }

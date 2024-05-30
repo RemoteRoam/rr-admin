@@ -1,13 +1,13 @@
 package tech.remote.admin.module.business.project.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.Data;
-import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
  * 项目实验室任务表 列表VO
@@ -18,7 +18,7 @@ import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
  */
 
 @Data
-public class ProjectLabVO {
+public class ProjectLabListVO {
 
 
     @Schema(description = "编号")
@@ -101,6 +101,33 @@ public class ProjectLabVO {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "项目编号")
+    private String projectNo;
+
+    @Schema(description = "项目类型")
+    private Integer projectType;
+
+    @Schema(description = "项目分类")
+    private Integer category;
+
+    @Schema(description = "客户ID")
+    private Long customerId;
+
+    @Schema(description = "客户")
+    private String customerName;
+
+    @Schema(description = "来源分类")
+    private Integer sourceType;
+
+    @Schema(description = "来源ID")
+    private Long sourceId;
+
+    @Schema(description = "来源")
+    private String sourceName;
+
+    @Schema(description = "实验室预警天数")
+    private Integer alarmDays;
 
     @Schema(description = "产品列表")
     private List<ProjectProductVO> projectProductList;

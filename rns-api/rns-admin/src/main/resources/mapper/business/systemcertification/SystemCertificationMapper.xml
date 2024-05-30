@@ -278,12 +278,12 @@
             <if test="queryForm.createTimeEnd != null">
                 AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
-            <if test="queryForm.alarmTYPE == 5">
+            <if test="queryForm.alarmType == 5">
                 <!--体系审核到期预警，审核日期提前3个月预警-->
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
             </if>
-            <if test="queryForm.alarmTYPE == 6">
+            <if test="queryForm.alarmType == 6">
                 <!--证书有效期预警，证书有效期截止日期提前3个月预警-->
                 AND t.certificate_expiry_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                 AND t.certificate_expiry_date &gt; CURDATE()

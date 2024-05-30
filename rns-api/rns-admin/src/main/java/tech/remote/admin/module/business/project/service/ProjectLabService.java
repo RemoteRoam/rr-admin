@@ -15,12 +15,10 @@ import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
 import tech.remote.admin.module.business.project.domain.entity.ProjectLabEntity;
 import tech.remote.admin.module.business.project.domain.entity.ProjectProductEntity;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabAddForm;
+import tech.remote.admin.module.business.project.domain.form.ProjectLabListQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabQueryForm;
 import tech.remote.admin.module.business.project.domain.form.ProjectLabUpdateForm;
-import tech.remote.admin.module.business.project.domain.vo.ProjectLabProgressVO;
-import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
-import tech.remote.admin.module.business.project.domain.vo.ProjectProductProgressVO;
-import tech.remote.admin.module.business.project.domain.vo.ProjectProductVO;
+import tech.remote.admin.module.business.project.domain.vo.*;
 import tech.remote.admin.module.business.project.manager.ProjectManager;
 import tech.remote.admin.module.business.project.manager.ProjectProductManager;
 import tech.remote.admin.module.business.projectnode.domain.entity.ProjectNodeEntity;
@@ -275,5 +273,27 @@ public class ProjectLabService {
 
         vo.setProjectProductList(projectProductList);
         return vo;
+    }
+
+    public PageResult<ProjectLabListVO> getProjectLabs(ProjectLabListQueryForm queryForm) {
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<ProjectLabListVO> list = projectLabDao.selectProjectLabs(page, queryForm);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(ProjectLabListVO vo : list){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(vo.getProjectId());
+                nodeQueryForm.setProjectType(vo.getProjectType());
+                nodeQueryForm.setTaskId(vo.getId());
+                nodeQueryForm.setNodeLevel(2);
+                vo.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+            }
+        }
+        PageResult<ProjectLabListVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        return pageResult;
+    }
+
+    public List<ProjectLabExcelVO> getExcelExportData(ProjectLabListQueryForm queryForm) {
+        List<ProjectLabExcelVO> excelList = projectLabDao.selectExcelList(queryForm);
+        return excelList;
     }
 }

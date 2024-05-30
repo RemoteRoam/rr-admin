@@ -161,6 +161,7 @@
         <SubmitCertificationFeeForm ref="submitCertificationFeeFormRef" @reloadList="queryData" />
         <ArchiveForm ref="archiveFormRef" @reloadList="queryData" />
         <ProjectMailForm ref="projectMailFormRef" @reloadList="queryData" />
+        <SamplingTestForm ref="samplingTestFormRef" @reloadList="queryData" />
 
     </a-card>
 
@@ -191,6 +192,7 @@ import CorrectionForm from '../common-nodes/correction/correction-form.vue';
 import SubmitCertificationFeeForm from '../common-nodes/submit-certification-fee/submit-certification-fee-form.vue';
 import ArchiveForm from '../common-nodes/archive/archive-form.vue';
 import ProjectMailForm from '../common-nodes/project-mail/project-mail-form.vue';
+import SamplingTestForm from '../common-nodes/sampling-test/sampling-test-form.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -392,6 +394,7 @@ const correctionFormRef = ref();
 const submitCertificationFeeFormRef = ref();
 const archiveFormRef = ref();
 const projectMailFormRef = ref();
+const samplingTestFormRef = ref();
 
 function showForm() {
     if (selectedRowKeyList.value.length === 1) {
@@ -505,6 +508,8 @@ const handleMenuClick = (e, param) => {
         archiveFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.mail) {
         projectMailFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.sampling_test) {
+        samplingTestFormRef.value.show(param, e.key.id);
     }
 
 };
