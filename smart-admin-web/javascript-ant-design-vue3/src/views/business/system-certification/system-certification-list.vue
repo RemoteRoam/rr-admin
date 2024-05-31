@@ -41,6 +41,10 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
+            <a-form-item label="状态" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
+                    placeholder="状态" />
+            </a-form-item>
             <a-form-item label="认证机构" class="smart-query-form-item">
                 <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择认证机构"
                     type="THIRD_2" />
@@ -374,6 +378,7 @@ const queryFormState = {
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID
+    status: undefined, //状态
     thirdPartyId: undefined, //认证机构ID
     contractNo: undefined, //合同号
     contractDate: [], //合同日

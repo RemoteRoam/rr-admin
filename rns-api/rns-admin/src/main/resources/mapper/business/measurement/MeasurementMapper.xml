@@ -22,6 +22,10 @@
             <if test="queryForm.managerId != null">
                 AND t.manager_id = #{queryForm.managerId}
             </if>
+            <!--状态-->
+            <if test="queryForm.status != null">
+                AND t.status = #{queryForm.status}
+            </if>
             <!--操作人-->
             <if test="queryForm.createUserId != null">
                 AND t.id in (

@@ -18,6 +18,10 @@
             <a-form-item label="负责人" class="smart-query-form-item">
                 <EmployeeSelect width="150px" v-model:value="queryForm.sourceId" placeholder="请选择负责人" />
             </a-form-item>
+            <a-form-item label="状态" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
+                    placeholder="状态" />
+            </a-form-item>
             <a-form-item label="操作人" class="smart-query-form-item">
                 <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
@@ -139,6 +143,7 @@ import MeasurementFormAdd from './measurement-form-add.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 import NODE_CONST from '/@/constants/business/project/node-const';
 import InvoiceForm from '../common-nodes/invoice/invoice-form.vue';
 import MailForm from '../common-nodes/mail/mail-form.vue';
@@ -267,6 +272,7 @@ const queryFormState = {
     customerId: undefined, //客户ID
     managerId: undefined, //负责人ID
     createUserId: undefined, //创建人
+    status: undefined, //状态
     createTime: [], //创建时间
     createTimeBegin: undefined, //创建时间 开始
     createTimeEnd: undefined, //创建时间 结束

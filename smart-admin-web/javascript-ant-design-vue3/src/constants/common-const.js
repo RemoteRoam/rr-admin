@@ -56,7 +56,7 @@ export const USER_TYPE_ENUM = {
     value: 1,
     desc: '员工',
   },
-  
+
 };
 
 export const DATA_TYPE_ENUM = {
@@ -68,7 +68,7 @@ export const DATA_TYPE_ENUM = {
     value: 10,
     desc: '加密',
   },
-  
+
 };
 
 export const SOURCE_TYPE_ENUM = {
@@ -80,7 +80,7 @@ export const SOURCE_TYPE_ENUM = {
     value: 2,
     desc: '内部',
   },
-  
+
 };
 
 export const PAY_PARTY_ENUM = {
@@ -92,7 +92,7 @@ export const PAY_PARTY_ENUM = {
     value: 2,
     desc: '我方',
   },
-  
+
 };
 
 
@@ -113,15 +113,15 @@ export const NODE_STATUS_ENUM = {
     value: 3,
     desc: '跳过',
   },
-  
+
 };
 
 
 export const PROJECT_STATUS_ENUM = {
-  INIT: {
-    value: 0,
-    desc: '未开始',
-  },
+  // INIT: {
+  //   value: 0,
+  //   desc: '未开始',
+  // },
   DOING: {
     value: 1,
     desc: '处理中',
@@ -130,5 +130,5 @@ export const PROJECT_STATUS_ENUM = {
     value: 2,
     desc: '已完成',
   },
-  
+
 };

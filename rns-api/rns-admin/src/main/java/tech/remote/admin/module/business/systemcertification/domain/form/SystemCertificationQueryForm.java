@@ -34,6 +34,9 @@ public class SystemCertificationQueryForm extends PageParam{
     @Schema(description = "来源ID")
     private Long sourceId;
 
+    @Schema(description = "状态")
+    private Integer status;
+
     @Schema(description = "认证机构ID")
     private Long thirdPartyId;
 

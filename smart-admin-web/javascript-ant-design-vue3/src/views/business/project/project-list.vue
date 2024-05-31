@@ -41,6 +41,10 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
+            <a-form-item label="状态" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
+                    placeholder="状态" />
+            </a-form-item>
             <a-form-item label="操作人" class="smart-query-form-item">
                 <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
@@ -314,6 +318,7 @@ const queryFormState = {
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID
+    status: undefined, //状态
     createUserId: undefined, //创建人
     createTime: [], //创建时间
     createTimeBegin: undefined, //创建时间 开始

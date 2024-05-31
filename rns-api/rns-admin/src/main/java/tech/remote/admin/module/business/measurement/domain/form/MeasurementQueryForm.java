@@ -25,6 +25,9 @@ public class MeasurementQueryForm extends PageParam{
     @Schema(description = "负责人ID")
     private Long managerId;
 
+    @Schema(description = "状态")
+    private Integer status;
+
     @Schema(description = "创建人")
     private Long createUserId;
 
