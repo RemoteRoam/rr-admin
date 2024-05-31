@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import tech.remote.admin.module.business.customer.domain.vo.GrandTotalResult;
 
 /**
  * 客户表 Dao
@@ -40,4 +41,5 @@ public interface CustomerDao extends BaseMapper<CustomerEntity> {
      */
     void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("deletedFlag")boolean deletedFlag);
 
+    GrandTotalResult getGrandTotal(@Param("customerId") Long customerId);
 }

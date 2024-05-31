@@ -16,13 +16,28 @@ export const PROJECT_TYPE_PRODUCT_ENUM = {
     value: 12,
     desc: '产品认证',
   },
-    LAB_PROJECT: {
+  LAB_PROJECT: {
     value: 21,
     desc: '实验项目',
   },
-    PRODUCT_SUPERVISION: {
+  PRODUCT_SUPERVISION: {
     value: 31,
     desc: '产品监督',
+  },
+};
+
+export const PROJECT_TYPE_LAB_ENUM = {
+  CCC: {
+    value: 11,
+    desc: 'CCC自我声明',
+  },
+  PRODUCT_CERTIFICATION: {
+    value: 12,
+    desc: '产品认证',
+  },
+  LAB_PROJECT: {
+    value: 21,
+    desc: '实验项目',
   },
 };
 
@@ -39,14 +54,6 @@ export const PROJECT_CATEGORY_ENUM = {
     value: 3,
     desc: '增项',
   }
-};
-
-
-export const PROJECT_TYPE_LAB_ENUM = {
-  LAB_PROJECT: {
-    value: 21,
-    desc: '实验项目',
-  },
 };
 
 export const LAB_CATEGORY_ENUM = {

@@ -6,14 +6,14 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="交卷" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="抽检实验" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="交卷日期" name="submissionDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.submissionDate" style="width: 100%"
-                            placeholder="交卷日期" />
+                    <a-form-item label="抽检实验完成日期" name="samplingTestDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.samplingTestDate"
+                            style="width: 100%" placeholder="抽检实验完成日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -35,7 +35,7 @@ import { reactive, ref, nextTick, h } from 'vue';
 import _ from 'lodash';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
-import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
+import { projectApi } from '/@/api/business/project/project-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
@@ -50,10 +50,11 @@ const visibleFlag = ref(false);
 
 const jumpNodeRef = ref();
 
-function show(rowData) {
+function show(rowData, projectNodeId) {
     Object.assign(form, formDefault);
     if (rowData && !_.isEmpty(rowData)) {
         Object.assign(form, rowData);
+        form.projectNodeId = projectNodeId;
     }
     visibleFlag.value = true;
     nextTick(() => {
@@ -74,10 +75,11 @@ const formRef = ref();
 const formDefault = {
     id: undefined, //项目ID
     projectType: undefined, //项目类型
-    nodeId: NODE_CONST.submit_paper, //节点ID
-    nodeStatus: undefined, //节点状态
+    projectNodeId: undefined, //项目节点ID
+    nodeId: NODE_CONST.sampling_test, //节点ID
+    nodeStatus: 0, //节点状态
     passReason: undefined, //跳过原因
-    submissionDate: undefined, //交卷日期
+    auditDate: undefined, //审核时间
 };
 
 let form = reactive({ ...formDefault });
@@ -99,6 +101,7 @@ async function onSubmit() {
 // 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数nodeStatus传3
 
 function onJump() {
+    // 用另一种方式处理，暂时有问题，后续再调查
     // jumpNodeRef.value.show(form);
 
     Modal.confirm({
@@ -133,11 +136,7 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        if (form.id) {
-            await systemCertificationApi.update(form);
-        } else {
-            // await systemCertificationApi.add(form);
-        }
+        await projectApi.update(form);
         message.success('操作成功');
         emits('reloadList');
         onClose();

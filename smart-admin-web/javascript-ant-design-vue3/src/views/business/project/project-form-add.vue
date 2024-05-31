@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
             <a-row>
@@ -30,7 +30,7 @@
                 <a-col :span="24">
                     <a-form-item label="来源分类" name="sourceType">
                         <SmartEnumSelect width="100%" v-model:value="form.sourceType" enumName="SOURCE_TYPE_ENUM"
-                            placeholder="来源分类" />
+                            @change="onChangeSourceType" placeholder="来源分类" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="24">
@@ -100,6 +100,10 @@ import EmployeeSelect from '/@/components/system/employee-select/index.vue';
 // ------------------------ 事件 ------------------------
 
 const emits = defineEmits(['reloadList']);
+// -------------------  监听数据变化 -------------------
+function onChangeSourceType(value) {
+    form.sourceId = null;
+}
 
 // ------------------------ 显示与隐藏 ------------------------
 // 是否显示

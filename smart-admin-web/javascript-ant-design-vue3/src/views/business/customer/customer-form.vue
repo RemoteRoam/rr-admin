@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-  <a-modal :title="form.customerId ? '编辑' : '添加'" width="500px" :open="visibleFlag" @cancel="onClose"
+  <a-modal :title="form.customerId ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose"
     :maskClosable="false" :destroyOnClose="true">
     <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
 
@@ -172,7 +172,7 @@ const formRef = ref();
 const formDefault = {
   customerId: undefined,
   customerName: undefined, //客户名称
-  customerLevel: undefined, //客户级别
+  customerLevel: 'LEVEL_C', //客户级别
   contact: undefined, //联系人
   contactPhone: undefined, //联系人电话
   province: undefined, //省份

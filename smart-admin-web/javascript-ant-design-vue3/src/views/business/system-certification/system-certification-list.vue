@@ -16,6 +16,10 @@
                 <SmartEnumSelect width="150px" v-model:value="queryForm.projectType" enumName="PROJECT_TYPE_SYSTEM_ENUM"
                     placeholder="项目类型" />
             </a-form-item>
+            <a-form-item label="类别" class="smart-query-form-item">
+                <DictSelect width="150px" v-model:value="queryForm.category" keyCode="SYSTEM_CATEGORY"
+                    placeholder="类别" />
+            </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
                 <CustomerSelect width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
@@ -37,6 +41,10 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
+            <a-form-item label="状态" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
+                    placeholder="状态" />
+            </a-form-item>
             <a-form-item label="认证机构" class="smart-query-form-item">
                 <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择认证机构"
                     type="THIRD_2" />
@@ -52,10 +60,10 @@
                 <a-range-picker v-model:value="queryForm.expectedDate" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeExpectedDate" />
             </a-form-item>
-            <a-form-item label="创建人" class="smart-query-form-item">
+            <!-- <a-form-item label="创建人" class="smart-query-form-item">
                 <EmployeeSelect ref="employeeSelect" placeholder="请选择创建人" width="200px"
                     v-model:value="queryForm.createUserId" :leaveFlag="false" />
-            </a-form-item>
+            </a-form-item> -->
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeCreateTime" />
@@ -94,15 +102,15 @@
                     </template>
                     编辑
                 </a-button>
-                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION.value)" type="primary" size="small"
-                    :disabled="toSupervision">
+                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION1.value)" type="primary"
+                    size="small">
                     <template #icon>
                         <ArrowRightOutlined />
                     </template>
                     转监督
                 </a-button>
                 <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.RE_CERTIFICATION.value)" type="primary"
-                    size="small" :disabled="reCertification">
+                    size="small">
                     <template #icon>
                         <RollbackOutlined />
                     </template>
@@ -133,6 +141,9 @@
                 <template v-if="column.dataIndex === 'projectType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_SYSTEM_ENUM', text) }}</span>
                 </template>
+                <template v-if="column.dataIndex === 'category'">
+                    <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
+                </template>
                 <template v-if="column.dataIndex === 'sourceType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
                 </template>
@@ -154,7 +165,7 @@
                             </template>
                         </a-dropdown>
                         <!-- <a-button @click="showForm(record)" type="link">编辑</a-button> -->
-                        <!-- <a-button @click="onDelete(record)" danger type="link">删除</a-button> -->
+                        <a-button @click="onDelete(record)" danger type="link">删除</a-button>
                     </div>
                 </template>
             </template>
@@ -200,6 +211,7 @@ import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import DictSelect from '/@/components/support/dict-select/index.vue';
 import FirstPaymentForm from '../common-nodes/first-payment/first-payment-form.vue';
 import SubmitDataForm from './nodes/submit-data/submit-data-form.vue';
 import NODE_CONST from '/@/constants/business/project/node-const';
@@ -225,7 +237,12 @@ const columns = ref([
     {
         title: '项目类型',
         dataIndex: 'projectType',
-        width: 80,
+        width: 90,
+    },
+    {
+        title: '类别',
+        dataIndex: 'category',
+        width: 90,
     },
     {
         title: '客户',
@@ -361,6 +378,7 @@ const queryFormState = {
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID
+    status: undefined, //状态
     thirdPartyId: undefined, //认证机构ID
     contractNo: undefined, //合同号
     contractDate: [], //合同日
@@ -530,7 +548,7 @@ function onSelectChange(selectedRowKeys, selections) {
         if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.INITIALIZATION.value) {
             toSupervision.value = false;
         }
-        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION.value) {
+        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION1.value) {
             reCertification.value = false;
         }
     } else {

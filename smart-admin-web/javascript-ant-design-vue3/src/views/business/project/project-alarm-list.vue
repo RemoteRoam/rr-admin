@@ -33,8 +33,8 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
-            <a-form-item label="创建人" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.createUserId" placeholder="创建人" />
+            <a-form-item label="操作人" class="smart-query-form-item">
+                <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
@@ -291,7 +291,8 @@ function resetQuery() {
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
-    queryForm.projectType = projectType;
+    // queryForm.projectType = projectType;
+    queryForm.alarmType = type.value;
     queryData();
 }
 
@@ -321,8 +322,8 @@ onMounted(() => {
     // 获取最后一个"/"之后的值
     const lastSlashIndex = route.path.lastIndexOf('/');
     if (lastSlashIndex !== -1) {
-        const type = route.path.slice(lastSlashIndex + 1);
-        queryForm.alarmType = type;
+        type.value = route.path.slice(lastSlashIndex + 1);
+        queryForm.alarmType = type.value;
         queryData();
     }
 
@@ -343,6 +344,8 @@ const correctionFormRef = ref();
 const submitCertificationFeeFormRef = ref();
 const archiveFormRef = ref();
 const projectMailFormRef = ref();
+
+const type = ref();
 
 
 const handleMenuClick = (e, param) => {

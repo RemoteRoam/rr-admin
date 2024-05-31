@@ -1,5 +1,6 @@
 package tech.remote.admin.module.business.customer.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,6 +11,7 @@ import tech.remote.admin.module.business.customer.domain.form.CustomerAddForm;
 import tech.remote.admin.module.business.customer.domain.form.CustomerQueryForm;
 import tech.remote.admin.module.business.customer.domain.form.CustomerUpdateForm;
 import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
+import tech.remote.admin.module.business.customer.domain.vo.GrandTotalResult;
 import tech.remote.admin.module.business.third.domain.vo.ThirdPartyVO;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
@@ -107,5 +109,23 @@ public class CustomerService {
         lambdaQueryWrapper.orderByDesc(CustomerEntity::getCreateTime);
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         return ResponseDTO.ok(SmartBeanUtil.copyList(list, CustomerVO.class));
+    }
+
+    public void updateLevel(Long customerId, String level) {
+        CustomerEntity entity = customerDao.selectById(customerId);
+        entity.setCustomerLevel(level);
+        customerDao.updateById(entity);
+    }
+
+
+    public void upgradeLevel(Long customerId) {
+        GrandTotalResult result = customerDao.getGrandTotal(customerId);
+        // 判断合同金额（contractAmount + result.grandTotalAmount）满100万，并且项目数量(result.grandTotalCount)满10个，设置级别为A，否则合同金额满50万，或者项目数量满5个设置级别为B
+        if (result.getGrandTotalCount() >= 10 && (result.getGrandTotalAmount()).compareTo(new BigDecimal(1000000)) >= 0) {
+            updateLevel(customerId, "LEVEL_A");
+        }   else if (result.getGrandTotalCount() >= 5 || (result.getGrandTotalAmount()).compareTo(new BigDecimal(500000)) >= 0) {
+            updateLevel(customerId, "LEVEL_B");
+        }
+
     }
 }

@@ -25,7 +25,7 @@
             </a-form-item>
             <a-form-item label="来源分类" class="smart-query-form-item">
                 <SmartEnumSelect width="150px" v-model:value="queryForm.sourceType" enumName="SOURCE_TYPE_ENUM"
-                    placeholder="来源分类" />
+                    @change="onChangeSourceType" placeholder="来源分类" />
             </a-form-item>
             <a-form-item label="来源" class="smart-query-form-item">
 
@@ -41,8 +41,12 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
-            <a-form-item label="创建人" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.createUserId" placeholder="创建人" />
+            <a-form-item label="状态" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
+                    placeholder="状态" />
+            </a-form-item>
+            <a-form-item label="操作人" class="smart-query-form-item">
+                <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
@@ -161,6 +165,7 @@
         <SubmitCertificationFeeForm ref="submitCertificationFeeFormRef" @reloadList="queryData" />
         <ArchiveForm ref="archiveFormRef" @reloadList="queryData" />
         <ProjectMailForm ref="projectMailFormRef" @reloadList="queryData" />
+        <SamplingTestForm ref="samplingTestFormRef" @reloadList="queryData" />
 
     </a-card>
 
@@ -191,6 +196,7 @@ import CorrectionForm from '../common-nodes/correction/correction-form.vue';
 import SubmitCertificationFeeForm from '../common-nodes/submit-certification-fee/submit-certification-fee-form.vue';
 import ArchiveForm from '../common-nodes/archive/archive-form.vue';
 import ProjectMailForm from '../common-nodes/project-mail/project-mail-form.vue';
+import SamplingTestForm from '../common-nodes/sampling-test/sampling-test-form.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -312,6 +318,7 @@ const queryFormState = {
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID
+    status: undefined, //状态
     createUserId: undefined, //创建人
     createTime: [], //创建时间
     createTimeBegin: undefined, //创建时间 开始
@@ -330,10 +337,11 @@ const total = ref(0);
 
 // 重置查询条件
 function resetQuery() {
+    console.log("projectType", projectType.value);
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
-    queryForm.projectType = projectType;
+    queryForm.projectType = projectType.value;
     queryData();
 }
 
@@ -354,6 +362,10 @@ async function queryData() {
 function onChangeCreateTime(dates, dateStrings) {
     queryForm.createTimeBegin = dateStrings[0];
     queryForm.createTimeEnd = dateStrings[1];
+}
+// -------------------  监听数据变化 -------------------
+function onChangeSourceType(value) {
+    queryForm.sourceId = null;
 }
 
 let route = useRoute();
@@ -387,6 +399,7 @@ const correctionFormRef = ref();
 const submitCertificationFeeFormRef = ref();
 const archiveFormRef = ref();
 const projectMailFormRef = ref();
+const samplingTestFormRef = ref();
 
 function showForm() {
     if (selectedRowKeyList.value.length === 1) {
@@ -500,6 +513,8 @@ const handleMenuClick = (e, param) => {
         archiveFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.mail) {
         projectMailFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.sampling_test) {
+        samplingTestFormRef.value.show(param, e.key.id);
     }
 
 };

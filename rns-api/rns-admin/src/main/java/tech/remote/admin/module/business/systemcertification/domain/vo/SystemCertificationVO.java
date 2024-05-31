@@ -1,5 +1,6 @@
 package tech.remote.admin.module.business.systemcertification.domain.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.List;
 import lombok.Data;
 import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeSubListVO;
 import tech.remote.admin.module.business.systemcertificationnode.domain.vo.SystemCertificationNodeVO;
+import tech.remote.base.common.json.serializer.DictValueVoSerializer;
 
 /**
  * 体系认证表 列表VO
@@ -31,7 +33,8 @@ public class SystemCertificationVO {
     @Schema(description = "项目类型")
     private Integer projectType;
 
-    @Schema(description = "项目分类")
+    @Schema(description = "类别")
+    @JsonSerialize(using = DictValueVoSerializer.class)
     private String category;
 
     @Schema(description = "客户ID")

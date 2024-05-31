@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.remote.admin.module.business.customer.service.CustomerService;
 import tech.remote.admin.module.business.node.domain.entity.NodeEntity;
 import tech.remote.admin.module.business.node.manager.NodeManager;
 import tech.remote.admin.module.business.systemcertification.dao.SystemCertificationDao;
@@ -67,6 +68,9 @@ public class SystemCertificationService {
 
     @Resource
     private NodeManager nodeManager;
+
+    @Resource
+    private CustomerService customerService;
 
     /**
      * 分页查询
@@ -136,6 +140,10 @@ public class SystemCertificationService {
         systemCertificationNodeService.saveBatch(systemCertificationNodeList);
 
         dataTracerService.insert(systemCertificationEntity.getId(), DataTracerTypeEnum.SYSTEM_CERTIFICATION);
+
+        if(addForm.getContractAmount() != null && addForm.getCustomerId() != null){
+            customerService.upgradeLevel(addForm.getCustomerId());
+        }
         return ResponseDTO.ok();
     }
 

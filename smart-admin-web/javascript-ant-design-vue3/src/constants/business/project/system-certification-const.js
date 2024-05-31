@@ -12,9 +12,13 @@ export const PROJECT_TYPE_SYSTEM_ENUM = {
     value: 41,
     desc: '体系初始',
   },
-  SUPERVISION: {
-    value: 42,
-    desc: '体系监督',
+  SUPERVISION1: {
+    value: 421,
+    desc: '体系监督一',
+  },
+  SUPERVISION2: {
+    value: 422,
+    desc: '体系监督二',
   },
   RE_CERTIFICATION: {
     value: 43,
@@ -23,6 +27,10 @@ export const PROJECT_TYPE_SYSTEM_ENUM = {
   EXPANSION: {
     value: 44,
     desc: '扩项',
+  },
+  PRODUCT: {
+    value: 45,
+    desc: '产品认证',
   },
 };
 

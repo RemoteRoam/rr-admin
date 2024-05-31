@@ -22,18 +22,22 @@
                 <a-input style="width: 150px" v-model:value="queryForm.contactPhone" placeholder="联系人电话" />
             </a-form-item>
             <a-form-item class="smart-query-form-item" label="所在城市">
-                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="area" placeholder="请选择所在城市" @change="changeArea" />
+                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="area"
+                    placeholder="请选择所在城市" @change="changeArea" />
             </a-form-item>
         </a-row>
         <a-row class="smart-query-form-row">
             <a-form-item class="smart-query-form-item" label="工厂所在城市">
-                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="factoryArea" placeholder="请选择所在城市" @change="changeFactoryArea" />
+                <AreaCascader type="province_city_district" style="width: 250px" v-model:value="factoryArea"
+                    placeholder="请选择所在城市" @change="changeFactoryArea" />
             </a-form-item>
             <a-form-item label="创建人" class="smart-query-form-item">
-                <EmployeeSelect ref="employeeSelect" placeholder="请选择创建人" width="200px" v-model:value="queryForm.createUserId" :leaveFlag="false" />
+                <EmployeeSelect ref="employeeSelect" placeholder="请选择创建人" width="200px"
+                    v-model:value="queryForm.createUserId" :leaveFlag="false" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
-                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px" @change="onChangeCreateTime" />
+                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
+                    @change="onChangeCreateTime" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
                 <a-button type="primary" @click="queryData">
@@ -63,7 +67,8 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="confirmBatchDelete" type="danger" size="small" :disabled="selectedRowKeyList.length == 0">
+                <a-button @click="confirmBatchDelete" type="danger" size="small"
+                    :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <DeleteOutlined />
                     </template>
@@ -77,16 +82,9 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table
-                size="small"
-                :dataSource="tableData"
-                :columns="columns"
-                rowKey="customerId"
-                bordered
-                :loading="tableLoading"
-                :pagination="false"
-                :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
-        >
+        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="customerId" bordered
+            :loading="tableLoading" :pagination="false"
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'customerLevel'">
                     <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
@@ -102,296 +100,287 @@
         <!---------- 表格 end ----------->
 
         <div class="smart-query-table-page">
-            <a-pagination
-                    showSizeChanger
-                    showQuickJumper
-                    show-less-items
-                    :pageSizeOptions="PAGE_SIZE_OPTIONS"
-                    :defaultPageSize="queryForm.pageSize"
-                    v-model:current="queryForm.pageNum"
-                    v-model:pageSize="queryForm.pageSize"
-                    :total="total"
-                    @change="queryData"
-                    @showSizeChange="queryData"
-                    :show-total="(total) => `共${total}条`"
-            />
+            <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+                :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum"
+                v-model:pageSize="queryForm.pageSize" :total="total" @change="queryData" @showSizeChange="queryData"
+                :show-total="(total) => `共${total}条`" />
         </div>
 
-        <CustomerForm  ref="formRef" @reloadList="queryData"/>
+        <CustomerForm ref="formRef" @refresh="queryData" />
 
     </a-card>
 </template>
 <script setup>
-    import { reactive, ref, onMounted } from 'vue';
-    import { message, Modal } from 'ant-design-vue';
-    import { SmartLoading } from '/@/components/framework/smart-loading';
-    import { customerApi } from '/@/api/business/customer/customer-api';
-    import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
-    import { smartSentry } from '/@/lib/smart-sentry';
-    import _ from 'lodash';
-    import TableOperator from '/@/components/support/table-operator/index.vue';
-    import CustomerForm from './customer-form.vue';
-    import DictSelect from '/@/components/support/dict-select/index.vue';
-    import AreaCascader from '/@/components/framework/area-cascader/index.vue';
-    import EmployeeSelect from '/@/components/system/employee-select/index.vue';
-    import { defaultTimeRanges } from '/@/lib/default-time-ranges';
-    // ---------------------------- 表格列 ----------------------------
+import { reactive, ref, onMounted } from 'vue';
+import { message, Modal } from 'ant-design-vue';
+import { SmartLoading } from '/@/components/framework/smart-loading';
+import { customerApi } from '/@/api/business/customer/customer-api';
+import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+import { smartSentry } from '/@/lib/smart-sentry';
+import _ from 'lodash';
+import TableOperator from '/@/components/support/table-operator/index.vue';
+import CustomerForm from './customer-form.vue';
+import DictSelect from '/@/components/support/dict-select/index.vue';
+import AreaCascader from '/@/components/framework/area-cascader/index.vue';
+import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import { defaultTimeRanges } from '/@/lib/default-time-ranges';
+// ---------------------------- 表格列 ----------------------------
 
-    const columns = ref([
-        {
-            title: '客户名称',
-            dataIndex: 'customerName',
-            width: 150,
-            ellipsis: true,
-        },
-        {
-            title: '客户级别',
-            dataIndex: 'customerLevel',
-            ellipsis: true,
-        },
-        {
-            title: '联系人',
-            dataIndex: 'contact',
-            ellipsis: true,
-        },
-        {
-            title: '联系人电话',
-            dataIndex: 'contactPhone',
-            width: 120,
-            ellipsis: true,
-        },
-        {
-            title: '省份',
-            dataIndex: 'provinceName',
-            ellipsis: true,
-        },
-        {
-            title: '城市',
-            dataIndex: 'cityName',
-            ellipsis: true,
-        },
-        {
-            title: '区县',
-            dataIndex: 'districtName',
-            ellipsis: true,
-        },
-        {
-            title: '工厂省份',
-            dataIndex: 'factoryProvinceName',
-            ellipsis: true,
-        },
-        {
-            title: '工厂城市',
-            dataIndex: 'factoryCityName',
-            ellipsis: true,
-        },
-        {
-            title: '工厂区县',
-            dataIndex: 'factoryDistrictName',
-            ellipsis: true,
-        },
-        {
-            title: '创建人',
-            dataIndex: 'createUserName',
-            ellipsis: true,
-        },
-        {
-            title: '创建时间',
-            dataIndex: 'createTime',
-            width: 160,
-            ellipsis: true,
-        },
-        {
-            title: '更新人',
-            dataIndex: 'updateUserName',
-            ellipsis: true,
-        },
-        {
-            title: '更新时间',
-            dataIndex: 'updateTime',
-            width: 160,
-            ellipsis: true,
-        },
-        {
-            title: '操作',
-            dataIndex: 'action',
-            fixed: 'right',
-            width: 90,
-        },
-    ]);
+const columns = ref([
+    {
+        title: '客户名称',
+        dataIndex: 'customerName',
+        width: 150,
+        ellipsis: true,
+    },
+    {
+        title: '客户级别',
+        dataIndex: 'customerLevel',
+        ellipsis: true,
+    },
+    {
+        title: '联系人',
+        dataIndex: 'contact',
+        ellipsis: true,
+    },
+    {
+        title: '联系人电话',
+        dataIndex: 'contactPhone',
+        width: 120,
+        ellipsis: true,
+    },
+    {
+        title: '省份',
+        dataIndex: 'provinceName',
+        ellipsis: true,
+    },
+    {
+        title: '城市',
+        dataIndex: 'cityName',
+        ellipsis: true,
+    },
+    {
+        title: '区县',
+        dataIndex: 'districtName',
+        ellipsis: true,
+    },
+    {
+        title: '工厂省份',
+        dataIndex: 'factoryProvinceName',
+        ellipsis: true,
+    },
+    {
+        title: '工厂城市',
+        dataIndex: 'factoryCityName',
+        ellipsis: true,
+    },
+    {
+        title: '工厂区县',
+        dataIndex: 'factoryDistrictName',
+        ellipsis: true,
+    },
+    {
+        title: '创建人',
+        dataIndex: 'createUserName',
+        ellipsis: true,
+    },
+    {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        width: 160,
+        ellipsis: true,
+    },
+    {
+        title: '更新人',
+        dataIndex: 'updateUserName',
+        ellipsis: true,
+    },
+    {
+        title: '更新时间',
+        dataIndex: 'updateTime',
+        width: 160,
+        ellipsis: true,
+    },
+    {
+        title: '操作',
+        dataIndex: 'action',
+        fixed: 'right',
+        width: 90,
+    },
+]);
 
-    // ---------------------------- 查询数据表单和方法 ----------------------------
+// ---------------------------- 查询数据表单和方法 ----------------------------
 
-    const queryFormState = {
-        customerName: undefined, //客户名称
-        customerLevel: undefined, //客户级别
-        contact: undefined, //联系人
-        contactPhone: undefined, //联系人电话
-        province: undefined, //省份
-        city: undefined, //市
-        district: undefined, //区县
-        factoryProvince: undefined, //工厂省份
-        factoryCity: undefined, //工厂市
-        factoryDistrict: undefined, //工厂区县
-        createUserId: undefined, //创建人
-        createTime: [], //创建时间
-        createTimeBegin: undefined, //创建时间 开始
-        createTimeEnd: undefined, //创建时间 结束
-        pageNum: 1,
-        pageSize: 10,
-    };
+const queryFormState = {
+    customerName: undefined, //客户名称
+    customerLevel: undefined, //客户级别
+    contact: undefined, //联系人
+    contactPhone: undefined, //联系人电话
+    province: undefined, //省份
+    city: undefined, //市
+    district: undefined, //区县
+    factoryProvince: undefined, //工厂省份
+    factoryCity: undefined, //工厂市
+    factoryDistrict: undefined, //工厂区县
+    createUserId: undefined, //创建人
+    createTime: [], //创建时间
+    createTimeBegin: undefined, //创建时间 开始
+    createTimeEnd: undefined, //创建时间 结束
+    pageNum: 1,
+    pageSize: 10,
+};
 
-    const area = ref([]);
-    const factoryArea = ref([]);
-    // 查询表单form
-    const queryForm = reactive({ ...queryFormState });
-    // 表格加载loading
-    const tableLoading = ref(false);
-    // 表格数据
-    const tableData = ref([]);
-    // 总数
-    const total = ref(0);
+const area = ref([]);
+const factoryArea = ref([]);
+// 查询表单form
+const queryForm = reactive({ ...queryFormState });
+// 表格加载loading
+const tableLoading = ref(false);
+// 表格数据
+const tableData = ref([]);
+// 总数
+const total = ref(0);
 
-    const employeeSelect = ref();
+const employeeSelect = ref();
 
-    // 重置查询条件
-    function resetQuery() {
-        let pageSize = queryForm.pageSize;
-        Object.assign(queryForm, queryFormState);
-        queryForm.pageSize = pageSize;
+// 重置查询条件
+function resetQuery() {
+    let pageSize = queryForm.pageSize;
+    Object.assign(queryForm, queryFormState);
+    queryForm.pageSize = pageSize;
+    queryData();
+}
+
+function changeArea(value, selectedOptions) {
+    Object.assign(queryForm, {
+        province: '',
+        city: '',
+        district: '',
+    });
+    if (!_.isEmpty(selectedOptions)) {
+        // 地区信息
+        queryForm.province = area.value[0].value;
+
+        if (area.value[1]) {
+            queryForm.city = area.value[1].value;
+        }
+        if (area.value[2]) {
+            queryForm.district = area.value[2].value;
+        }
+    }
+}
+
+function changeFactoryArea(value, selectedOptions) {
+    Object.assign(queryForm, {
+        factoryProvince: '',
+        factoryCity: '',
+        factoryDistrict: '',
+    });
+    if (!_.isEmpty(selectedOptions)) {
+        // 地区信息
+        queryForm.factoryProvince = factoryArea.value[0].value;
+        queryForm.factoryCity = factoryArea.value[1].value;
+        queryForm.factoryDistrict = factoryArea.value[2].value;
+    }
+}
+
+function onChangeCreateTime(dates, dateStrings) {
+    queryForm.createTimeBegin = dateStrings[0];
+    queryForm.createTimeEnd = dateStrings[1];
+}
+
+// 查询数据
+async function queryData() {
+    tableLoading.value = true;
+    try {
+        let queryResult = await customerApi.queryPage(queryForm);
+        tableData.value = queryResult.data.list;
+        total.value = queryResult.data.total;
+    } catch (e) {
+        smartSentry.captureError(e);
+    } finally {
+        tableLoading.value = false;
+    }
+}
+
+
+onMounted(queryData);
+
+// ---------------------------- 添加/修改 ----------------------------
+const formRef = ref();
+
+function showForm(data) {
+    formRef.value.show(data);
+}
+
+// ---------------------------- 单个删除 ----------------------------
+//确认删除
+function onDelete(data) {
+    Modal.confirm({
+        title: '提示',
+        content: '确定要删除选吗?',
+        okText: '删除',
+        okType: 'danger',
+        onOk() {
+            requestDelete(data);
+        },
+        cancelText: '取消',
+        onCancel() { },
+    });
+}
+
+//请求删除
+async function requestDelete(data) {
+    SmartLoading.show();
+    try {
+        let deleteForm = {
+            goodsIdList: selectedRowKeyList.value,
+        };
+        await customerApi.delete(data.customerId);
+        message.success('删除成功');
         queryData();
+    } catch (e) {
+        smartSentry.captureError(e);
+    } finally {
+        SmartLoading.hide();
     }
+}
 
-  function changeArea(value, selectedOptions) {
-    Object.assign(queryForm, {
-      province: '',
-      city: '',
-      district: '',
+// ---------------------------- 批量删除 ----------------------------
+
+// 选择表格行
+const selectedRowKeyList = ref([]);
+
+function onSelectChange(selectedRowKeys) {
+    selectedRowKeyList.value = selectedRowKeys;
+}
+
+// 批量删除
+function confirmBatchDelete() {
+    Modal.confirm({
+        title: '提示',
+        content: '确定要批量删除这些数据吗?',
+        okText: '删除',
+        okType: 'danger',
+        onOk() {
+            requestBatchDelete();
+        },
+        cancelText: '取消',
+        onCancel() { },
     });
-    if (!_.isEmpty(selectedOptions)) {
-      // 地区信息
-      queryForm.province = area.value[0].value;
+}
 
-      if (area.value[1]) {
-        queryForm.city = area.value[1].value;
-      }
-      if (area.value[2]) {
-        queryForm.district = area.value[2].value;
-      }
-    }
-  }
-
-  function changeFactoryArea(value, selectedOptions) {
-    Object.assign(queryForm, {
-      factoryProvince: '',
-      factoryCity: '',
-      factoryDistrict: '',
-    });
-    if (!_.isEmpty(selectedOptions)) {
-      // 地区信息
-      queryForm.factoryProvince = factoryArea.value[0].value;
-      queryForm.factoryCity = factoryArea.value[1].value;
-      queryForm.factoryDistrict = factoryArea.value[2].value;
-    }
-  }
-
-    function onChangeCreateTime(dates, dateStrings){
-        queryForm.createTimeBegin = dateStrings[0];
-        queryForm.createTimeEnd = dateStrings[1];
-    }
-
-    // 查询数据
-    async function queryData() {
-        tableLoading.value = true;
-        try {
-            let queryResult = await customerApi.queryPage(queryForm);
-            tableData.value = queryResult.data.list;
-            total.value = queryResult.data.total;
-        } catch (e) {
-            smartSentry.captureError(e);
-        } finally {
-            tableLoading.value = false;
-        }
-    }
-
-
-    onMounted(queryData);
-
-    // ---------------------------- 添加/修改 ----------------------------
-    const formRef = ref();
-
-    function showForm(data) {
-        formRef.value.show(data);
-    }
-
-    // ---------------------------- 单个删除 ----------------------------
-    //确认删除
-    function onDelete(data){
-        Modal.confirm({
-            title: '提示',
-            content: '确定要删除选吗?',
-            okText: '删除',
-            okType: 'danger',
-            onOk() {
-                requestDelete(data);
-            },
-            cancelText: '取消',
-            onCancel() {},
-        });
-    }
-
-    //请求删除
-    async function requestDelete(data){
+//请求批量删除
+async function requestBatchDelete() {
+    try {
         SmartLoading.show();
-        try {
-            let deleteForm = {
-                goodsIdList: selectedRowKeyList.value,
-            };
-            await customerApi.delete(data.customerId);
-            message.success('删除成功');
-            queryData();
-        } catch (e) {
-            smartSentry.captureError(e);
-        } finally {
-            SmartLoading.hide();
-        }
+        await customerApi.batchDelete(selectedRowKeyList.value);
+        message.success('删除成功');
+        queryData();
+    } catch (e) {
+        smartSentry.captureError(e);
+    } finally {
+        SmartLoading.hide();
     }
-
-    // ---------------------------- 批量删除 ----------------------------
-
-    // 选择表格行
-    const selectedRowKeyList = ref([]);
-
-    function onSelectChange(selectedRowKeys) {
-        selectedRowKeyList.value = selectedRowKeys;
-    }
-
-    // 批量删除
-    function confirmBatchDelete() {
-        Modal.confirm({
-            title: '提示',
-            content: '确定要批量删除这些数据吗?',
-            okText: '删除',
-            okType: 'danger',
-            onOk() {
-                requestBatchDelete();
-            },
-            cancelText: '取消',
-            onCancel() {},
-        });
-    }
-
-    //请求批量删除
-    async function requestBatchDelete() {
-        try {
-            SmartLoading.show();
-            await customerApi.batchDelete(selectedRowKeyList.value);
-            message.success('删除成功');
-            queryData();
-        } catch (e) {
-            smartSentry.captureError(e);
-        } finally {
-            SmartLoading.hide();
-        }
-    }
+}
 </script>

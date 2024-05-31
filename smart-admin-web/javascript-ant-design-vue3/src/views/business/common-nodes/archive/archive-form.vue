@@ -1,5 +1,5 @@
 <template>
-    <a-modal title="归档" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="归档" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
@@ -101,6 +101,11 @@ const rules = {
 
 // 点击确定，验证表单
 async function onSubmit() {
+
+    if (selectedRowKeyList.value.length === 0) {
+        message.error('请选择产品');
+        return;
+    }
     try {
         await formRef.value.validateFields();
         save(2);

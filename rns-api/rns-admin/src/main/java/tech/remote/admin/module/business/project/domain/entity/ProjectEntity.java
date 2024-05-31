@@ -139,6 +139,12 @@ public class ProjectEntity {
     private String rectificationContent;
 
     /**
+     * 抽检实验完成日期 samplingTestDate
+     */
+    @DataTracerFieldLabel("抽检实验完成日期")
+    private LocalDate samplingTestDate;
+
+    /**
      * 整改日期
      */
     @DataTracerFieldLabel("整改日期")

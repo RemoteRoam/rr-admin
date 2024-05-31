@@ -44,7 +44,7 @@ public class SystemCertificationEntity {
     private Integer projectType;
 
     /**
-     * 项目分类
+     * 类别
      */
     private String category;
 

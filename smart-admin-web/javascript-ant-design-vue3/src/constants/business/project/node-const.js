@@ -31,6 +31,7 @@ const data = [
   { id: 25, node_code: "rectification_date", node_name: "整改日期" },
   { id: 26, node_code: "measurement_completion", node_name: "计量完成" },
   { id: 27, node_code: "receive_payment", node_name: "收款" },
+  { id: 28, node_code: "sampling_test", node_name: "抽检实验" },
 ];
 
 // 定义常量

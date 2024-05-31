@@ -72,7 +72,8 @@
             <a-row>
                 <a-col :span="8">
                     <a-form-item label="是否付款" name="isPaid">
-                        <a-input-number style="width: 95%" v-model:value="form.isPaid" placeholder="是否付款" />
+                        <!-- <a-input-number style="width: 95%" v-model:value="form.isPaid" placeholder="是否付款" /> -->
+                        <a-checkbox v-model:checked="form.isPaid" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -131,7 +132,7 @@
     </a-modal>
 </template>
 <script setup>
-import { reactive, ref, nextTick } from 'vue';
+import { reactive, ref, nextTick, computed } from 'vue';
 import _ from 'lodash';
 import { message } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -160,6 +161,7 @@ async function detail(id) {
         let result = await projectLabApi.detail(id);
         let data = result.data;
         Object.assign(form, data);
+        form.isPaid = form.isPaid == 1 ? true : false;
         nextTick(() => {
             formRef.value.clearValidate();
         });
@@ -225,12 +227,11 @@ async function onSubmit() {
 // 新建、编辑API
 async function save() {
     SmartLoading.show();
+    form.isPaid = form.isPaid ? 1 : 0;
     try {
-        if (form.id) {
-            await projectLabApi.update(form);
-        } else {
-            await projectLabApi.add(form);
-        }
+
+        await projectLabApi.update(form);
+
         message.success('操作成功');
         emits('reloadList');
         onClose();
@@ -238,6 +239,7 @@ async function save() {
         smartSentry.captureError(err);
     } finally {
         SmartLoading.hide();
+        form.isPaid = null;
     }
 }
 

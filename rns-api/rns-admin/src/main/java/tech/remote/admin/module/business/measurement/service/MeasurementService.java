@@ -5,6 +5,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.remote.admin.module.business.customer.service.CustomerService;
 import tech.remote.admin.module.business.measurement.dao.MeasurementDao;
 import tech.remote.admin.module.business.measurement.domain.entity.MeasurementEntity;
 import tech.remote.admin.module.business.measurement.domain.entity.MeasurementNodeEntity;
@@ -61,6 +62,9 @@ public class MeasurementService {
 
     @Resource
     private DataTracerService dataTracerService;
+
+    @Resource
+    private CustomerService customerService;
 
     /**
      * 分页查询
@@ -183,6 +187,10 @@ public class MeasurementService {
 
             //变更记录
             dataTracerService.update(measurementEntity.getId(), DataTracerTypeEnum.MEASUREMENT, oldEntity, measurementEntity);
+        }
+
+        if(updateForm.getPaymentAmount() != null && oldEntity.getCustomerId() != null){
+            customerService.upgradeLevel(oldEntity.getCustomerId());
         }
         return ResponseDTO.ok();
     }

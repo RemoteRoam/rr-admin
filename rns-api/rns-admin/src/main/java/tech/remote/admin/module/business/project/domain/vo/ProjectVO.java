@@ -90,6 +90,9 @@ public class ProjectVO {
     @Schema(description = "整改日期")
     private LocalDate rectificationDate;
 
+    @Schema(description = "抽检实验完成日期")
+    private LocalDate samplingTestDate;
+
     @Schema(description = "尾款金额")
     private BigDecimal finalPaymentAmount;
 

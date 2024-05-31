@@ -44,6 +44,10 @@
             <if test="queryForm.sourceId != null">
                 AND t.source_id = #{queryForm.sourceId}
             </if>
+            <!--状态-->
+            <if test="queryForm.status != null">
+                AND t.status = #{queryForm.status}
+            </if>
             <!--认证机构ID-->
             <if test="queryForm.thirdPartyId != null">
                 AND t.third_party_id = #{queryForm.thirdPartyId}
@@ -126,9 +130,11 @@
         END AS sourceName,
         CASE
         WHEN t.project_type = 41 THEN '体系初始'
-        WHEN t.project_type = 42 THEN '体系监督'
+        WHEN t.project_type = 421 THEN '体系监督一'
+        WHEN t.project_type = 422 THEN '体系监督二'
         WHEN t.project_type = 43 THEN '再认证'
         WHEN t.project_type = 44 THEN '扩项'
+        WHEN t.project_type = 45 THEN '产品认证'
         ELSE NULL
         END AS projectTypeName
         FROM t_system_certification t
@@ -276,12 +282,12 @@
             <if test="queryForm.createTimeEnd != null">
                 AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
-            <if test="queryForm.alarmTYPE == 5">
+            <if test="queryForm.alarmType == 5">
                 <!--体系审核到期预警，审核日期提前3个月预警-->
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
             </if>
-            <if test="queryForm.alarmTYPE == 6">
+            <if test="queryForm.alarmType == 6">
                 <!--证书有效期预警，证书有效期截止日期提前3个月预警-->
                 AND t.certificate_expiry_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                 AND t.certificate_expiry_date &gt; CURDATE()

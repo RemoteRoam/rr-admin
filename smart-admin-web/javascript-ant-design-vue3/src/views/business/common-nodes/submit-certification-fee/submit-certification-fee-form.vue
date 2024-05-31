@@ -1,5 +1,5 @@
 <template>
-    <a-modal title="交认证费" width="500px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="交认证费" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
@@ -12,7 +12,8 @@
                 <a-col :span="24">
                     <a-form-item label="是否付款" name="isPaid">
                         <!-- <a-checkbox :true-value="1" :false-value="0" v-model:checked="form.isPaid">是否付款</a-checkbox> -->
-                        <a-checkbox :value="formattedValue" @change="onChange" />
+                        <!-- <a-checkbox :value="formattedValue" @change="onChange" /> -->
+                        <a-checkbox v-model:checked="form.isPaid" @change="onChange" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -119,6 +120,11 @@ const rules = {
 
 // 点击确定，验证表单
 async function onSubmit() {
+
+    if (selectedRowKeyList.value.length === 0) {
+        message.error('请选择产品');
+        return;
+    }
     try {
         await formRef.value.validateFields();
         save(2);
@@ -131,8 +137,10 @@ const formattedValue = computed(() => {
     return form.isPaid ? 1 : 0;
 });
 const onChange = (event) => {
-    form.isPaid = event.target.checked ? 1 : 0;
-    // console.log(form.isPaid);
+    if (!event.target.checked) {
+        form.payParty = undefined;
+        form.payDate = undefined;
+    }
 };
 
 // 点击跳过，弹出Modal.confirm框，输入跳过原因，值赋给form.passReason，点击确认后调用save方法，参数nodeStatus传3
@@ -173,6 +181,7 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     form.productIdList = selectedRowKeyList;
+    form.isPaid = form.isPaid ? 1 : 0;
     try {
         await projectApi.update(form);
         message.success('操作成功');

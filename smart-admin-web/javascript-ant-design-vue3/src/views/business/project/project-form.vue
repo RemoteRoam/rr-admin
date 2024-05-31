@@ -37,7 +37,7 @@
                 <a-col :span="8">
                     <a-form-item label="来源分类" name="sourceType">
                         <SmartEnumSelect width="95%" v-model:value="form.sourceType" enumName="SOURCE_TYPE_ENUM"
-                            placeholder="来源分类" />
+                            @change="onChangeSourceType" placeholder="来源分类" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -134,6 +134,12 @@
                 </a-col>
             </a-row>
             <a-row>
+                <a-col :span="8" v-if="projectTypeGlobal === 31">
+                    <a-form-item label="抽检实验完成日期" name="samplingTestDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.samplingTestDate" style="width: 95%"
+                            placeholder="抽检实验完成日期" />
+                    </a-form-item>
+                </a-col>
                 <a-col :span="8">
                     <a-form-item label="尾款金额" name="finalPaymentAmount">
                         <a-input-number style="width: 95%" v-model:value="form.finalPaymentAmount" placeholder="尾款金额" />
@@ -191,6 +197,10 @@ import EmployeeSelect from '/@/components/system/employee-select/index.vue';
 // ------------------------ 事件 ------------------------
 
 const emits = defineEmits(['reloadList']);
+// -------------------  监听数据变化 -------------------
+function onChangeSourceType(value) {
+    form.sourceId = null;
+}
 
 // ------------------------ 显示与隐藏 ------------------------
 // 是否显示

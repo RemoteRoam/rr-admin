@@ -37,4 +37,6 @@ public class ProjectProductProgressVO {
     @Schema(description = "认证费付款日期")
     private LocalDate payDate;
 
+    @Schema(description = "快递单号")
+    private String trackingNumber;
 }

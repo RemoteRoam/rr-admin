@@ -168,6 +168,9 @@ public class ProjectExcelVO {
     @ExcelProperty("整改日期")
     private LocalDate rectificationDate;
 
+    @ExcelProperty("抽检实验完成日期")
+    private LocalDate samplingTestDate;
+
     @ExcelProperty("尾款金额")
     private BigDecimal finalPaymentAmount;
 
