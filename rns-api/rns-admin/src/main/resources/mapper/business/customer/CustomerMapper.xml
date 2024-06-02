@@ -19,11 +19,11 @@
             </if>
             <!--联系人-->
             <if test="queryForm.contact != null and queryForm.contact != ''">
-                        AND INSTR(t_customer.contact,#{queryForm.contact})
+                        AND (INSTR(t_customer.contact,#{queryForm.contact}) OR INSTR(t_customer.contact_second,#{queryForm.contact}) OR INSTR(t_customer.contact_third,#{queryForm.contact}))
             </if>
             <!--联系人电话-->
             <if test="queryForm.contactPhone != null and queryForm.contactPhone != ''">
-                        AND INSTR(t_customer.contact_phone,#{queryForm.contactPhone})
+                        AND (INSTR(t_customer.contact_phone,#{queryForm.contactPhone}) OR INSTR(t_customer.contact_second_phone,#{queryForm.contactPhone}) OR INSTR(t_customer.contact_third_phone,#{queryForm.contactPhone}))
             </if>
             <!--省份-->
             <if test="queryForm.province != null and queryForm.province != ''">

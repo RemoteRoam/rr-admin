@@ -84,7 +84,7 @@
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="customerId" bordered
             :loading="tableLoading" :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'customerLevel'">
                     <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
@@ -129,7 +129,7 @@ import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 const columns = ref([
     {
         title: '客户名称',
-        dataIndex: 'customerName',
+        dataIndex: 'customerName', fixed: 'left',
         width: 150,
         ellipsis: true,
     },
@@ -139,13 +139,35 @@ const columns = ref([
         ellipsis: true,
     },
     {
-        title: '联系人',
+        title: '联系人1',
         dataIndex: 'contact',
         ellipsis: true,
     },
     {
-        title: '联系人电话',
+        title: '联系人1电话',
         dataIndex: 'contactPhone',
+        width: 120,
+        ellipsis: true,
+    },
+    {
+        title: '联系人2',
+        dataIndex: 'contactSecond',
+        ellipsis: true,
+    },
+    {
+        title: '联系人2电话',
+        dataIndex: 'contactSecondPhone',
+        width: 120,
+        ellipsis: true,
+    },
+    {
+        title: '联系人3',
+        dataIndex: 'contactThird',
+        ellipsis: true,
+    },
+    {
+        title: '联系人3电话',
+        dataIndex: 'contactThirdPhone',
         width: 120,
         ellipsis: true,
     },

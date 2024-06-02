@@ -22,13 +22,33 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="联系人" name="contact">
-            <a-input style="width: 100%" v-model:value="form.contact" placeholder="联系人" />
+          <a-form-item label="联系人1" name="contact">
+            <a-input style="width: 100%" v-model:value="form.contact" placeholder="联系人1" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="联系人电话" name="contactPhone">
-            <a-input style="width: 100%" v-model:value="form.contactPhone" placeholder="联系人电话" />
+          <a-form-item label="联系人1电话" name="contactPhone">
+            <a-input style="width: 100%" v-model:value="form.contactPhone" placeholder="联系人1电话" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="联系人2" name="contactSecond">
+            <a-input style="width: 100%" v-model:value="form.contactSecond" placeholder="联系人2" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="联系人2电话" name="contactSecondPhone">
+            <a-input style="width: 100%" v-model:value="form.contactSecondPhone" placeholder="联系人2电话" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="联系人3" name="contactThird">
+            <a-input style="width: 100%" v-model:value="form.contactThird" placeholder="联系人3" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="联系人3电话" name="contactThirdPhone">
+            <a-input style="width: 100%" v-model:value="form.contactThirdPhone" placeholder="联系人3电话" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -173,8 +193,12 @@ const formDefault = {
   customerId: undefined,
   customerName: undefined, //客户名称
   customerLevel: 'LEVEL_C', //客户级别
-  contact: undefined, //联系人
-  contactPhone: undefined, //联系人电话
+  contact: undefined, //联系人1
+  contactPhone: undefined, //联系人1电话
+  contactSecond: undefined, //联系人2
+  contactSecondPhone: undefined, //联系人2电话
+  contactThird: undefined, //联系人3
+  contactThirdPhone: undefined, //联系人3电话
   province: undefined, //省份
   provinceName: undefined, //省份名称
   city: undefined, //市

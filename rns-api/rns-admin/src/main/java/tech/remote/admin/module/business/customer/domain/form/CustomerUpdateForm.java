@@ -36,6 +36,26 @@ public class CustomerUpdateForm {
     @Schema(description = "联系人电话")
     private String contactPhone;
 
+    /**
+     * 联系人2
+     */
+    private String contactSecond;
+
+    /**
+     * 联系人2电话
+     */
+    private String contactSecondPhone;
+
+    /**
+     * 联系人3
+     */
+    private String contactThird;
+
+    /**
+     * 联系人3电话
+     */
+    private String contactThirdPhone;
+
     @Schema(description = "省份")
     private Integer province;
 
