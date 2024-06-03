@@ -1,8 +1,7 @@
 package tech.remote.admin.module.business.systemcertification.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,12 +74,14 @@ public class SystemCertificationEntity {
      * 合同号
      */
     @DataTracerFieldLabel("合同号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String contractNo;
 
     /**
      * 合同日
      */
     @DataTracerFieldLabel("合同日")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate contractDate;
 
     /**
@@ -88,18 +89,21 @@ public class SystemCertificationEntity {
      */
     @DataTracerFieldLabel("合同金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal contractAmount;
 
     /**
      * 客户预期日期
      */
     @DataTracerFieldLabel("客户预期日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate expectedDate;
 
     /**
      * 备注
      */
     @DataTracerFieldLabel("备注")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String remark;
 
     /**
@@ -107,66 +111,77 @@ public class SystemCertificationEntity {
      */
     @DataTracerFieldLabel("首款金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal firstPaymentAmount;
 
     /**
      * 首款收款日期
      */
     @DataTracerFieldLabel("首款收款日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate firstPaymentDate;
 
     /**
      * 资料上报日期
      */
     @DataTracerFieldLabel("资料上报日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate dataReportDate;
 
     /**
      * 审核老师
      */
     @DataTracerFieldLabel("审核老师")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String auditTeacher;
 
     /**
      * 审核日期
      */
     @DataTracerFieldLabel("审核日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate auditDate;
 
     /**
      * 咨询老师
      */
     @DataTracerFieldLabel("咨询老师")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String consultationTeacher;
 
     /**
      * 交卷日期
      */
     @DataTracerFieldLabel("交卷日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate submissionDate;
 
     /**
      * 评定日期
      */
     @DataTracerFieldLabel("评定日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate assessmentDate;
 
     /**
      * 整改日期
      */
     @DataTracerFieldLabel("整改日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate rectificationDate;
 
     /**
      * 证书发送日期
      */
     @DataTracerFieldLabel("证书发送日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate certificateSendDate;
 
     /**
      * 证书有效期截止日期
      */
     @DataTracerFieldLabel("有效期截止日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate certificateExpiryDate;
 
     /**
@@ -174,18 +189,21 @@ public class SystemCertificationEntity {
      */
     @DataTracerFieldLabel("尾款金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal finalPaymentAmount;
 
     /**
      * 尾款收款日期
      */
     @DataTracerFieldLabel("尾款收款日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate finalPaymentDate;
 
     /**
      * 开票日期
      */
     @DataTracerFieldLabel("开票日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate invoiceDate;
 
     /**
@@ -193,24 +211,28 @@ public class SystemCertificationEntity {
      */
     @DataTracerFieldLabel("发票金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal invoiceAmount;
 
     /**
      * 发票号
      */
     @DataTracerFieldLabel("发票号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String invoiceNumber;
 
     /**
      * 邮寄日期
      */
     @DataTracerFieldLabel("邮寄日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate mailingDate;
 
     /**
      * 快递单号
      */
     @DataTracerFieldLabel("快递单号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String trackingNumber;
 
     /**

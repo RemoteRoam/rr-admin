@@ -1,8 +1,7 @@
 package tech.remote.admin.module.business.measurement.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,24 +53,28 @@ public class MeasurementEntity {
      */
     @DataTracerFieldLabel("收款金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal paymentAmount;
 
     /**
      * 收款日期
      */
     @DataTracerFieldLabel("收款日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate paymentDate;
 
     /**
      * 备注
      */
     @DataTracerFieldLabel("备注")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String remark;
 
     /**
      * 开票日期
      */
     @DataTracerFieldLabel("开票日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate invoiceDate;
 
     /**
@@ -79,24 +82,28 @@ public class MeasurementEntity {
      */
     @DataTracerFieldLabel("发票金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal invoiceAmount;
 
     /**
      * 发票号
      */
     @DataTracerFieldLabel("发票号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String invoiceNumber;
 
     /**
      * 邮寄日期
      */
     @DataTracerFieldLabel("邮寄日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate mailingDate;
 
     /**
      * 快递单号
      */
     @DataTracerFieldLabel("快递单号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String trackingNumber;
 
     /**

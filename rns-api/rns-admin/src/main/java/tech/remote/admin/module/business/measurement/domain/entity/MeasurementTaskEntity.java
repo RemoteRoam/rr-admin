@@ -1,8 +1,7 @@
 package tech.remote.admin.module.business.measurement.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,12 +46,14 @@ public class MeasurementTaskEntity {
      * 仪器名称
      */
     @DataTracerFieldLabel("仪器名称")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String instrument;
 
     /**
      * 有效期
      */
     @DataTracerFieldLabel("有效期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate expiryDate;
 
     /**
@@ -60,6 +61,7 @@ public class MeasurementTaskEntity {
      */
     @DataTracerFieldLabel("实验费金额")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal experimentAmount;
 
     /**
@@ -67,18 +69,21 @@ public class MeasurementTaskEntity {
      */
     @DataTracerFieldLabel("成本价")
     @DataTracerFieldBigDecimal
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal costAmount;
 
     /**
      * 计量日期
      */
     @DataTracerFieldLabel("计量日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate measurementDate;
 
     /**
      * 完成日期
      */
     @DataTracerFieldLabel("完成日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate finishDate;
 
     /**

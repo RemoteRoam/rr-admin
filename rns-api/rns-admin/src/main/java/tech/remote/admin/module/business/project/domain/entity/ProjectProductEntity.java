@@ -1,8 +1,7 @@
 package tech.remote.admin.module.business.project.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -52,30 +51,35 @@ public class ProjectProductEntity {
      * 实验室上报日期
      */
     @DataTracerFieldLabel("实验室上报日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate labReportDate;
 
     /**
      * 自我声明日期
      */
     @DataTracerFieldLabel("自我声明日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate selfDeclarationDate;
 
     /**
      * 证书编号
      */
     @DataTracerFieldLabel("证书编号")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String certificateNo;
 
     /**
      * 证书发送日期
      */
     @DataTracerFieldLabel("证书发送日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate certificateSendDate;
 
     /**
      * 证书有效期截止日期
      */
     @DataTracerFieldLabel("证书有效期截止日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate certificateExpiryDate;
 
     /**
