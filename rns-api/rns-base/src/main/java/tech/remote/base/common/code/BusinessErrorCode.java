@@ -18,6 +18,7 @@ public enum BusinessErrorCode implements ErrorCode {
 
     PROJECT_NODE_STATUS_ERROR(40001, "项目节点状态异常"),
     PROJECT_NODE_ALREADY_PROCESSED(40002, "项目节点已经处理过了，无需操作"),
+    CUSTOMER_NAME_EXIST_ERROR(41001, "客户名称已存在"),
 ;
 
     private final int code;

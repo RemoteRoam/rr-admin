@@ -13,6 +13,7 @@ import tech.remote.admin.module.business.customer.domain.form.CustomerUpdateForm
 import tech.remote.admin.module.business.customer.domain.vo.CustomerVO;
 import tech.remote.admin.module.business.customer.domain.vo.GrandTotalResult;
 import tech.remote.admin.module.business.third.domain.vo.ThirdPartyVO;
+import tech.remote.base.common.code.BusinessErrorCode;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -53,6 +54,14 @@ public class CustomerService {
      * 添加
      */
     public ResponseDTO<String> add(CustomerAddForm addForm) {
+        // 校验客户名称是否存在
+        LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, addForm.getCustomerName());
+        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
+        List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
+        if(CollectionUtils.isNotEmpty(list)){
+            return ResponseDTO.error(BusinessErrorCode.CUSTOMER_NAME_EXIST_ERROR);
+        }
         CustomerEntity customerEntity = SmartBeanUtil.copy(addForm, CustomerEntity.class);
         customerDao.insert(customerEntity);
         return ResponseDTO.ok();
@@ -65,6 +74,16 @@ public class CustomerService {
      * @return
      */
     public ResponseDTO<String> update(CustomerUpdateForm updateForm) {
+        // 校验客户名称是否存在
+        LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, updateForm.getCustomerName());
+        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
+        lambdaQueryWrapper.ne(CustomerEntity::getCustomerId, updateForm.getCustomerId());
+        List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
+        if(CollectionUtils.isNotEmpty(list)){
+            return ResponseDTO.error(BusinessErrorCode.CUSTOMER_NAME_EXIST_ERROR);
+        }
+
         CustomerEntity customerEntity = SmartBeanUtil.copy(updateForm, CustomerEntity.class);
         customerDao.updateById(customerEntity);
         return ResponseDTO.ok();

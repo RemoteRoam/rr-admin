@@ -292,7 +292,7 @@ public class DataTracerChangeContentService {
         DataTracerContentBO dataTracerContentBO = new DataTracerContentBO();
         dataTracerContentBO.setField(field);
         if (fieldValue == null) {
-            dataTracerContentBO.setFieldValue("");
+            dataTracerContentBO.setFieldValue(null);
             dataTracerContentBO.setFieldContent("");
             return dataTracerContentBO;
         }

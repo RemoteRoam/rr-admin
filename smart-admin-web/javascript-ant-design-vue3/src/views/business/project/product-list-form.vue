@@ -10,8 +10,8 @@
         :destroyOnClose="true">
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false">
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false">
             <template #bodyCell="{ text, record, column }">
 
             </template>
@@ -62,89 +62,89 @@ const columns = ref([
     // {
     //     title: '编号',
     //     dataIndex: 'id',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目ID',
     //     dataIndex: 'projectId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '实验室任务ID',
     //     dataIndex: 'taskId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '产品名称',
         dataIndex: 'productName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '产品型号',
         dataIndex: 'productModel',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '实验室上报日期',
     //     dataIndex: 'labReportDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '自我声明日期',
     //     dataIndex: 'selfDeclarationDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '证书编号',
     //     dataIndex: 'certificateNo',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '证书发送日期',
     //     dataIndex: 'certificateSendDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '证书有效期截止日期',
     //     dataIndex: 'certificateExpiryDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目认证费表ID',
     //     dataIndex: 'certificationFeeId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目归档表ID',
     //     dataIndex: 'archiveId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目邮寄表ID',
     //     dataIndex: 'mail',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '状态',
     //     dataIndex: 'status',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '创建人',
     //     dataIndex: 'createUserId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '创建人',
     //     dataIndex: 'createUserName',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '创建时间',
     //     dataIndex: 'createTime',
-    //     ellipsis: true,
+    //     width: 120,
     // },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 const queryFormState = {
     projectId: undefined, //项目ID
@@ -175,6 +175,9 @@ async function queryData() {
     } finally {
         tableLoading.value = false;
     }
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 
 

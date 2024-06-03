@@ -77,8 +77,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'projectNo'">
@@ -154,108 +154,108 @@ const columns = ref([
     // {
     //     title: '编号',
     //     dataIndex: 'id',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '项目编号',
         dataIndex: 'projectNo',
-        ellipsis: true,
+        width: 120,
         width: 150,
     },
     // {
     //     title: '项目类型',
     //     dataIndex: 'projectType',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '客户',
         dataIndex: 'customerName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '负责人',
         dataIndex: 'managerName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '收款金额',
         dataIndex: 'paymentAmount',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '收款日期',
         dataIndex: 'paymentDate',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '备注',
     //     dataIndex: 'remark',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '开票日期',
         dataIndex: 'invoiceDate',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '发票金额',
         dataIndex: 'invoiceAmount',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '发票号',
     //     dataIndex: 'invoiceNumber',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '邮寄日期',
         dataIndex: 'mailingDate',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '快递单号',
     //     dataIndex: 'trackingNumber',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '状态',
         dataIndex: 'status',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '删除状态',
     //     dataIndex: 'deletedFlag',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '创建人',
     //     dataIndex: 'createUserId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '创建人姓名',
         dataIndex: 'createUserName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '更新人',
     //     dataIndex: 'updateUserId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '更新人姓名',
     //     dataIndex: 'updateUserName',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '更新时间',
     //     dataIndex: 'updateTime',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '操作',
@@ -263,7 +263,7 @@ const columns = ref([
         fixed: 'right',
         width: 90,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -426,6 +426,9 @@ const handleMenuClick = (e, param) => {
         mailFormRef.value.show(param, e.key.id);
     }
 };
+function handleResizeColumn(w, col) {
+    col.width = w;
+}
 
 let router = useRouter();
 

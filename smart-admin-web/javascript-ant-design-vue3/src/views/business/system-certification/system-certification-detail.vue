@@ -15,6 +15,7 @@
       <div>
         <a-descriptions size="small" :column="4">
           <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
+          <a-descriptions-item label="类别">{{ detail.category }}</a-descriptions-item>
           <a-descriptions-item label="来源分类">{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM',
             detail.sourceType) }}</a-descriptions-item>
           <a-descriptions-item label="来源">{{ detail.sourceName

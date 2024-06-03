@@ -56,8 +56,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
@@ -135,12 +135,12 @@ const columns = ref([
     // {
     //     title: '编号',
     //     dataIndex: 'id',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目ID',
     //     dataIndex: 'projectId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '实验室任务编号',
@@ -160,7 +160,7 @@ const columns = ref([
     {
         title: '实验室合同日期',
         dataIndex: 'labContractDate',
-        ellipsis: true,
+        width: 120,
         width: 120,
     },
     {
@@ -176,37 +176,37 @@ const columns = ref([
     // {
     //     title: '实验合同备注',
     //     dataIndex: 'labContractRemark',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '资料发送日期',
     //     dataIndex: 'dataSendDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '资料接收日期',
     //     dataIndex: 'dataReceiveDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '是否付款',
     //     dataIndex: 'isPaid',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '付款方(客户/我方)',
     //     dataIndex: 'payParty',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '实验费付款日期',
     //     dataIndex: 'labPayDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '实验费备注',
     //     dataIndex: 'labPayRemark',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '实验室下达任务日期',
@@ -216,22 +216,22 @@ const columns = ref([
     // {
     //     title: '预计完成日期',
     //     dataIndex: 'expectedCompletionDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '报告完成日期',
     //     dataIndex: 'reportCompletionDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '状态',
         dataIndex: 'status',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建人',
         dataIndex: 'createUserName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建时间',
@@ -241,17 +241,17 @@ const columns = ref([
     // {
     //     title: '更新人',
     //     dataIndex: 'updateUserId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '更新人姓名',
     //     dataIndex: 'updateUserName',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '更新时间',
     //     dataIndex: 'updateTime',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '操作',
@@ -259,7 +259,7 @@ const columns = ref([
         fixed: 'right',
         width: 90,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -390,6 +390,9 @@ async function getDetail(projectId) {
     } finally {
         SmartLoading.hide();
     }
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 
 let router = useRouter();

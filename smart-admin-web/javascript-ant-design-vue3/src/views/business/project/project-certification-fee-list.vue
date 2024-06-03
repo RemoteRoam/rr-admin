@@ -48,15 +48,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table
-                size="small"
-                :dataSource="tableData"
-                :columns="columns"
-                rowKey="id"
-                bordered
-                :loading="tableLoading"
-                :pagination="false"
-        >
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
@@ -68,151 +61,145 @@
         <!---------- 表格 end ----------->
 
         <div class="smart-query-table-page">
-            <a-pagination
-                    showSizeChanger
-                    showQuickJumper
-                    show-less-items
-                    :pageSizeOptions="PAGE_SIZE_OPTIONS"
-                    :defaultPageSize="queryForm.pageSize"
-                    v-model:current="queryForm.pageNum"
-                    v-model:pageSize="queryForm.pageSize"
-                    :total="total"
-                    @change="queryData"
-                    @showSizeChange="queryData"
-                    :show-total="(total) => `共${total}条`"
-            />
+            <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+                :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum"
+                v-model:pageSize="queryForm.pageSize" :total="total" @change="queryData" @showSizeChange="queryData"
+                :show-total="(total) => `共${total}条`" />
         </div>
 
-        <ProjectCertificationFeeForm  ref="formRef" @reloadList="queryData"/>
+        <ProjectCertificationFeeForm ref="formRef" @reloadList="queryData" />
 
     </a-card>
 </template>
 <script setup>
-    import { reactive, ref, onMounted } from 'vue';
-    import { message, Modal } from 'ant-design-vue';
-    import { SmartLoading } from '/@/components/framework/smart-loading';
-    import { projectCertificationFeeApi } from '/@/api/business/project/project-certification-fee-api';
-    import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
-    import { smartSentry } from '/@/lib/smart-sentry';
-    import TableOperator from '/@/components/support/table-operator/index.vue';
-    import ProjectCertificationFeeForm from './project-certification-fee-form.vue';
-    // ---------------------------- 表格列 ----------------------------
+import { reactive, ref, onMounted } from 'vue';
+import { message, Modal } from 'ant-design-vue';
+import { SmartLoading } from '/@/components/framework/smart-loading';
+import { projectCertificationFeeApi } from '/@/api/business/project/project-certification-fee-api';
+import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+import { smartSentry } from '/@/lib/smart-sentry';
+import TableOperator from '/@/components/support/table-operator/index.vue';
+import ProjectCertificationFeeForm from './project-certification-fee-form.vue';
+// ---------------------------- 表格列 ----------------------------
 
-    const columns = ref([
-        {
-            title: '编号',
-            dataIndex: 'id',
-            ellipsis: true,
-        },
-        {
-            title: '项目ID',
-            dataIndex: 'projectId',
-            ellipsis: true,
-        },
-        {
-            title: '是否付款',
-            dataIndex: 'isPaid',
-            ellipsis: true,
-        },
-        {
-            title: '付款方(客户/我方)',
-            dataIndex: 'payParty',
-            ellipsis: true,
-        },
-        {
-            title: '认证费付款日期',
-            dataIndex: 'payDate',
-            ellipsis: true,
-        },
-        {
-            title: '认证费备注',
-            dataIndex: 'payRemark',
-            ellipsis: true,
-        },
-        {
-            title: '创建人',
-            dataIndex: 'createUserId',
-            ellipsis: true,
-        },
-        {
-            title: '创建人姓名',
-            dataIndex: 'createUserName',
-            ellipsis: true,
-        },
-        {
-            title: '创建时间',
-            dataIndex: 'createTime',
-            ellipsis: true,
-        },
-        {
-            title: '更新人',
-            dataIndex: 'updateUserId',
-            ellipsis: true,
-        },
-        {
-            title: '更新人姓名',
-            dataIndex: 'updateUserName',
-            ellipsis: true,
-        },
-        {
-            title: '更新时间',
-            dataIndex: 'updateTime',
-            ellipsis: true,
-        },
-        {
-            title: '操作',
-            dataIndex: 'action',
-            fixed: 'right',
-            width: 90,
-        },
-    ]);
+const columns = ref([
+    {
+        title: '编号',
+        dataIndex: 'id',
+        width: 120,
+    },
+    {
+        title: '项目ID',
+        dataIndex: 'projectId',
+        width: 120,
+    },
+    {
+        title: '是否付款',
+        dataIndex: 'isPaid',
+        width: 120,
+    },
+    {
+        title: '付款方(客户/我方)',
+        dataIndex: 'payParty',
+        width: 120,
+    },
+    {
+        title: '认证费付款日期',
+        dataIndex: 'payDate',
+        width: 120,
+    },
+    {
+        title: '认证费备注',
+        dataIndex: 'payRemark',
+        width: 120,
+    },
+    {
+        title: '创建人',
+        dataIndex: 'createUserId',
+        width: 120,
+    },
+    {
+        title: '创建人姓名',
+        dataIndex: 'createUserName',
+        width: 120,
+    },
+    {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        width: 120,
+    },
+    {
+        title: '更新人',
+        dataIndex: 'updateUserId',
+        width: 120,
+    },
+    {
+        title: '更新人姓名',
+        dataIndex: 'updateUserName',
+        width: 120,
+    },
+    {
+        title: '更新时间',
+        dataIndex: 'updateTime',
+        width: 120,
+    },
+    {
+        title: '操作',
+        dataIndex: 'action',
+        fixed: 'right',
+        width: 90,
+    },
+].map(column => ({ ...column, resizable: true })));
 
-    // ---------------------------- 查询数据表单和方法 ----------------------------
+// ---------------------------- 查询数据表单和方法 ----------------------------
 
-    const queryFormState = {
-        projectId: undefined, //项目ID
-        pageNum: 1,
-        pageSize: 10,
-    };
-    // 查询表单form
-    const queryForm = reactive({ ...queryFormState });
-    // 表格加载loading
-    const tableLoading = ref(false);
-    // 表格数据
-    const tableData = ref([]);
-    // 总数
-    const total = ref(0);
+const queryFormState = {
+    projectId: undefined, //项目ID
+    pageNum: 1,
+    pageSize: 10,
+};
+// 查询表单form
+const queryForm = reactive({ ...queryFormState });
+// 表格加载loading
+const tableLoading = ref(false);
+// 表格数据
+const tableData = ref([]);
+// 总数
+const total = ref(0);
 
-    // 重置查询条件
-    function resetQuery() {
-        let pageSize = queryForm.pageSize;
-        Object.assign(queryForm, queryFormState);
-        queryForm.pageSize = pageSize;
-        queryData();
+// 重置查询条件
+function resetQuery() {
+    let pageSize = queryForm.pageSize;
+    Object.assign(queryForm, queryFormState);
+    queryForm.pageSize = pageSize;
+    queryData();
+}
+
+// 查询数据
+async function queryData() {
+    tableLoading.value = true;
+    try {
+        let queryResult = await projectCertificationFeeApi.queryPage(queryForm);
+        tableData.value = queryResult.data.list;
+        total.value = queryResult.data.total;
+    } catch (e) {
+        smartSentry.captureError(e);
+    } finally {
+        tableLoading.value = false;
     }
-
-    // 查询数据
-    async function queryData() {
-        tableLoading.value = true;
-        try {
-            let queryResult = await projectCertificationFeeApi.queryPage(queryForm);
-            tableData.value = queryResult.data.list;
-            total.value = queryResult.data.total;
-        } catch (e) {
-            smartSentry.captureError(e);
-        } finally {
-            tableLoading.value = false;
-        }
-    }
+}
 
 
-    onMounted(queryData);
+onMounted(queryData);
 
-    // ---------------------------- 添加/修改 ----------------------------
-    const formRef = ref();
+// ---------------------------- 添加/修改 ----------------------------
+const formRef = ref();
 
-    function showForm(data) {
-        formRef.value.show(data);
-    }
+function showForm(data) {
+    formRef.value.show(data);
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
+}
 
 </script>

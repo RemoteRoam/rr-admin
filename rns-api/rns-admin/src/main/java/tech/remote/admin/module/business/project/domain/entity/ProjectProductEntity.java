@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 项目产品表 实体类
@@ -38,36 +39,43 @@ public class ProjectProductEntity {
     /**
      * 产品名称
      */
+    @DataTracerFieldLabel("产品名称")
     private String productName;
 
     /**
      * 产品型号
      */
+    @DataTracerFieldLabel("产品型号")
     private String productModel;
 
     /**
      * 实验室上报日期
      */
+    @DataTracerFieldLabel("实验室上报日期")
     private LocalDate labReportDate;
 
     /**
      * 自我声明日期
      */
+    @DataTracerFieldLabel("自我声明日期")
     private LocalDate selfDeclarationDate;
 
     /**
      * 证书编号
      */
+    @DataTracerFieldLabel("证书编号")
     private String certificateNo;
 
     /**
      * 证书发送日期
      */
+    @DataTracerFieldLabel("证书发送日期")
     private LocalDate certificateSendDate;
 
     /**
      * 证书有效期截止日期
      */
+    @DataTracerFieldLabel("证书有效期截止日期")
     private LocalDate certificateExpiryDate;
 
     /**

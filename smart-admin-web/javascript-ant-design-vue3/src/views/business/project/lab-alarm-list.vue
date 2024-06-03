@@ -65,8 +65,8 @@
 
     <!-- Data Table -->
     <a-card size="small" :bordered="false" :hoverable="true">
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false" :scroll="{ x: 2000 }">
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
                     <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -171,7 +171,7 @@ const columns = ref([
     { title: '状态', dataIndex: 'status', width: 70 },
     { title: '创建时间', dataIndex: 'createTime', width: 170 },
     { title: '操作', dataIndex: 'action', fixed: 'right', width: 90 },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 
 // Query form state
@@ -285,6 +285,9 @@ const detail = (id) => {
 
 function detailTask(record) {
     router.push({ path: '/project/lab-detail', query: { id: record.id, customerName: record.customerName, projectType: record.projectType, category: record.category } });
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 
 // Initial data query

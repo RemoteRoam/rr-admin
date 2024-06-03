@@ -82,8 +82,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="customerId" bordered
-            :loading="tableLoading" :pagination="false"
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn"
+            rowKey="customerId" bordered :loading="tableLoading" :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'customerLevel'">
@@ -131,97 +131,97 @@ const columns = ref([
         title: '客户名称',
         dataIndex: 'customerName', fixed: 'left',
         width: 150,
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '客户级别',
         dataIndex: 'customerLevel',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '联系人1',
         dataIndex: 'contact',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '联系人1电话',
         dataIndex: 'contactPhone',
         width: 120,
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '联系人2',
         dataIndex: 'contactSecond',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '联系人2电话',
         dataIndex: 'contactSecondPhone',
         width: 120,
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '联系人3',
         dataIndex: 'contactThird',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '联系人3电话',
         dataIndex: 'contactThirdPhone',
         width: 120,
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '省份',
         dataIndex: 'provinceName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '城市',
         dataIndex: 'cityName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '区县',
         dataIndex: 'districtName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '工厂省份',
         dataIndex: 'factoryProvinceName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '工厂城市',
         dataIndex: 'factoryCityName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '工厂区县',
         dataIndex: 'factoryDistrictName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建人',
         dataIndex: 'createUserName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建时间',
         dataIndex: 'createTime',
         width: 160,
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '更新人',
         dataIndex: 'updateUserName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '更新时间',
         dataIndex: 'updateTime',
         width: 160,
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '操作',
@@ -229,7 +229,7 @@ const columns = ref([
         fixed: 'right',
         width: 90,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -404,5 +404,8 @@ async function requestBatchDelete() {
     } finally {
         SmartLoading.hide();
     }
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 </script>

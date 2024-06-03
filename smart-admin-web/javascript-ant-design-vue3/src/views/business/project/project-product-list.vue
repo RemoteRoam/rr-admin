@@ -47,8 +47,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'productName'">
@@ -113,102 +113,102 @@ const columns = ref([
     // {
     //     title: '编号',
     //     dataIndex: 'id',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目ID',
     //     dataIndex: 'projectId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '实验室任务ID',
     //     dataIndex: 'taskId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '产品名称',
         dataIndex: 'productName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '产品型号',
         dataIndex: 'productModel',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '实验室上报日期',
         dataIndex: 'labReportDate',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '自我声明日期',
         dataIndex: 'selfDeclarationDate',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '证书编号',
         dataIndex: 'certificateNo',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '证书发送日期',
         dataIndex: 'certificateSendDate',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '证书有效期截止日期',
         dataIndex: 'certificateExpiryDate',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '项目认证费表ID',
     //     dataIndex: 'certificationFeeId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目归档表ID',
     //     dataIndex: 'archiveId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '项目邮寄表ID',
     //     dataIndex: 'mail',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '状态',
         dataIndex: 'status',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '创建人',
     //     dataIndex: 'createUserId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '创建人',
         dataIndex: 'createUserName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '更新人',
     //     dataIndex: 'updateUserId',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '更新人姓名',
     //     dataIndex: 'updateUserName',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '更新时间',
     //     dataIndex: 'updateTime',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '操作',
@@ -216,7 +216,7 @@ const columns = ref([
         fixed: 'right',
         width: 90,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -392,6 +392,9 @@ async function getTaskDetail(taskId) {
     } finally {
         SmartLoading.hide();
     }
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 
 let router = useRouter();

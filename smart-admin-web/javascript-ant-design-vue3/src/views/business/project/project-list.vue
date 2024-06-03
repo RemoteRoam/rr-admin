@@ -101,8 +101,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
 
@@ -209,92 +209,92 @@ const columns = ref([
     {
         title: '项目类型',
         dataIndex: 'projectType',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '项目分类',
         dataIndex: 'category',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '客户',
         dataIndex: 'customerName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '来源分类',
         dataIndex: 'sourceType',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '来源',
         dataIndex: 'sourceName',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '合同号',
         dataIndex: 'contractNo',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '合同日',
         dataIndex: 'contractDate',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '合同金额',
         dataIndex: 'contractAmount',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '客户预期日期',
         dataIndex: 'expectedDate',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '首款金额',
     //     dataIndex: 'firstPaymentAmount',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '首款收款日期',
     //     dataIndex: 'firstPaymentDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '审核任务时间',
     //     dataIndex: 'auditTaskDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '审核老师',
     //     dataIndex: 'auditTeacher',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '咨询老师',
     //     dataIndex: 'consultationTeacher',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '审核日期',
     //     dataIndex: 'auditDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '整改内容',
     //     dataIndex: 'rectificationContent',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '整改日期',
     //     dataIndex: 'rectificationDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '状态',
         dataIndex: 'status',
-        ellipsis: true,
+        width: 120,
     },
     {
         title: '创建时间',
@@ -307,7 +307,7 @@ const columns = ref([
         fixed: 'right',
         width: 90,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -518,6 +518,9 @@ const handleMenuClick = (e, param) => {
     }
 
 };
+function handleResizeColumn(w, col) {
+    col.width = w;
+}
 
 let router = useRouter();
 

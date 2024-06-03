@@ -81,8 +81,8 @@
             </div>
         </a-row>
         <!---------- 表格操作行 end ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false" :scroll="{ x: 2000 }">
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
                     <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -113,6 +113,10 @@
                             </a>
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
+                                    <a-menu-item>
+                                        产品列表
+                                    </a-menu-item>
+                                    <a-menu-divider />
                                     <a-menu-item v-for="node in record.projectNodeList" :key="node">
                                         {{ node.nodeName }}
                                     </a-menu-item>
@@ -147,6 +151,7 @@ import { reactive, ref, onMounted, getCurrentInstance } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+import TableOperator from '/@/components/support/table-operator/index.vue';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
@@ -186,7 +191,7 @@ const columns = ref([
     { title: '状态', dataIndex: 'status', width: 70 },
     { title: '创建时间', dataIndex: 'createTime', width: 170 },
     { title: '操作', dataIndex: 'action', fixed: 'right', width: 90 },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 
 // Query form state
@@ -264,12 +269,13 @@ const onLabPayDateChange = (dates, dateStrings) => {
 
 // Handle menu click
 const handleMenuClick = (e, param) => {
+    let orgProjectType = param.projectType;
     param.projectType = 111;
     if (e.key === null) {
         router.push({
             path: '/project/product-list', query: {
                 projectId: route.query.projectId,
-                customerName: detail.value.customerName, projectType: detail.value.projectType, category: detail.value.category,
+                customerName: param.customerName, projectType: orgProjectType, category: param.category,
                 taskId: param.id
             }
         });
@@ -303,6 +309,9 @@ function detailTask(record) {
 // --------------------------- 导出 ---------------------------
 async function exportExcel() {
     await projectLabApi.exportExcel(queryForm);
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 
 // Initial data query

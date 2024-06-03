@@ -34,7 +34,6 @@ public class SystemCertificationVO {
     private Integer projectType;
 
     @Schema(description = "类别")
-    @JsonSerialize(using = DictValueVoSerializer.class)
     private String category;
 
     @Schema(description = "客户ID")

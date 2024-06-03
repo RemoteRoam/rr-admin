@@ -28,9 +28,9 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="类别" name="category">
-                        <DictSelect width="100%" v-model:value="form.category" keyCode="SYSTEM_CATEGORY"
-                            placeholder="类别" />
+                    <a-form-item label="类别" name="categoryList">
+                        <a-select v-model:value="form.categoryList" mode="multiple" style="width: 100%"
+                            placeholder="请选择类别" :options="dictValueList"></a-select>
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -237,6 +237,7 @@ import _ from 'lodash';
 import { message } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
+import { dictApi } from '/src/api/support/dict-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
@@ -254,6 +255,7 @@ const visibleFlag = ref(false);
 
 function show(id) {
     Object.assign(form, formDefault);
+    queryDict();
     detail(id);
     visibleFlag.value = true;
 
@@ -263,7 +265,11 @@ async function detail(id) {
     try {
         let result = await systemCertificationApi.detail(id);
         let data = result.data;
-        Object.assign(form, data);
+        Object.assign(form, {
+            ...data,
+            categoryList: data.category ? data.category.split(',') : [],
+        }
+        );
         nextTick(() => {
 
             if (form.category && form.category.length > 0) {
@@ -288,11 +294,11 @@ function onClose() {
 const formRef = ref();
 
 const formDefault = {
-    id: undefined,
     id: undefined, //编号
     orgProjectId: undefined, //原始项目ID
     projectNo: undefined, //项目编号
     projectType: undefined, //项目类型
+    categoryList: [], //类别列表
     category: undefined, //类别
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
@@ -333,6 +339,7 @@ const rules = {
 async function onSubmit() {
     try {
         await formRef.value.validateFields();
+        form.category = form.categoryList.join(',');
         save();
     } catch (err) {
         message.error('参数验证错误，请仔细填写表单数据!');
@@ -356,6 +363,15 @@ async function save() {
     } finally {
         SmartLoading.hide();
     }
+}
+
+const dictValueList = ref([]);
+async function queryDict() {
+    let res = await dictApi.valueList("SYSTEM_CATEGORY");
+    dictValueList.value = res.data.map(item => ({
+        label: item.valueName,
+        value: item.valueName
+    }));
 }
 
 defineExpose({

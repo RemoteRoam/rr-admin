@@ -141,9 +141,6 @@
                 <template v-if="column.dataIndex === 'projectType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_SYSTEM_ENUM', text) }}</span>
                 </template>
-                <template v-if="column.dataIndex === 'category'">
-                    <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
-                </template>
                 <template v-if="column.dataIndex === 'sourceType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
                 </template>
