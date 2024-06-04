@@ -104,8 +104,9 @@
     <select id="selectExcelList"
             resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabExcelVO">
         SELECT l.*,
-        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id, p.contract_no, p.contract_date, p.contract_amount, p.expected_date,
+        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id, p.audit_date,
         p3.name AS thirdPartyName, c.customer_name AS customerName,
+        n.lab_report_date AS labReportDate, n.self_declaration_date AS selfDeclareDate, n.certificate_send_date AS certificateSendDate,n.mailing_date AS mailingDate,
         CASE
         WHEN p.source_type = 1 THEN p2.name
         WHEN p.source_type = 2 THEN e.actual_name
@@ -141,13 +142,39 @@
         WHEN l.pay_party = 1 THEN '客户'
         WHEN l.pay_party = 2 THEN '我方'
         ELSE NULL
-        END AS payParty
+        END AS payParty,
+        CASE
+        WHEN l.status = 1 THEN '进行中'
+        WHEN l.status = 2 THEN '已完成'
+        ELSE NULL
+        END AS statusName
         FROM t_project_lab l
         LEFT JOIN t_project p ON l.project_id = p.id
         LEFT JOIN t_third_party p3 ON l.third_party_id = p3.id
         LEFT JOIN t_customer c ON p.customer_id = c.customer_id
         LEFT JOIN t_third_party p2 ON p.source_type = 1 AND p.source_id = p2.id
         LEFT JOIN t_employee e ON p.source_type = 2 AND p.source_id = e.employee_id
+        LEFT JOIN
+            (SELECT
+            pp.id AS product_id,
+            pp.task_id,
+            pm.mailing_date,
+            pp.lab_report_date,
+            pp.self_declaration_date,
+            pp.certificate_send_date
+            FROM
+            t_project_product pp
+            JOIN (
+                SELECT
+                task_id,
+                MAX(lab_report_date) AS max_lab_report_date
+                FROM
+                t_project_product
+                GROUP BY
+                task_id
+                ) AS max_dates ON pp.task_id = max_dates.task_id AND pp.lab_report_date = max_dates.max_lab_report_date
+            LEFT JOIN t_project_mail pm ON pp.mail_id = pm.id
+            ) AS n on n.task_id = l.id
         WHERE p.project_type IN (11, 12, 21)
         <if test="queryForm.thirdPartyId != null">AND l.third_party_id = #{queryForm.thirdPartyId}</if>
         <if test="queryForm.projectNo != null and queryForm.projectNo != ''">AND INSTR(p.project_no, #{queryForm.projectNo})</if>

@@ -65,6 +65,12 @@ public class SystemCertificationExcelVO {
     @ExcelProperty("首款收款日期")
     private LocalDate firstPaymentDate;
 
+    @ExcelProperty("体系文件传递日期")
+    private LocalDate systemFileTransferDate;
+
+    @ExcelProperty("前期资料传递日期")
+    private LocalDate preDataTransferDate;
+
     @ExcelProperty("资料上报日期")
     private LocalDate dataReportDate;
 

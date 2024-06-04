@@ -122,6 +122,20 @@ public class SystemCertificationEntity {
     private LocalDate firstPaymentDate;
 
     /**
+     * 体系文件传递日期
+     */
+    @DataTracerFieldLabel("体系文件传递日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate systemFileTransferDate;
+
+    /**
+     * 前期资料传递日期
+     */
+    @DataTracerFieldLabel("前期资料传递日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate preDataTransferDate;
+
+    /**
      * 资料上报日期
      */
     @DataTracerFieldLabel("资料上报日期")

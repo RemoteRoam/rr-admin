@@ -2,6 +2,7 @@ package tech.remote.admin.module.business.project.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,83 +21,84 @@ import java.time.LocalDateTime;
 @ColumnWidth(15)
 public class ProjectLabExcelVO {
 
+    // 项目单位
     @ExcelProperty("项目编号")
     private String projectNo;
 
+    // 项目单位
     @ExcelProperty("项目类型")
     private String projectTypeName;
 
+    // 项目单位
     @ExcelProperty("项目分类")
     private String categoryName;
 
-    @ExcelProperty("客户")
+    // 项目单位
+    @ExcelProperty("客户名称")
     private String customerName;
 
-    @ExcelProperty("来源")
+    // 项目单位
+    @ExcelProperty("客户来源")
     private String sourceName;
 
-    @ExcelProperty("合同号")
-    private String contractNo;
-
-    @ExcelProperty("合同日")
-    private LocalDate contractDate;
-
-    @ExcelProperty("合同金额")
-    private BigDecimal contractAmount;
-
-    @ExcelProperty("客户预期日期")
-    private LocalDate expectedDate;
-
-    @ExcelProperty("实验室任务编号")
-    @ColumnWidth(18)
-    private String taskNo;
-
-    @ExcelProperty("实验室名称")
-    private String thirdPartyName;
-
+    // 实验室单位
     @ExcelProperty("实验室合同号")
     private String labContractNo;
 
+    // 实验室单位
     @ExcelProperty("实验室合同日期")
     @ColumnWidth(18)
     private LocalDate labContractDate;
 
-    @ExcelProperty("实验费金额")
-    private BigDecimal labContractAmount;
+    // 实验室单位
+    @ExcelProperty("实验室")
+    private String thirdPartyName;
 
-    @ExcelProperty("客户要求完成日期")
-    @ColumnWidth(19)
-    private LocalDate labExpectedDate;
-
-    @ExcelProperty("实验合同备注")
-    private String labContractRemark;
-
-    @ExcelProperty("资料发送日期")
-    private LocalDate dataSendDate;
-
-    @ExcelProperty("资料接收日期")
-    private LocalDate dataReceiveDate;
-
-    @ExcelProperty("是否付款")
-    private String isPaid;
-
-    @ExcelProperty("实验费付款方")
+    // 实验室单位
+    @ExcelProperty("付款方")
     private String payParty;
 
+    // 实验室单位
     @ExcelProperty("实验费付款日期")
     @ColumnWidth(18)
     private LocalDate labPayDate;
 
-    @ExcelProperty("实验费备注")
-    private String labPayRemark;
+    // 实验室单位
+    @ExcelProperty("客户要求完成日期")
+    @ColumnWidth(19)
+    private LocalDate labExpectedDate;
 
-    @ExcelProperty("下达任务日期")
-    private LocalDate assignTaskDate;
-
+    // 实验室单位
     @ExcelProperty("预计完成日期")
     private LocalDate expectedCompletionDate;
 
+    // 产品单位
+    @ExcelProperty("实验室上报日期")
+    @ColumnWidth(18)
+    private LocalDate labReportDate;
+
+    // 实验室单位
     @ExcelProperty("报告完成日期")
     private LocalDate reportCompletionDate;
+
+    // 产品单位
+    @ExcelProperty("自我声明日期")
+    private LocalDate selfDeclarationDate;
+
+    // 项目单位
+    @ExcelProperty("审核日期")
+    private LocalDate auditDate;
+
+    // 产品单位
+    @ExcelProperty("证书发送日期")
+    private LocalDate certificateSendDate;
+
+    // 产品单位
+    @ExcelProperty("邮寄日期")
+    private LocalDate mailingDate;
+
+    // 实验室单位
+    @ExcelProperty("状态")
+    private String statusName;
 
 }

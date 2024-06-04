@@ -102,6 +102,20 @@
                             placeholder="首款收款日期" />
                     </a-form-item>
                 </a-col>
+            </a-row>
+            <a-row>
+                <a-col :span="8">
+                    <a-form-item label="前期资料传递日期" name="preDataTransferDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.preDataTransferDate"
+                            style="width: 95%" placeholder="前期资料传递日期" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                    <a-form-item label="体系文件传递日期" name="systemFileTransferDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.systemFileTransferDate"
+                            style="width: 95%" placeholder="体系文件传递日期" />
+                    </a-form-item>
+                </a-col>
                 <a-col :span="8">
                     <a-form-item label="资料上报日期" name="dataReportDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.dataReportDate" style="width: 95%"
@@ -311,6 +325,8 @@ const formDefault = {
     remark: undefined, //备注
     firstPaymentAmount: undefined, //首款金额
     firstPaymentDate: undefined, //首款收款日期
+    preDataTransferDate: undefined, //前期资料传递日期
+    systemFileTransferDate: undefined, //体系文件传递日期
     dataReportDate: undefined, //资料上报日期
     auditTeacher: undefined, //审核老师
     auditDate: undefined, //审核日期

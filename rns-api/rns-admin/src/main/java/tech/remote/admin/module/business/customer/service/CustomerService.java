@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.customer.dao.CustomerDao;
 import tech.remote.admin.module.business.customer.domain.entity.CustomerEntity;
@@ -57,7 +58,7 @@ public class CustomerService {
         // 校验客户名称是否存在
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, addForm.getCustomerName());
-        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
+        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, NumberUtils.INTEGER_ZERO);
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         if(CollectionUtils.isNotEmpty(list)){
             return ResponseDTO.error(BusinessErrorCode.CUSTOMER_NAME_EXIST_ERROR);
@@ -77,7 +78,7 @@ public class CustomerService {
         // 校验客户名称是否存在
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, updateForm.getCustomerName());
-        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
+        lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, NumberUtils.INTEGER_ZERO);
         lambdaQueryWrapper.ne(CustomerEntity::getCustomerId, updateForm.getCustomerId());
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         if(CollectionUtils.isNotEmpty(list)){

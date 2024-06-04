@@ -108,6 +108,20 @@
                   placeholder="" disabled />
               </a-form-item>
             </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="8">
+              <a-form-item label="前期资料传递日期" name="preDataTransferDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.preDataTransferDate" style="width: 95%"
+                  placeholder="" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="体系文件传递日期" name="systemFileTransferDate">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.systemFileTransferDate" style="width: 95%"
+                  placeholder="" disabled />
+              </a-form-item>
+            </a-col>
             <a-col :span="8">
               <a-form-item label="资料上报日期" name="dataReportDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataReportDate" style="width: 95%"

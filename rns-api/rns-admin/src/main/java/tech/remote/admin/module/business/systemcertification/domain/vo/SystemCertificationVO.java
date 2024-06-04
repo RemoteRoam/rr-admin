@@ -78,6 +78,12 @@ public class SystemCertificationVO {
     @Schema(description = "首款收款日期")
     private LocalDate firstPaymentDate;
 
+    @Schema(description = "体系文件传递日期")
+    private LocalDate systemFileTransferDate;
+
+    @Schema(description = "前期资料传递日期")
+    private LocalDate preDataTransferDate;
+
     @Schema(description = "资料上报日期")
     private LocalDate dataReportDate;
 

@@ -159,7 +159,6 @@ const columns = ref([
     {
         title: '项目编号',
         dataIndex: 'projectNo',
-        width: 120,
         width: 150,
     },
     // {

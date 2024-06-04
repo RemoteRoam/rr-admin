@@ -9,6 +9,16 @@
                 <SmartEnumSelect width="190px" v-model:value="queryForm.projectType" enumName="PROJECT_TYPE_LAB_ENUM"
                     placeholder="项目类型" />
             </a-form-item>
+            <a-form-item label="项目分类" class="smart-query-form-item">
+                <template v-if="queryForm.projectType == 21">
+                    <SmartEnumSelect width="150px" v-model:value="queryForm.category" enumName="LAB_CATEGORY_ENUM"
+                        placeholder="项目分类" />
+                </template>
+                <template v-else>
+                    <SmartEnumSelect width="150px" v-model:value="queryForm.category" enumName="PROJECT_CATEGORY_ENUM"
+                        placeholder="项目分类" />
+                </template>
+            </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
                 <CustomerSelect width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>

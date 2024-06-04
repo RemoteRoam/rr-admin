@@ -90,7 +90,7 @@ public class ProjectLabController {
             return;
         }
 
-        String projectTypeName = "实验室任务";
+        String projectTypeName = "总项目管理进度表";
         String fileName = projectTypeName + "-" + DateUtil.today() + ".xls";
 
         // 设置下载消息头

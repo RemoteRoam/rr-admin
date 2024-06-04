@@ -130,8 +130,8 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false"
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
             <template #bodyCell="{ text, record, column }">
 
@@ -188,7 +188,8 @@
         <FinalPaymentForm ref="finalPaymentFormRef" @reloadList="queryData" />
         <InvoiceForm ref="invoiceFormRef" @reloadList="queryData" />
         <MailForm ref="mailFormRef" @reloadList="queryData" />
-
+        <PreDataTransferForm ref="preDataTransferFormRef" @reloadList="queryData" />
+        <SystemFileTransferForm ref="systemFileTransferFormRef" @reloadList="queryData" />
     </a-card>
 </template>
 <script setup>
@@ -220,6 +221,8 @@ import SystemCertificateForm from './nodes/system-certificate/system-certificate
 import FinalPaymentForm from '../common-nodes/final-payment/final-payment-form.vue';
 import InvoiceForm from '../common-nodes/invoice/invoice-form.vue';
 import MailForm from '../common-nodes/mail/mail-form.vue';
+import PreDataTransferForm from './nodes/pre-data-transfer/pre-data-transfer-form.vue';
+import SystemFileTransferForm from './nodes/system-file-transfer/system-file-transfer-form.vue';
 
 // ---------------------------- 表格列 ----------------------------
 
@@ -227,136 +230,133 @@ const columns = ref([
 
     {
         title: '项目编号',
-        dataIndex: 'projectNo',
-        ellipsis: false,
+        dataIndex: 'projectNo', fixed: 'left',
         width: 150,
     },
     {
         title: '项目类型',
         dataIndex: 'projectType',
-        width: 90,
+        width: 140,
     },
     {
         title: '类别',
         dataIndex: 'category',
-        width: 90,
+        width: 110,
     },
     {
         title: '客户',
         dataIndex: 'customerName',
-        ellipsis: true,
-        width: 150,
+        width: 120,
     },
     {
         title: '认证机构',
         dataIndex: 'thirdPartyName',
-        width: 120,
+        width: 150,
     },
     // {
     //     title: '合同号',
     //     dataIndex: 'contractNo',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '合同日',
     //     dataIndex: 'contractDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '合同金额',
         dataIndex: 'contractAmount',
-        ellipsis: true,
+        width: 120,
     },
     // {
     //     title: '首款金额',
     //     dataIndex: 'firstPaymentAmount',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '首款收款日期',
     //     dataIndex: 'firstPaymentDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '资料上报日期',
     //     dataIndex: 'dataReportDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '审核老师',
         dataIndex: 'auditTeacher',
-        width: 80,
+        width: 120,
     },
     {
         title: '审核日期',
         dataIndex: 'auditDate',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '咨询老师',
         dataIndex: 'consultationTeacher',
-        width: 80,
+        width: 120,
     },
     // {
     //     title: '交卷日期',
     //     dataIndex: 'submissionDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '评定日期',
     //     dataIndex: 'assessmentDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '整改日期',
     //     dataIndex: 'rectificationDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '证书发送日期',
         dataIndex: 'certificateSendDate',
-        ellipsis: true,
+        width: 160,
     },
     // {
     //     title: '证书有效期截止日期',
     //     dataIndex: 'certificateExpiryDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '尾款金额',
     //     dataIndex: 'finalPaymentAmount',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '尾款收款日期',
     //     dataIndex: 'finalPaymentDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '开票日期',
     //     dataIndex: 'invoiceDate',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     // {
     //     title: '发票金额',
     //     dataIndex: 'invoiceAmount',
-    //     ellipsis: true,
+    //     width: 120,
     // },
     {
         title: '邮寄日期',
         dataIndex: 'mailingDate',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '状态',
         dataIndex: 'status',
-        width: 70,
+        width: 90,
     },
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        ellipsis: true,
-        width: 170,
+        width: 120,
     },
     {
         title: '操作',
@@ -364,7 +364,7 @@ const columns = ref([
         fixed: 'right',
         width: 120,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -453,6 +453,8 @@ const systemCertificateFormRef = ref();
 const finalPaymentFormRef = ref();
 const invoiceFormRef = ref();
 const mailFormRef = ref();
+const preDataTransferFormRef = ref();
+const systemFileTransferFormRef = ref();
 
 function showFormAdd() {
     formAddRef.value.show();
@@ -494,6 +496,10 @@ const handleMenuClick = (e, param) => {
         invoiceFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.mail) {
         mailFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.pre_data_transfer) {
+        preDataTransferFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.system_file_transfer) {
+        systemFileTransferFormRef.value.show(param, e.key.id);
     }
 };
 
@@ -584,6 +590,9 @@ async function requestBatchDelete() {
     } finally {
         SmartLoading.hide();
     }
+}
+function handleResizeColumn(w, col) {
+    col.width = w;
 }
 
 let router = useRouter();
