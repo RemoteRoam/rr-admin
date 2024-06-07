@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.goods.dao.SalesDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.goods.domain.vo.SalesVO">
+        SELECT
+        *
+        FROM t_sales
+        <where>
+            <!--销售单号-->
+            <if test="queryForm.salesNo != null and queryForm.salesNo != ''">
+                        AND INSTR(t_sales.sales_no,#{queryForm.salesNo})
+            </if>
+            <!--销售类型-->
+            <if test="queryForm.salesType != null">
+                AND t_sales.sales_type = #{queryForm.salesType}
+            </if>
+            <!--供货厂家-->
+            <if test="queryForm.supplier != null and queryForm.supplier != ''">
+                        AND INSTR(t_sales.supplier,#{queryForm.supplier})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t_sales.customer_id = #{queryForm.customerId}
+            </if>
+            <!--销售经理ID-->
+            <if test="queryForm.managerId != null">
+                AND t_sales.manager_id = #{queryForm.managerId}
+            </if>
+            <!--合同号-->
+            <if test="queryForm.contractNo != null and queryForm.contractNo != ''">
+                        AND INSTR(t_sales.contract_no,#{queryForm.contractNo})
+            </if>
+            <!--合同日-->
+            <if test="queryForm.contractDateBegin != null">
+                AND DATE_FORMAT(t_sales.contract_date, '%Y-%m-%d') &gt;= #{queryForm.contractDateBegin}
+            </if>
+            <if test="queryForm.contractDateEnd != null">
+                AND DATE_FORMAT(t_sales.contract_date, '%Y-%m-%d') &lt;= #{queryForm.contractDateEnd}
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="batchUpdateDeleted">
+        update t_sales set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_sales set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+</mapper>

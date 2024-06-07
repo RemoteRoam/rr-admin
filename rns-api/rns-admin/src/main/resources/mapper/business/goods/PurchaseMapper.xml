@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.goods.dao.PurchaseDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.goods.domain.vo.PurchaseVO">
+        SELECT
+        *
+        FROM t_purchase
+        <where>
+            <!--采购单号-->
+            <if test="queryForm.purchaseNo != null and queryForm.purchaseNo != ''">
+                        AND INSTR(t_purchase.purchase_no,#{queryForm.purchaseNo})
+            </if>
+            <!--供货厂家-->
+            <if test="queryForm.supplier != null and queryForm.supplier != ''">
+                        AND INSTR(t_purchase.supplier,#{queryForm.supplier})
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t_purchase.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t_purchase.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="batchUpdateDeleted">
+        update t_purchase set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_purchase set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+</mapper>
