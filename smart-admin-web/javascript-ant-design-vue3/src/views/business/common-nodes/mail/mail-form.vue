@@ -47,6 +47,7 @@ import { measurementApi } from '/@/api/business/measurement/measurement-api';
 import { projectApi } from '/@/api/business/project/project-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
+import { PROJECT_TYPE_SYSTEM_ENUM } from '/@/constants/business/project/system-certification-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
 
 // ------------------------ 事件 ------------------------
@@ -138,8 +139,9 @@ function onJump() {
         },
     });
 }
-
-
+function isProjectTypeInEnum(projectType) {
+    return Object.values(PROJECT_TYPE_SYSTEM_ENUM).some(enumItem => enumItem.value === projectType);
+}
 
 // 新建、编辑API
 async function save(nodeStatus) {
@@ -150,7 +152,7 @@ async function save(nodeStatus) {
         console.log('form', form);
         if (form.projectType < 40) {
             await projectApi.update(form);
-        } else if (form.projectType >= 40 && form.projectType < 50) {
+        } else if (isProjectTypeInEnum(form.projectType)) {
             await systemCertificationApi.update(form);
         } else if (form.projectType >= 50 && form.projectType < 60) {
             await measurementApi.update(form);
