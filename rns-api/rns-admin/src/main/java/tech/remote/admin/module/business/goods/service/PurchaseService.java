@@ -1,6 +1,8 @@
 package tech.remote.admin.module.business.goods.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.goods.dao.PurchaseDao;
 import tech.remote.admin.module.business.goods.domain.entity.PurchaseEntity;
 import tech.remote.admin.module.business.goods.domain.form.PurchaseAddForm;

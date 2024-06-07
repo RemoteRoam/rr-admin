@@ -1,6 +1,8 @@
 package tech.remote.admin.module.business.goods.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.goods.dao.StocktakeItemDao;
 import tech.remote.admin.module.business.goods.domain.entity.StocktakeItemEntity;
 import tech.remote.admin.module.business.goods.domain.form.StocktakeItemAddForm;

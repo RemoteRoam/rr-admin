@@ -1,6 +1,8 @@
 package tech.remote.admin.module.business.goods.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.goods.dao.InventoryDao;
 import tech.remote.admin.module.business.goods.domain.entity.InventoryEntity;
 import tech.remote.admin.module.business.goods.domain.form.InventoryAddForm;
