@@ -11,6 +11,7 @@ import tech.remote.admin.module.business.goods.domain.form.GoodsUpdateForm;
 import tech.remote.admin.module.business.goods.domain.vo.GoodsExcelVO;
 import tech.remote.admin.module.business.goods.domain.vo.GoodsVO;
 import tech.remote.admin.module.business.goods.service.GoodsService;
+import tech.remote.admin.module.business.project.domain.vo.ProjectLabVO;
 import tech.remote.base.common.domain.PageResult;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.ValidateList;
@@ -101,4 +102,15 @@ public class GoodsController {
                 .doWrite(goodsList);
     }
 
+    @Operation(summary = "查询详情 @author cbh")
+    @GetMapping("/goods/get/{id}")
+    public ResponseDTO<GoodsVO> getDetail(@PathVariable Long id) {
+        return ResponseDTO.ok(goodsService.getDetail(id));
+    }
+
+    @Operation(summary = "根据商品分类查询列表 @author cbh")
+    @GetMapping("/goods/list/{categoryId}")
+    public ResponseDTO<List<GoodsVO>> getList(@PathVariable Long categoryId) {
+        return ResponseDTO.ok(goodsService.list(categoryId));
+    }
 }

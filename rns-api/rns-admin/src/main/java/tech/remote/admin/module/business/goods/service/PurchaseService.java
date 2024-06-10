@@ -2,19 +2,26 @@ package tech.remote.admin.module.business.goods.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.remote.admin.module.business.goods.dao.PurchaseDao;
 import tech.remote.admin.module.business.goods.domain.entity.PurchaseEntity;
-import tech.remote.admin.module.business.goods.domain.form.PurchaseAddForm;
-import tech.remote.admin.module.business.goods.domain.form.PurchaseQueryForm;
-import tech.remote.admin.module.business.goods.domain.form.PurchaseUpdateForm;
+import tech.remote.admin.module.business.goods.domain.entity.PurchaseItemEntity;
+import tech.remote.admin.module.business.goods.domain.entity.SkusEntity;
+import tech.remote.admin.module.business.goods.domain.form.*;
+import tech.remote.admin.module.business.goods.domain.vo.PurchaseItemVO;
 import tech.remote.admin.module.business.goods.domain.vo.PurchaseVO;
+import tech.remote.admin.module.business.goods.manager.PurchaseItemManager;
+import tech.remote.admin.module.business.goods.manager.SkusManager;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections4.CollectionUtils;
+import tech.remote.base.module.support.serialnumber.constant.SerialNumberIdEnum;
+import tech.remote.base.module.support.serialnumber.service.SerialNumberService;
 
 import javax.annotation.Resource;
 
@@ -32,6 +39,18 @@ public class PurchaseService {
     @Resource
     private PurchaseDao purchaseDao;
 
+    @Resource
+    private PurchaseItemManager purchaseItemManager;
+
+    @Resource
+    private PurchaseItemService purchaseItemService;
+
+    @Resource
+    private SkusManager skusManager;
+
+    @Autowired
+    private SerialNumberService serialNumberService;
+
     /**
      * 分页查询
      *
@@ -48,9 +67,35 @@ public class PurchaseService {
     /**
      * 添加
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> add(PurchaseAddForm addForm) {
+        // 如果没有明细，直接返回
+        if (CollectionUtils.isEmpty(addForm.getItemList())){
+            return ResponseDTO.userErrorParam("明细不能为空");
+        }
+        // 明细不能超过300条
+        if (addForm.getItemList().size() > 300){
+            return ResponseDTO.userErrorParam("每次采购入库的商品规格型号不能超过300个");
+        }
         PurchaseEntity purchaseEntity = SmartBeanUtil.copy(addForm, PurchaseEntity.class);
+
+        String purchaseNo = serialNumberService.generate(SerialNumberIdEnum.PURCHASE_NO);
+        purchaseEntity.setPurchaseNo(purchaseNo);
         purchaseDao.insert(purchaseEntity);
+
+        // 插入明细
+        List<PurchaseItemAddForm> itemList = addForm.getItemList();
+        List<PurchaseItemEntity> entityList = SmartBeanUtil.copyList(itemList, PurchaseItemEntity.class);
+        List<SkusStockUpdateForm> skusStockUpdateFormList = SmartBeanUtil.copyList(itemList, SkusStockUpdateForm.class);
+        for (PurchaseItemEntity purchaseItemEntity : entityList) {
+
+            purchaseItemEntity.setPurchaseId(purchaseEntity.getId());
+        }
+        purchaseItemManager.saveBatch(entityList);
+
+        // 修改库存
+        skusManager.batchUpdateStock(skusStockUpdateFormList);
+
         return ResponseDTO.ok();
     }
 
@@ -91,5 +136,17 @@ public class PurchaseService {
 
         purchaseDao.updateDeleted(id,true);
         return ResponseDTO.ok();
+    }
+
+    /**
+     * 查询详情
+     */
+    public PurchaseVO getDetail(Long id) {
+        PurchaseEntity purchaseEntity = purchaseDao.selectById(id);
+        PurchaseVO purchaseVO = SmartBeanUtil.copy(purchaseEntity, PurchaseVO.class);
+        // 调用PurchaseItemService的listByPurchaseId方法,查询明细
+        List<PurchaseItemVO> purchaseItemVOList = purchaseItemService.listByPurchaseId(id);
+        purchaseVO.setItemVOList(purchaseItemVOList);
+        return purchaseVO;
     }
 }

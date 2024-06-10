@@ -2,6 +2,8 @@ package tech.remote.admin.module.business.goods.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -46,4 +48,6 @@ public class PurchaseVO {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "商品型号规格列表")
+    private List<PurchaseItemVO> itemVOList;
 }

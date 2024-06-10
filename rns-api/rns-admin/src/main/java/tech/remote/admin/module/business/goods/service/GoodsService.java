@@ -2,6 +2,7 @@ package tech.remote.admin.module.business.goods.service;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import tech.remote.admin.module.business.category.constant.CategoryTypeEnum;
@@ -10,12 +11,12 @@ import tech.remote.admin.module.business.category.service.CategoryQueryService;
 import tech.remote.admin.module.business.goods.constant.GoodsStatusEnum;
 import tech.remote.admin.module.business.goods.dao.GoodsDao;
 import tech.remote.admin.module.business.goods.domain.entity.GoodsEntity;
-import tech.remote.admin.module.business.goods.domain.form.GoodsAddForm;
-import tech.remote.admin.module.business.goods.domain.form.GoodsImportForm;
-import tech.remote.admin.module.business.goods.domain.form.GoodsQueryForm;
-import tech.remote.admin.module.business.goods.domain.form.GoodsUpdateForm;
+import tech.remote.admin.module.business.goods.domain.entity.SkusEntity;
+import tech.remote.admin.module.business.goods.domain.form.*;
 import tech.remote.admin.module.business.goods.domain.vo.GoodsExcelVO;
 import tech.remote.admin.module.business.goods.domain.vo.GoodsVO;
+import tech.remote.admin.module.business.goods.domain.vo.SkusVO;
+import tech.remote.admin.module.business.goods.manager.SkusManager;
 import tech.remote.base.common.code.UserErrorCode;
 import tech.remote.base.common.domain.PageResult;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -61,6 +62,12 @@ public class GoodsService {
     @Resource
     private DictCacheService dictCacheService;
 
+    @Resource
+    private SkusService skusService;
+
+    @Resource
+    private SkusManager skusManager;
+
     /**
      * 添加商品
      */
@@ -71,9 +78,14 @@ public class GoodsService {
         if (!res.getOk()) {
             return res;
         }
+        if (isGoodsNameAlreadyExists(addForm.getGoodsName(), null)) {
+            return ResponseDTO.userErrorParam("商品名称已经存在~");
+        }
         GoodsEntity goodsEntity = SmartBeanUtil.copy(addForm, GoodsEntity.class);
         goodsEntity.setDeletedFlag(Boolean.FALSE);
         goodsDao.insert(goodsEntity);
+        // 把addForm中的skuList插入到数据库
+        skusService.insertSkus(goodsEntity.getGoodsId(), addForm);
         dataTracerService.insert(goodsEntity.getGoodsId(), DataTracerTypeEnum.GOODS);
         return ResponseDTO.ok();
     }
@@ -88,11 +100,20 @@ public class GoodsService {
         if (!res.getOk()) {
             return res;
         }
+        if (isGoodsNameAlreadyExists(updateForm.getGoodsName(), updateForm.getGoodsId())) {
+            return ResponseDTO.userErrorParam("商品名称已经存在~");
+        }
         GoodsEntity originEntity = goodsDao.selectById(updateForm.getGoodsId());
         GoodsEntity goodsEntity = SmartBeanUtil.copy(updateForm, GoodsEntity.class);
         goodsDao.updateById(goodsEntity);
+        skusService.updateSkus(updateForm);
         dataTracerService.update(updateForm.getGoodsId(), DataTracerTypeEnum.GOODS, originEntity, goodsEntity);
         return ResponseDTO.ok();
+    }
+
+    private boolean isGoodsNameAlreadyExists(String goodsName, Long goodsId) {
+        return goodsDao.selectCount(Wrappers.lambdaQuery(GoodsEntity.class)
+                .eq(GoodsEntity::getGoodsName, goodsName).ne(goodsId != null, GoodsEntity::getGoodsId, goodsId)) > 0;
     }
 
     /**
@@ -104,6 +125,13 @@ public class GoodsService {
         Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
         if (!optional.isPresent() || !CategoryTypeEnum.GOODS.equalsValue(optional.get().getCategoryType())) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "商品类目不存在~");
+        }
+        // 校验addForm.skuList里的skuName不能有重复的
+        if (CollectionUtils.isNotEmpty(addForm.getSkuList())) {
+            Set<String> skuNameSet = addForm.getSkuList().stream().map(SkusAddForm::getSkuName).collect(Collectors.toSet());
+            if (skuNameSet.size() != addForm.getSkuList().size()) {
+                return ResponseDTO.userErrorParam("规格型号名称不能有重复的");
+            }
         }
 
         return ResponseDTO.ok();
@@ -206,5 +234,22 @@ public class GoodsService {
                 )
                 .collect(Collectors.toList());
 
+    }
+
+    public GoodsVO getDetail(Long id) {
+        GoodsVO goodsVO = goodsDao.getDetail(id);
+
+        // 根据goodsId查询skusList
+        List<SkusEntity> skusList = skusManager.list(Wrappers.lambdaQuery(SkusEntity.class)
+                .eq(SkusEntity::getGoodsId, id));
+        goodsVO.setSkuList(SmartBeanUtil.copyList(skusList, SkusVO.class));
+        return goodsVO;
+    }
+
+    public List<GoodsVO> list(Long categoryId) {
+        List<GoodsEntity> goodsEntityList = goodsDao.selectList(Wrappers.lambdaQuery(GoodsEntity.class)
+                .eq(GoodsEntity::getCategoryId, categoryId)
+                .eq(GoodsEntity::getDeletedFlag, false));
+        return SmartBeanUtil.copyList(goodsEntityList, GoodsVO.class);
     }
 }

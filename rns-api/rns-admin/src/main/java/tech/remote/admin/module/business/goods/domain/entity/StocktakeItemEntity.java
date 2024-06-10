@@ -31,17 +31,17 @@ public class StocktakeItemEntity {
     /**
      * 型号规格ID
      */
-    private Integer skuId;
+    private Long skuId;
 
     /**
      * 商品ID
      */
-    private Integer goodsId;
+    private Long goodsId;
 
     /**
      * 商品类目ID
      */
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 盘点数量

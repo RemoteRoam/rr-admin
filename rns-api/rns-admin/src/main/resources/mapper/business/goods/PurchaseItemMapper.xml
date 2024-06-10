@@ -27,5 +27,17 @@
         </where>
     </select>
 
+    <!-- 根据采购入库单ID查询采购入库单明细 -->
+    <select id="listByPurchaseId"
+            resultType="tech.remote.admin.module.business.goods.domain.vo.PurchaseItemVO">
+        SELECT
+            i.*, c.category_name as categoryName,  g.goods_name as goodsName, s.sku_name as skuName, s.weight
+        FROM t_purchase_item i
+                 LEFT JOIN t_goods g ON i.goods_id = g.goods_id
+                 LEFT JOIN t_category c ON i.category_id = c.category_id
+        LEFT JOIN t_skus s ON i.sku_id = s.sku_id
+        WHERE i.purchase_id = #{purchaseId}
+    </select>
+
 
 </mapper>

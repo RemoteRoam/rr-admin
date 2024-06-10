@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 public class GoodsQueryForm extends PageParam {
 
     @Schema(description = "商品分类")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "搜索词")
     @Length(max = 30, message = "搜索词最多30字符")

@@ -18,13 +18,19 @@ public class SkusVO {
 
 
     @Schema(description = "型号规格ID")
-    private Integer skuId;
+    private Long skuId;
 
     @Schema(description = "商品ID")
-    private Integer goodsId;
+    private Long goodsId;
+
+    @Schema(description = "商品名称")
+    private String goodsName;
 
     @Schema(description = "商品类目ID")
-    private Integer categoryId;
+    private Long categoryId;
+
+    @Schema(description = "商品分类")
+    private String categoryName;
 
     @Schema(description = "型号规格名称")
     private String skuName;

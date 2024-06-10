@@ -12,6 +12,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 商品 添加表单
@@ -53,4 +54,7 @@ public class GoodsAddForm {
 
     @Schema(description = "备注|可选")
     private String remark;
+
+    @Schema(description = "SKU列表")
+    private List<SkusAddForm> skuList;
 }

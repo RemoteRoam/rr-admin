@@ -1,14 +1,15 @@
 package tech.remote.admin.module.business.goods.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.goods.dao.SkusDao;
 import tech.remote.admin.module.business.goods.domain.entity.SkusEntity;
-import tech.remote.admin.module.business.goods.domain.form.SkusAddForm;
-import tech.remote.admin.module.business.goods.domain.form.SkusQueryForm;
-import tech.remote.admin.module.business.goods.domain.form.SkusUpdateForm;
+import tech.remote.admin.module.business.goods.domain.form.*;
 import tech.remote.admin.module.business.goods.domain.vo.SkusVO;
+import tech.remote.admin.module.business.goods.manager.SkusManager;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -31,6 +32,9 @@ public class SkusService {
 
     @Resource
     private SkusDao skusDao;
+
+    @Resource
+    private SkusManager skusManager;
 
     /**
      * 分页查询
@@ -84,12 +88,34 @@ public class SkusService {
     /**
      * 单个删除
      */
-    public ResponseDTO<String> delete(Integer skuId) {
+    public ResponseDTO<String> delete(Long skuId) {
         if (null == skuId){
             return ResponseDTO.ok();
         }
 
         skusDao.updateDeleted(skuId,true);
         return ResponseDTO.ok();
+    }
+
+    public void insertSkus(Long goodsId, GoodsAddForm addForm) {
+        if (CollectionUtils.isEmpty(addForm.getSkuList())) {
+            return;
+        }
+        List<SkusEntity> skusList = addForm.getSkuList().stream().map(skusAddForm -> {
+            SkusEntity skusEntity = SmartBeanUtil.copy(skusAddForm, SkusEntity.class);
+            skusEntity.setGoodsId(goodsId);
+            skusEntity.setCategoryId(addForm.getCategoryId());
+            return skusEntity;
+        }).collect(Collectors.toList());
+        skusManager.saveBatch(skusList);
+    }
+
+    public void updateSkus(GoodsUpdateForm updateForm) {
+        // 先根据goodsId删除所有型号规格数据，然后重新插入
+        if (CollectionUtils.isEmpty(updateForm.getSkuList())) {
+            return;
+        }
+        skusDao.delete(Wrappers.lambdaQuery(SkusEntity.class).eq(SkusEntity::getGoodsId, updateForm.getGoodsId()));
+        this.insertSkus(updateForm.getGoodsId(), updateForm);
     }
 }

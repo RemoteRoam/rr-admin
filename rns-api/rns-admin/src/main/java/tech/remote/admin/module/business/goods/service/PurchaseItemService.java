@@ -92,4 +92,11 @@ public class PurchaseItemService {
         purchaseItemDao.deleteById(id);
         return ResponseDTO.ok();
     }
+
+    /**
+     * 根据采购单ID查询明细
+     */
+    public List<PurchaseItemVO> listByPurchaseId(Long id) {
+        return purchaseItemDao.listByPurchaseId(id);
+    }
 }

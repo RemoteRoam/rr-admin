@@ -60,7 +60,7 @@ public class SkusController {
 
     @Operation(summary = "单个删除 @author cbh")
     @GetMapping("/skus/delete/{skuId}")
-    public ResponseDTO<String> batchDelete(@PathVariable Integer skuId) {
+    public ResponseDTO<String> batchDelete(@PathVariable Long skuId) {
         return skusService.delete(skuId);
     }
 }

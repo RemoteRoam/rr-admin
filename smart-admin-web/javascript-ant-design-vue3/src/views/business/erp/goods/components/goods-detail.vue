@@ -1,7 +1,6 @@
 <template>
-  <a-modal :title="form.goodsId ? '编辑' : '添加'" :width="600" :open="visible" ok-text="确认" cancel-text="取消" @ok="onSubmit"
-    @cancel="onClose">
-    <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
+  <a-modal title="商品详情" :width="600" :open="visible" cancel-text="取消" @cancel="onClose" :footer="null">
+    <a-form ref="formRef" :model="form" :label-col="{ span: 5 }" disabled>
       <a-form-item label="商品分类" name="categoryId">
         <CategoryTree v-model:value="form.categoryId" placeholder="请选择商品分类"
           :categoryType="CATEGORY_TYPE_ENUM.GOODS.value" />
@@ -10,19 +9,13 @@
         <a-input v-model:value="form.goodsName" placeholder="请输入商品名称" />
       </a-form-item>
 
-      <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="handleAdd">添加规格型号</a-button>
-      <a-table bordered :data-source="dataSource" :columns="dynamicColumns" :scroll="{ y: 300 }">
+      <a-table bordered :data-source="dataSource" :columns="dynamicColumns" :scroll="{ y: 300 }" :pagination="false">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'skuName'">
             <a-input v-model:value="record.skuName" />
           </template>
           <template v-if="column.dataIndex === 'weight'">
             <a-input-number v-model:value="record.weight" />
-          </template>
-          <template v-else-if="column.dataIndex === 'operation'">
-            <a-popconfirm v-if="dataSource.length" title="确认删除?" @confirm="onDelete(record.key)">
-              <a>删除</a>
-            </a-popconfirm>
           </template>
         </template>
       </a-table>
@@ -63,20 +56,19 @@ const formDefault = {
   skuList: [],
 };
 let form = reactive({ ...formDefault });
-const rules = {
-  categoryId: [{ required: true, message: '请选择商品分类' }],
-  goodsName: [{ required: true, message: '商品名称不能为空' }],
-};
+
+const dataSource = ref([{
+  key: '1',
+  skuName: '',
+  weight: undefined,
+}]);
 
 // 是否展示抽屉
 const visible = ref(false);
 
 function showDrawer(rowData) {
   Object.assign(form, formDefault);
-  if (rowData.goodsId) {
-    detail(rowData.goodsId);
-  }
-
+  detail(rowData.goodsId);
   visible.value = true;
 
 }
@@ -104,10 +96,6 @@ const dynamicColumns = computed(() => {
       dataIndex: 'skuName',
       width: '50%',
     },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-    },
   ];
 
   if (form.categoryId === 1) {
@@ -120,24 +108,6 @@ const dynamicColumns = computed(() => {
   return baseColumns;
 });
 
-const dataSource = ref([{
-  key: '1',
-  skuName: '',
-  weight: undefined,
-}]);
-const count = computed(() => dataSource.value.length + 1);
-
-const onDelete = key => {
-  dataSource.value = dataSource.value.filter(item => item.key !== key);
-};
-const handleAdd = () => {
-  const newData = {
-    key: `${count.value}`,
-    skuName: '',
-    weight: undefined,
-  };
-  dataSource.value.push(newData);
-};
 
 function onClose() {
   Object.assign(form, formDefault);
@@ -149,34 +119,6 @@ function onClose() {
   visible.value = false;
 }
 
-function onSubmit() {
-  formRef.value
-    .validate()
-    .then(async () => {
-      SmartLoading.show();
-      try {
-        form.skuList = cloneDeep(dataSource.value);
-        let params = cloneDeep(form);
-
-        if (form.goodsId) {
-          await goodsApi.updateGoods(params);
-        } else {
-          await goodsApi.addGoods(params);
-        }
-        message.success(`${form.goodsId ? '修改' : '添加'}成功`);
-        onClose();
-        emit('reloadList');
-      } catch (error) {
-        smartSentry.captureError(error);
-      } finally {
-        SmartLoading.hide();
-      }
-    })
-    .catch((error) => {
-      console.log('error', error);
-      message.error('参数验证错误，请仔细填写表单数据!');
-    });
-}
 
 defineExpose({
   showDrawer,

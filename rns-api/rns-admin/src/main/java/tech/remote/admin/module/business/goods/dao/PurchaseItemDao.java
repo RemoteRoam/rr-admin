@@ -32,4 +32,10 @@ public interface PurchaseItemDao extends BaseMapper<PurchaseItemEntity> {
     List<PurchaseItemVO> queryPage(Page page, @Param("queryForm") PurchaseItemQueryForm queryForm);
 
 
+    /**
+     * 根据采购单ID查询采购明细
+     * @param purchaseId
+     * @return
+     */
+    List<PurchaseItemVO> listByPurchaseId(@Param("purchaseId")Long purchaseId);
 }

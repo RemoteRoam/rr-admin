@@ -26,15 +26,15 @@ public class PurchaseItemUpdateForm {
 
     @Schema(description = "型号规格ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "型号规格ID 不能为空")
-    private Integer skuId;
+    private Long skuId;
 
     @Schema(description = "商品ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "商品ID 不能为空")
-    private Integer goodsId;
+    private Long goodsId;
 
     @Schema(description = "商品类目ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "商品类目ID 不能为空")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "采购数量", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "采购数量 不能为空")

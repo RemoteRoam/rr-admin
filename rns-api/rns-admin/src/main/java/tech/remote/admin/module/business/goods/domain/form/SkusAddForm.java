@@ -20,11 +20,11 @@ public class SkusAddForm {
 
     @Schema(description = "商品ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "商品ID 不能为空")
-    private Integer goodsId;
+    private Long goodsId;
 
     @Schema(description = "商品类目ID", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "商品类目ID 不能为空")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "型号规格名称", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "型号规格名称 不能为空")
@@ -32,14 +32,5 @@ public class SkusAddForm {
 
     @Schema(description = "排的重量")
     private BigDecimal weight;
-
-    @Schema(description = "上架状态")
-    private Integer shelvesFlag;
-
-    @Schema(description = "删除状态")
-    private Integer deletedFlag;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
 
 }

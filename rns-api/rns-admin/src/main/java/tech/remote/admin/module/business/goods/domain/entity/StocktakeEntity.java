@@ -32,7 +32,7 @@ public class StocktakeEntity {
     /**
      * 商品类目ID
      */
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 删除状态

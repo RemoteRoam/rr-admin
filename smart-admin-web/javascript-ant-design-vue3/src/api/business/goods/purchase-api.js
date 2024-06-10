@@ -12,7 +12,7 @@ export const purchaseApi = {
   /**
    * 分页查询  @author  cbh
    */
-  queryPage : (param) => {
+  queryPage: (param) => {
     return postRequest('/purchase/queryPage', param);
   },
 
@@ -20,14 +20,14 @@ export const purchaseApi = {
    * 增加  @author  cbh
    */
   add: (param) => {
-      return postRequest('/purchase/add', param);
+    return postRequest('/purchase/add', param);
   },
 
   /**
    * 修改  @author  cbh
    */
   update: (param) => {
-      return postRequest('/purchase/update', param);
+    return postRequest('/purchase/update', param);
   },
 
 
@@ -35,14 +35,21 @@ export const purchaseApi = {
    * 删除  @author  cbh
    */
   delete: (id) => {
-      return getRequest(`/purchase/delete/${id}`);
+    return getRequest(`/purchase/delete/${id}`);
   },
 
   /**
    * 批量删除  @author  cbh
    */
   batchDelete: (idList) => {
-      return postRequest('/purchase/batchDelete', idList);
+    return postRequest('/purchase/batchDelete', idList);
   },
+
+  /**
+   * 通过id查询  @param id  主键id
+   */
+  getById: (id) => {
+    return getRequest(`/purchase/get/${id}`);
+  }
 
 };

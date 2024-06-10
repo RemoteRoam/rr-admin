@@ -26,7 +26,7 @@ public class StocktakeUpdateForm {
     private String stocktakeNo;
 
     @Schema(description = "商品类目ID")
-    private Integer categoryId;
+    private Long categoryId;
 
     @Schema(description = "删除状态")
     private Integer deletedFlag;

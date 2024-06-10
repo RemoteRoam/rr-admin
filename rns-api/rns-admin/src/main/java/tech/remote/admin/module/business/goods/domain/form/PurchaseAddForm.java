@@ -2,6 +2,8 @@ package tech.remote.admin.module.business.goods.domain.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -21,9 +23,6 @@ public class PurchaseAddForm {
     @Schema(description = "供货厂家")
     private String supplier;
 
-    @Schema(description = "删除状态")
-    private Integer deletedFlag;
-
     @Schema(description = "备注")
     private String remark;
 
@@ -33,7 +32,7 @@ public class PurchaseAddForm {
     @Schema(description = "创建人姓名")
     private String createUserName;
 
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    @Schema(description = "采购单明细")
+    private List<PurchaseItemAddForm> itemList;
 
 }

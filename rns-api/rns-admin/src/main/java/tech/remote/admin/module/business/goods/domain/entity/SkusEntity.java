@@ -23,17 +23,17 @@ public class SkusEntity {
      * 型号规格ID
      */
     @TableId(type = IdType.AUTO)
-    private Integer skuId;
+    private Long skuId;
 
     /**
      * 商品ID
      */
-    private Integer goodsId;
+    private Long goodsId;
 
     /**
      * 商品类目ID
      */
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 型号规格名称
@@ -44,6 +44,11 @@ public class SkusEntity {
      * 排的重量
      */
     private BigDecimal weight;
+
+    /**
+     * SKU库存数量
+     */
+    private Integer quantity;
 
     /**
      * 上架状态

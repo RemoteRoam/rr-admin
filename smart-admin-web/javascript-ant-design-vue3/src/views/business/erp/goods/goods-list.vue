@@ -96,6 +96,9 @@
     <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="goodsId" bordered :pagination="false"
       :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
       <template #bodyCell="{ text, record, column }">
+        <template v-if="column.dataIndex === 'goodsName'">
+          <a @click="detailGoods(record)">{{ record.goodsName }}</a>
+        </template>
         <!-- <template v-if="column.dataIndex === 'place'">
           <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
         </template>
@@ -121,6 +124,7 @@
     </div>
 
     <GoodsFormModal ref="formModal" @reloadList="queryData" />
+    <GoodsDetail ref="goodsDetailRef" @reloadList="queryData" />
 
     <a-modal v-model:open="importModalShowFlag" title="导入" @onCancel="hideImportModal" @ok="hideImportModal">
       <div style="text-align: center; width: 400px; margin: 0 auto">
@@ -147,6 +151,7 @@
 </template>
 <script setup>
 import GoodsFormModal from './components/goods-form-modal.vue';
+import GoodsDetail from './components/goods-detail.vue';
 import { reactive, ref, onMounted } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -261,9 +266,14 @@ onMounted(queryData);
 
 // ---------------------------- 添加/修改 ----------------------------
 const formModal = ref();
+const goodsDetailRef = ref();
 
 function addGoods(goodsData) {
   formModal.value.showDrawer(goodsData);
+}
+
+function detailGoods(goodsData) {
+  goodsDetailRef.value.showDrawer(goodsData);
 }
 // ---------------------------- 单个删除 ----------------------------
 
@@ -329,6 +339,14 @@ async function batchDelete() {
   } finally {
     SmartLoading.hide();
   }
+}
+
+
+async function detail(record) {
+  console.log(record);
+  let det = await goodsApi.detail(record.goodsId);
+  console.log(det);
+  // router.push({ path: '/project/lab-detail', query: { id: record.id, customerName: record.customerName, projectType: record.projectType, category: record.category } });
 }
 
 // ------------------------------- 导出和导入 ---------------------------------

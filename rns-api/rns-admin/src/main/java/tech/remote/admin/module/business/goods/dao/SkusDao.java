@@ -34,7 +34,7 @@ public interface SkusDao extends BaseMapper<SkusEntity> {
     /**
      * 更新删除状态
      */
-    long updateDeleted(@Param("skuId")Integer skuId,@Param("${deletedFlag}")boolean deletedFlag);
+    long updateDeleted(@Param("skuId")Long skuId,@Param("${deletedFlag}")boolean deletedFlag);
     /**
      * 批量更新删除状态
      */

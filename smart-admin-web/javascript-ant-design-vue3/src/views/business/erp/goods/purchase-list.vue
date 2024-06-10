@@ -10,13 +10,13 @@
     <a-form class="smart-query-form">
         <a-row class="smart-query-form-row">
             <a-form-item label="采购单号" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.purchaseNo" placeholder="采购单号" />
+                <a-input style="width: 190px" v-model:value="queryForm.purchaseNo" placeholder="采购单号" />
             </a-form-item>
             <a-form-item label="供货厂家" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.supplier" placeholder="供货厂家" />
+                <a-input style="width: 200px" v-model:value="queryForm.supplier" placeholder="供货厂家" />
             </a-form-item>
             <a-form-item label="创建时间" class="smart-query-form-item">
-                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 150px"
+                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeCreateTime" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
@@ -47,13 +47,7 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="confirmBatchDelete" type="danger" size="small"
-                    :disabled="selectedRowKeyList.length == 0">
-                    <template #icon>
-                        <DeleteOutlined />
-                    </template>
-                    批量删除
-                </a-button>
+
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -65,6 +59,10 @@
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
             :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
             <template #bodyCell="{ text, record, column }">
+                <!---------- purchaseNo添加超链接 ----------->
+                <template v-if="column.dataIndex === 'purchaseNo'">
+                    <a @click="showPurchaseDetail(record.id)">{{ text }}</a>
+                </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
                         <a-button @click="showForm(record)" type="link">编辑</a-button>
@@ -83,6 +81,7 @@
         </div>
 
         <PurchaseForm ref="formRef" @reloadList="queryData" />
+        <purchase-detail ref="detailRef" />
 
     </a-card>
 </template>
@@ -96,18 +95,19 @@ import { smartSentry } from '/@/lib/smart-sentry';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import PurchaseForm from './purchase-form.vue';
+import PurchaseDetail from './purchase-detail.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
-    {
-        title: '采购入库ID',
-        dataIndex: 'id',
-        ellipsis: true,
-    },
+    // {
+    //     title: '采购入库ID',
+    //     dataIndex: 'id',
+    //     ellipsis: true,
+    // },
     {
         title: '采购单号',
         dataIndex: 'purchaseNo',
-        ellipsis: true,
+        width: 200,
     },
     {
         title: '供货厂家',
@@ -119,11 +119,11 @@ const columns = ref([
         dataIndex: 'remark',
         ellipsis: true,
     },
-    {
-        title: '创建人',
-        dataIndex: 'createUserId',
-        ellipsis: true,
-    },
+    // {
+    //     title: '创建人',
+    //     dataIndex: 'createUserId',
+    //     ellipsis: true,
+    // },
     {
         title: '创建人姓名',
         dataIndex: 'createUserName',
@@ -134,27 +134,13 @@ const columns = ref([
         dataIndex: 'createTime',
         ellipsis: true,
     },
-    {
-        title: '更新人',
-        dataIndex: 'updateUserId',
-        ellipsis: true,
-    },
-    {
-        title: '更新人姓名',
-        dataIndex: 'updateUserName',
-        ellipsis: true,
-    },
-    {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        ellipsis: true,
-    },
-    {
-        title: '操作',
-        dataIndex: 'action',
-        fixed: 'right',
-        width: 90,
-    },
+
+    // {
+    //     title: '操作',
+    //     dataIndex: 'action',
+    //     fixed: 'right',
+    //     width: 90,
+    // },
 ]);
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
@@ -209,9 +195,15 @@ onMounted(queryData);
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();
+const detailRef = ref();
 
 function showForm(data) {
     formRef.value.show(data);
+}
+
+function showPurchaseDetail(id) {
+    // 使用$refs调用showDetail方法
+    detailRef.value.showDetail(id);
 }
 
 // ---------------------------- 单个删除 ----------------------------
