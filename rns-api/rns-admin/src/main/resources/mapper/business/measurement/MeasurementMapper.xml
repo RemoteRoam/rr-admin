@@ -10,6 +10,7 @@
         left join t_customer c on t.customer_id = c.customer_id
         LEFT JOIN t_employee e ON t.manager_id = e.employee_id
         <where>
+            t.deleted_flag = 0
             <!--项目编号-->
             <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
                         AND INSTR(t.project_no,#{queryForm.projectNo})
@@ -54,6 +55,7 @@
         left join t_customer c on t.customer_id = c.customer_id
         LEFT JOIN t_employee e ON t.manager_id = e.employee_id
         <where>
+            t.deleted_flag = 0
             <!--项目编号-->
             <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
                 AND INSTR(t.project_no,#{queryForm.projectNo})
@@ -127,6 +129,7 @@
         left join t_measurement_task mt on t.id = mt.project_id
         left join t_third_party p1 on mt.third_party_id = p1.id
         <where>
+            t.deleted_flag = 0
             <!--项目编号-->
             <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
                 AND INSTR(t.project_no,#{queryForm.projectNo})

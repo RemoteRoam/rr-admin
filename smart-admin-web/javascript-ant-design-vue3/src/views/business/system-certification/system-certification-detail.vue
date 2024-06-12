@@ -136,8 +136,14 @@
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item label="审核日期" name="auditDate">
+              <a-form-item label="审核开始日期" name="auditDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.auditDate" style="width: 95%"
+                  placeholder="" disabled />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label="审核结束日期" name="auditDateEnd">
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.auditDateEnd" style="width: 95%"
                   placeholder="" disabled />
               </a-form-item>
             </a-col>

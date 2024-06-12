@@ -129,11 +129,11 @@ const columns = ref([
         dataIndex: 'instrument',
         ellipsis: true,
     },
-    {
-        title: '实验费金额',
-        dataIndex: 'experimentAmount',
-        ellipsis: true,
-    },
+    // {
+    //     title: '实验费金额',
+    //     dataIndex: 'experimentAmount',
+    //     ellipsis: true,
+    // },
     {
         title: '成本价',
         dataIndex: 'costAmount',

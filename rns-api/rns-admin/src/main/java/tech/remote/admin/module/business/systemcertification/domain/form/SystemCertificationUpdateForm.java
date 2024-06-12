@@ -1,10 +1,13 @@
 package tech.remote.admin.module.business.systemcertification.domain.form;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 体系认证表 更新表单
@@ -78,8 +81,11 @@ public class SystemCertificationUpdateForm {
     @Schema(description = "审核老师")
     private String auditTeacher;
 
-    @Schema(description = "审核日期")
+    @Schema(description = "审核开始日期")
     private LocalDate auditDate;
+
+    @Schema(description = "审核结束日期")
+    private LocalDate auditDateEnd;
 
     @Schema(description = "咨询老师")
     private String consultationTeacher;

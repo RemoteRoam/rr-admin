@@ -90,8 +90,11 @@ public class SystemCertificationVO {
     @Schema(description = "审核老师")
     private String auditTeacher;
 
-    @Schema(description = "审核日期")
+    @Schema(description = "审核开始日期")
     private LocalDate auditDate;
+
+    @Schema(description = "审核结束日期")
+    private LocalDate auditDateEnd;
 
     @Schema(description = "咨询老师")
     private String consultationTeacher;

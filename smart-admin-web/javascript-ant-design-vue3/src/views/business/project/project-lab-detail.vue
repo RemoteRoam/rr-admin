@@ -11,7 +11,7 @@
           <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
           <a-descriptions-item label="项目类型">{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM',
             detail.projectType) }}</a-descriptions-item>
-          <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
+          <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue(enumName,
             detail.category) }}</a-descriptions-item>
           <a-descriptions-item label="创建时间">{{ detail.createTime }}</a-descriptions-item>
           <a-descriptions-item label="创建人">{{ detail.createUserName }}</a-descriptions-item>
@@ -199,7 +199,7 @@
 
 <script setup>
 import _ from 'lodash';
-import { reactive, onMounted, onActivated, ref } from 'vue';
+import { reactive, onMounted, onActivated, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { projectApi } from '/@/api/business/project/project-api';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
@@ -234,6 +234,10 @@ onActivated(() => {
     queryForm.projectId = route.query.id;
     queryData();
   }
+});
+
+const enumName = computed(() => {
+  return Number(route.query.projectType) == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
 });
 
 //编辑

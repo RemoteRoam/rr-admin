@@ -14,7 +14,7 @@
                     <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
                     <a-descriptions-item label="项目类型">{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM',
                         detail.projectType) }}</a-descriptions-item>
-                    <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
+                    <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue(enumName,
                         detail.category) }}</a-descriptions-item>
                     <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
 
@@ -92,7 +92,7 @@
     </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted, onActivated } from 'vue';
+import { reactive, ref, onMounted, onActivated, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -275,6 +275,10 @@ onActivated(() => {
     queryForm.projectType = route.query.projectType;
     queryForm.taskId = route.query.taskId;
     queryData();
+});
+
+const enumName = computed(() => {
+    return Number(route.query.projectType) == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
 });
 
 // ---------------------------- 添加/修改 ----------------------------

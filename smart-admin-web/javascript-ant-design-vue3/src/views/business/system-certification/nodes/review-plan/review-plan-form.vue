@@ -18,9 +18,17 @@
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="审核日期" name="auditDate">
+                    <a-form-item label="审核开始日期" name="auditDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.auditDate" style="width: 100%"
-                            placeholder="审核日期" />
+                            placeholder="审核开始日期" />
+                    </a-form-item>
+                </a-col>
+            </a-row>
+            <a-row>
+                <a-col :span="24">
+                    <a-form-item label="审核结束日期" name="auditDateEnd">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.auditDateEnd" style="width: 100%"
+                            placeholder="审核结束日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -93,7 +101,8 @@ const formDefault = {
     nodeStatus: 0, //节点状态
     passReason: undefined, //跳过原因
     auditTeacher: undefined, //审核老师
-    auditDate: undefined, //审核日期
+    auditDate: undefined, //审核开始日期
+    auditDateEnd: undefined, //审核结束日期
     consultationTeacher: undefined, //咨询老师
 };
 

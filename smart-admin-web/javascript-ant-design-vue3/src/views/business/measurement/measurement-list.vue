@@ -105,8 +105,8 @@
                                 </a-menu>
                             </template>
                         </a-dropdown>
-                        <!-- <a-button @click="showForm(record)" type="link">编辑</a-button>
-                        <a-button @click="onDelete(record)" danger type="link">删除</a-button> -->
+                        <!-- <a-button @click="showForm(record)" type="link">编辑</a-button> -->
+                        <a-button @click="onDelete(record)" danger type="link">删除</a-button>
                     </div>
                 </template>
             </template>
