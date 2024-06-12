@@ -25,6 +25,9 @@ public enum SerialNumberIdEnum implements BaseEnum {
     MEASUREMENT(5, "仪器计量项目编号"),
     MEASUREMENT_TASK(6, "仪器计量项目实验室任务编号"),
     PROJECT_TASK(7, "产品项目实验室任务编号"),
+    PURCHASE_NO(8, "采购单号"),
+    SALES_NO(9, "销售单号"),
+    STOCKTAKE_NO(10, "盘点单号"),
 
     ;
 

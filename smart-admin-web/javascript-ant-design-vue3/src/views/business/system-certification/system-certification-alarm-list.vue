@@ -109,7 +109,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
             <template #bodyCell="{ text, record, column }">
 
@@ -209,6 +209,7 @@ const columns = ref([
         title: '项目编号',
         dataIndex: 'projectNo',
         width: 150,
+        fixed: 'left',
     },
     {
         title: '项目类型',
@@ -266,8 +267,13 @@ const columns = ref([
         width: 80,
     },
     {
-        title: '审核日期',
+        title: '审核开始日期',
         dataIndex: 'auditDate',
+        width: 120,
+    },
+    {
+        title: '审核结束日期',
+        dataIndex: 'auditDateEnd',
         width: 120,
     },
     {

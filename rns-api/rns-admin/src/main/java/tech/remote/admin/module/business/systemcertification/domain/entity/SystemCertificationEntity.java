@@ -150,11 +150,18 @@ public class SystemCertificationEntity {
     private String auditTeacher;
 
     /**
-     * 审核日期
+     * 审核开始日期
      */
-    @DataTracerFieldLabel("审核日期")
+    @DataTracerFieldLabel("审核开始日期")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate auditDate;
+
+    /**
+     * 审核结束日期
+     */
+    @DataTracerFieldLabel("审核结束日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate auditDateEnd;
 
     /**
      * 咨询老师

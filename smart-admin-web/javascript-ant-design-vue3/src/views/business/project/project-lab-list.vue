@@ -14,7 +14,7 @@
                     <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
                     <a-descriptions-item label="项目类型">{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM',
                         detail.projectType) }}</a-descriptions-item>
-                    <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
+                    <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue(enumName,
                         detail.category) }}</a-descriptions-item>
                     <a-descriptions-item label="来源分类">{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM',
                         detail.sourceType) }}</a-descriptions-item>
@@ -57,7 +57,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
@@ -110,7 +110,7 @@
     </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted, onActivated } from 'vue';
+import { reactive, ref, onMounted, onActivated, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -318,6 +318,11 @@ onActivated(() => {
     queryForm.projectId = route.query.projectId;
     queryForm.projectType = route.query.projectType;
     queryData();
+});
+
+
+const enumName = computed(() => {
+    return Number(route.query.projectType) == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
 });
 
 // ---------------------------- 添加/修改 ----------------------------

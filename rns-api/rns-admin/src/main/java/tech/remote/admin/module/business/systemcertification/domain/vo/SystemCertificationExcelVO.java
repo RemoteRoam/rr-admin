@@ -77,8 +77,11 @@ public class SystemCertificationExcelVO {
     @ExcelProperty("审核老师")
     private String auditTeacher;
 
-    @ExcelProperty("审核日期")
+    @ExcelProperty("审核开始日期")
     private LocalDate auditDate;
+
+    @ExcelProperty("审核结束日期")
+    private LocalDate auditDateEnd;
 
     @ExcelProperty("咨询老师")
     private String consultationTeacher;

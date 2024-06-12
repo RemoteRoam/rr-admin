@@ -131,7 +131,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
             <template #bodyCell="{ text, record, column }">
 
@@ -289,8 +289,13 @@ const columns = ref([
         width: 120,
     },
     {
-        title: '审核日期',
+        title: '审核开始日期',
         dataIndex: 'auditDate',
+        width: 150,
+    },
+    {
+        title: '审核结束日期',
+        dataIndex: 'auditDateEnd',
         width: 150,
     },
     {

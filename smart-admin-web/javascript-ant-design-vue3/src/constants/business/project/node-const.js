@@ -34,6 +34,7 @@ const data = [
   { id: 28, node_code: "sampling_test", node_name: "抽检实验" },
   { id: 29, node_code: "pre_data_transfer", node_name: "前期资料传递" },
   { id: 30, node_code: "system_file_transfer", node_name: "体系文件传递" },
+  { id: 31, node_code: "delivery", node_name: "发货" },
 ];
 
 // 定义常量

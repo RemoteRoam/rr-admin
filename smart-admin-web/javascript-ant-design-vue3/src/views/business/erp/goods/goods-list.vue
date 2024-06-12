@@ -12,18 +12,14 @@
   <a-form class="smart-query-form">
     <a-row class="smart-query-form-row" v-privilege="'goods:query'">
       <a-form-item label="商品分类" class="smart-query-form-item">
-        <category-tree
-          width="150px"
-          v-model:value="queryForm.categoryId"
-          placeholder="请选择商品分类"
-          :categoryType="CATEGORY_TYPE_ENUM.GOODS.value"
-        />
+        <category-tree width="150px" v-model:value="queryForm.categoryId" placeholder="请选择商品分类"
+          :categoryType="CATEGORY_TYPE_ENUM.GOODS.value" />
       </a-form-item>
 
       <a-form-item label="商品名称" class="smart-query-form-item">
         <a-input style="width: 200px" v-model:value="queryForm.searchWord" placeholder="商品名称" />
       </a-form-item>
-
+      <!-- 
       <a-form-item label="产地" name="place" class="smart-query-form-item">
         <DictSelect key-code="GODOS_PLACE" v-model:value="queryForm.place" width="120px" />
       </a-form-item>
@@ -38,7 +34,7 @@
           <a-radio-button :value="true">上架</a-radio-button>
           <a-radio-button :value="false">下架</a-radio-button>
         </a-radio-group>
-      </a-form-item>
+      </a-form-item> -->
 
       <a-form-item class="smart-query-form-item">
         <a-button type="primary" @click="onSearch" v-privilege="'goods:query'">
@@ -69,19 +65,20 @@
           新建
         </a-button>
 
-        <a-button @click="confirmBatchDelete" danger size="small" :disabled="selectedRowKeyList.length === 0" v-privilege="'goods:batchDelete'">
+        <!-- <a-button @click="confirmBatchDelete" danger size="small" :disabled="selectedRowKeyList.length === 0"
+          v-privilege="'goods:batchDelete'">
           <template #icon>
             <DeleteOutlined />
           </template>
           批量删除
-        </a-button>
+        </a-button> -->
 
-        <a-button @click="showImportModal" type="primary" size="small" v-privilege="'goods:importGoods'">
+        <!-- <a-button @click="showImportModal" type="primary" size="small" v-privilege="'goods:importGoods'">
           <template #icon>
             <ImportOutlined />
           </template>
           导入
-        </a-button>
+        </a-button> -->
 
         <a-button @click="onExportGoods" type="primary" size="small" v-privilege="'goods:exportGoods'">
           <template #icon>
@@ -96,25 +93,21 @@
     </a-row>
     <!---------- 表格操作行 end ----------->
 
-    <a-table
-      size="small"
-      :dataSource="tableData"
-      :columns="columns"
-      rowKey="goodsId"
-      bordered
-      :pagination="false"
-      :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
-    >
+    <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="goodsId" bordered :pagination="false"
+      :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
       <template #bodyCell="{ text, record, column }">
-        <template v-if="column.dataIndex === 'place'">
+        <template v-if="column.dataIndex === 'goodsName'">
+          <a @click="detailGoods(record)">{{ record.goodsName }}</a>
+        </template>
+        <!-- <template v-if="column.dataIndex === 'place'">
           <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
         </template>
-        <template v-if="column.dataIndex === 'goodsStatus'">
+    <template v-if="column.dataIndex === 'goodsStatus'">
           <span>{{ $smartEnumPlugin.getDescByValue('GOODS_STATUS_ENUM', text) }}</span>
         </template>
-        <template v-if="column.dataIndex === 'shelvesFlag'">
+    <template v-if="column.dataIndex === 'shelvesFlag'">
           <span>{{ text ? '上架' : '下架' }}</span>
-        </template>
+        </template> -->
         <template v-if="column.dataIndex === 'action'">
           <div class="smart-table-operate">
             <a-button @click="addGoods(record)" type="link" v-privilege="'goods:update'">编辑</a-button>
@@ -125,37 +118,22 @@
     </a-table>
 
     <div class="smart-query-table-page">
-      <a-pagination
-        showSizeChanger
-        showQuickJumper
-        show-less-items
-        :pageSizeOptions="PAGE_SIZE_OPTIONS"
-        :defaultPageSize="queryForm.pageSize"
-        v-model:current="queryForm.pageNum"
-        v-model:pageSize="queryForm.pageSize"
-        :total="total"
-        @change="queryData"
-        @showSizeChange="queryData"
-        :show-total="(total) => `共${total}条`"
-      />
+      <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+        :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum" v-model:pageSize="queryForm.pageSize"
+        :total="total" @change="queryData" @showSizeChange="queryData" :show-total="(total) => `共${total}条`" />
     </div>
 
     <GoodsFormModal ref="formModal" @reloadList="queryData" />
+    <GoodsDetail ref="goodsDetailRef" @reloadList="queryData" />
 
     <a-modal v-model:open="importModalShowFlag" title="导入" @onCancel="hideImportModal" @ok="hideImportModal">
       <div style="text-align: center; width: 400px; margin: 0 auto">
         <a-button @click="downloadExcel"> <download-outlined />第一步：下载模板</a-button>
         <br />
         <br />
-        <a-upload
-          v-model:fileList="fileList"
-          name="file"
-          :multiple="false"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          accept=".xls,.xlsx"
-          :before-upload="beforeUpload"
-          @remove="handleRemove"
-        >
+        <a-upload v-model:fileList="fileList" name="file" :multiple="false"
+          action="https://www.mocky.io/v2/5cc8019d300000980a055e76" accept=".xls,.xlsx" :before-upload="beforeUpload"
+          @remove="handleRemove">
           <a-button>
             <upload-outlined />
             第二步：选择文件
@@ -172,244 +150,258 @@
   </a-card>
 </template>
 <script setup>
-  import GoodsFormModal from './components/goods-form-modal.vue';
-  import { reactive, ref, onMounted } from 'vue';
-  import { message, Modal } from 'ant-design-vue';
-  import { SmartLoading } from '/@/components/framework/smart-loading';
-  import { goodsApi } from '/@/api/business/goods/goods-api';
-  import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
-  import CategoryTree from '/@/components/business/category-tree-select/index.vue';
-  import { CATEGORY_TYPE_ENUM } from '/@/constants/business/erp/category-const';
-  import { smartSentry } from '/@/lib/smart-sentry';
-  import TableOperator from '/@/components/support/table-operator/index.vue';
-  import { TABLE_ID_CONST } from '/@/constants/support/table-id-const';
-  import { GOODS_STATUS_ENUM } from '/@/constants/business/erp/goods-const';
-  import DictSelect from '/@/components/support/dict-select/index.vue';
-  import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
-  import { FILE_FOLDER_TYPE_ENUM } from '/@/constants/support/file-const.js';
-  import FileUpload from '/@/components/support/file-upload/index.vue';
+import GoodsFormModal from './components/goods-form-modal.vue';
+import GoodsDetail from './components/goods-detail.vue';
+import { reactive, ref, onMounted } from 'vue';
+import { message, Modal } from 'ant-design-vue';
+import { SmartLoading } from '/@/components/framework/smart-loading';
+import { goodsApi } from '/@/api/business/goods/goods-api';
+import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+import CategoryTree from '/@/components/business/category-tree-select/index.vue';
+import { CATEGORY_TYPE_ENUM } from '/@/constants/business/erp/category-const';
+import { smartSentry } from '/@/lib/smart-sentry';
+import TableOperator from '/@/components/support/table-operator/index.vue';
+import { TABLE_ID_CONST } from '/@/constants/support/table-id-const';
+import { GOODS_STATUS_ENUM } from '/@/constants/business/erp/goods-const';
+import DictSelect from '/@/components/support/dict-select/index.vue';
+import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
+import { FILE_FOLDER_TYPE_ENUM } from '/@/constants/support/file-const.js';
+import FileUpload from '/@/components/support/file-upload/index.vue';
 
-  // ---------------------------- 表格列 ----------------------------
+// ---------------------------- 表格列 ----------------------------
 
-  const columns = ref([
-    {
-      title: '商品分类',
-      dataIndex: 'categoryName',
+const columns = ref([
+  {
+    title: '商品名称',
+    dataIndex: 'goodsName',
+  },
+  {
+    title: '商品分类',
+    dataIndex: 'categoryName',
+  },
+  // {
+  //   title: '商品状态',
+  //   dataIndex: 'goodsStatus',
+  // },
+  // {
+  //   title: '产地',
+  //   dataIndex: 'place',
+  // },
+  // {
+  //   title: '商品价格',
+  //   dataIndex: 'price',
+  // },
+  // {
+  //   title: '上架状态',
+  //   dataIndex: 'shelvesFlag',
+  // },
+  // {
+  //   title: '备注',
+  //   dataIndex: 'remark',
+  // },
+  {
+    title: '创建时间',
+    dataIndex: 'createTime',
+    width: 180,
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    fixed: 'right',
+    width: 100,
+  },
+]);
+
+// ---------------------------- 查询数据表单和方法 ----------------------------
+
+const queryFormState = {
+  categoryId: undefined,
+  searchWord: '',
+  goodsStatus: undefined,
+  place: undefined,
+  shelvesFlag: undefined,
+  goodsType: undefined,
+  pageNum: 1,
+  pageSize: 10,
+};
+// 查询表单form
+const queryForm = reactive({ ...queryFormState });
+// 表格加载loading
+const tableLoading = ref(false);
+// 表格数据
+const tableData = ref([]);
+// 总数
+const total = ref(0);
+
+// 重置查询条件
+function resetQuery() {
+  let pageSize = queryForm.pageSize;
+  Object.assign(queryForm, queryFormState);
+  queryForm.pageSize = pageSize;
+  queryData();
+}
+
+// 搜索
+function onSearch() {
+  queryForm.pageNum = 1;
+  queryData();
+}
+
+// 查询数据
+async function queryData() {
+  tableLoading.value = true;
+  try {
+    let queryResult = await goodsApi.queryGoodsList(queryForm);
+
+    tableData.value = queryResult.data.list;
+    total.value = queryResult.data.total;
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    tableLoading.value = false;
+  }
+}
+
+onMounted(queryData);
+
+// ---------------------------- 添加/修改 ----------------------------
+const formModal = ref();
+const goodsDetailRef = ref();
+
+function addGoods(goodsData) {
+  formModal.value.showDrawer(goodsData);
+}
+
+function detailGoods(goodsData) {
+  goodsDetailRef.value.showDrawer(goodsData);
+}
+// ---------------------------- 单个删除 ----------------------------
+
+function deleteGoods(goodsData) {
+  Modal.confirm({
+    title: '提示',
+    content: '确定要删除【' + goodsData.goodsName + '】吗?',
+    okText: '删除',
+    okType: 'danger',
+    onOk() {
+      singleDelete(goodsData);
     },
-    {
-      title: '商品名称',
-      dataIndex: 'goodsName',
-    },
-    {
-      title: '商品状态',
-      dataIndex: 'goodsStatus',
-    },
-    {
-      title: '产地',
-      dataIndex: 'place',
-    },
-    {
-      title: '商品价格',
-      dataIndex: 'price',
-    },
-    {
-      title: '上架状态',
-      dataIndex: 'shelvesFlag',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remark',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      width: 150,
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      fixed: 'right',
-      width: 100,
-    },
-  ]);
+    cancelText: '取消',
+    onCancel() { },
+  });
+}
 
-  // ---------------------------- 查询数据表单和方法 ----------------------------
-
-  const queryFormState = {
-    categoryId: undefined,
-    searchWord: '',
-    goodsStatus: undefined,
-    place: undefined,
-    shelvesFlag: undefined,
-    goodsType: undefined,
-    pageNum: 1,
-    pageSize: 10,
-  };
-  // 查询表单form
-  const queryForm = reactive({ ...queryFormState });
-  // 表格加载loading
-  const tableLoading = ref(false);
-  // 表格数据
-  const tableData = ref([]);
-  // 总数
-  const total = ref(0);
-
-  // 重置查询条件
-  function resetQuery() {
-    let pageSize = queryForm.pageSize;
-    Object.assign(queryForm, queryFormState);
-    queryForm.pageSize = pageSize;
-    queryData();
-  }
-
-  // 搜索
-  function onSearch() {
-    queryForm.pageNum = 1;
-    queryData();
-  }
-
-  // 查询数据
-  async function queryData() {
-    tableLoading.value = true;
-    try {
-      let queryResult = await goodsApi.queryGoodsList(queryForm);
-
-      tableData.value = queryResult.data.list;
-      total.value = queryResult.data.total;
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      tableLoading.value = false;
-    }
-  }
-
-  onMounted(queryData);
-
-  // ---------------------------- 添加/修改 ----------------------------
-  const formModal = ref();
-
-  function addGoods(goodsData) {
-    formModal.value.showDrawer(goodsData);
-  }
-  // ---------------------------- 单个删除 ----------------------------
-
-  function deleteGoods(goodsData) {
-    Modal.confirm({
-      title: '提示',
-      content: '确定要删除【' + goodsData.goodsName + '】吗?',
-      okText: '删除',
-      okType: 'danger',
-      onOk() {
-        singleDelete(goodsData);
-      },
-      cancelText: '取消',
-      onCancel() {},
-    });
-  }
-
-  async function singleDelete(goodsData) {
-    try {
-      SmartLoading.show();
-      await goodsApi.deleteGoods(goodsData.goodsId);
-      message.success('删除成功');
-      queryData();
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      SmartLoading.hide();
-    }
-  }
-
-  // ---------------------------- 批量删除 ----------------------------
-
-  // 选择表格行
-  const selectedRowKeyList = ref([]);
-
-  function onSelectChange(selectedRowKeys) {
-    selectedRowKeyList.value = selectedRowKeys;
-  }
-
-  // 批量删除
-  function confirmBatchDelete() {
-    Modal.confirm({
-      title: '提示',
-      content: '确定要删除选中商品吗?',
-      okText: '删除',
-      okType: 'danger',
-      onOk() {
-        batchDelete();
-      },
-      cancelText: '取消',
-      onCancel() {},
-    });
-  }
-
-  async function batchDelete() {
-    try {
-      SmartLoading.show();
-      await goodsApi.batchDelete(selectedRowKeyList.value);
-      message.success('删除成功');
-      queryData();
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      SmartLoading.hide();
-    }
-  }
-
-  // ------------------------------- 导出和导入 ---------------------------------
-  // 导入弹窗
-  const importModalShowFlag = ref(false);
-
-  const fileList = ref([]);
-  // 显示导入
-  function showImportModal() {
-    fileList.value = [];
-    importModalShowFlag.value = true;
-  }
-
-  // 关闭 导入
-  function hideImportModal() {
-    importModalShowFlag.value = false;
-  }
-
-  function handleChange() {}
-
-  function handleDrop() {}
-
-  function handleRemove(file) {
-    const index = fileList.value.indexOf(file);
-    const newFileList = fileList.value.slice();
-    newFileList.splice(index, 1);
-    fileList.value = newFileList;
-  }
-  function beforeUpload(file) {
-    fileList.value = [...(fileList.value || []), file];
-    return false;
-  }
-
-  function downloadExcel() {
-    window.open('https://smartadmin.vip/cdn/%E5%95%86%E5%93%81%E6%A8%A1%E6%9D%BF.xls');
-  }
-
-  async function onImportGoods() {
-    const formData = new FormData();
-    fileList.value.forEach((file) => {
-      formData.append('file', file.originFileObj);
-    });
-
+async function singleDelete(goodsData) {
+  try {
     SmartLoading.show();
-    try {
-      let res = await goodsApi.importGoods(formData);
-      message.success(res.msg);
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      SmartLoading.hide();
-    }
+    await goodsApi.deleteGoods(goodsData.goodsId);
+    message.success('删除成功');
+    queryData();
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    SmartLoading.hide();
   }
+}
 
-  async function onExportGoods() {
-    await goodsApi.exportGoods();
+// ---------------------------- 批量删除 ----------------------------
+
+// 选择表格行
+const selectedRowKeyList = ref([]);
+
+function onSelectChange(selectedRowKeys) {
+  selectedRowKeyList.value = selectedRowKeys;
+}
+
+// 批量删除
+function confirmBatchDelete() {
+  Modal.confirm({
+    title: '提示',
+    content: '确定要删除选中商品吗?',
+    okText: '删除',
+    okType: 'danger',
+    onOk() {
+      batchDelete();
+    },
+    cancelText: '取消',
+    onCancel() { },
+  });
+}
+
+async function batchDelete() {
+  try {
+    SmartLoading.show();
+    await goodsApi.batchDelete(selectedRowKeyList.value);
+    message.success('删除成功');
+    queryData();
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    SmartLoading.hide();
   }
+}
+
+
+async function detail(record) {
+  console.log(record);
+  let det = await goodsApi.detail(record.goodsId);
+  console.log(det);
+  // router.push({ path: '/project/lab-detail', query: { id: record.id, customerName: record.customerName, projectType: record.projectType, category: record.category } });
+}
+
+// ------------------------------- 导出和导入 ---------------------------------
+// 导入弹窗
+const importModalShowFlag = ref(false);
+
+const fileList = ref([]);
+// 显示导入
+function showImportModal() {
+  fileList.value = [];
+  importModalShowFlag.value = true;
+}
+
+// 关闭 导入
+function hideImportModal() {
+  importModalShowFlag.value = false;
+}
+
+function handleChange() { }
+
+function handleDrop() { }
+
+function handleRemove(file) {
+  const index = fileList.value.indexOf(file);
+  const newFileList = fileList.value.slice();
+  newFileList.splice(index, 1);
+  fileList.value = newFileList;
+}
+function beforeUpload(file) {
+  fileList.value = [...(fileList.value || []), file];
+  return false;
+}
+
+function downloadExcel() {
+  window.open('https://smartadmin.vip/cdn/%E5%95%86%E5%93%81%E6%A8%A1%E6%9D%BF.xls');
+}
+
+async function onImportGoods() {
+  const formData = new FormData();
+  fileList.value.forEach((file) => {
+    formData.append('file', file.originFileObj);
+  });
+
+  SmartLoading.show();
+  try {
+    let res = await goodsApi.importGoods(formData);
+    message.success(res.msg);
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    SmartLoading.hide();
+  }
+}
+
+async function onExportGoods() {
+  await goodsApi.exportGoods();
+}
 </script>

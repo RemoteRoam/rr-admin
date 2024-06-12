@@ -56,6 +56,7 @@ public enum DataTracerTypeEnum implements BaseEnum {
     PC_CERTIFICATION(12, "产品认证"),
     LAB_PROJECT(21, "试验项目"),
     PC_SUPERVISION(31, "产品监督"),
+    SALES(61, "销售"),
 
     ;
 

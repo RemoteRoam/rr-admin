@@ -11,7 +11,7 @@
           <a-descriptions-item label="客户">{{ detail.customerName }}</a-descriptions-item>
           <a-descriptions-item label="项目类型">{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM',
             detail.projectType) }}</a-descriptions-item>
-          <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue('PROJECT_CATEGORY_ENUM',
+          <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue(enumName,
             detail.category) }}</a-descriptions-item>
           <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
           <a-descriptions-item label="产品名称">{{ detail.productName }}</a-descriptions-item>
@@ -59,120 +59,6 @@
           </a-row>
         </template>
       </a-tab-pane>
-      <!-- <a-tab-pane key="content" tab="详细信息">
-        <a-form :label-col="{ span: 8 }">
-          <a-row>
-            <a-col :span="8">
-              <a-form-item label="实验室任务编号" name="taskNo">
-                <a-input style="width: 95%" v-model:value="detail.taskNo" placeholder="实验室任务编号" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="实验室" name="thirdPartyId">
-                <ThirdPartySelect width="95%" v-model:value="detail.thirdPartyId" placeholder="请选择实验室" type="THIRD_1"
-                  disabled />
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :span="8">
-              <a-form-item label="实验室合同号" name="labContractNo">
-                <a-input style="width: 95%" v-model:value="detail.labContractNo" placeholder="实验室合同号" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="实验室合同日期" name="labContractDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labContractDate" style="width: 95%"
-                  placeholder="实验室合同日期" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="实验费金额" name="labContractAmount">
-                <a-input-number style="width: 95%" v-model:value="detail.labContractAmount" placeholder="实验费金额"
-                  disabled />
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :span="16">
-              <a-form-item label="实验合同备注" name="labContractRemark">
-                <a-textarea style="width: 95%" v-model:value="detail.labContractRemark" placeholder="实验合同备注" disabled />
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :span="8">
-              <a-form-item label="客户要求完成日期" name="labExpectedDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labExpectedDate" style="width: 95%"
-                  placeholder="客户要求完成日期" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="资料发送日期" name="dataSendDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataSendDate" style="width: 95%"
-                  placeholder="资料发送日期" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="资料接收日期" name="dataReceiveDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.dataReceiveDate" style="width: 95%"
-                  placeholder="资料接收日期" disabled />
-              </a-form-item>
-
-            </a-col>
-
-          </a-row>
-          <a-row>
-            <a-col :span="8">
-              <a-form-item label="是否付款" name="isPaid">
-                <a-input-number style="width: 95%" v-model:value="detail.isPaid" placeholder="是否付款" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="付款方" name="payParty">
-                <a-input-number style="width: 95%" v-model:value="detail.payParty" placeholder="付款方(客户/我方)" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="实验费付款日期" name="labPayDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labPayDate" style="width: 95%"
-                  placeholder="实验费付款日期" disabled />
-              </a-form-item>
-
-            </a-col>
-
-          </a-row>
-          <a-row>
-            <a-col :span="16">
-              <a-form-item label="实验费备注" name="labPayRemark">
-                <a-textarea style="width: 95%" v-model:value="detail.labPayRemark" placeholder="实验费备注" disabled />
-              </a-form-item>
-
-            </a-col>
-
-          </a-row>
-          <a-row>
-            <a-col :span="8">
-              <a-form-item label="实验室下达任务日期" name="assignTaskDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.assignTaskDate" style="width: 95%"
-                  placeholder="实验室下达任务日期" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="预计完成日期" name="expectedCompletionDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.expectedCompletionDate" style="width: 95%"
-                  placeholder="预计完成日期" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="报告完成日期" name="reportCompletionDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.reportCompletionDate" style="width: 95%"
-                  placeholder="报告完成日期" disabled />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-form>
-      </a-tab-pane> -->
 
       <a-tab-pane key="dataTracer" tab="变更记录">
         <DataTracer :dataId="id" :type="112" />
@@ -183,7 +69,7 @@
 
 <script setup>
 import _ from 'lodash';
-import { reactive, onMounted, onActivated, ref } from 'vue';
+import { reactive, onMounted, onActivated, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { projectApi } from '/@/api/business/project/project-api';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
@@ -200,7 +86,7 @@ let id = ref();
 // 详情
 let detail = ref({});
 onMounted(() => {
-  console.log('route', route.query);
+  // console.log('route', route.query);
   if (route.query.id) {
     id.value = Number(route.query.id);
     getDetail();
@@ -211,6 +97,10 @@ onActivated(() => {
     id.value = Number(route.query.id);
     getDetail();
   }
+});
+
+const enumName = computed(() => {
+  return Number(route.query.projectType) == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
 });
 
 //编辑
@@ -229,7 +119,7 @@ async function getDetail() {
     detail.value.category = Number(route.query.category);
     detail.value.taskNo = route.query.taskNo;
     detail.value.thirdPartyName = route.query.thirdPartyName;
-    console.log("get detail:", detail.value)
+    // console.log("get detail:", detail.value)
   } catch (error) {
     smartSentry.captureError(error);
   } finally {

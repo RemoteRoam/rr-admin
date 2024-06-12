@@ -131,9 +131,15 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="审核日期" name="auditDate">
+                    <a-form-item label="审核开始日期" name="auditDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.auditDate" style="width: 95%"
-                            placeholder="审核日期" />
+                            placeholder="审核开始日期" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                    <a-form-item label="审核结束日期" name="auditDateEnd">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.auditDateEnd" style="width: 95%"
+                            placeholder="审核结束日期" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
@@ -329,7 +335,8 @@ const formDefault = {
     systemFileTransferDate: undefined, //体系文件传递日期
     dataReportDate: undefined, //资料上报日期
     auditTeacher: undefined, //审核老师
-    auditDate: undefined, //审核日期
+    auditDate: undefined, //审核开始日期
+    auditDateEnd: undefined, //审核结束日期
     consultationTeacher: undefined, //咨询老师
     submissionDate: undefined, //交卷日期
     assessmentDate: undefined, //评定日期

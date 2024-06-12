@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.goods.dao.InventoryFlowDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.goods.domain.vo.InventoryFlowVO">
+        SELECT
+        *
+        FROM t_inventory_flow
+        <where>
+            <!--记录类型(1采购入库，2销售出库，3盘点)-->
+            <if test="queryForm.type != null">
+                AND t_inventory_flow.type = #{queryForm.type}
+            </if>
+            <!--对应单据表ID-->
+            <if test="queryForm.taskId != null">
+                AND t_inventory_flow.task_id = #{queryForm.taskId}
+            </if>
+            <!--型号规格ID-->
+            <if test="queryForm.skuId != null">
+                AND t_inventory_flow.sku_id = #{queryForm.skuId}
+            </if>
+            <!--商品ID-->
+            <if test="queryForm.goodsId != null">
+                AND t_inventory_flow.goods_id = #{queryForm.goodsId}
+            </if>
+            <!--商品类目ID-->
+            <if test="queryForm.categoryId != null">
+                AND t_inventory_flow.category_id = #{queryForm.categoryId}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

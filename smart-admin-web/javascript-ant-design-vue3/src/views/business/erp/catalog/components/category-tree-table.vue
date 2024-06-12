@@ -21,25 +21,16 @@
       <div class="smart-table-setting-block"></div>
     </a-row>
 
-    <a-table
-      :scroll="{ x: 1000 }"
-      size="small"
-      :dataSource="tableData"
-      :columns="columns"
-      rowKey="categoryId"
-      bordered
-      :pagination="false"
-      @expandedRowsChange="changeExand"
-      :expanded-row-keys="expandedRowKeys"
-    >
+    <a-table :scroll="{ x: 1000 }" size="small" :dataSource="tableData" :columns="columns" rowKey="categoryId" bordered
+      :pagination="false" @expandedRowsChange="changeExand" :expanded-row-keys="expandedRowKeys">
       <template #bodyCell="{ record, column }">
         <template v-if="column.dataIndex === 'action'">
           <div class="smart-table-operate">
-            <a-button @click="addCategory(record.categoryId)" type="link" v-privilege="`${privilegePrefix}category:addChild`">增加子分类</a-button>
-            <a-button @click="addCategory(undefined, record)" type="link" v-privilege="`${privilegePrefix}category:update`">编辑</a-button>
-            <a-button @click="confirmDeleteCategory(record.categoryId)" danger type="link" v-privilege="`${privilegePrefix}category:delete`"
-              >删除</a-button
-            >
+            <!-- <a-button @click="addCategory(record.categoryId)" type="link" v-privilege="`${privilegePrefix}category:addChild`">增加子分类</a-button> -->
+            <a-button @click="addCategory(undefined, record)" type="link"
+              v-privilege="`${privilegePrefix}category:update`">编辑</a-button>
+            <a-button @click="confirmDeleteCategory(record.categoryId)" danger type="link"
+              v-privilege="`${privilegePrefix}category:delete`">删除</a-button>
           </div>
         </template>
       </template>
@@ -48,117 +39,117 @@
   </a-card>
 </template>
 <script setup>
-  import { computed, onMounted, reactive, ref } from 'vue';
-  import { message, Modal } from 'ant-design-vue';
-  import { SmartLoading } from '/@/components/framework/smart-loading';
-  import CategoryFormModal from './category-form-modal.vue';
-  import { categoryApi } from '/@/api/business/category/category-api';
-  import { CATEGORY_TYPE_ENUM } from '/@/constants/business/erp/category-const';
-  import { smartSentry } from '/@/lib/smart-sentry';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { message, Modal } from 'ant-design-vue';
+import { SmartLoading } from '/@/components/framework/smart-loading';
+import CategoryFormModal from './category-form-modal.vue';
+import { categoryApi } from '/@/api/business/category/category-api';
+import { CATEGORY_TYPE_ENUM } from '/@/constants/business/erp/category-const';
+import { smartSentry } from '/@/lib/smart-sentry';
 
-  const columnNameList = [
-    {
-      categoryType: CATEGORY_TYPE_ENUM.GOODS.value,
-      columnName: '商品分类',
-    },
-    {
-      categoryType: CATEGORY_TYPE_ENUM.DEMO.value,
-      columnName: '演示分类',
-    },
-  ];
-  const columName = computed(() => {
-    let find = columnNameList.find((e) => e.categoryType === props.categoryType);
-    return find ? find.columnName : '';
-  });
+const columnNameList = [
+  {
+    categoryType: CATEGORY_TYPE_ENUM.GOODS.value,
+    columnName: '商品分类',
+  },
+  {
+    categoryType: CATEGORY_TYPE_ENUM.DEMO.value,
+    columnName: '演示分类',
+  },
+];
+const columName = computed(() => {
+  let find = columnNameList.find((e) => e.categoryType === props.categoryType);
+  return find ? find.columnName : '';
+});
 
-  const props = defineProps({
-    // 分组类型
-    categoryType: Number,
-    privilegePrefix: {
-      type: String,
-      default: '',
-    },
-  });
+const props = defineProps({
+  // 分组类型
+  categoryType: Number,
+  privilegePrefix: {
+    type: String,
+    default: '',
+  },
+});
 
-  // ------------------------------ 查询 ------------------------------
-  const tableLoading = ref(false);
-  const tableData = ref([]);
-  const columns = reactive([
-    {
-      title: columName,
-      dataIndex: 'categoryName',
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      width: 200,
-    },
-  ]);
+// ------------------------------ 查询 ------------------------------
+const tableLoading = ref(false);
+const tableData = ref([]);
+const columns = reactive([
+  {
+    title: columName,
+    dataIndex: 'categoryName',
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    width: 200,
+  },
+]);
 
-  async function queryList() {
-    try {
-      tableLoading.value = true;
-      let queryForm = {
-        categoryType: props.categoryType,
-      };
-      let responseModel = await categoryApi.queryCategoryTree(queryForm);
-      tableData.value = responseModel.data;
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      tableLoading.value = false;
-    }
+async function queryList() {
+  try {
+    tableLoading.value = true;
+    let queryForm = {
+      categoryType: props.categoryType,
+    };
+    let responseModel = await categoryApi.queryCategoryTree(queryForm);
+    tableData.value = responseModel.data;
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    tableLoading.value = false;
   }
+}
 
-  const expandedRowKeys = ref([]);
-  function reloadList(parentId) {
+const expandedRowKeys = ref([]);
+function reloadList(parentId) {
+  queryList();
+  if (parentId) {
+    expandedRowKeys.value.push(parentId);
+  }
+}
+
+onMounted(queryList);
+defineExpose({
+  queryList,
+});
+
+function changeExand(val) {
+  expandedRowKeys.value = val;
+}
+
+// ------------------------------ 添加 ------------------------------
+
+const formModal = ref();
+function addCategory(parentId, rowData) {
+  formModal.value.showModal(props.categoryType, parentId, rowData);
+}
+
+// ------------------------------ 删除 ------------------------------
+
+function confirmDeleteCategory(categoryId) {
+  Modal.confirm({
+    title: '提示',
+    content: '确定要删除当前分类吗?',
+    okText: '确定',
+    okType: 'danger',
+    async onOk() {
+      deleteCategory(categoryId);
+    },
+    cancelText: '取消',
+    onCancel() { },
+  });
+}
+async function deleteCategory(categoryId) {
+  try {
+    SmartLoading.show();
+    await categoryApi.deleteCategoryById(categoryId);
+    message.success('删除成功');
     queryList();
-    if (parentId) {
-      expandedRowKeys.value.push(parentId);
-    }
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    SmartLoading.hide();
   }
-
-  onMounted(queryList);
-  defineExpose({
-    queryList,
-  });
-
-  function changeExand(val) {
-    expandedRowKeys.value = val;
-  }
-
-  // ------------------------------ 添加 ------------------------------
-
-  const formModal = ref();
-  function addCategory(parentId, rowData) {
-    formModal.value.showModal(props.categoryType, parentId, rowData);
-  }
-
-  // ------------------------------ 删除 ------------------------------
-
-  function confirmDeleteCategory(categoryId) {
-    Modal.confirm({
-      title: '提示',
-      content: '确定要删除当前分类吗?',
-      okText: '确定',
-      okType: 'danger',
-      async onOk() {
-        deleteCategory(categoryId);
-      },
-      cancelText: '取消',
-      onCancel() {},
-    });
-  }
-  async function deleteCategory(categoryId) {
-    try {
-      SmartLoading.show();
-      await categoryApi.deleteCategoryById(categoryId);
-      message.success('删除成功');
-      queryList();
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      SmartLoading.hide();
-    }
-  }
+}
 </script>

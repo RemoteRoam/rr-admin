@@ -25,7 +25,8 @@ public enum ProjectTypeEnum implements BaseEnum {
     SC_SUPERVISION(42, "体系监督"),
     SC_RE_CERTIFICATION(43, "再认证"),
     SC_EXPANSION(44, "扩项"),
-    MEASUREMENT(51, "仪器计量");
+    MEASUREMENT(51, "仪器计量"),
+    SALES(61, "销售");
 
     private final Integer value;
 

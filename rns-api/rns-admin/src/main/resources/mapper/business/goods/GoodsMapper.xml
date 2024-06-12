@@ -37,5 +37,10 @@
             ORDER BY goods_id DESC
         </if>
     </select>
+    <select id="getDetail" resultType="tech.remote.admin.module.business.goods.domain.vo.GoodsVO">
+        SELECT g.*,c.category_id as categoryId, c.category_name as categoryName
+        FROM t_goods g left join t_category c on g.category_id = c.category_id
+        WHERE goods_id = #{goodsId}
+    </select>
 
 </mapper>

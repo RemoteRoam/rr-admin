@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.goods.dao.SkusDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.goods.domain.vo.SkusVO">
+        SELECT
+        s.*, c.category_name as categoryName,  g.goods_name as goodsName
+        FROM t_skus s
+        LEFT JOIN t_goods g ON s.goods_id = g.goods_id
+        LEFT JOIN t_category c ON g.category_id = c.category_id
+        <where>
+            <!--型号规格ID-->
+            <if test="queryForm.skuId != null">
+                AND s.sku_id = #{queryForm.skuId}
+            </if>
+            <!--商品ID-->
+            <if test="queryForm.goodsId != null">
+                AND s.goods_id = #{queryForm.goodsId}
+            </if>
+            <!--商品类目ID-->
+            <if test="queryForm.categoryId != null">
+                AND s.category_id = #{queryForm.categoryId}
+            </if>
+            <!--型号规格名称-->
+            <if test="queryForm.skuName != null and queryForm.skuName != ''">
+                        AND INSTR(s.sku_name,#{queryForm.skuName})
+            </if>
+        </where>
+    </select>
+    <select id="selectExcelList" resultType="tech.remote.admin.module.business.goods.domain.vo.SkusExcelVO">
+        SELECT
+        s.*, c.category_name as categoryName,  g.goods_name as goodsName
+        FROM t_skus s
+        LEFT JOIN t_goods g ON s.goods_id = g.goods_id
+        LEFT JOIN t_category c ON g.category_id = c.category_id
+        <where>
+            <!--型号规格ID-->
+            <if test="queryForm.skuId != null">
+                AND s.sku_id = #{queryForm.skuId}
+            </if>
+            <!--商品ID-->
+            <if test="queryForm.goodsId != null">
+                AND s.goods_id = #{queryForm.goodsId}
+            </if>
+            <!--商品类目ID-->
+            <if test="queryForm.categoryId != null">
+                AND s.category_id = #{queryForm.categoryId}
+            </if>
+            <!--型号规格名称-->
+            <if test="queryForm.skuName != null and queryForm.skuName != ''">
+                        AND INSTR(s.sku_name,#{queryForm.skuName})
+            </if>
+        </where>
+    </select>
+
+
+    <update id="batchUpdateDeleted">
+        update t_skus set deleted_flag = #{deletedFlag}
+        where sku_id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_skus set deleted_flag = #{deletedFlag}
+        where sku_id = #{skuId}
+    </update>
+</mapper>

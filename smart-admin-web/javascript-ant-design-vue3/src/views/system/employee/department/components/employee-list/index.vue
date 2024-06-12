@@ -128,11 +128,11 @@ const columns = ref([
     dataIndex: 'phone',
     width: 80,
   },
-  {
-    title: '性别',
-    dataIndex: 'gender',
-    width: 40,
-  },
+  // {
+  //   title: '性别',
+  //   dataIndex: 'gender',
+  //   width: 40,
+  // },
   {
     title: '登录账号',
     dataIndex: 'loginName',

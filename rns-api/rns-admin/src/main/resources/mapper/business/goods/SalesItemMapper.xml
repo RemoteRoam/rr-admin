@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.goods.dao.SalesItemDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.goods.domain.vo.SalesItemVO">
+        SELECT
+        *
+        FROM t_sales_item
+        <where>
+            <!--销售单ID-->
+            <if test="queryForm.salesId != null">
+                AND t_sales_item.sales_id = #{queryForm.salesId}
+            </if>
+            <!--型号规格ID-->
+            <if test="queryForm.skuId != null">
+                AND t_sales_item.sku_id = #{queryForm.skuId}
+            </if>
+            <!--商品ID-->
+            <if test="queryForm.goodsId != null">
+                AND t_sales_item.goods_id = #{queryForm.goodsId}
+            </if>
+            <!--商品类目ID-->
+            <if test="queryForm.categoryId != null">
+                AND t_sales_item.category_id = #{queryForm.categoryId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据销售出库单ID查询销售出库单明细 -->
+    <select id="listBySalesId"
+            resultType="tech.remote.admin.module.business.goods.domain.vo.SalesItemVO">
+        SELECT
+            i.*, c.category_name as categoryName,  g.goods_name as goodsName, s.sku_name as skuName, s.weight
+        FROM t_sales_item i
+                 LEFT JOIN t_goods g ON i.goods_id = g.goods_id
+                 LEFT JOIN t_category c ON i.category_id = c.category_id
+                 LEFT JOIN t_skus s ON i.sku_id = s.sku_id
+        WHERE i.sales_id = #{salesId}
+    </select>
+
+</mapper>
