@@ -1,33 +1,26 @@
 <!--
-  * 体系认证表
+  * 发货
   *
   * @Author:    cbh
   * @Date:      2024-04-25 14:53:11
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="收款" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="发货" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="收款日期" name="paymentDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.paymentDate" style="width: 100%"
-                            placeholder="收款日期" />
+                    <a-form-item label="发货日期" name="shippingDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.shippingDate" style="width: 100%"
+                            placeholder="发货日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="收款金额" name="paymentAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.paymentAmount" placeholder="收款金额" />
-                    </a-form-item>
-                </a-col>
-            </a-row>
-            <a-row>
-                <a-col :span="24">
-                    <a-form-item label="备注" name="remark">
-                        <a-input v-model:value="form.remark" placeholder="备注" />
+                    <a-form-item label="发货金额" name="shippingAmount">
+                        <a-input-number style="width: 100%" v-model:value="form.shippingAmount" placeholder="发货金额" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -51,6 +44,7 @@ import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { measurementApi } from '/@/api/business/measurement/measurement-api';
+import { projectApi } from '/@/api/business/project/project-api';
 import { salesApi } from '/@/api/business/goods/sales-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
@@ -93,12 +87,11 @@ const formDefault = {
     id: undefined, //项目ID
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
-    nodeId: NODE_CONST.first_payment, //节点ID
+    nodeId: NODE_CONST.shipping, //节点ID
     nodeStatus: undefined, //节点状态
     passReason: undefined, //跳过原因
-    paymentDate: undefined, //收款日期
-    paymentAmount: undefined, //收款金额
-    remark: undefined, //备注
+    shippingDate: undefined, //发货日期
+    shippingAmount: undefined, //发票金额
 };
 
 let form = reactive({ ...formDefault });
@@ -158,8 +151,9 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
-        if (isProjectTypeInEnum(form.projectType)) {
+        if (form.projectType < 40) {
+            await projectApi.update(form);
+        } else if (isProjectTypeInEnum(form.projectType)) {
             await systemCertificationApi.update(form);
         } else if (form.projectType >= 50 && form.projectType < 60) {
             await measurementApi.update(form);

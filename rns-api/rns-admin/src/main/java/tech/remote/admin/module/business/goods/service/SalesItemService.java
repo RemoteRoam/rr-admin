@@ -92,4 +92,8 @@ public class SalesItemService {
         salesItemDao.deleteById(id);
         return ResponseDTO.ok();
     }
+
+    public List<SalesItemVO> listBySalesId(Long id) {
+        return salesItemDao.listBySalesId(id);
+    }
 }

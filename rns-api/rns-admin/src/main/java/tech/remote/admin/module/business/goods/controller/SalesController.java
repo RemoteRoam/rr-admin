@@ -7,6 +7,7 @@ import tech.remote.admin.module.business.goods.domain.form.SalesQueryForm;
 import tech.remote.admin.module.business.goods.domain.form.SalesUpdateForm;
 import tech.remote.admin.module.business.goods.domain.vo.SalesVO;
 import tech.remote.admin.module.business.goods.service.SalesService;
+import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -43,6 +45,9 @@ public class SalesController {
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/sales/add")
     public ResponseDTO<String> add(@RequestBody @Valid SalesAddForm addForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        addForm.setCreateUserId(requestUser.getUserId());
+        addForm.setCreateUserName(requestUser.getUserName());
         return salesService.add(addForm);
     }
 
@@ -62,5 +67,11 @@ public class SalesController {
     @GetMapping("/sales/delete/{id}")
     public ResponseDTO<String> batchDelete(@PathVariable Long id) {
         return salesService.delete(id);
+    }
+
+    @Operation(summary = "查询详情")
+    @GetMapping("/sales/detail/{id}")
+    public ResponseDTO<SalesVO> detail(@PathVariable Long id) {
+        return ResponseDTO.ok(salesService.getDetail(id));
     }
 }

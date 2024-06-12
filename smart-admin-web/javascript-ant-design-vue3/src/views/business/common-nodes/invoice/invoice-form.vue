@@ -52,6 +52,7 @@ import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
 import { measurementApi } from '/@/api/business/measurement/measurement-api';
 import { projectApi } from '/@/api/business/project/project-api';
+import { salesApi } from '/@/api/business/goods/sales-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 import { PROJECT_TYPE_SYSTEM_ENUM } from '/@/constants/business/project/system-certification-const';
@@ -164,6 +165,8 @@ async function save(nodeStatus) {
             await systemCertificationApi.update(form);
         } else if (form.projectType >= 50 && form.projectType < 60) {
             await measurementApi.update(form);
+        } else if (form.projectType >= 60 && form.projectType < 70) {
+            await salesApi.update(form);
         }
         message.success('操作成功');
         emits('reloadList');

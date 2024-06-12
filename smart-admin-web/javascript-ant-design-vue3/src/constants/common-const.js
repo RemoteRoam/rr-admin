@@ -132,3 +132,16 @@ export const PROJECT_STATUS_ENUM = {
   },
 
 };
+
+
+export const SALES_TYPE_ENUM = {
+  INVENTORY: {
+    value: 0,
+    desc: '库存',
+  },
+  MANUFACTURER: {
+    value: 1,
+    desc: '厂家',
+  },
+
+};

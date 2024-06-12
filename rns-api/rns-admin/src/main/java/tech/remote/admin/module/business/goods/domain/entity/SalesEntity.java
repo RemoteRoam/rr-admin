@@ -102,6 +102,11 @@ public class SalesEntity {
     private String invoiceNumber;
 
     /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
      * 删除状态
      */
     private Integer deletedFlag;

@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -50,4 +52,6 @@ public class SalesAddForm {
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
+    @Schema(description = "销售单明细")
+    private List<SalesItemAddForm> itemList;
 }

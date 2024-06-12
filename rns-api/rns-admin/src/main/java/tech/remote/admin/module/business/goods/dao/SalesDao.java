@@ -40,4 +40,5 @@ public interface SalesDao extends BaseMapper<SalesEntity> {
      */
     void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("${deletedFlag}")boolean deletedFlag);
 
+    SalesVO detail(Long id);
 }

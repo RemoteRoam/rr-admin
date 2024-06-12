@@ -14,6 +14,7 @@ import tech.remote.admin.module.business.goods.domain.vo.PurchaseItemVO;
 import tech.remote.admin.module.business.goods.domain.vo.PurchaseVO;
 import tech.remote.admin.module.business.goods.manager.PurchaseItemManager;
 import tech.remote.admin.module.business.goods.manager.SkusManager;
+import tech.remote.base.common.enumeration.RecordTypeEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -94,7 +95,7 @@ public class PurchaseService {
         purchaseItemManager.saveBatch(entityList);
 
         // 修改库存
-        skusManager.batchUpdateStock(skusStockUpdateFormList);
+        skusManager.batchUpdateStock(skusStockUpdateFormList, RecordTypeEnum.PURCHASE_INBOUND, purchaseEntity.getId());
 
         return ResponseDTO.ok();
     }

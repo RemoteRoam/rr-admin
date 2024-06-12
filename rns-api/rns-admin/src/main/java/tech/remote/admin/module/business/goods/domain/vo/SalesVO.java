@@ -4,7 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
+import tech.remote.admin.module.business.goods.domain.entity.SalesNodeEntity;
+import tech.remote.admin.module.business.measurement.domain.vo.MeasurementNodeVO;
 
 /**
  * 销售单表 列表VO
@@ -33,8 +37,14 @@ public class SalesVO {
     @Schema(description = "客户ID")
     private Long customerId;
 
+    @Schema(description = "客户")
+    private String customerName;
+
     @Schema(description = "销售经理ID")
     private Long managerId;
+
+    @Schema(description = "销售经理")
+    private String managerName;
 
     @Schema(description = "合同号")
     private String contractNo;
@@ -69,6 +79,9 @@ public class SalesVO {
     @Schema(description = "备注")
     private String remark;
 
+    @Schema(description = "状态")
+    private Integer status;
+
     @Schema(description = "创建人")
     private Long createUserId;
 
@@ -87,4 +100,9 @@ public class SalesVO {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "商品型号规格列表")
+    private List<SalesItemVO> itemVOList;
+
+    @Schema(description = "操作节点列表")
+    private List<SalesNodeEntity> nodeList;
 }

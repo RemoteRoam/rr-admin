@@ -88,7 +88,7 @@ const total = ref(0);
 const tableData = ref([]);
 const tableLoading = ref(false);
 
-// 添加员工
+// 添加商品型号规格
 const selectSkuModal = ref();
 async function addSku() {
     // let res = await enterpriseApi.employeeList([props.enterpriseId]);
@@ -157,6 +157,17 @@ const rules = {
 async function onSubmit() {
     try {
         await formRef.value.validateFields();
+        // Check that each record in tableData has a quantity value
+        for (let record of tableData.value) {
+            if (record.quantity === null || record.quantity === undefined) {
+                message.error('商品的采购数量不能为空');
+                return;
+            }
+            if (record.quantity === 0) {
+                message.error('商品的采购数量不能为0');
+                return;
+            }
+        }
         save();
     } catch (err) {
         message.error('参数验证错误，请仔细填写表单数据!');

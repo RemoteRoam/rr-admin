@@ -34,6 +34,10 @@ export const DATA_TRACER_TYPE_ENUM = {
     value: 6,
     desc: '仪器计量实验室任务',
   },
+  SALES: {
+    value: 61,
+    desc: '销售',
+  },
 };
 
 export default {

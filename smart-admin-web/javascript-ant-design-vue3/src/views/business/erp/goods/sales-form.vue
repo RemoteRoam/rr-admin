@@ -6,91 +6,74 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
-        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
-            <a-row>
-                <a-form-item label="销售单ID" name="id">
-                    <a-input-number style="width: 100%" v-model:value="form.id" placeholder="销售单ID" />
-                </a-form-item>
-                <a-form-item label="销售单号" name="salesNo">
-                    <a-input style="width: 100%" v-model:value="form.salesNo" placeholder="销售单号" />
-                </a-form-item>
-                <a-form-item label="销售类型（0:库存，1:厂家）" name="salesType">
-                    <SmartEnumSelect width="100%" v-model:value="form.salesType" enumName=""
-                        placeholder="销售类型（0:库存，1:厂家）" />
-                </a-form-item>
-                <a-form-item label="供货厂家" name="supplier">
-                    <a-input style="width: 100%" v-model:value="form.supplier" placeholder="供货厂家" />
-                </a-form-item>
-                <a-form-item label="客户ID" name="customerId">
-                    <a-input-number style="width: 100%" v-model:value="form.customerId" placeholder="客户ID" />
-                </a-form-item>
-                <a-form-item label="销售经理ID" name="managerId">
-                    <a-input-number style="width: 100%" v-model:value="form.managerId" placeholder="销售经理ID" />
-                </a-form-item>
-                <a-form-item label="合同号" name="contractNo">
-                    <a-input style="width: 100%" v-model:value="form.contractNo" placeholder="合同号" />
-                </a-form-item>
-                <a-form-item label="合同日" name="contractDate">
-                    <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.contractDate" style="width: 100%"
-                        placeholder="合同日" />
-                </a-form-item>
-                <a-form-item label="合同金额" name="contractAmount">
-                    <a-input-number style="width: 100%" v-model:value="form.contractAmount" placeholder="合同金额" />
-                </a-form-item>
-                <a-form-item label="回款日期" name="receivedPaymentDate">
-                    <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.receivedPaymentDate" style="width: 100%"
-                        placeholder="回款日期" />
-                </a-form-item>
-                <a-form-item label="回款金额" name="receivedPaymentAmount">
-                    <a-input-number style="width: 100%" v-model:value="form.receivedPaymentAmount" placeholder="回款金额" />
-                </a-form-item>
-                <a-form-item label="发货日期" name="shippingDate">
-                    <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.shippingDate" style="width: 100%"
-                        placeholder="发货日期" />
-                </a-form-item>
-                <a-form-item label="发货金额" name="shippingAmount">
-                    <a-input-number style="width: 100%" v-model:value="form.shippingAmount" placeholder="发货金额" />
-                </a-form-item>
-                <a-form-item label="开票日期" name="invoiceDate">
-                    <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.invoiceDate" style="width: 100%"
-                        placeholder="开票日期" />
-                </a-form-item>
-                <a-form-item label="发票金额" name="invoiceAmount">
-                    <a-input-number style="width: 100%" v-model:value="form.invoiceAmount" placeholder="发票金额" />
-                </a-form-item>
-                <a-form-item label="发票号" name="invoiceNumber">
-                    <a-input style="width: 100%" v-model:value="form.invoiceNumber" placeholder="发票号" />
-                </a-form-item>
-                <a-form-item label="删除状态" name="deletedFlag">
-                    <BooleanSelect v-model:value="form.deletedFlag" style="width: 100%" />
-                </a-form-item>
-                <a-form-item label="备注" name="remark">
-                    <a-textarea style="width: 100%" v-model:value="form.remark" placeholder="备注" />
-                </a-form-item>
-                <a-form-item label="创建人" name="createUserId">
-                    <a-input-number style="width: 100%" v-model:value="form.createUserId" placeholder="创建人" />
-                </a-form-item>
-                <a-form-item label="创建人姓名" name="createUserName">
-                    <a-input style="width: 100%" v-model:value="form.createUserName" placeholder="创建人姓名" />
-                </a-form-item>
-                <a-form-item label="创建时间" name="createTime">
-                    <a-date-picker show-time valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="form.createTime"
-                        style="width: 100%" placeholder="创建时间" />
-                </a-form-item>
-                <a-form-item label="更新人" name="updateUserId">
-                    <a-input-number style="width: 100%" v-model:value="form.updateUserId" placeholder="更新人" />
-                </a-form-item>
-                <a-form-item label="更新人姓名" name="updateUserName">
-                    <a-input style="width: 100%" v-model:value="form.updateUserName" placeholder="更新人姓名" />
-                </a-form-item>
-                <a-form-item label="更新时间" name="updateTime">
-                    <a-date-picker show-time valueFormat="YYYY-MM-DD HH:mm:ss" v-model:value="form.updateTime"
-                        style="width: 100%" placeholder="更新时间" />
-                </a-form-item>
+        <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 7 }">
+            <a-row :gutter="16">
+                <a-col :span="12">
+                    <a-form-item label="销售类型" name="salesType">
+                        <SmartEnumSelect width="100%" v-model:value="form.salesType" enumName="SALES_TYPE_ENUM"
+                            placeholder="销售类型" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="供货厂家" name="supplier" v-if="form.salesType == 1">
+                        <a-input style="width: 100%" v-model:value="form.supplier" placeholder="供货厂家" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="客户" name="customerId">
+                        <CustomerSelect style="width: 100%" v-model:value="form.customerId" placeholder="客户" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="销售经理" name="managerId">
+                        <EmployeeSelect style="width: 100%" v-model:value="form.managerId" placeholder="销售经理" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="合同号" name="contractNo">
+                        <a-input style="width: 100%" v-model:value="form.contractNo" placeholder="合同号" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="合同日" name="contractDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.contractDate" style="width: 100%"
+                            placeholder="合同日" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="合同金额" name="contractAmount">
+                        <a-input-number style="width: 100%" v-model:value="form.contractAmount" placeholder="合同金额" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                    <a-form-item label="备注" name="remark">
+                        <a-textarea style="width: 100%" v-model:value="form.remark" placeholder="备注" />
+                    </a-form-item>
+                </a-col>
             </a-row>
 
+            <div>
+                <a-button class="button-style" type="primary" @click="addSku"> 添加商品 </a-button>
+            </div>
+
+            <a-table :loading="tableLoading" :dataSource="tableData" :columns="columns" :pagination="false"
+                rowKey="skuId" size="small" bordered>
+                <template #bodyCell="{ text, record, index, column }">
+                    <template v-if="column.dataIndex === 'quantity'">
+                        <!-- <a-input-number v-model:value="record.quantity" :min="0" :max="record.stockQuantity" /> -->
+                        <a-input-number v-model:value="record.quantity" :min="0" />
+                    </template>
+                    <template v-if="column.dataIndex === 'unitPrice'">
+                        <a-input-number v-model:value="record.unitPrice" :min="0" />
+                    </template>
+                    <template v-else-if="column.dataIndex === 'operate'">
+                        <a @click="deleteRecord(record.skuId)">移除</a>
+                    </template>
+                </template>
+            </a-table>
+            <SkuTableSelectModal ref="selectSkuModal" @selectData="selectData" />
         </a-form>
 
         <template #footer>
@@ -104,12 +87,16 @@
 <script setup>
 import { reactive, ref, nextTick } from 'vue';
 import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { message } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { salesApi } from '/@/api/business/goods/sales-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import BooleanSelect from '/@/components/framework/boolean-select/index.vue';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
+import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
+import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import SkuTableSelectModal from '/@/components/business/sku-table-select-modal/index.vue';
 
 // ------------------------ 事件 ------------------------
 
@@ -132,6 +119,7 @@ function show(rowData) {
 
 function onClose() {
     Object.assign(form, formDefault);
+    tableData.value = [];
     visibleFlag.value = false;
 }
 
@@ -140,9 +128,10 @@ function onClose() {
 // 组件ref
 const formRef = ref();
 
+const tableData = ref([]);
+const tableLoading = ref(false);
+
 const formDefault = {
-    id: undefined,
-    id: undefined, //销售单ID
     salesNo: undefined, //销售单号
     salesType: undefined, //销售类型（0:库存，1:厂家）
     supplier: undefined, //供货厂家
@@ -158,25 +147,31 @@ const formDefault = {
     invoiceDate: undefined, //开票日期
     invoiceAmount: undefined, //发票金额
     invoiceNumber: undefined, //发票号
-    deletedFlag: undefined, //删除状态
     remark: undefined, //备注
-    createUserId: undefined, //创建人
-    createUserName: undefined, //创建人姓名
-    createTime: undefined, //创建时间
-    updateUserId: undefined, //更新人
-    updateUserName: undefined, //更新人姓名
-    updateTime: undefined, //更新时间
+    itemList: [],
 };
 
 let form = reactive({ ...formDefault });
 
 const rules = {
+    salesType: [{ required: true, message: '必须选择销售类型' }],
 };
 
 // 点击确定，验证表单
 async function onSubmit() {
     try {
         await formRef.value.validateFields();
+        // Validate tableData
+        for (let record of tableData.value) {
+            if (record.quantity === null || record.quantity === undefined || record.unitPrice === null || record.unitPrice === undefined) {
+                message.error('销售数量和单价不能为空');
+                return;
+            }
+            if (record.quantity <= 0 || record.unitPrice <= 0) {
+                message.error('销售数量和单价必须大于0');
+                return;
+            }
+        }
         save();
     } catch (err) {
         message.error('参数验证错误，请仔细填写表单数据!');
@@ -187,6 +182,16 @@ async function onSubmit() {
 async function save() {
     SmartLoading.show();
     try {
+        form.itemList = cloneDeep(tableData.value);
+        // 判断salesType = 0时， itemList中的record中，quantity是否大于0并且小于库存数量
+        if (form.salesType === 0) {
+            for (let record of form.itemList) {
+                if (record.quantity > record.stockQuantity) {
+                    message.error('销售数量超过了库存数量');
+                    return;
+                }
+            }
+        }
         if (form.id) {
             await salesApi.update(form);
         } else {
@@ -200,6 +205,60 @@ async function save() {
     } finally {
         SmartLoading.hide();
     }
+}
+
+// 添加商品型号规格
+const selectSkuModal = ref();
+async function addSku() {
+    // let res = await enterpriseApi.employeeList([props.enterpriseId]);
+    selectSkuModal.value.showModal(tableData.value);
+}
+
+function deleteRecord(skuId) {
+    tableData.value = tableData.value.filter(record => record.skuId !== skuId);
+}
+
+const columns = reactive([
+    {
+        title: '商品分类',
+        dataIndex: 'categoryName',
+        width: 100,
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'goodsName',
+        ellipsis: true,
+    },
+    {
+        title: '型号规格',
+        dataIndex: 'skuName',
+        ellipsis: true,
+    },
+    {
+        title: '销售数量',
+        dataIndex: 'quantity',
+        width: 120,
+    },
+    {
+        title: '销售单价',
+        dataIndex: 'unitPrice',
+        width: 150,
+    },
+    {
+        title: '操作',
+        dataIndex: 'operate',
+        width: 60,
+    },
+]);
+
+function selectData(list) {
+    if (_.isEmpty(list)) {
+        message.warning('请选择商品型号规格');
+        return;
+    }
+    tableData.value = list;
+    console.log(tableData.value);
+
 }
 
 defineExpose({

@@ -32,4 +32,11 @@ public interface SalesItemDao extends BaseMapper<SalesItemEntity> {
     List<SalesItemVO> queryPage(Page page, @Param("queryForm") SalesItemQueryForm queryForm);
 
 
+    /**
+     * 根据销售单ID查询销售明细
+     * @param salesId
+     * @return
+     */
+    List<SalesItemVO> listBySalesId(@Param("salesId")Long salesId);
+
 }

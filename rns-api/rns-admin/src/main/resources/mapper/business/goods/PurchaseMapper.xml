@@ -24,6 +24,7 @@
                 AND DATE_FORMAT(t_purchase.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
         </where>
+        ORDER BY t_purchase.create_time DESC
     </select>
 
 

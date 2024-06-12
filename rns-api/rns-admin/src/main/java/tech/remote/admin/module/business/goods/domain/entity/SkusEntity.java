@@ -48,7 +48,7 @@ public class SkusEntity {
     /**
      * SKU库存数量
      */
-    private Integer quantity;
+    private Integer stockQuantity;
 
     /**
      * 上架状态

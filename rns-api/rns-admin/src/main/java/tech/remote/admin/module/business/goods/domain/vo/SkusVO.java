@@ -38,6 +38,9 @@ public class SkusVO {
     @Schema(description = "排的重量")
     private BigDecimal weight;
 
+    @Schema(description = "SKU库存数量")
+    private Integer stockQuantity;
+
     @Schema(description = "备注")
     private String remark;
 

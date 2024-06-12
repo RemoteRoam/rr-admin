@@ -177,5 +177,10 @@ const columns = ref([
     dataIndex: 'skuName',
     ellipsis: true,
   },
+  {
+    title: '库存数量',
+    dataIndex: 'stockQuantity',
+    width: 100,
+  },
 ]);
 </script>

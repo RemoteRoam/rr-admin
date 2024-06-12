@@ -10,25 +10,26 @@
     <a-form class="smart-query-form">
         <a-row class="smart-query-form-row">
             <a-form-item label="销售单号" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.salesNo" placeholder="销售单号" />
+                <a-input style="width: 180px" v-model:value="queryForm.salesNo" placeholder="销售单号" />
             </a-form-item>
             <a-form-item label="销售类型" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.salesType" placeholder="销售类型" />
+                <SmartEnumSelect width="150px" v-model:value="queryForm.salesType" enumName="SALES_TYPE_ENUM"
+                    placeholder="销售类型" />
             </a-form-item>
             <a-form-item label="供货厂家" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.supplier" placeholder="供货厂家" />
             </a-form-item>
-            <a-form-item label="客户ID" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.customerId" placeholder="客户ID" />
+            <a-form-item label="客户" class="smart-query-form-item">
+                <CustomerSelect width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
-            <a-form-item label="销售经理ID" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.managerId" placeholder="销售经理ID" />
+            <a-form-item label="销售经理" class="smart-query-form-item">
+                <EmployeeSelect style="width: 150px" v-model:value="queryForm.managerId" placeholder="销售经理" />
             </a-form-item>
             <a-form-item label="合同号" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.contractNo" placeholder="合同号" />
             </a-form-item>
             <a-form-item label="合同日" class="smart-query-form-item">
-                <a-range-picker v-model:value="queryForm.contractDate" :presets="defaultTimeRanges" style="width: 150px"
+                <a-range-picker v-model:value="queryForm.contractDate" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeContractDate" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
@@ -59,13 +60,13 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="confirmBatchDelete" type="danger" size="small"
+                <!-- <a-button @click="confirmBatchDelete" type="danger" size="small"
                     :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <DeleteOutlined />
                     </template>
                     批量删除
-                </a-button>
+                </a-button> -->
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -74,13 +75,32 @@
         <!---------- 表格操作行 end ----------->
 
         <!---------- 表格 begin ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false"
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
+                <template v-if="column.dataIndex === 'salesNo'">
+                    <a @click="detail(record.id)">{{ record.salesNo }}</a>
+                </template>
+                <template v-if="column.dataIndex === 'salesType'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('SALES_TYPE_ENUM', text) }}</span>
+                </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
-                        <a-button @click="showForm(record)" type="link">编辑</a-button>
-                        <a-button @click="onDelete(record)" danger type="link">删除</a-button>
+                        <a-dropdown v-if="record.nodeList && record.nodeList.length > 0">
+                            <a class="ant-dropdown-link" @click.prevent>
+                                节点操作
+                            </a>
+                            <template #overlay>
+                                <a-menu @click="handleMenuClick($event, record)">
+                                    <a-menu-item v-for="node in record.nodeList" :key="node">
+                                        {{ node.nodeName }}
+                                    </a-menu-item>
+                                </a-menu>
+                            </template>
+                        </a-dropdown>
+                        <!-- <a-button @click="showForm(record)" type="link">编辑</a-button>
+                        <a-button @click="onDelete(record)" danger type="link">删除</a-button> -->
                     </div>
                 </template>
             </template>
@@ -96,10 +116,14 @@
 
         <SalesForm ref="formRef" @reloadList="queryData" />
 
+        <ReceivePayment ref="receivePaymentFormRef" @reloadList="queryData" />
+        <DeliveryForm ref="deliveryFormRef" @reloadList="queryData" />
+        <InvoiceForm ref="invoiceFormRef" @reloadList="queryData" />
     </a-card>
 </template>
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { salesApi } from '/@/api/business/goods/sales-api';
@@ -108,131 +132,116 @@ import { smartSentry } from '/@/lib/smart-sentry';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import SalesForm from './sales-form.vue';
+import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
+import EmployeeSelect from '/@/components/system/employee-select/index.vue';
+import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
+import NODE_CONST from '/@/constants/business/project/node-const';
+import InvoiceForm from '../../common-nodes/invoice/invoice-form.vue';
+import DeliveryForm from '../../common-nodes/delivery/delivery-form.vue';
+import ReceivePayment from '../../common-nodes/receive-payment/receive-payment.vue';
+
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
     {
-        title: '销售单ID',
-        dataIndex: 'id',
-        ellipsis: true,
-    },
-    {
         title: '销售单号',
-        dataIndex: 'salesNo',
-        ellipsis: true,
+        dataIndex: 'salesNo', fixed: 'left',
+        width: 180,
     },
     {
-        title: '销售类型（0:库存，1:厂家）',
+        title: '销售类型',
         dataIndex: 'salesType',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '供货厂家',
         dataIndex: 'supplier',
-        ellipsis: true,
+        width: 150,
     },
     {
-        title: '客户ID',
-        dataIndex: 'customerId',
-        ellipsis: true,
+        title: '客户',
+        dataIndex: 'customerName',
+        width: 150,
     },
     {
-        title: '销售经理ID',
-        dataIndex: 'managerId',
-        ellipsis: true,
+        title: '销售经理',
+        dataIndex: 'managerName',
+        width: 150,
     },
     {
         title: '合同号',
         dataIndex: 'contractNo',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '合同日',
         dataIndex: 'contractDate',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '合同金额',
         dataIndex: 'contractAmount',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '回款日期',
         dataIndex: 'receivedPaymentDate',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '回款金额',
         dataIndex: 'receivedPaymentAmount',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '发货日期',
         dataIndex: 'shippingDate',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '发货金额',
         dataIndex: 'shippingAmount',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '开票日期',
         dataIndex: 'invoiceDate',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '发票金额',
         dataIndex: 'invoiceAmount',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '发票号',
         dataIndex: 'invoiceNumber',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '备注',
         dataIndex: 'remark',
-        ellipsis: true,
+        width: 150,
     },
+
     {
         title: '创建人',
-        dataIndex: 'createUserId',
-        ellipsis: true,
-    },
-    {
-        title: '创建人姓名',
         dataIndex: 'createUserName',
-        ellipsis: true,
+        width: 150,
     },
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        ellipsis: true,
+        width: 190,
     },
-    {
-        title: '更新人',
-        dataIndex: 'updateUserId',
-        ellipsis: true,
-    },
-    {
-        title: '更新人姓名',
-        dataIndex: 'updateUserName',
-        ellipsis: true,
-    },
-    {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        ellipsis: true,
-    },
+
     {
         title: '操作',
         dataIndex: 'action',
         fixed: 'right',
         width: 90,
     },
-]);
+].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
 
@@ -293,6 +302,11 @@ const formRef = ref();
 
 function showForm(data) {
     formRef.value.show(data);
+}
+
+let router = useRouter();
+function detail(id) {
+    router.push({ path: '/erp/goods/sales/detail', query: { id: id, date: new Date().getTime() } });
 }
 
 // ---------------------------- 单个删除 ----------------------------
@@ -365,4 +379,24 @@ async function requestBatchDelete() {
         SmartLoading.hide();
     }
 }
+
+function handleResizeColumn(w, col) {
+    col.width = w;
+}
+
+const receivePaymentFormRef = ref();
+const invoiceFormRef = ref();
+const deliveryFormRef = ref();
+
+const handleMenuClick = (e, param) => {
+
+    param.projectType = 61;
+    if (e.key.nodeId === NODE_CONST.receive_payment) {
+        receivePaymentFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.invoice) {
+        invoiceFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.delivery) {
+        deliveryFormRef.value.show(param, e.key.id);
+    }
+};
 </script>
