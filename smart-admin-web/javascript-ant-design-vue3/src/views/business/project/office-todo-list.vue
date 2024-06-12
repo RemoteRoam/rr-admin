@@ -75,146 +75,56 @@
 
     <!-- Data Table -->
     <a-card size="small" :bordered="false" :hoverable="true">
-        <a-tabs>
-            <a-tab-pane key="estimateCompletion" :tab="tabName8">
-                <a-table size="small" :dataSource="tableData8" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
-                    <template #bodyCell="{ text, record, column }">
-                        <template v-if="column.dataIndex === 'taskNo'">
-                            <a @click="detailTask(record)">{{ record.taskNo }}</a>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'projectType'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_LAB_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'category'">
-                            <span>{{ getEnumDescription(record.projectType, text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'sourceType'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'isPaid'">
-                            <span>{{ text ? '是' : '否' }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'payParty'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PAY_PARTY_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'status'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'action'">
-                            <div class="smart-table-operate">
-                                <a-dropdown>
-                                    <a class="ant-dropdown-link" @click.prevent>
-                                        节点操作
-                                    </a>
-                                    <template #overlay>
-                                        <a-menu @click="handleMenuClick($event, record)">
-                                            <a-menu-item v-for="node in record.projectNodeList" :key="node">
-                                                {{ node.nodeName }}
-                                            </a-menu-item>
-                                        </a-menu>
-                                    </template>
-                                </a-dropdown>
-                            </div>
-                        </template>
-                    </template>
-                </a-table>
+        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
+            <template #bodyCell="{ text, record, column }">
+                <template v-if="column.dataIndex === 'taskNo'">
+                    <a @click="detailTask(record)">{{ record.taskNo }}</a>
+                </template>
+                <template v-else-if="column.dataIndex === 'projectType'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_LAB_ENUM', text) }}</span>
+                </template>
+                <template v-else-if="column.dataIndex === 'category'">
+                    <span>{{ getEnumDescription(record.projectType, text) }}</span>
+                </template>
+                <template v-else-if="column.dataIndex === 'sourceType'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
+                </template>
+                <template v-else-if="column.dataIndex === 'isPaid'">
+                    <span>{{ text ? '是' : '否' }}</span>
+                </template>
+                <template v-else-if="column.dataIndex === 'payParty'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('PAY_PARTY_ENUM', text) }}</span>
+                </template>
+                <template v-else-if="column.dataIndex === 'status'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
+                </template>
+                <template v-else-if="column.dataIndex === 'action'">
+                    <div class="smart-table-operate">
+                        <a-dropdown>
+                            <a class="ant-dropdown-link" @click.prevent>
+                                节点操作
+                            </a>
+                            <template #overlay>
+                                <a-menu @click="handleMenuClick($event, record)">
+                                    <a-menu-item v-for="node in record.projectNodeList" :key="node">
+                                        {{ node.nodeName }}
+                                    </a-menu-item>
+                                </a-menu>
+                            </template>
+                        </a-dropdown>
+                    </div>
+                </template>
+            </template>
+        </a-table>
 
-            </a-tab-pane>
+        <div class="smart-query-table-page">
+            <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+                :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum"
+                v-model:pageSize="queryForm.pageSize" :total="total" @change="queryData" @showSizeChange="queryData"
+                :show-total="total => `共${total}条`" />
+        </div>
 
-            <a-tab-pane key="experimentCheck" :tab="tabName9">
-                <a-table size="small" :dataSource="tableData9" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
-                    <template #bodyCell="{ text, record, column }">
-                        <template v-if="column.dataIndex === 'taskNo'">
-                            <a @click="detailTask(record)">{{ record.taskNo }}</a>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'projectType'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_LAB_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'category'">
-                            <span>{{ getEnumDescription(record.projectType, text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'sourceType'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'isPaid'">
-                            <span>{{ text ? '是' : '否' }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'payParty'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PAY_PARTY_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'status'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'action'">
-                            <div class="smart-table-operate">
-                                <a-dropdown>
-                                    <a class="ant-dropdown-link" @click.prevent>
-                                        节点操作
-                                    </a>
-                                    <template #overlay>
-                                        <a-menu @click="handleMenuClick($event, record)">
-                                            <a-menu-item v-for="node in record.projectNodeList" :key="node">
-                                                {{ node.nodeName }}
-                                            </a-menu-item>
-                                        </a-menu>
-                                    </template>
-                                </a-dropdown>
-                            </div>
-                        </template>
-                    </template>
-                </a-table>
-            </a-tab-pane>
-            <a-tab-pane key="labReport" :tab="tabName10">
-                <a-table size="small" :dataSource="tableData10" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
-                    <template #bodyCell="{ text, record, column }">
-                        <template v-if="column.dataIndex === 'taskNo'">
-                            <a @click="detailTask(record)">{{ record.taskNo }}</a>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'projectType'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_LAB_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'category'">
-                            <span>{{ getEnumDescription(record.projectType, text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'sourceType'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'isPaid'">
-                            <span>{{ text ? '是' : '否' }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'payParty'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PAY_PARTY_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'status'">
-                            <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
-                        </template>
-                        <template v-else-if="column.dataIndex === 'action'">
-                            <div class="smart-table-operate">
-                                <a-dropdown>
-                                    <a class="ant-dropdown-link" @click.prevent>
-                                        节点操作
-                                    </a>
-                                    <template #overlay>
-                                        <a-menu @click="handleMenuClick($event, record)">
-                                            <a-menu-item>
-                                                产品列表
-                                            </a-menu-item>
-                                            <a-menu-divider />
-                                            <a-menu-item v-for="node in record.projectNodeList" :key="node">
-                                                {{ node.nodeName }}
-                                            </a-menu-item>
-                                        </a-menu>
-                                    </template>
-                                </a-dropdown>
-                            </div>
-                        </template>
-                    </template>
-                </a-table>
-            </a-tab-pane>
-        </a-tabs>
 
         <EnterContractForm ref="enterContractFormRef" @reloadList="queryData" />
         <SendDataForm ref="sendDataFormRef" @reloadList="queryData" />
@@ -295,15 +205,9 @@ const queryFormState = {
 const queryForm = reactive({ ...queryFormState });
 const labPayDateRange = ref([]);
 
-const tabName8 = ref('预计完成');
-const tabName9 = ref('实验检测');
-const tabName10 = ref('实验室上报');
-
 // Table loading state
 const tableLoading = ref(false);
-const tableData8 = ref([]);
-const tableData9 = ref([]);
-const tableData10 = ref([]);
+const tableData = ref([]);
 const total = ref(0);
 
 // Router and route
@@ -322,13 +226,8 @@ const experimentCheckFormRef = ref();
 const queryData = async () => {
     tableLoading.value = true;
     try {
-        const { data } = await projectLabApi.queryLabTodoList(queryForm);
-        tableData8.value = data.estimateCompletionList;
-        tabName8.value = `预计完成(${data.estimateCompletionCount})`;
-        tableData9.value = data.experimentCheckList;
-        tabName9.value = `实验检测(${data.experimentCheckCount})`;
-        tableData10.value = data.labReportList;
-        tabName10.value = `实验室上报(${data.labReportCount})`;
+        const { data } = await projectLabApi.queryLabListPage(queryForm);
+        tableData.value = data.list;
         total.value = data.total;
     } catch (error) {
         console.error(error);
@@ -366,7 +265,7 @@ const handleMenuClick = (e, param) => {
         router.push({
             path: '/project/product-list', query: {
                 projectId: route.query.projectId,
-                customerName: param.customerName, projectType: param.projectType, category: param.category,
+                customerName: detail.value.customerName, projectType: detail.value.projectType, category: detail.value.category,
                 taskId: param.id
             }
         });

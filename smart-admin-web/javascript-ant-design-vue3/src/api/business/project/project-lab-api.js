@@ -47,6 +47,13 @@ export const projectLabApi = {
     return postRequest('/projectLab/queryLabListPage', param);
   },
 
+  /**
+    * 实验室待办查询  @author  cbh
+    */
+  queryLabTodoList: (param) => {
+    return postRequest('/projectLab/queryLabTodoList', param);
+  },
+
   // 导出excel @author cbh
   exportExcel: (param) => {
     return postDownload('/projectLab/exportExcel', param);
