@@ -3,6 +3,8 @@ package tech.remote.admin.module.business.goods.domain.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 盘点明细表 列表VO
  *
@@ -35,5 +37,17 @@ public class StocktakeItemVO {
 
     @Schema(description = "备注")
     private String remark;
+
+    @Schema(description = "商品名称")
+    private String goodsName;
+
+    @Schema(description = "商品分类")
+    private String categoryName;
+
+    @Schema(description = "型号规格名称")
+    private String skuName;
+
+    @Schema(description = "排的重量")
+    private BigDecimal weight;
 
 }

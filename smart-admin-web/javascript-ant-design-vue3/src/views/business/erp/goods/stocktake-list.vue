@@ -10,10 +10,14 @@
     <a-form class="smart-query-form">
         <a-row class="smart-query-form-row">
             <a-form-item label="盘点单号" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.stocktakeNo" placeholder="盘点单号" />
+                <a-input style="width: 190px" v-model:value="queryForm.stocktakeNo" placeholder="盘点单号" />
             </a-form-item>
-            <a-form-item label="盘点时间" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.createTime" placeholder="盘点时间" />
+            <a-form-item label="盘点单名称" class="smart-query-form-item">
+                <a-input style="width: 190px" v-model:value="queryForm.title" placeholder="盘点单名称" />
+            </a-form-item>
+            <a-form-item label="创建时间" class="smart-query-form-item">
+                <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
+                    @change="onChangeCreateTime" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
                 <a-button type="primary" @click="queryData">
@@ -43,13 +47,13 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="confirmBatchDelete" type="danger" size="small"
+                <!-- <a-button @click="confirmBatchDelete" type="danger" size="small"
                     :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <DeleteOutlined />
                     </template>
                     批量删除
-                </a-button>
+                </a-button> -->
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -61,6 +65,9 @@
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
             :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
             <template #bodyCell="{ text, record, column }">
+                <template v-if="column.dataIndex === 'stocktakeNo'">
+                    <a @click="showDetail(record.id)">{{ text }}</a>
+                </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
                         <a-button @click="showForm(record)" type="link">编辑</a-button>
@@ -79,6 +86,7 @@
         </div>
 
         <StocktakeForm ref="formRef" @reloadList="queryData" />
+        <StocktakeDetail ref="detailRef" />
 
     </a-card>
 </template>
@@ -90,42 +98,40 @@ import { stocktakeApi } from '/@/api/business/goods/stocktake-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
 import { smartSentry } from '/@/lib/smart-sentry';
 import TableOperator from '/@/components/support/table-operator/index.vue';
+import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import StocktakeForm from './stocktake-form.vue';
+import StocktakeDetail from './stocktake-detail.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
-    {
-        title: '盘点ID',
-        dataIndex: 'id',
-        ellipsis: true,
-    },
+    // {
+    //     title: '盘点ID',
+    //     dataIndex: 'id',
+    //     ellipsis: true,
+    // },
     {
         title: '盘点单号',
         dataIndex: 'stocktakeNo',
         ellipsis: true,
     },
     {
-        title: '商品类目ID',
-        dataIndex: 'categoryId',
+        title: '盘点单名称',
+        dataIndex: 'title',
         ellipsis: true,
     },
-    {
-        title: '删除状态',
-        dataIndex: 'deletedFlag',
-        ellipsis: true,
-    },
+    // {
+    //     title: '删除状态',
+    //     dataIndex: 'deletedFlag',
+    //     ellipsis: true,
+    // },
     {
         title: '备注',
         dataIndex: 'remark',
         ellipsis: true,
     },
+
     {
         title: '创建人',
-        dataIndex: 'createUserId',
-        ellipsis: true,
-    },
-    {
-        title: '创建人姓名',
         dataIndex: 'createUserName',
         ellipsis: true,
     },
@@ -134,27 +140,7 @@ const columns = ref([
         dataIndex: 'createTime',
         ellipsis: true,
     },
-    {
-        title: '更新人',
-        dataIndex: 'updateUserId',
-        ellipsis: true,
-    },
-    {
-        title: '更新人姓名',
-        dataIndex: 'updateUserName',
-        ellipsis: true,
-    },
-    {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        ellipsis: true,
-    },
-    {
-        title: '操作',
-        dataIndex: 'action',
-        fixed: 'right',
-        width: 90,
-    },
+
 ]);
 
 // ---------------------------- 查询数据表单和方法 ----------------------------
@@ -196,8 +182,20 @@ async function queryData() {
     }
 }
 
+function onChangeCreateTime(dates, dateStrings) {
+    queryForm.createTimeBegin = dateStrings[0];
+    queryForm.createTimeEnd = dateStrings[1];
+}
 
 onMounted(queryData);
+
+
+const detailRef = ref();
+
+function showDetail(id) {
+    // 使用$refs调用showDetail方法
+    detailRef.value.showDetail(id);
+}
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();

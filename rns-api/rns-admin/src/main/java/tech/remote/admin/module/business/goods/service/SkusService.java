@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import tech.remote.admin.module.business.goods.dao.SkusDao;
 import tech.remote.admin.module.business.goods.domain.entity.SkusEntity;
 import tech.remote.admin.module.business.goods.domain.form.*;
+import tech.remote.admin.module.business.goods.domain.vo.SkusExcelVO;
 import tech.remote.admin.module.business.goods.domain.vo.SkusVO;
 import tech.remote.admin.module.business.goods.manager.SkusManager;
 import tech.remote.base.common.util.SmartBeanUtil;
@@ -117,5 +118,10 @@ public class SkusService {
         }
         skusDao.delete(Wrappers.lambdaQuery(SkusEntity.class).eq(SkusEntity::getGoodsId, updateForm.getGoodsId()));
         this.insertSkus(updateForm.getGoodsId(), updateForm);
+    }
+
+    public List<SkusExcelVO> getExcelExportData(SkusQueryForm queryForm) {
+        List<SkusExcelVO> excelList = skusDao.selectExcelList(queryForm);
+        return excelList;
     }
 }

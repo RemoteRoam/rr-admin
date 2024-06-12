@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -28,6 +30,11 @@ public class StocktakeEntity {
      * 盘点单号
      */
     private String stocktakeNo;
+
+    /**
+     * 盘点单名称
+     */
+    private String title;
 
     /**
      * 商品类目ID

@@ -1,10 +1,14 @@
 package tech.remote.admin.module.business.goods.controller;
 
+import cn.hutool.core.date.DateUtil;
+import com.alibaba.excel.EasyExcel;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import tech.remote.admin.module.business.goods.domain.form.SkusAddForm;
 import tech.remote.admin.module.business.goods.domain.form.SkusQueryForm;
 import tech.remote.admin.module.business.goods.domain.form.SkusUpdateForm;
+import tech.remote.admin.module.business.goods.domain.vo.SkusExcelVO;
 import tech.remote.admin.module.business.goods.domain.vo.SkusVO;
 import tech.remote.admin.module.business.goods.service.SkusService;
 import tech.remote.base.common.domain.ValidateList;
@@ -15,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartResponseUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 型号规格 Controller
@@ -62,5 +70,27 @@ public class SkusController {
     @GetMapping("/skus/delete/{skuId}")
     public ResponseDTO<String> batchDelete(@PathVariable Long skuId) {
         return skusService.delete(skuId);
+    }
+
+
+    @Operation(summary = "导出 @author cbh")
+    @PostMapping("/skus/exportExcel")
+    public void exportExcel(@RequestBody @Valid SkusQueryForm queryForm, HttpServletResponse response) throws IOException {
+        List<SkusExcelVO> data = skusService.getExcelExportData(queryForm);
+        if (CollectionUtils.isEmpty(data)) {
+            SmartResponseUtil.write(response, ResponseDTO.userErrorParam("暂无数据"));
+            return;
+        }
+
+        String fileName = "库存报表-" + DateUtil.today() + ".xls";
+
+        // 设置下载消息头
+        SmartResponseUtil.setDownloadFileHeader(response, fileName, null);
+
+        // 下载
+        EasyExcel.write(response.getOutputStream(), SkusExcelVO.class)
+                .autoCloseStream(Boolean.FALSE)
+                .sheet("库存")
+                .doWrite(data);
     }
 }

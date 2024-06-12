@@ -32,4 +32,5 @@ public interface StocktakeItemDao extends BaseMapper<StocktakeItemEntity> {
     List<StocktakeItemVO> queryPage(Page page, @Param("queryForm") StocktakeItemQueryForm queryForm);
 
 
+    List<StocktakeItemVO> listByStocktakeId(Long id);
 }

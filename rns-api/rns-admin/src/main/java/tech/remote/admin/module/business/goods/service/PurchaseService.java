@@ -74,10 +74,7 @@ public class PurchaseService {
         if (CollectionUtils.isEmpty(addForm.getItemList())){
             return ResponseDTO.userErrorParam("明细不能为空");
         }
-        // 明细不能超过300条
-        if (addForm.getItemList().size() > 300){
-            return ResponseDTO.userErrorParam("每次采购入库的商品规格型号不能超过300个");
-        }
+
         PurchaseEntity purchaseEntity = SmartBeanUtil.copy(addForm, PurchaseEntity.class);
 
         String purchaseNo = serialNumberService.generate(SerialNumberIdEnum.PURCHASE_NO);

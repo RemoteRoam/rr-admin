@@ -9,17 +9,17 @@
     <!---------- 查询表单form begin ----------->
     <a-form class="smart-query-form">
         <a-row class="smart-query-form-row">
-            <a-form-item label="型号规格ID" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.skuId" placeholder="型号规格ID" />
+            <a-form-item label="商品分类" class="smart-query-form-item">
+                <category-tree width="150px" v-model:value="queryForm.categoryId" placeholder="请选择商品分类"
+                    :categoryType="CATEGORY_TYPE_ENUM.GOODS.value" @change="onCategoryChange" />
             </a-form-item>
-            <a-form-item label="商品ID" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.goodsId" placeholder="商品ID" />
+            <a-form-item label="商品名称" class="smart-query-form-item">
+
+                <GoodsSelect width="150px" v-model:value="queryForm.goodsId" placeholder="请选择商品"
+                    :categoryId="selectedCategoryId" />
             </a-form-item>
-            <a-form-item label="商品类目ID" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.categoryId" placeholder="商品类目ID" />
-            </a-form-item>
-            <a-form-item label="型号规格名称" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.skuName" placeholder="型号规格名称" />
+            <a-form-item label="规格型号名称" class="smart-query-form-item">
+                <a-input style="width: 150px" v-model:value="queryForm.skuName" placeholder="关键字" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
                 <a-button type="primary" @click="queryData">
@@ -42,7 +42,13 @@
     <a-card size="small" :bordered="false" :hoverable="true">
         <!---------- 表格操作行 begin ----------->
         <a-row class="smart-table-btn-block">
-            <div class="smart-table-operate-block">
+            <a-button @click="exportExcel()" type="primary" size="small">
+                <template #icon>
+                    <FileExcelOutlined />
+                </template>
+                导出库存
+            </a-button>
+            <!-- <div class="smart-table-operate-block">
                 <a-button @click="showForm" type="primary" size="small">
                     <template #icon>
                         <PlusOutlined />
@@ -56,9 +62,9 @@
                     </template>
                     批量删除
                 </a-button>
-            </div>
+            </div> -->
             <div class="smart-table-setting-block">
-                <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
+                <!-- <TableOperator v-model="columns" :tableId="null" :refresh="queryData" /> -->
             </div>
         </a-row>
         <!---------- 表格操作行 end ----------->
@@ -67,12 +73,12 @@
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="skuId" bordered :loading="tableLoading"
             :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
             <template #bodyCell="{ text, record, column }">
-                <template v-if="column.dataIndex === 'action'">
+                <!-- <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
                         <a-button @click="showForm(record)" type="link">编辑</a-button>
                         <a-button @click="onDelete(record)" danger type="link">删除</a-button>
                     </div>
-                </template>
+                </template> -->
             </template>
         </a-table>
         <!---------- 表格 end ----------->
@@ -97,22 +103,21 @@ import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
 import { smartSentry } from '/@/lib/smart-sentry';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import SkusForm from './skus-form.vue';
+import CategoryTree from '/@/components/business/category-tree-select/index.vue';
+import { CATEGORY_TYPE_ENUM } from '/@/constants/business/erp/category-const';
+import GoodsSelect from '/@/components/business/goods-select/index.vue';
+
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
     {
-        title: '型号规格ID',
-        dataIndex: 'skuId',
+        title: '商品类目',
+        dataIndex: 'categoryName',
         ellipsis: true,
     },
     {
-        title: '商品ID',
-        dataIndex: 'goodsId',
-        ellipsis: true,
-    },
-    {
-        title: '商品类目ID',
-        dataIndex: 'categoryId',
+        title: '商品名称',
+        dataIndex: 'goodsName',
         ellipsis: true,
     },
     {
@@ -121,30 +126,9 @@ const columns = ref([
         ellipsis: true,
     },
     {
-        title: '排的重量',
-        dataIndex: 'weight',
-        ellipsis: true,
-    },
-    {
-        title: '备注',
-        dataIndex: 'remark',
-        ellipsis: true,
-    },
-    {
-        title: '更新时间',
-        dataIndex: 'updateTime',
-        ellipsis: true,
-    },
-    {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        ellipsis: true,
-    },
-    {
-        title: '操作',
-        dataIndex: 'action',
-        fixed: 'right',
-        width: 90,
+        title: '库存数量',
+        dataIndex: 'stockQuantity',
+        width: 100,
     },
 ]);
 
@@ -188,7 +172,11 @@ async function queryData() {
         tableLoading.value = false;
     }
 }
-
+// ----------------------- 商品分类变化 ---------------------
+const selectedCategoryId = ref(null);
+function onCategoryChange(categoryId) {
+    selectedCategoryId.value = categoryId;
+}
 
 onMounted(queryData);
 
@@ -268,5 +256,9 @@ async function requestBatchDelete() {
     } finally {
         SmartLoading.hide();
     }
+}
+// --------------------------- 导出 ---------------------------
+async function exportExcel() {
+    await skusApi.exportExcel(queryForm);
 }
 </script>

@@ -12,7 +12,7 @@ export const stocktakeApi = {
   /**
    * 分页查询  @author  cbh
    */
-  queryPage : (param) => {
+  queryPage: (param) => {
     return postRequest('/stocktake/queryPage', param);
   },
 
@@ -20,14 +20,14 @@ export const stocktakeApi = {
    * 增加  @author  cbh
    */
   add: (param) => {
-      return postRequest('/stocktake/add', param);
+    return postRequest('/stocktake/add', param);
   },
 
   /**
    * 修改  @author  cbh
    */
   update: (param) => {
-      return postRequest('/stocktake/update', param);
+    return postRequest('/stocktake/update', param);
   },
 
 
@@ -35,14 +35,20 @@ export const stocktakeApi = {
    * 删除  @author  cbh
    */
   delete: (id) => {
-      return getRequest(`/stocktake/delete/${id}`);
+    return getRequest(`/stocktake/delete/${id}`);
   },
 
   /**
    * 批量删除  @author  cbh
    */
   batchDelete: (idList) => {
-      return postRequest('/stocktake/batchDelete', idList);
+    return postRequest('/stocktake/batchDelete', idList);
   },
 
+  /**
+   * 通过id查询  @Author  cbh
+   */
+  getById: (id) => {
+    return getRequest(`/stocktake/get/${id}`);
+  },
 };

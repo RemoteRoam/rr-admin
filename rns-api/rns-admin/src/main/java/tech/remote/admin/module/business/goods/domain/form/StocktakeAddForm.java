@@ -2,6 +2,7 @@ package tech.remote.admin.module.business.goods.domain.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -16,18 +17,8 @@ import lombok.Data;
 @Data
 public class StocktakeAddForm {
 
-    @Schema(description = "盘点ID")
-    private Long id;
-
-    @Schema(description = "盘点单号", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank(message = "盘点单号 不能为空")
-    private String stocktakeNo;
-
-    @Schema(description = "商品类目ID")
-    private Long categoryId;
-
-    @Schema(description = "删除状态")
-    private Integer deletedFlag;
+    @Schema(description = "盘点单名称")
+    private String title;
 
     @Schema(description = "备注")
     private String remark;
@@ -41,4 +32,6 @@ public class StocktakeAddForm {
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
+    @Schema(description = "盘点单明细")
+    private List<StocktakeItemAddForm> itemList;
 }

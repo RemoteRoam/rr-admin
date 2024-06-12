@@ -4,6 +4,7 @@ import tech.remote.base.common.domain.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -20,7 +21,13 @@ public class StocktakeQueryForm extends PageParam{
     @Schema(description = "盘点单号")
     private String stocktakeNo;
 
-    @Schema(description = "盘点时间")
-    private LocalDateTime createTime;
+    @Schema(description = "盘点单名称")
+    private String title;
+
+    @Schema(description = "创建时间")
+    private LocalDate createTimeBegin;
+
+    @Schema(description = "创建时间")
+    private LocalDate createTimeEnd;
 
 }

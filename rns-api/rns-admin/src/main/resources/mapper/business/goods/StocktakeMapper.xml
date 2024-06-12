@@ -12,11 +12,15 @@
             <if test="queryForm.stocktakeNo != null and queryForm.stocktakeNo != ''">
                         AND INSTR(t_stocktake.stocktake_no,#{queryForm.stocktakeNo})
             </if>
-            <!--盘点时间-->
-            <if test="queryForm.createTime != null">
-                AND t_stocktake.create_time = #{queryForm.createTime}
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t_stocktake.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t_stocktake.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
         </where>
+        order by t_stocktake.create_time desc
     </select>
 
 

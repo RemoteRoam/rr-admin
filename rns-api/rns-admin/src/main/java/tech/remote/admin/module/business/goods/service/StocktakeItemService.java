@@ -92,4 +92,8 @@ public class StocktakeItemService {
         stocktakeItemDao.deleteById(id);
         return ResponseDTO.ok();
     }
+
+    public List<StocktakeItemVO> listByStocktakeId(Long id) {
+        return stocktakeItemDao.listByStocktakeId(id);
+    }
 }

@@ -3,6 +3,7 @@ package tech.remote.admin.module.business.goods.dao;
 import java.util.List;
 import tech.remote.admin.module.business.goods.domain.entity.SkusEntity;
 import tech.remote.admin.module.business.goods.domain.form.SkusQueryForm;
+import tech.remote.admin.module.business.goods.domain.vo.SkusExcelVO;
 import tech.remote.admin.module.business.goods.domain.vo.SkusVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -40,4 +41,5 @@ public interface SkusDao extends BaseMapper<SkusEntity> {
      */
     void batchUpdateDeleted(@Param("idList")List<Integer> idList,@Param("${deletedFlag}")boolean deletedFlag);
 
+    List<SkusExcelVO> selectExcelList(@Param("queryForm") SkusQueryForm queryForm);
 }

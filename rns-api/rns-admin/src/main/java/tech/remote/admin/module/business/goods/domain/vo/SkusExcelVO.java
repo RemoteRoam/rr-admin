@@ -1,9 +1,12 @@
 package tech.remote.admin.module.business.goods.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import lombok.Data;
 
 /**
  * 型号规格 列表VO
@@ -14,40 +17,32 @@ import lombok.Data;
  */
 
 @Data
-public class SkusVO {
+@ColumnWidth(15)
+public class SkusExcelVO {
 
-
-    @Schema(description = "型号规格ID")
-    private Long skuId;
-
-    @Schema(description = "商品ID")
-    private Long goodsId;
-
-    @Schema(description = "商品名称")
-    private String goodsName;
-
-    @Schema(description = "商品类目ID")
-    private Long categoryId;
-
-    @Schema(description = "商品分类")
+    @ExcelProperty("商品分类")
     private String categoryName;
 
-    @Schema(description = "型号规格名称")
+    @ExcelProperty("商品名称")
+    private String goodsName;
+
+    @ExcelProperty("型号规格名称")
     private String skuName;
 
-    @Schema(description = "排的重量")
-    private BigDecimal weight;
-
-    @Schema(description = "SKU库存数量")
+    @ExcelProperty("库存数量")
     private Integer stockQuantity;
 
-    @Schema(description = "备注")
-    private String remark;
+    @ExcelProperty("排的重量")
+    private BigDecimal weight;
 
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+//    @ExcelProperty("备注")
+//    private String remark;
+//
+//    @ExcelProperty("更新时间")
+//    private LocalDateTime updateTime;
+//
+//    @ExcelProperty("创建时间")
+//    @ColumnWidth(20)
+//    private LocalDateTime createTime;
 
 }

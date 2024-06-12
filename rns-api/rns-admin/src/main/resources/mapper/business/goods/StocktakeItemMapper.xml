@@ -26,6 +26,16 @@
             </if>
         </where>
     </select>
+    <select id="listByStocktakeId"
+            resultType="tech.remote.admin.module.business.goods.domain.vo.StocktakeItemVO">
+        SELECT
+            i.*, c.category_name as categoryName,  g.goods_name as goodsName, s.sku_name as skuName, s.weight
+        FROM t_stocktake_item i
+                 LEFT JOIN t_goods g ON i.goods_id = g.goods_id
+                 LEFT JOIN t_category c ON i.category_id = c.category_id
+                 LEFT JOIN t_skus s ON i.sku_id = s.sku_id
+        WHERE i.stocktake_id = #{stocktakeId}
+    </select>
 
 
 </mapper>

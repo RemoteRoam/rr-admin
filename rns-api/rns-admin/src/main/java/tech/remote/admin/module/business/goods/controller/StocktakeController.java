@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import tech.remote.admin.module.business.goods.domain.form.StocktakeAddForm;
 import tech.remote.admin.module.business.goods.domain.form.StocktakeQueryForm;
 import tech.remote.admin.module.business.goods.domain.form.StocktakeUpdateForm;
+import tech.remote.admin.module.business.goods.domain.vo.PurchaseVO;
 import tech.remote.admin.module.business.goods.domain.vo.StocktakeVO;
 import tech.remote.admin.module.business.goods.service.StocktakeService;
+import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
 import tech.remote.base.common.domain.ResponseDTO;
 import tech.remote.base.common.domain.PageResult;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import tech.remote.base.common.util.SmartRequestUtil;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -43,6 +46,9 @@ public class StocktakeController {
     @Operation(summary = "添加 @author cbh")
     @PostMapping("/stocktake/add")
     public ResponseDTO<String> add(@RequestBody @Valid StocktakeAddForm addForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        addForm.setCreateUserId(requestUser.getUserId());
+        addForm.setCreateUserName(requestUser.getUserName());
         return stocktakeService.add(addForm);
     }
 
@@ -62,5 +68,12 @@ public class StocktakeController {
     @GetMapping("/stocktake/delete/{id}")
     public ResponseDTO<String> batchDelete(@PathVariable Long id) {
         return stocktakeService.delete(id);
+    }
+
+
+    @Operation(summary = "查询详情")
+    @GetMapping("/stocktake/get/{id}")
+    public ResponseDTO<StocktakeVO> getDetail(@PathVariable Long id) {
+        return ResponseDTO.ok(stocktakeService.getDetail(id));
     }
 }
