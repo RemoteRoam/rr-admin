@@ -3,6 +3,8 @@ package tech.remote.admin.module.business.customer.domain.form;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 import tech.remote.base.common.json.deserializer.DictValueVoDeserializer;
 
@@ -22,6 +24,11 @@ public class CustomerAddForm {
     @Schema(description = "客户名称", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "客户名称 不能为空")
     private String customerName;
+
+    @Schema(description = "客户类型(1认证客户2销售客户)")
+    @NotNull(message = "客户类型 不能为空")
+    private Integer type;
+
 
     @Schema(description = "客户级别")
     @JsonDeserialize(using = DictValueVoDeserializer.class)

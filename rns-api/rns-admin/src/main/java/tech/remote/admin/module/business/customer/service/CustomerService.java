@@ -59,6 +59,7 @@ public class CustomerService {
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, addForm.getCustomerName());
         lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, NumberUtils.INTEGER_ZERO);
+        lambdaQueryWrapper.eq(CustomerEntity::getType, addForm.getType());
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         if(CollectionUtils.isNotEmpty(list)){
             return ResponseDTO.error(BusinessErrorCode.CUSTOMER_NAME_EXIST_ERROR);
@@ -79,6 +80,7 @@ public class CustomerService {
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, updateForm.getCustomerName());
         lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, NumberUtils.INTEGER_ZERO);
+        lambdaQueryWrapper.eq(CustomerEntity::getType, updateForm.getType());
         lambdaQueryWrapper.ne(CustomerEntity::getCustomerId, updateForm.getCustomerId());
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         if(CollectionUtils.isNotEmpty(list)){
@@ -122,10 +124,11 @@ public class CustomerService {
         return SmartBeanUtil.copy(entity, CustomerVO.class);
     }
 
-    public ResponseDTO<List<CustomerVO>> queryList() {
+    public ResponseDTO<List<CustomerVO>> queryList(Integer type) {
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
         lambdaQueryWrapper.eq(CustomerEntity::getDisabledFlag, Boolean.FALSE);
+        lambdaQueryWrapper.eq(CustomerEntity::getType, type);
         lambdaQueryWrapper.orderByDesc(CustomerEntity::getCreateTime);
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         return ResponseDTO.ok(SmartBeanUtil.copyList(list, CustomerVO.class));

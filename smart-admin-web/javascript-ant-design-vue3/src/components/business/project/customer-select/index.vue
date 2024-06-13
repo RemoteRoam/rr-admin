@@ -9,18 +9,9 @@
   *
 -->
 <template>
-  <a-select
-    v-model:value="selectValue"
-    :style="`width: ${width}`"
-    :placeholder="props.placeholder"
-    :showSearch="true"
-    :allowClear="true"
-    :size="size"
-    @change="handleChange"
-    :disabled="disabled"
-    :mode="multiple ? 'multiple' : ''"
-    optionFilterProp="label"
-  >
+  <a-select v-model:value="selectValue" :style="`width: ${width}`" :placeholder="props.placeholder" :showSearch="true"
+    :allowClear="true" :size="size" @change="handleChange" :disabled="disabled" :mode="multiple ? 'multiple' : ''"
+    optionFilterProp="label">
     <a-select-option v-for="item in dataList" :key="item.customerId" :label="item.customerName">
       {{ item.customerName }}
     </a-select-option>
@@ -28,54 +19,58 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, watch } from 'vue';
-  import { customerApi } from '/@/api/business/customer/customer-api';
+import { onMounted, ref, watch } from 'vue';
+import { customerApi } from '/@/api/business/customer/customer-api';
 
-  const props = defineProps({
-    value: [Number, String, Object],
-    width: {
-      type: String,
-      default: '200px',
-    },
-    placeholder: {
-      type: String,
-      default: '请选择',
-    },
-    size: {
-      type: String,
-      default: 'default',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-  });
-  const emit = defineEmits(['update:value', 'change']);
+const props = defineProps({
+  value: [Number, String, Object],
+  width: {
+    type: String,
+    default: '200px',
+  },
+  placeholder: {
+    type: String,
+    default: '请选择',
+  },
+  size: {
+    type: String,
+    default: 'default',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  type: {
+    type: Number,
+    default: 1,
+  },
+});
+const emit = defineEmits(['update:value', 'change']);
 
-  const selectValue = ref(props.value);
+const selectValue = ref(props.value);
 
-  // 箭头value变化
-  watch(
-    () => props.value,
-    (newValue) => {
-      selectValue.value = newValue;
-    }
-  );
-
-  function handleChange(value) {
-    emit('update:value', value);
-    emit('change', value);
+// 箭头value变化
+watch(
+  () => props.value,
+  (newValue) => {
+    selectValue.value = newValue;
   }
+);
 
-  const dataList = ref([]);
+function handleChange(value) {
+  emit('update:value', value);
+  emit('change', value);
+}
 
-  async function queryData() {
-    let res = await customerApi.queryList();
-    dataList.value = res.data;
-  }
-  onMounted(queryData);
+const dataList = ref([]);
+
+async function queryData() {
+  let res = await customerApi.queryList(props.type);
+  dataList.value = res.data;
+}
+onMounted(queryData);
 </script>

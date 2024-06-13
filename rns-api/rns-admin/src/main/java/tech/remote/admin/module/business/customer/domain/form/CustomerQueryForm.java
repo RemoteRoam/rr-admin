@@ -20,6 +20,9 @@ public class CustomerQueryForm extends PageParam{
     @Schema(description = "客户名称")
     private String customerName;
 
+    @Schema(description = "客户类型(1认证客户2销售客户)")
+    private Integer type;
+
     @Schema(description = "客户级别")
     private String customerLevel;
 

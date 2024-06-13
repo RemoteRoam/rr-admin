@@ -113,10 +113,12 @@ const emits = defineEmits(['refresh']);
 // 是否显示
 const visibleFlag = ref(false);
 
-function show(rowData) {
+function show(rowData, type) {
+  console.log(type);
   Object.assign(form, formDefault);
   area.value = [];
   factoryArea.value = [];
+  form.type = type;
   if (rowData.customerId) {
     detail(rowData.customerId);
   }
@@ -192,6 +194,7 @@ const formRef = ref();
 const formDefault = {
   customerId: undefined,
   customerName: undefined, //客户名称
+  type: undefined, //客户类型
   customerLevel: 'LEVEL_C', //客户级别
   contact: undefined, //联系人1
   contactPhone: undefined, //联系人1电话
@@ -240,6 +243,7 @@ async function onSubmit() {
 async function save() {
   SmartLoading.show();
   try {
+    console.log(form);
     if (form.customerId) {
       await customerApi.update(form);
     } else {

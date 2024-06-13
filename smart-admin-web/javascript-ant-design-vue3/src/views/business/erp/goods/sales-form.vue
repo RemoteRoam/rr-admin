@@ -23,7 +23,7 @@
                 </a-col>
                 <a-col :span="12">
                     <a-form-item label="客户" name="customerId">
-                        <CustomerSelect style="width: 100%" v-model:value="form.customerId" placeholder="客户" />
+                        <CustomerSelect type="2" style="width: 100%" v-model:value="form.customerId" placeholder="客户" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="12">
