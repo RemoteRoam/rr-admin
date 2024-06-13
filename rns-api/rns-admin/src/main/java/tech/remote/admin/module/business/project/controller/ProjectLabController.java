@@ -81,6 +81,13 @@ public class ProjectLabController {
         return ResponseDTO.ok(projectLabService.getProjectLabs(queryForm));
     }
 
+
+    @Operation(summary = "实验室待办查询 @author cbh")
+    @PostMapping("/projectLab/queryLabTodoList")
+    public ResponseDTO<ProjectLabTodoListVO> queryLabTodoList(@RequestBody @Valid ProjectLabListQueryForm queryForm) {
+        return ResponseDTO.ok(projectLabService.getProjectLabTodoList(queryForm));
+    }
+
     @Operation(summary = "导出 @author cbh")
     @PostMapping("/projectLab/exportExcel")
     public void exportExcel(@RequestBody @Valid ProjectLabListQueryForm queryForm, HttpServletResponse response) throws IOException {

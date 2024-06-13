@@ -296,4 +296,57 @@ public class ProjectLabService {
         List<ProjectLabExcelVO> excelList = projectLabDao.selectExcelList(queryForm);
         return excelList;
     }
+
+    public ProjectLabTodoListVO getProjectLabTodoList(ProjectLabListQueryForm queryForm) {
+        ProjectLabTodoListVO vo = new ProjectLabTodoListVO();
+        queryForm.setNodeId(8);
+        List<ProjectLabListVO> estimateCompletionList = projectLabDao.selectLabsTodo(queryForm);
+        if(CollectionUtils.isNotEmpty(estimateCompletionList)){
+            for(ProjectLabListVO projectLab : estimateCompletionList){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(projectLab.getProjectId());
+                nodeQueryForm.setProjectType(projectLab.getProjectType());
+                nodeQueryForm.setTaskId(projectLab.getId());
+                nodeQueryForm.setNodeLevel(2);
+                List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
+                projectLab.setProjectNodeList(projectNodeList);
+            }
+        }
+        vo.setEstimateCompletionList(estimateCompletionList);
+        vo.setEstimateCompletionCount(estimateCompletionList.size());
+
+        queryForm.setNodeId(9);
+        List<ProjectLabListVO> experimentCheckList = projectLabDao.selectLabsTodo(queryForm);
+        if(CollectionUtils.isNotEmpty(experimentCheckList)){
+            for(ProjectLabListVO projectLab : experimentCheckList){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(projectLab.getProjectId());
+                nodeQueryForm.setProjectType(projectLab.getProjectType());
+                nodeQueryForm.setTaskId(projectLab.getId());
+                nodeQueryForm.setNodeLevel(2);
+                List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
+                projectLab.setProjectNodeList(projectNodeList);
+            }
+        }
+        vo.setExperimentCheckList(experimentCheckList);
+        vo.setExperimentCheckCount(experimentCheckList.size());
+
+        queryForm.setNodeId(10);
+        List<ProjectLabListVO> labReportList = projectLabDao.selectLabsTodo(queryForm);
+        if(CollectionUtils.isNotEmpty(labReportList)){
+            for(ProjectLabListVO projectLab : labReportList){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(projectLab.getProjectId());
+                nodeQueryForm.setProjectType(projectLab.getProjectType());
+                nodeQueryForm.setTaskId(projectLab.getId());
+                nodeQueryForm.setNodeLevel(2);
+                List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
+                projectLab.setProjectNodeList(projectNodeList);
+            }
+        }
+        vo.setLabReportList(labReportList);
+        vo.setLabReportCount(labReportList.size());
+
+        return vo;
+    }
 }

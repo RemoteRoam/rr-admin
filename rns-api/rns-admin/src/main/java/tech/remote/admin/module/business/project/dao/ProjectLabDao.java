@@ -40,4 +40,7 @@ public interface ProjectLabDao extends BaseMapper<ProjectLabEntity> {
     List<ProjectLabListVO> selectProjectLabs(Page page, @Param("queryForm") ProjectLabListQueryForm queryForm);
 
     List<ProjectLabExcelVO> selectExcelList(@Param("queryForm") ProjectLabListQueryForm queryForm);
+
+    List<ProjectLabListVO> selectLabsTodo(@Param("queryForm") ProjectLabListQueryForm queryForm);
+
 }

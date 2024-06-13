@@ -50,7 +50,7 @@
         END AS sourceName,
         DATEDIFF(l.lab_expected_date, CURDATE()) AS alarmDays
         FROM t_project_lab l
-        LEFT JOIN t_project p ON l.project_id = p.id
+        LEFT JOIN t_project p ON l.project_id = p.id and p.deleted_flag = 0
         LEFT JOIN t_third_party p3 ON l.third_party_id = p3.id
         LEFT JOIN t_customer c ON p.customer_id = c.customer_id
         LEFT JOIN t_third_party p2 ON p.source_type = 1 AND p.source_id = p2.id
@@ -149,7 +149,7 @@
         ELSE NULL
         END AS statusName
         FROM t_project_lab l
-        LEFT JOIN t_project p ON l.project_id = p.id
+        LEFT JOIN t_project p ON l.project_id = p.id and p.deleted_flag = 0
         LEFT JOIN t_third_party p3 ON l.third_party_id = p3.id
         LEFT JOIN t_customer c ON p.customer_id = c.customer_id
         LEFT JOIN t_third_party p2 ON p.source_type = 1 AND p.source_id = p2.id
@@ -191,5 +191,79 @@
         <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
         order by l.create_time
+    </select>
+
+
+    <select id="selectLabsTodo" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabListVO">
+        SELECT l.*,
+        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id,
+        p3.name AS thirdPartyName, c.customer_name AS customerName,
+        CASE
+        WHEN p.source_type = 1 THEN p2.name
+        WHEN p.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName,
+        DATEDIFF(l.lab_expected_date, CURDATE()) AS alarmDays
+        FROM t_project_lab l
+        LEFT JOIN t_project p ON l.project_id = p.id and p.deleted_flag = 0
+        LEFT JOIN t_third_party p3 ON l.third_party_id = p3.id
+        LEFT JOIN t_customer c ON p.customer_id = c.customer_id
+        LEFT JOIN t_third_party p2 ON p.source_type = 1 AND p.source_id = p2.id
+        LEFT JOIN t_employee e ON p.source_type = 2 AND p.source_id = e.employee_id
+        WHERE p.project_type IN (11, 12, 21)
+        <if test="queryForm.thirdPartyId != null">AND l.third_party_id = #{queryForm.thirdPartyId}</if>
+        <if test="queryForm.projectNo != null and queryForm.projectNo != ''">AND INSTR(p.project_no, #{queryForm.projectNo})</if>
+        <if test="queryForm.projectType != null">AND p.project_type = #{queryForm.projectType}</if>
+        <if test="queryForm.category != null">AND p.category = #{queryForm.category}</if>
+        <if test="queryForm.customerId != null">AND p.customer_id = #{queryForm.customerId}</if>
+        <if test="queryForm.sourceType != null">AND p.source_type = #{queryForm.sourceType}</if>
+        <if test="queryForm.sourceId != null">AND p.source_id = #{queryForm.sourceId}</if>
+        <if test="queryForm.operateUserId != null">
+            AND l.id IN (SELECT DISTINCT n.task_id FROM t_project_node n WHERE operate_user_id = #{queryForm.operateUserId})
+        </if>
+        <if test="queryForm.status != null">AND l.status = #{queryForm.status}</if>
+        <if test="queryForm.labContractNo != null and queryForm.labContractNo != ''">AND INSTR(l.lab_contract_no, #{queryForm.labContractNo})</if>
+        <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
+        <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
+        <if test="queryForm.nodeId != null and queryForm.nodeId == 8 ">
+            <!--7下达任务节点已完成，8预计完成节点没有完成-->
+            AND l.id in (
+            select distinct n.task_id
+            from t_project_node n
+            inner join
+            (
+            select  distinct project_id, task_id
+            from t_project_node
+            where project_type in (11,12,21) and node_id = 7 and status IN (2, 3)) as n1 on n1.project_id = n.project_id and n1.task_id = n.task_id
+            where n.node_id = 8 and n.status in (0,1)
+            )
+        </if>
+        <if test="queryForm.nodeId != null and queryForm.nodeId == 9 ">
+            <!--8预计完成节点已完成，9实验检测节点没有完成-->
+            AND l.id in (
+            select distinct n.task_id
+            from t_project_node n
+            inner join
+            (
+            select  distinct project_id, task_id
+            from t_project_node
+            where project_type in (11,12,21) and node_id = 8 and status IN (2, 3)) as n1 on n1.project_id = n.project_id and n1.task_id = n.task_id
+            where n.node_id = 9 and n.status in (0,1)
+            )
+        </if>
+        <if test="queryForm.nodeId != null and queryForm.nodeId == 10 ">
+            <!--9实验检测节点已完成，10实验室上报节点没有完成-->
+            AND l.id in (
+            select distinct n.task_id
+            from t_project_node n
+            inner join
+            (
+            select  distinct project_id, task_id
+            from t_project_node
+            where project_type in (11,12,21) and node_id = 9 and status IN (2, 3)) as n1 on n1.project_id = n.project_id and n1.task_id = n.task_id
+            where n.node_id = 10 and n.status in (0,1)
+            )
+        </if>
+            order by l.create_time desc
     </select>
 </mapper>

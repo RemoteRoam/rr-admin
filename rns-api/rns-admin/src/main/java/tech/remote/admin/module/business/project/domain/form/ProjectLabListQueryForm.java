@@ -38,4 +38,7 @@ public class ProjectLabListQueryForm extends PageParam {
 
     @Schema(description = "预警类型：2 实验室任务预警")
     private Integer alarmType;
+
+    @Schema(description = "节点ID：8预计完成 9实验检测 10试验室上报")
+    private Integer nodeId;
 }
