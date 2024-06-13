@@ -295,9 +295,9 @@ const queryFormState = {
 const queryForm = reactive({ ...queryFormState });
 const labPayDateRange = ref([]);
 
-const tabName8 = ref('预计完成');
-const tabName9 = ref('实验检测');
-const tabName10 = ref('实验室上报');
+const tabName8 = ref('预计完成时间');
+const tabName9 = ref('报告完成时间');
+const tabName10 = ref('试验室上报时间');
 
 // Table loading state
 const tableLoading = ref(false);
@@ -324,11 +324,11 @@ const queryData = async () => {
     try {
         const { data } = await projectLabApi.queryLabTodoList(queryForm);
         tableData8.value = data.estimateCompletionList;
-        tabName8.value = `预计完成(${data.estimateCompletionCount})`;
+        tabName8.value = `预计完成时间(${data.estimateCompletionCount})`;
         tableData9.value = data.experimentCheckList;
-        tabName9.value = `实验检测(${data.experimentCheckCount})`;
+        tabName9.value = `报告完成时间(${data.experimentCheckCount})`;
         tableData10.value = data.labReportList;
-        tabName10.value = `实验室上报(${data.labReportCount})`;
+        tabName10.value = `试验室上报时间(${data.labReportCount})`;
         total.value = data.total;
     } catch (error) {
         console.error(error);
@@ -361,12 +361,13 @@ const onLabPayDateChange = (dates, dateStrings) => {
 
 // Handle menu click
 const handleMenuClick = (e, param) => {
+    let orgProjectType = param.projectType;
     param.projectType = 111;
     if (e.key === null) {
         router.push({
             path: '/project/product-list', query: {
-                projectId: route.query.projectId,
-                customerName: param.customerName, projectType: param.projectType, category: param.category,
+                projectId: param.projectId,
+                customerName: param.customerName, projectType: orgProjectType, category: param.category,
                 taskId: param.id
             }
         });
