@@ -13,22 +13,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ProjectStatusEnum implements BaseEnum {
-
-    /**
-     * 未开始
-     */
-    INIT(0, "未开始"),
-
-    /**
-     * 处理中
-     */
-    DOING(1, "进行中"),
-
-    /**
-     * 完成
-     */
-    DONE(2, "已完成"),
+public enum SalesCompanyEnum implements BaseEnum {
+    TCCTXNY(1, "天传诚通新能源科技（天津）有限公司"),
+    TCCT(2, "天津天传诚通科技发展有限公司"),
     ;
     private final Integer value;
 
@@ -36,7 +23,7 @@ public enum ProjectStatusEnum implements BaseEnum {
 
     // 根据value获取desc
     public static String getDescByValue(Integer value) {
-        for (ProjectStatusEnum e : ProjectStatusEnum.values()) {
+        for (SalesCompanyEnum e : SalesCompanyEnum.values()) {
             if (e.value.equals(value)) {
                 return e.desc;
             }

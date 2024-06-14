@@ -78,6 +78,7 @@ export const PROJECT_TYPE_SUPERVISION_ENUM = {
   },
 };
 
+
 export default {
   PROJECT_TYPE_PRODUCT_ENUM,
   PROJECT_TYPE_LAB_ENUM,

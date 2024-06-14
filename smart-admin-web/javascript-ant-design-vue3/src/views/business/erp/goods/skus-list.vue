@@ -42,11 +42,11 @@
     <a-card size="small" :bordered="false" :hoverable="true">
         <!---------- 表格操作行 begin ----------->
         <a-row class="smart-table-btn-block">
-            <a-button @click="exportExcel()" type="primary" size="small">
+            <a-button @click="exportExcel()" type="primary" size="small" v-privilege="'goods:skus:excel'">
                 <template #icon>
                     <FileExcelOutlined />
                 </template>
-                导出库存
+                导出数据
             </a-button>
             <!-- <div class="smart-table-operate-block">
                 <a-button @click="showForm" type="primary" size="small">
@@ -71,7 +71,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="skuId" bordered :loading="tableLoading"
-            :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
+            :pagination="false">
             <template #bodyCell="{ text, record, column }">
                 <!-- <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">

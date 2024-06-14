@@ -175,12 +175,17 @@ const columns = ref([
     ellipsis: true,
   },
   {
-    title: '销售数量',
+    title: '数量',
     dataIndex: 'quantity',
     width: 120,
   },
   {
-    title: '销售单价',
+    title: '重量',
+    dataIndex: 'weight',
+    width: 120,
+  },
+  {
+    title: '单价',
     dataIndex: 'unitPrice',
     width: 150,
   },

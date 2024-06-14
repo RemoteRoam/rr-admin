@@ -1,5 +1,6 @@
 package tech.remote.admin.module.business.goods.domain.form;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import tech.remote.base.common.domain.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
@@ -22,6 +23,9 @@ public class SalesQueryForm extends PageParam{
     @Schema(description = "销售类型")
     private Integer salesType;
 
+    @Schema(description = "销售公司")
+    private Integer company;
+
     @Schema(description = "供货厂家")
     private String supplier;
 
@@ -40,4 +44,6 @@ public class SalesQueryForm extends PageParam{
     @Schema(description = "合同日")
     private LocalDate contractDateEnd;
 
+    @Schema(description = "是否有回款")
+    private Boolean hasReceivedPayment;
 }

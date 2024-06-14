@@ -156,7 +156,7 @@
                             placeholder="交卷日期" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <!-- <a-col :span="8">
                     <a-form-item label="评定日期" name="assessmentDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.assessmentDate" style="width: 95%"
                             placeholder="评定日期" />
@@ -170,7 +170,7 @@
                 </a-col>
 
             </a-row>
-            <a-row>
+            <a-row> -->
                 <a-col :span="8">
                     <a-form-item label="证书发送日期" name="certificateSendDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.certificateSendDate"

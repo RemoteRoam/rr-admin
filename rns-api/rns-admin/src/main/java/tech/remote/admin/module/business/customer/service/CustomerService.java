@@ -143,6 +143,9 @@ public class CustomerService {
 
     public void upgradeLevel(Long customerId) {
         GrandTotalResult result = customerDao.getGrandTotal(customerId);
+        if(result == null || result.getGrandTotalCount() == null || result.getGrandTotalAmount() == null){
+            return;
+        }
         // 判断合同金额（contractAmount + result.grandTotalAmount）满100万，并且项目数量(result.grandTotalCount)满10个，设置级别为A，否则合同金额满50万，或者项目数量满5个设置级别为B
         if (result.getGrandTotalCount() >= 10 && (result.getGrandTotalAmount()).compareTo(new BigDecimal(1000000)) >= 0) {
             updateLevel(customerId, "LEVEL_A");

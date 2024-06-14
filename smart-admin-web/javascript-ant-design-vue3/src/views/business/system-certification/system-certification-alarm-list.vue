@@ -21,7 +21,7 @@
                     placeholder="类别" />
             </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
-                <CustomerSelect width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
+                <CustomerSelect width="200px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
             <a-form-item label="来源分类" class="smart-query-form-item">
                 <SmartEnumSelect width="150px" v-model:value="queryForm.sourceType" enumName="SOURCE_TYPE_ENUM"

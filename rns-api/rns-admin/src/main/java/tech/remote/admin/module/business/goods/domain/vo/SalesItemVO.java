@@ -40,7 +40,7 @@ public class SalesItemVO {
     @Schema(description = "型号规格名称")
     private String skuName;
 
-    @Schema(description = "排的重量")
+    @Schema(description = "重量")
     private BigDecimal weight;
 
     @Schema(description = "销售数量")

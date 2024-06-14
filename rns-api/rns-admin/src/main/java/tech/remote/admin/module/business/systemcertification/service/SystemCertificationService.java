@@ -120,7 +120,7 @@ public class SystemCertificationService {
 
         // 获取该类型下的对应节点
         TypeNodeQuery query = new TypeNodeQuery();
-        query.setNodeLevel(1);
+//        query.setNodeLevel(1);
         query.setProjectType(addForm.getProjectType());
         List<TypeNodeListVO> typeNodeList = typeNodeService.getTypeNodes(query);
         // 把typeNodeList插入到SystemCertificationNode表中

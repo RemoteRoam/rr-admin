@@ -16,11 +16,15 @@
                 <SmartEnumSelect width="150px" v-model:value="queryForm.salesType" enumName="SALES_TYPE_ENUM"
                     placeholder="销售类型" />
             </a-form-item>
+            <a-form-item label="销售公司" class="smart-query-form-item">
+                <SmartEnumSelect width="230px" v-model:value="queryForm.company" enumName="SALES_COMPANY_ENUM"
+                    placeholder="销售公司" />
+            </a-form-item>
             <a-form-item label="供货厂家" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.supplier" placeholder="供货厂家" />
             </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
-                <CustomerSelect type="2" width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
+                <CustomerSelect type=2 width="200px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
             <a-form-item label="销售经理" class="smart-query-form-item">
                 <EmployeeSelect style="width: 150px" v-model:value="queryForm.managerId" placeholder="销售经理" />
@@ -31,6 +35,10 @@
             <a-form-item label="合同日" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.contractDate" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeContractDate" />
+            </a-form-item>
+
+            <a-form-item label="是否有回款" class="smart-query-form-item">
+                <SmartBooleanSelect v-model:value="queryForm.hasReceivedPayment" style="width: 70px" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
                 <a-button type="primary" @click="queryData">
@@ -54,11 +62,17 @@
         <!---------- 表格操作行 begin ----------->
         <a-row class="smart-table-btn-block">
             <div class="smart-table-operate-block">
-                <a-button @click="showForm" type="primary" size="small">
+                <a-button @click="showFormAdd" type="primary" size="small">
                     <template #icon>
                         <PlusOutlined />
                     </template>
                     新建
+                </a-button>
+                <a-button @click="exportExcel()" type="primary" size="small" v-privilege="'goods:sales:excel'">
+                    <template #icon>
+                        <FileExcelOutlined />
+                    </template>
+                    导出数据
                 </a-button>
                 <!-- <a-button @click="confirmBatchDelete" type="danger" size="small"
                     :disabled="selectedRowKeyList.length == 0">
@@ -76,14 +90,16 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }" :scroll="{ x: 2000 }">
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'salesNo'">
                     <a @click="detail(record.id)">{{ record.salesNo }}</a>
                 </template>
                 <template v-if="column.dataIndex === 'salesType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SALES_TYPE_ENUM', text) }}</span>
+                </template>
+                <template v-if="column.dataIndex === 'company'">
+                    <span>{{ $smartEnumPlugin.getDescByValue('SALES_COMPANY_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
@@ -99,8 +115,8 @@
                                 </a-menu>
                             </template>
                         </a-dropdown>
-                        <!-- <a-button @click="showForm(record)" type="link">编辑</a-button>
-                        <a-button @click="onDelete(record)" danger type="link">删除</a-button> -->
+                        <a-button @click="showForm(record)" type="link">编辑</a-button>
+                        <!-- <a-button @click="onDelete(record)" danger type="link">删除</a-button> -->
                     </div>
                 </template>
             </template>
@@ -115,6 +131,7 @@
         </div>
 
         <SalesForm ref="formRef" @reloadList="queryData" />
+        <SalesFormAdd ref="formAddRef" @reloadList="queryData" />
 
         <ReceivePayment ref="receivePaymentFormRef" @reloadList="queryData" />
         <DeliveryForm ref="deliveryFormRef" @reloadList="queryData" />
@@ -129,9 +146,11 @@ import { SmartLoading } from '/@/components/framework/smart-loading';
 import { salesApi } from '/@/api/business/goods/sales-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
 import { smartSentry } from '/@/lib/smart-sentry';
+import SmartBooleanSelect from '/@/components/framework/boolean-select/index.vue';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 import SalesForm from './sales-form.vue';
+import SalesFormAdd from './sales-form-add.vue';
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
@@ -152,6 +171,11 @@ const columns = ref([
         title: '销售类型',
         dataIndex: 'salesType',
         width: 150,
+    },
+    {
+        title: '销售公司',
+        dataIndex: 'company',
+        width: 180,
     },
     {
         title: '供货厂家',
@@ -248,6 +272,7 @@ const columns = ref([
 const queryFormState = {
     salesNo: undefined, //销售单号
     salesType: undefined, //销售类型
+    company: undefined, //销售公司
     supplier: undefined, //供货厂家
     customerId: undefined, //客户ID
     managerId: undefined, //销售经理ID
@@ -255,6 +280,7 @@ const queryFormState = {
     contractDate: [], //合同日
     contractDateBegin: undefined, //合同日 开始
     contractDateEnd: undefined, //合同日 结束
+    hasReceivedPayment: undefined, //是否有回款
     pageNum: 1,
     pageSize: 10,
 };
@@ -299,9 +325,13 @@ onMounted(queryData);
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();
+const formAddRef = ref();
 
 function showForm(data) {
     formRef.value.show(data);
+}
+function showFormAdd() {
+    formAddRef.value.show();
 }
 
 let router = useRouter();
@@ -399,4 +429,8 @@ const handleMenuClick = (e, param) => {
         deliveryFormRef.value.show(param, e.key.id);
     }
 };
+// --------------------------- 导出 ---------------------------
+async function exportExcel() {
+    // await systemCertificationApi.exportExcel(queryForm);
+}
 </script>

@@ -145,3 +145,15 @@ export const SALES_TYPE_ENUM = {
   },
 
 };
+
+
+export const SALES_COMPANY_ENUM = {
+  TCCTXNY: {
+    value: 1,
+    desc: '天传诚通新能源科技（天津）有限公司',
+  },
+  TCCT: {
+    value: 2,
+    desc: '天津天传诚通科技发展有限公司',
+  },
+};

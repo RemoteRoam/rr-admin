@@ -133,8 +133,6 @@ async function queryData() {
     smartSentry.captureError(error);
   } finally {
     tableLoading.value = false;
-
-    console.log("queryData", selectedRowsList.value);
   }
 }
 

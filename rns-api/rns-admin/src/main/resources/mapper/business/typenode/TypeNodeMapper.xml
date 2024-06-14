@@ -27,7 +27,9 @@
         from t_type_node t, t_node n
         where t.node_id = n.id
           and t.project_type = #{query.projectType}
+        <if test="query.nodeLevel != null">
           and n.node_level = #{query.nodeLevel}
+        </if>
         order by t.node_sort
     </select>
 

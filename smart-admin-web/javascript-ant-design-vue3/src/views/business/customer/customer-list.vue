@@ -83,8 +83,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn"
-            rowKey="customerId" bordered :loading="tableLoading" :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }" :scroll="{ x: 2000 }">
+            rowKey="customerId" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'customerLevel'">
                     <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>

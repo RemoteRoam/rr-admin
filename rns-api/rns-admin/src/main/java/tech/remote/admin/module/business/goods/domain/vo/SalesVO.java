@@ -31,6 +31,9 @@ public class SalesVO {
     @Schema(description = "销售类型（0:库存，1:厂家）")
     private Integer salesType;
 
+    @Schema(description = "销售公司")
+    private Integer company;
+
     @Schema(description = "供货厂家")
     private String supplier;
 

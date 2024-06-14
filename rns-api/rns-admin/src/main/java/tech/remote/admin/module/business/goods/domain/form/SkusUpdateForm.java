@@ -34,7 +34,7 @@ public class SkusUpdateForm {
     @NotBlank(message = "型号规格名称 不能为空")
     private String skuName;
 
-    @Schema(description = "排的重量")
+    @Schema(description = "重量")
     private BigDecimal weight;
 
     @Schema(description = "上架状态")

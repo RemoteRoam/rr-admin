@@ -45,7 +45,7 @@ const props = defineProps({
     default: false,
   },
   type: {
-    type: Number,
+    type: [Number, String],
     default: 1,
   },
 });

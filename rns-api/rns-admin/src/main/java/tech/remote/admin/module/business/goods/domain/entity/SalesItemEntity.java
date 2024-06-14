@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldBigDecimal;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 销售明细表 实体类
@@ -47,16 +49,27 @@ public class SalesItemEntity {
     /**
      * 销售数量
      */
+    @DataTracerFieldLabel("销售数量")
     private Integer quantity;
 
     /**
      * 销售单价
      */
+    @DataTracerFieldLabel("销售单价")
+    @DataTracerFieldBigDecimal
     private BigDecimal unitPrice;
+
+    /**
+     * 重量
+     */
+    @DataTracerFieldLabel("重量")
+    @DataTracerFieldBigDecimal
+    private BigDecimal weight;
 
     /**
      * 备注
      */
+    @DataTracerFieldLabel("备注")
     private String remark;
 
 }

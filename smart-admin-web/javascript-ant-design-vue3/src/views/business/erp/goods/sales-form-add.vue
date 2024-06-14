@@ -6,107 +6,81 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="900px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 7 }">
             <a-row :gutter="16">
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="销售公司" name="company">
                         <SmartEnumSelect width="100%" v-model:value="form.company" enumName="SALES_COMPANY_ENUM"
                             placeholder="销售公司" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
+                </a-col>
+                <a-col :span="12">
                     <a-form-item label="销售类型" name="salesType">
                         <SmartEnumSelect width="100%" v-model:value="form.salesType" enumName="SALES_TYPE_ENUM"
                             placeholder="销售类型" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="供货厂家" name="supplier" v-if="form.salesType == 1">
                         <a-input style="width: 100%" v-model:value="form.supplier" placeholder="供货厂家" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="客户" name="customerId">
                         <CustomerSelect type=2 style="width: 100%" v-model:value="form.customerId" placeholder="客户" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="销售经理" name="managerId">
                         <EmployeeSelect style="width: 100%" v-model:value="form.managerId" placeholder="销售经理" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="合同号" name="contractNo">
                         <a-input style="width: 100%" v-model:value="form.contractNo" placeholder="合同号" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="合同日" name="contractDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.contractDate" style="width: 100%"
                             placeholder="合同日" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
+                <a-col :span="12">
                     <a-form-item label="合同金额" name="contractAmount">
                         <a-input-number style="width: 100%" v-model:value="form.contractAmount" placeholder="合同金额" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="8">
-                    <a-form-item label="回款日期" name="receivedPaymentDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.receivedPaymentDate"
-                            style="width: 100%" placeholder="回款日期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
-                    <a-form-item label="回款金额" name="receivedPaymentAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.receivedPaymentAmount"
-                            placeholder="回款金额" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
-                    <a-form-item label="发货日期" name="shippingDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.shippingDate" style="width: 100%"
-                            placeholder="发货日期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
-                    <a-form-item label="发货金额" name="shippingAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.shippingAmount" placeholder="发货金额" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
-                    <a-form-item label="开票日期" name="invoiceDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.invoiceDate" style="width: 100%"
-                            placeholder="开票日期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
-                    <a-form-item label="发票金额" name="invoiceAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.invoiceAmount" placeholder="发票金额" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="8">
-                    <a-form-item label="发票号" name="invoiceNumber">
-                        <a-input style="width: 100%" v-model:value="form.invoiceNumber" placeholder="发票号" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="16">
+                <a-col :span="12">
                     <a-form-item label="备注" name="remark">
                         <a-textarea style="width: 100%" v-model:value="form.remark" placeholder="备注" />
                     </a-form-item>
                 </a-col>
             </a-row>
 
+            <div>
+                <a-button class="button-style" type="primary" @click="addSku"> 添加商品 </a-button>
+            </div>
+
             <a-table :loading="tableLoading" :dataSource="tableData" :columns="columns" :pagination="false"
                 rowKey="skuId" size="small" bordered>
                 <template #bodyCell="{ text, record, index, column }">
+                    <template v-if="column.dataIndex === 'quantity'">
+                        <!-- <a-input-number v-model:value="record.quantity" :min="0" :max="record.stockQuantity" /> -->
+                        <a-input-number v-model:value="record.quantity" :min="0" />
+                    </template>
                     <template v-if="column.dataIndex === 'weight'">
                         <a-input-number v-model:value="record.weight" :min="0" />
                     </template>
                     <template v-if="column.dataIndex === 'unitPrice'">
                         <a-input-number v-model:value="record.unitPrice" :min="0" />
+                    </template>
+                    <template v-else-if="column.dataIndex === 'operate'">
+                        <a @click="deleteRecord(record.skuId)">移除</a>
                     </template>
                 </template>
             </a-table>
@@ -143,11 +117,14 @@ const emits = defineEmits(['reloadList']);
 const visibleFlag = ref(false);
 
 function show(rowData) {
-    console.log(rowData);
     Object.assign(form, formDefault);
-    getDetail(rowData.id);
-
+    if (rowData && !_.isEmpty(rowData)) {
+        Object.assign(form, rowData);
+    }
     visibleFlag.value = true;
+    nextTick(() => {
+        formRef.value.clearValidate();
+    });
 }
 
 function onClose() {
@@ -192,24 +169,6 @@ const rules = {
     salesType: [{ required: true, message: '请选择销售类型' }],
 };
 
-
-async function getDetail(id) {
-    try {
-        let result = await salesApi.getById(id);
-
-        Object.assign(form, result.data);
-        tableData.value = result.data.itemVOList;
-        nextTick(() => {
-            formRef.value.clearValidate();
-        });
-    } catch (error) {
-        smartSentry.captureError(error);
-    } finally {
-        SmartLoading.hide();
-    }
-}
-
-
 // 点击确定，验证表单
 async function onSubmit() {
     try {
@@ -246,8 +205,7 @@ async function save() {
             }
         }
 
-        await salesApi.update(form);
-
+        await salesApi.add(form);
         message.success('操作成功');
         emits('reloadList');
         onClose();
@@ -315,7 +273,11 @@ const columns = reactive([
         dataIndex: 'unitPrice',
         width: 150,
     },
-
+    {
+        title: '操作',
+        dataIndex: 'operate',
+        width: 60,
+    },
 ]);
 
 function selectData(list) {

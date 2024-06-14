@@ -54,6 +54,9 @@ public class SalesController {
     @Operation(summary = "更新 @author cbh")
     @PostMapping("/sales/update")
     public ResponseDTO<String> update(@RequestBody @Valid SalesUpdateForm updateForm) {
+        RequestUser requestUser = SmartRequestUtil.getRequestUser();
+        updateForm.setUpdateUserId(requestUser.getUserId());
+        updateForm.setUpdateUserName(requestUser.getUserName());
         return salesService.update(updateForm);
     }
 

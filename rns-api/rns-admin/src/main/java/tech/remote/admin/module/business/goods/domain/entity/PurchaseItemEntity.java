@@ -54,4 +54,8 @@ public class PurchaseItemEntity {
      */
     private BigDecimal unitPrice;
 
+    /**
+     * 重量
+     */
+    private BigDecimal weight;
 }

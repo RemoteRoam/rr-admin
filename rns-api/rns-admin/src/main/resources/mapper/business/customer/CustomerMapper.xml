@@ -100,6 +100,11 @@
                  SELECT SUM(payment_amount) AS total_amount, COUNT(1) AS total_count
                  FROM t_measurement
                  WHERE customer_id = #{customerId}
+                 UNION ALL
+
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_sales
+                 WHERE customer_id = #{customerId}
              ) AS combined_totals
     </select>
 </mapper>

@@ -43,4 +43,7 @@ public class PurchaseItemUpdateForm {
     @Schema(description = "采购单价")
     private BigDecimal unitPrice;
 
+    @Schema(description = "重量")
+    private BigDecimal weight;
+
 }

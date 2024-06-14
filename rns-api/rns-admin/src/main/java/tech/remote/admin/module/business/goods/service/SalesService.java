@@ -12,10 +12,7 @@ import tech.remote.admin.module.business.goods.dao.SalesDao;
 import tech.remote.admin.module.business.goods.domain.entity.SalesEntity;
 import tech.remote.admin.module.business.goods.domain.entity.SalesItemEntity;
 import tech.remote.admin.module.business.goods.domain.entity.SalesNodeEntity;
-import tech.remote.admin.module.business.goods.domain.form.SalesAddForm;
-import tech.remote.admin.module.business.goods.domain.form.SalesQueryForm;
-import tech.remote.admin.module.business.goods.domain.form.SalesUpdateForm;
-import tech.remote.admin.module.business.goods.domain.form.SkusStockUpdateForm;
+import tech.remote.admin.module.business.goods.domain.form.*;
 import tech.remote.admin.module.business.goods.domain.vo.SalesItemVO;
 import tech.remote.admin.module.business.goods.domain.vo.SalesVO;
 import tech.remote.admin.module.business.goods.manager.SalesItemManager;
@@ -202,6 +199,21 @@ public class SalesService {
 
             //变更记录
             dataTracerService.update(salesEntity.getId(), DataTracerTypeEnum.SALES, oldEntity, salesEntity);
+        }
+
+        // 销售单明细更新
+        if(CollectionUtils.isNotEmpty(updateForm.getItemList())){
+            for (SalesItemUpdateForm item : updateForm.getItemList()){
+                if (item.getId() == null){
+                    return ResponseDTO.userErrorParam("明细ID不能为空");
+                }
+                SalesItemEntity oldItemEntity = salesItemManager.getById(item.getId());
+                SalesItemEntity entity = SmartBeanUtil.copy(item, SalesItemEntity.class);
+                salesItemManager.updateById(entity);
+
+                //变更记录
+                dataTracerService.update(salesEntity.getId(), DataTracerTypeEnum.SALES, oldItemEntity, entity);
+            }
         }
 
         if(updateForm.getContractAmount() != null && oldEntity.getCustomerId() != null){

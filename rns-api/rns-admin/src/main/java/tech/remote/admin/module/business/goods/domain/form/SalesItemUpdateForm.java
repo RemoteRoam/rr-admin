@@ -44,6 +44,9 @@ public class SalesItemUpdateForm {
     @NotNull(message = "销售单价 不能为空")
     private BigDecimal unitPrice;
 
+    @Schema(description = "重量")
+    private BigDecimal weight;
+
     @Schema(description = "备注")
     private String remark;
 

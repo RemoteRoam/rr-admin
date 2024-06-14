@@ -13,7 +13,7 @@
                 <a-input style="width: 150px" v-model:value="queryForm.projectNo" placeholder="项目编号" />
             </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
-                <CustomerSelect width="150px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
+                <CustomerSelect width="200px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
             <a-form-item label="负责人" class="smart-query-form-item">
                 <EmployeeSelect width="150px" v-model:value="queryForm.sourceId" placeholder="请选择负责人" />
