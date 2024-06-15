@@ -1,8 +1,9 @@
 package tech.remote.admin.module.business.goods.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 /**
  * 销售明细表 列表VO
@@ -13,23 +14,11 @@ import lombok.Data;
  */
 
 @Data
-public class SalesItemVO {
+public class SalesTemplateItemVO {
 
 
-    @Schema(description = "销售明细ID")
-    private Long id;
-
-    @Schema(description = "销售单ID")
-    private Long salesId;
-
-    @Schema(description = "型号规格ID")
-    private Long skuId;
-
-    @Schema(description = "商品ID")
-    private Long goodsId;
-
-    @Schema(description = "商品类目ID")
-    private Long categoryId;
+    @Schema(description = "序号")
+    private Integer no;
 
     @Schema(description = "商品名称")
     private String goodsName;

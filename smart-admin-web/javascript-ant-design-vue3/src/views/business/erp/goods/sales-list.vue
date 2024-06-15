@@ -431,6 +431,6 @@ const handleMenuClick = (e, param) => {
 };
 // --------------------------- 导出 ---------------------------
 async function exportExcel() {
-    // await systemCertificationApi.exportExcel(queryForm);
+    await salesApi.exportExcel(queryForm);
 }
 </script>

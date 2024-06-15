@@ -13,6 +13,7 @@ import tech.remote.admin.module.business.goods.domain.entity.SalesEntity;
 import tech.remote.admin.module.business.goods.domain.entity.SalesItemEntity;
 import tech.remote.admin.module.business.goods.domain.entity.SalesNodeEntity;
 import tech.remote.admin.module.business.goods.domain.form.*;
+import tech.remote.admin.module.business.goods.domain.vo.SalesExcelVO;
 import tech.remote.admin.module.business.goods.domain.vo.SalesItemVO;
 import tech.remote.admin.module.business.goods.domain.vo.SalesVO;
 import tech.remote.admin.module.business.goods.manager.SalesItemManager;
@@ -260,5 +261,9 @@ public class SalesService {
         List<SalesNodeEntity> nodeList = salesNodeManager.getAllNodes(id);
         salesVO.setNodeList(nodeList);
         return salesVO;
+    }
+
+    public List<SalesExcelVO> getExcelExportData(SalesQueryForm queryForm) {
+        return salesDao.getExcelExportData(queryForm);
     }
 }
