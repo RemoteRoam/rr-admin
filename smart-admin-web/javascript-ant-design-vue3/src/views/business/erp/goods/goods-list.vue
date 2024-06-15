@@ -80,12 +80,12 @@
           导入
         </a-button> -->
 
-        <a-button @click="onExportGoods" type="primary" size="small" v-privilege="'goods:exportGoods'">
+        <!-- <a-button @click="onExportGoods" type="primary" size="small" v-privilege="'goods:exportGoods'">
           <template #icon>
             <ExportOutlined />
           </template>
           导出
-        </a-button>
+        </a-button> -->
       </div>
       <div class="smart-table-setting-block">
         <TableOperator v-model="columns" :tableId="TABLE_ID_CONST.BUSINESS.ERP.GOODS" :refresh="queryData" />
@@ -93,8 +93,7 @@
     </a-row>
     <!---------- 表格操作行 end ----------->
 
-    <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="goodsId" bordered :pagination="false"
-      :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
+    <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="goodsId" bordered :pagination="false">
       <template #bodyCell="{ text, record, column }">
         <template v-if="column.dataIndex === 'goodsName'">
           <a @click="detailGoods(record)">{{ record.goodsName }}</a>

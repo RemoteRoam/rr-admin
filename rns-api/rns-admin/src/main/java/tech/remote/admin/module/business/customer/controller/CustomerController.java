@@ -80,8 +80,8 @@ public class CustomerController {
     }
 
     @Operation(summary = "查询所有客户 @author cbh")
-    @GetMapping("/customer/query/list")
-    public ResponseDTO<List<CustomerVO>> queryList() {
-        return customerService.queryList();
+    @GetMapping("/customer/query/list/{type}")
+    public ResponseDTO<List<CustomerVO>> queryList(@PathVariable Integer type) {
+        return customerService.queryList(type);
     }
 }

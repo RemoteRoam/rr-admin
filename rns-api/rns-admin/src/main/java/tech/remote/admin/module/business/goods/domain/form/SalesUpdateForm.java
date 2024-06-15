@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -27,6 +28,9 @@ public class SalesUpdateForm {
 
     @Schema(description = "销售类型（0:库存，1:厂家）")
     private Integer salesType;
+
+    @Schema(description = "销售公司")
+    private Integer company;
 
     @Schema(description = "供货厂家")
     private String supplier;
@@ -91,4 +95,6 @@ public class SalesUpdateForm {
     @Schema(description = "跳过原因")
     private String passReason;
 
+    @Schema(description = "销售单明细")
+    private List<SalesItemUpdateForm> itemList;
 }

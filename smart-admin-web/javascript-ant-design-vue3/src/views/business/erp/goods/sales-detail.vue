@@ -35,8 +35,19 @@
         </a-descriptions>
       </div>
     </a-page-header>
+
   </div>
   <a-card class="smart-margin-top10" size="small">
+    <a-row class="smart-table-btn-block">
+      <div class="smart-table-operate-block">
+        <a-button @click="printExcel()" type="primary">
+          <template #icon>
+            <FileExcelOutlined />
+          </template>
+          发货单
+        </a-button>
+      </div>
+    </a-row>
     <a-tabs>
       <a-tab-pane key="nodeList" tab="流程节点">
         <a-row class="row-title">
@@ -175,12 +186,17 @@ const columns = ref([
     ellipsis: true,
   },
   {
-    title: '销售数量',
+    title: '数量',
     dataIndex: 'quantity',
     width: 120,
   },
   {
-    title: '销售单价',
+    title: '重量',
+    dataIndex: 'weight',
+    width: 120,
+  },
+  {
+    title: '单价',
     dataIndex: 'unitPrice',
     width: 150,
   },
@@ -226,6 +242,11 @@ let router = useRouter();
 function detailTask(id) {
   router.push({ path: '/measurement/task/detail', query: { id: id } });
 }
+
+async function printExcel() {
+  await salesApi.printExcel(id.value);
+}
+
 </script>
 
 <style lang="less" scoped>

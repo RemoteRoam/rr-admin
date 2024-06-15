@@ -110,12 +110,12 @@ const dynamicColumns = computed(() => {
     },
   ];
 
-  if (form.categoryId === 1) {
-    baseColumns.splice(1, 0, {
-      title: '重量',
-      dataIndex: 'weight',
-    });
-  }
+  // if (form.categoryId === 1) {
+  //   baseColumns.splice(1, 0, {
+  //     title: '重量',
+  //     dataIndex: 'weight',
+  //   });
+  // }
 
   return baseColumns;
 });

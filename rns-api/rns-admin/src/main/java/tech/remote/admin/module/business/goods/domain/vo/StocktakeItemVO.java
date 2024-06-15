@@ -47,7 +47,7 @@ public class StocktakeItemVO {
     @Schema(description = "型号规格名称")
     private String skuName;
 
-    @Schema(description = "排的重量")
+    @Schema(description = "重量")
     private BigDecimal weight;
 
 }

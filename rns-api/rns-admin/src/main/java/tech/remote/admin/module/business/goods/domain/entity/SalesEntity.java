@@ -35,7 +35,14 @@ public class SalesEntity {
     /**
      * 销售类型（0:库存，1:厂家）
      */
+    @DataTracerFieldLabel("销售类型")
     private Integer salesType;
+
+    /**
+     * 销售公司
+     */
+    @DataTracerFieldLabel("销售公司")
+    private Integer company;
 
     /**
      * 供货厂家

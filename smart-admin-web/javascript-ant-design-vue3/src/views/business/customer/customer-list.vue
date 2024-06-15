@@ -67,13 +67,13 @@
                     </template>
                     新建
                 </a-button>
-                <a-button @click="confirmBatchDelete" type="danger" size="small"
+                <!-- <a-button @click="confirmBatchDelete" type="danger" v-privilege="'base:customer:delete'" size="small"
                     :disabled="selectedRowKeyList.length == 0">
                     <template #icon>
                         <DeleteOutlined />
                     </template>
                     批量删除
-                </a-button>
+                </a-button> -->
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -83,16 +83,17 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn"
-            rowKey="customerId" bordered :loading="tableLoading" :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }" :scroll="{ x: 2000 }">
+            rowKey="customerId" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'customerLevel'">
                     <span>{{ text && text.length > 0 ? text[0].valueName : '' }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
-                        <a-button @click="showForm(record)" type="link">编辑</a-button>
-                        <a-button @click="onDelete(record)" danger type="link">删除</a-button>
+                        <a-button @click="showForm(record)" v-privilege="'base:customer:update'"
+                            type="link">编辑</a-button>
+                        <a-button @click="onDelete(record)" danger v-privilege="'base:customer:delete'"
+                            type="link">删除</a-button>
                     </div>
                 </template>
             </template>
@@ -112,6 +113,7 @@
 </template>
 <script setup>
 import { reactive, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { customerApi } from '/@/api/business/customer/customer-api';
@@ -235,6 +237,7 @@ const columns = ref([
 
 const queryFormState = {
     customerName: undefined, //客户名称
+    type: undefined, //客户类型(1认证客户2销售客户)
     customerLevel: undefined, //客户级别
     contact: undefined, //联系人
     contactPhone: undefined, //联系人电话
@@ -269,6 +272,7 @@ const employeeSelect = ref();
 function resetQuery() {
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
+    queryForm.type = type.value;
     queryForm.pageSize = pageSize;
     queryData();
 }
@@ -325,14 +329,25 @@ async function queryData() {
     }
 }
 
+const route = useRoute();
 
-onMounted(queryData);
+const type = ref();
+onMounted(() => {
+    // 获取最后一个"/"之后的值
+    const lastSlashIndex = route.path.lastIndexOf('/');
+    if (lastSlashIndex !== -1) {
+        type.value = route.path.slice(lastSlashIndex + 1);
+        queryForm.type = type.value;
+        queryData();
+    }
+
+});
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();
 
 function showForm(data) {
-    formRef.value.show(data);
+    formRef.value.show(data, type.value);
 }
 
 // ---------------------------- 单个删除 ----------------------------

@@ -25,6 +25,9 @@ public class SalesAddForm {
     @Schema(description = "供货厂家")
     private String supplier;
 
+    @Schema(description = "销售公司")
+    private Integer company;
+
     @Schema(description = "客户ID")
     private Long customerId;
 

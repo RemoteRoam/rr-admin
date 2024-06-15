@@ -59,6 +59,7 @@ public class CustomerService {
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, addForm.getCustomerName());
         lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, NumberUtils.INTEGER_ZERO);
+        lambdaQueryWrapper.eq(CustomerEntity::getType, addForm.getType());
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         if(CollectionUtils.isNotEmpty(list)){
             return ResponseDTO.error(BusinessErrorCode.CUSTOMER_NAME_EXIST_ERROR);
@@ -79,6 +80,7 @@ public class CustomerService {
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getCustomerName, updateForm.getCustomerName());
         lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, NumberUtils.INTEGER_ZERO);
+        lambdaQueryWrapper.eq(CustomerEntity::getType, updateForm.getType());
         lambdaQueryWrapper.ne(CustomerEntity::getCustomerId, updateForm.getCustomerId());
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         if(CollectionUtils.isNotEmpty(list)){
@@ -122,10 +124,11 @@ public class CustomerService {
         return SmartBeanUtil.copy(entity, CustomerVO.class);
     }
 
-    public ResponseDTO<List<CustomerVO>> queryList() {
+    public ResponseDTO<List<CustomerVO>> queryList(Integer type) {
         LambdaQueryWrapper<CustomerEntity> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(CustomerEntity::getDeletedFlag, Boolean.FALSE);
         lambdaQueryWrapper.eq(CustomerEntity::getDisabledFlag, Boolean.FALSE);
+        lambdaQueryWrapper.eq(CustomerEntity::getType, type);
         lambdaQueryWrapper.orderByDesc(CustomerEntity::getCreateTime);
         List<CustomerEntity> list = customerDao.selectList(lambdaQueryWrapper);
         return ResponseDTO.ok(SmartBeanUtil.copyList(list, CustomerVO.class));
@@ -140,6 +143,9 @@ public class CustomerService {
 
     public void upgradeLevel(Long customerId) {
         GrandTotalResult result = customerDao.getGrandTotal(customerId);
+        if(result == null || result.getGrandTotalCount() == null || result.getGrandTotalAmount() == null){
+            return;
+        }
         // 判断合同金额（contractAmount + result.grandTotalAmount）满100万，并且项目数量(result.grandTotalCount)满10个，设置级别为A，否则合同金额满50万，或者项目数量满5个设置级别为B
         if (result.getGrandTotalCount() >= 10 && (result.getGrandTotalAmount()).compareTo(new BigDecimal(1000000)) >= 0) {
             updateLevel(customerId, "LEVEL_A");

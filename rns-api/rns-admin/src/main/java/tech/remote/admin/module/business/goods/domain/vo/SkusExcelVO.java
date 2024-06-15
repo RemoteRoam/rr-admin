@@ -32,8 +32,8 @@ public class SkusExcelVO {
     @ExcelProperty("库存数量")
     private Integer stockQuantity;
 
-    @ExcelProperty("排的重量")
-    private BigDecimal weight;
+//    @ExcelProperty("重量")
+//    private BigDecimal weight;
 
 //    @ExcelProperty("备注")
 //    private String remark;

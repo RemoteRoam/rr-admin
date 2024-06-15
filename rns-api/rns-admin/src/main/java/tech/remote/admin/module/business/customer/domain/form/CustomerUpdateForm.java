@@ -22,6 +22,10 @@ public class CustomerUpdateForm {
     @NotNull(message = "客户ID 不能为空")
     private Long customerId;
 
+    @Schema(description = "客户类型(1认证客户2销售客户)")
+    @NotNull(message = "客户类型 不能为空")
+    private Integer type;
+
     @Schema(description = "客户名称", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "客户名称 不能为空")
     private String customerName;

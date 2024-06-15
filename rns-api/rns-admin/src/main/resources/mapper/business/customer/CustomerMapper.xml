@@ -11,7 +11,11 @@
             deleted_flag = 0
             <!--客户名称-->
             <if test="queryForm.customerName != null and queryForm.customerName != ''">
-                        AND INSTR(t_customer.customer_name,#{queryForm.customerName})
+                AND INSTR(t_customer.customer_name,#{queryForm.customerName})
+            </if>
+            <!--客户类型-->
+            <if test="queryForm.type != null">
+                AND t_customer.type = #{queryForm.type}
             </if>
             <!--客户级别-->
             <if test="queryForm.customerLevel != null">
@@ -95,6 +99,11 @@
 
                  SELECT SUM(payment_amount) AS total_amount, COUNT(1) AS total_count
                  FROM t_measurement
+                 WHERE customer_id = #{customerId}
+                 UNION ALL
+
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_sales
                  WHERE customer_id = #{customerId}
              ) AS combined_totals
     </select>

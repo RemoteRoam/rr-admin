@@ -63,7 +63,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false" :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }">
+            :pagination="false">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'stocktakeNo'">
                     <a @click="showDetail(record.id)">{{ text }}</a>

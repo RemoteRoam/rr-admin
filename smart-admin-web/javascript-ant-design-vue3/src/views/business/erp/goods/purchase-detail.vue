@@ -55,6 +55,11 @@ const columns = reactive([
         dataIndex: 'quantity',
         width: 150,
     },
+    {
+        title: '重量',
+        dataIndex: 'weight',
+        width: 150,
+    },
 
 ]);
 

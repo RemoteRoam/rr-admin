@@ -32,6 +32,9 @@
                     <template v-if="column.dataIndex === 'quantity'">
                         <a-input-number v-model:value="record.quantity" :min="0" />
                     </template>
+                    <template v-if="column.dataIndex === 'weight'">
+                        <a-input-number v-model:value="record.weight" :min="0" />
+                    </template>
                     <template v-else-if="column.dataIndex === 'operate'">
                         <a @click="deleteRecord(record.skuId)">移除</a>
                     </template>
@@ -118,6 +121,11 @@ const columns = reactive([
     {
         title: '采购数量',
         dataIndex: 'quantity',
+        width: 150,
+    },
+    {
+        title: '重量',
+        dataIndex: 'weight',
         width: 150,
     },
     {
