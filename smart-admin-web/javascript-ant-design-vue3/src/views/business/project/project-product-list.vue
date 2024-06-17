@@ -70,6 +70,7 @@
                             </a-menu>
                         </template>
                     </a-dropdown>
+                    <a-button @click="onDelete(record)" danger type="link">删除</a-button>
                 </template>
             </template>
         </a-table>

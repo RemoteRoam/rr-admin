@@ -383,7 +383,11 @@
                 AND t.id in (
                     select distinct l.project_id
                     from t_project_lab l
-                    where l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+                    where (
+                        (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))
+                        OR
+                        (l.lab_expected_date IS NULL AND l.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))
+                    )
                     AND l.status != 2
                 )
             </if>

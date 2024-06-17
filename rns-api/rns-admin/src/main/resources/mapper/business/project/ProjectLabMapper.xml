@@ -93,7 +93,12 @@
         </if>
         <if test="queryForm.alarmType != null and queryForm.alarmType == 2">
             <!--实验室任务客户要求完成日期提前3天预警-->
-            AND  l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+            AND
+            (
+                (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))
+                OR
+                (l.lab_expected_date IS NULL AND l.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))
+            )
             AND l.status != 2
             ORDER BY alarmDays ASC, l.create_time DESC
         </if>
