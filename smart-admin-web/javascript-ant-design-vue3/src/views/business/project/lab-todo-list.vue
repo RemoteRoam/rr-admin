@@ -78,7 +78,7 @@
         <a-tabs>
             <a-tab-pane key="estimateCompletion" :tab="tabName8">
                 <a-table size="small" :dataSource="tableData8" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
+                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
                     <template #bodyCell="{ text, record, column }">
                         <template v-if="column.dataIndex === 'taskNo'">
                             <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -124,7 +124,7 @@
 
             <a-tab-pane key="experimentCheck" :tab="tabName9">
                 <a-table size="small" :dataSource="tableData9" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
+                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
                     <template #bodyCell="{ text, record, column }">
                         <template v-if="column.dataIndex === 'taskNo'">
                             <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -168,7 +168,7 @@
             </a-tab-pane>
             <a-tab-pane key="labReport" :tab="tabName10">
                 <a-table size="small" :dataSource="tableData10" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
+                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
                     <template #bodyCell="{ text, record, column }">
                         <template v-if="column.dataIndex === 'taskNo'">
                             <a @click="detailTask(record)">{{ record.taskNo }}</a>
