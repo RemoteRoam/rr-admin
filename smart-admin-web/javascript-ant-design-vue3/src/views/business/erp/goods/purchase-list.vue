@@ -57,7 +57,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
-            :pagination="false">
+            :pagination="false" :scroll="{ x: 1000, y: 400 }">
             <template #bodyCell="{ text, record, column }">
                 <!---------- purchaseNo添加超链接 ----------->
                 <template v-if="column.dataIndex === 'purchaseNo'">

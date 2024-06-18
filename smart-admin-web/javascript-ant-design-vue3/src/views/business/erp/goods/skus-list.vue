@@ -71,7 +71,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="skuId" bordered :loading="tableLoading"
-            :pagination="false">
+            :pagination="false" :scroll="{ x: 1000, y: 400 }">
             <template #bodyCell="{ text, record, column }">
                 <!-- <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
