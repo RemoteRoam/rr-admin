@@ -48,7 +48,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'productName'">

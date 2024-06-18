@@ -93,7 +93,8 @@
     </a-row>
     <!---------- 表格操作行 end ----------->
 
-    <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="goodsId" bordered :pagination="false">
+    <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="goodsId" bordered :pagination="false"
+      :scroll="{ x: 1000, y: 400 }">
       <template #bodyCell="{ text, record, column }">
         <template v-if="column.dataIndex === 'goodsName'">
           <a @click="detailGoods(record)">{{ record.goodsName }}</a>
@@ -173,10 +174,12 @@ const columns = ref([
   {
     title: '商品名称',
     dataIndex: 'goodsName',
+    width: 180,
   },
   {
     title: '商品分类',
     dataIndex: 'categoryName',
+    width: 180,
   },
   // {
   //   title: '商品状态',

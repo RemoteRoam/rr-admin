@@ -131,7 +131,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
             <template #bodyCell="{ text, record, column }">
 

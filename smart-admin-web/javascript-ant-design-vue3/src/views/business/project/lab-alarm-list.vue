@@ -76,7 +76,7 @@
     <!-- Data Table -->
     <a-card size="small" :bordered="false" :hoverable="true">
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000 }">
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
                     <a @click="detailTask(record)">{{ record.taskNo }}</a>
