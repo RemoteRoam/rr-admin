@@ -50,7 +50,7 @@
         <ip2region.version>2.7.0</ip2region.version>
         <bcprov.version>1.59</bcprov.version>
         <jackson-datatype-jsr310.version>2.13.4</jackson-datatype-jsr310.version>
-        <smartdb.version>1.2.0</smartdb.version>
+<!--        <smartdb.version>1.2.0</smartdb.version>-->
     </properties>
 
     <dependencyManagement>
@@ -294,11 +294,11 @@
                 <version>${jackson-datatype-jsr310.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>net.1024lab</groupId>
-                <artifactId>smartdb</artifactId>
-                <version>${smartdb.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>net.1024lab</groupId>-->
+<!--                <artifactId>smartdb</artifactId>-->
+<!--                <version>${smartdb.version}</version>-->
+<!--            </dependency>-->
         </dependencies>
 
     </dependencyManagement>

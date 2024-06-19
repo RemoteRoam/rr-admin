@@ -253,11 +253,11 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>net.1024lab</groupId>
-            <artifactId>smartdb</artifactId>
-            <version>${smartdb.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.1024lab</groupId>-->
+<!--            <artifactId>smartdb</artifactId>-->
+<!--            <version>${smartdb.version}</version>-->
+<!--        </dependency>-->
 
 
     </dependencies>
