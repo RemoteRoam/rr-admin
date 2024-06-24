@@ -56,6 +56,12 @@
             <a-form-item label="实验费付款日期" class="smart-query-form-item">
                 <a-range-picker v-model:value="labPayDateRange" style="width: 250px" @change="onLabPayDateChange" />
             </a-form-item>
+            <a-form-item label="产品名称" class="smart-query-form-item">
+                <a-input width="150px" v-model:value="queryForm.productName" placeholder="产品名称" />
+            </a-form-item>
+            <a-form-item label="产品型号" class="smart-query-form-item">
+                <a-input width="150px" v-model:value="queryForm.productModel" placeholder="产品型号" />
+            </a-form-item>
             <a-form-item class="smart-query-form-item">
                 <a-button type="primary" @click="queryData">
                     <template #icon>
@@ -217,6 +223,8 @@ const queryFormState = {
     labContractNo: undefined,
     labPayDateBegin: undefined,
     labPayDateEnd: undefined,
+    productName: undefined,
+    productModel: undefined,
     pageNum: 1,
     pageSize: 10,
 };
