@@ -32,6 +32,10 @@ public class ProjectLabListQueryForm extends PageParam {
 
     private LocalDate labPayDateBegin;
     private LocalDate labPayDateEnd;
+    @Schema(description = "产品名称")
+    private String productName;
+    @Schema(description = "产品型号")
+    private String productModel;
 
     @Schema(description = "待办类型：1 办公室待办，2 实验室待办")
     private Integer toDoType;
