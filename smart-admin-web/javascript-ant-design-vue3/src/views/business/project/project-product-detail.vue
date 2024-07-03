@@ -16,6 +16,8 @@
           <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
           <a-descriptions-item label="产品名称">{{ detail.productName }}</a-descriptions-item>
           <a-descriptions-item label="产品型号">{{ detail.productModel }}</a-descriptions-item>
+          <a-descriptions-item label="预计完成日期">{{ detail.expectedCompletionDate }}</a-descriptions-item>
+          <a-descriptions-item label="报告完成日期">{{ detail.reportCompletionDate }}</a-descriptions-item>
           <a-descriptions-item label="实验室上报日期">{{ detail.labReportDate }}</a-descriptions-item>
           <a-descriptions-item label="自我声明日期">{{ detail.selfDeclarationDate }}</a-descriptions-item>
           <a-descriptions-item label="证书编号">{{ detail.certificateNo }}</a-descriptions-item>

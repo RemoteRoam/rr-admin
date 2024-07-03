@@ -1,6 +1,7 @@
 package tech.remote.admin.module.business.project.service;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ import tech.remote.base.common.code.BusinessErrorCode;
 import tech.remote.base.common.constant.StringConst;
 import tech.remote.base.common.enumeration.NodeStatusEnum;
 import tech.remote.base.common.enumeration.ProjectStatusEnum;
+import tech.remote.base.common.enumeration.ProjectTypeEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -109,6 +111,7 @@ public class ProjectLabService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> add(ProjectLabAddForm addForm) {
         ProjectLabEntity projectLabEntity = SmartBeanUtil.copy(addForm, ProjectLabEntity.class);
+        ProjectEntity projectEntity = projectManager.getById(addForm.getProjectId());
 
         String projectNo = serialNumberService.generate(SerialNumberIdEnum.PROJECT_TASK);
         projectLabEntity.setTaskNo(projectNo);
@@ -156,9 +159,25 @@ public class ProjectLabService {
         query2.setProjectType(addForm.getProjectType());
         List<TypeNodeListVO> typeNodeList2 = typeNodeService.getTypeNodes(query2);
 
-        for(ProjectProductEntity projectProduct : projectProductList){
+        for (ProjectProductEntity projectProduct : projectProductList) {
             List<ProjectNodeEntity> projectNodeList2 = SmartBeanUtil.copyList(typeNodeList2, ProjectNodeEntity.class);
-            for(ProjectNodeEntity projectNode : projectNodeList2){
+
+            // 使用Iterator避免ConcurrentModificationException
+            Iterator<ProjectNodeEntity> iterator = projectNodeList2.iterator();
+
+            while (iterator.hasNext()) {
+                ProjectNodeEntity projectNode = iterator.next();
+
+                if ((projectEntity.getProjectType() == ProjectTypeEnum.PC_CCC.getValue() ||
+                        projectEntity.getProjectType() == ProjectTypeEnum.PC_CERTIFICATION.getValue()) &&
+                        projectEntity.getCategory() == 2 &&
+                        addForm.getThirdPartyId() == null &&
+                        (projectNode.getNodeId() == 8 || projectNode.getNodeId() == 9 || projectNode.getNodeId() == 10)) {
+                    // 移除当前projectNode
+                    iterator.remove();
+                    continue;
+                }
+
                 projectNode.setId(null);
                 projectNode.setProjectId(addForm.getProjectId());
                 projectNode.setProjectNo(projectNo);
@@ -169,7 +188,10 @@ public class ProjectLabService {
                 projectNode.setCreateUserId(addForm.getCreateUserId());
                 projectNode.setCreateUserName(addForm.getCreateUserName());
             }
-            projectNodeManager.saveBatch(projectNodeList2);
+
+            if (!projectNodeList2.isEmpty()) {
+                projectNodeManager.saveBatch(projectNodeList2);
+            }
         }
 
         dataTracerService.insert(projectLabEntity.getId(), DataTracerTypeEnum.PROJECT_LAB_TASK);
@@ -275,6 +297,7 @@ public class ProjectLabService {
         return vo;
     }
 
+//    办公室待办、实验室任务列表、实验室预警
     public PageResult<ProjectLabListVO> getProjectLabs(ProjectLabListQueryForm queryForm) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<ProjectLabListVO> list = projectLabDao.selectProjectLabs(page, queryForm);
@@ -300,14 +323,15 @@ public class ProjectLabService {
     public ProjectLabTodoListVO getProjectLabTodoList(ProjectLabListQueryForm queryForm) {
         ProjectLabTodoListVO vo = new ProjectLabTodoListVO();
         queryForm.setNodeId(8);
-        List<ProjectLabListVO> estimateCompletionList = projectLabDao.selectLabsTodo(queryForm);
+        List<ProjectProductListVO> estimateCompletionList = projectLabDao.selectLabsTodo(queryForm);
         if(CollectionUtils.isNotEmpty(estimateCompletionList)){
-            for(ProjectLabListVO projectLab : estimateCompletionList){
+            for(ProjectProductListVO projectLab : estimateCompletionList){
                 ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
                 nodeQueryForm.setProjectId(projectLab.getProjectId());
                 nodeQueryForm.setProjectType(projectLab.getProjectType());
-                nodeQueryForm.setTaskId(projectLab.getId());
-                nodeQueryForm.setNodeLevel(2);
+                nodeQueryForm.setTaskId(projectLab.getTaskId());
+                nodeQueryForm.setProductId(projectLab.getId());
+                nodeQueryForm.setNodeLevel(3);
                 List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
                 projectLab.setProjectNodeList(projectNodeList);
             }
@@ -316,14 +340,15 @@ public class ProjectLabService {
         vo.setEstimateCompletionCount(estimateCompletionList.size());
 
         queryForm.setNodeId(9);
-        List<ProjectLabListVO> experimentCheckList = projectLabDao.selectLabsTodo(queryForm);
+        List<ProjectProductListVO> experimentCheckList = projectLabDao.selectLabsTodo(queryForm);
         if(CollectionUtils.isNotEmpty(experimentCheckList)){
-            for(ProjectLabListVO projectLab : experimentCheckList){
+            for(ProjectProductListVO projectLab : experimentCheckList){
                 ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
                 nodeQueryForm.setProjectId(projectLab.getProjectId());
                 nodeQueryForm.setProjectType(projectLab.getProjectType());
-                nodeQueryForm.setTaskId(projectLab.getId());
-                nodeQueryForm.setNodeLevel(2);
+                nodeQueryForm.setTaskId(projectLab.getTaskId());
+                nodeQueryForm.setProductId(projectLab.getId());
+                nodeQueryForm.setNodeLevel(3);
                 List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
                 projectLab.setProjectNodeList(projectNodeList);
             }
@@ -332,14 +357,15 @@ public class ProjectLabService {
         vo.setExperimentCheckCount(experimentCheckList.size());
 
         queryForm.setNodeId(10);
-        List<ProjectLabListVO> labReportList = projectLabDao.selectLabsTodo(queryForm);
+        List<ProjectProductListVO> labReportList = projectLabDao.selectLabsTodo(queryForm);
         if(CollectionUtils.isNotEmpty(labReportList)){
-            for(ProjectLabListVO projectLab : labReportList){
+            for(ProjectProductListVO projectLab : labReportList){
                 ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
                 nodeQueryForm.setProjectId(projectLab.getProjectId());
                 nodeQueryForm.setProjectType(projectLab.getProjectType());
-                nodeQueryForm.setTaskId(projectLab.getId());
-                nodeQueryForm.setNodeLevel(2);
+                nodeQueryForm.setTaskId(projectLab.getTaskId());
+                nodeQueryForm.setProductId(projectLab.getId());
+                nodeQueryForm.setNodeLevel(3);
                 List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
                 projectLab.setProjectNodeList(projectNodeList);
             }

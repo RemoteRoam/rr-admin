@@ -44,11 +44,11 @@ public class ProjectLabProgressVO {
 //    @Schema(description = "实验室下达任务日期")
 //    private LocalDate assignTaskDate;
 
-    @Schema(description = "预计完成日期")
-    private LocalDate expectedCompletionDate;
-
-    @Schema(description = "报告完成日期")
-    private LocalDate reportCompletionDate;
+//    @Schema(description = "预计完成日期")
+//    private LocalDate expectedCompletionDate;
+//
+//    @Schema(description = "报告完成日期")
+//    private LocalDate reportCompletionDate;
 
     @Schema(description = "审核任务时间")
     private LocalDate auditTaskDate;

@@ -86,6 +86,8 @@
         <ProjectProductForm ref="formRef" @reloadList="queryData" />
         <ProjectProductAddForm ref="formAddRef" @reloadList="queryData" />
 
+        <EstimateCompletionForm ref="estimateCompletionFormRef" @reloadList="queryData" />
+        <ExperimentCheckForm ref="experimentCheckFormRef" @reloadList="queryData" />
         <LabReportForm ref="labReportFormRef" @reloadList="queryData" />
         <SelfDeclarationForm ref="selfDeclarationFormRef" @reloadList="queryData" />
         <CertificateForm ref="certificateFormRef" @reloadList="queryData" />
@@ -108,6 +110,8 @@ import ProjectProductAddForm from './project-product-add-form.vue';
 import LabReportForm from '../common-nodes/lab-report/lab-report-form.vue';
 import SelfDeclarationForm from '../common-nodes/self-declaration/self-declaration-form.vue';
 import CertificateForm from '../common-nodes/certificate/certificate-form.vue';
+import EstimateCompletionForm from '../common-nodes/estimate-completion/estimate-completion-form.vue';
+import ExperimentCheckForm from '../common-nodes/experiment-check/experiment-check-form.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -134,6 +138,16 @@ const columns = ref([
     {
         title: '产品型号',
         dataIndex: 'productModel',
+        width: 120,
+    },
+    {
+        title: '预计完成日期',
+        dataIndex: 'expectedCompletionDate',
+        width: 120,
+    },
+    {
+        title: '报告完成日期',
+        dataIndex: 'reportCompletionDate',
         width: 120,
     },
     {
@@ -286,6 +300,8 @@ const enumName = computed(() => {
 const formRef = ref();
 const formAddRef = ref();
 
+const estimateCompletionFormRef = ref();
+const experimentCheckFormRef = ref();
 const labReportFormRef = ref();
 const selfDeclarationFormRef = ref();
 const certificateFormRef = ref();
@@ -381,6 +397,10 @@ const handleMenuClick = (e, param) => {
         selfDeclarationFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.certificate) {
         certificateFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.estimate_completion) {
+        estimateCompletionFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.experiment_check) {
+        experimentCheckFormRef.value.show(param, e.key.id);
     }
 
 };

@@ -77,7 +77,7 @@ const formDefault = {
     projectId: undefined, //项目类型
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
-    nodeId: NODE_CONST.assign_task, //节点ID
+    nodeId: NODE_CONST.self_declaration, //节点ID
     nodeStatus: 0, //节点状态
     passReason: undefined, //跳过原因
     selfDeclarationDate: undefined, //自我声明日期

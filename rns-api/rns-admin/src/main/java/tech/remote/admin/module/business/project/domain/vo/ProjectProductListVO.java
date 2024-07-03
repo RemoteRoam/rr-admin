@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 项目实验室任务表 列表VO
+ * 实验室待办、预警 列表VO
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -18,7 +18,8 @@ import java.util.List;
  */
 
 @Data
-public class ProjectLabListVO {
+public class ProjectProductListVO {
+
 
 
     @Schema(description = "编号")
@@ -26,6 +27,67 @@ public class ProjectLabListVO {
 
     @Schema(description = "项目ID")
     private Long projectId;
+
+    @Schema(description = "实验室任务ID")
+    private Long taskId;
+
+    @Schema(description = "产品名称")
+    private String productName;
+
+    @Schema(description = "产品型号")
+    private String productModel;
+
+    @Schema(description = "预计完成日期")
+    private LocalDate expectedCompletionDate;
+
+    @Schema(description = "报告完成日期")
+    private LocalDate reportCompletionDate;
+
+    @Schema(description = "实验室上报日期")
+    private LocalDate labReportDate;
+
+    @Schema(description = "自我声明日期")
+    private LocalDate selfDeclarationDate;
+
+    @Schema(description = "证书编号")
+    private String certificateNo;
+
+    @Schema(description = "证书发送日期")
+    private LocalDate certificateSendDate;
+
+    @Schema(description = "证书有效期截止日期")
+    private LocalDate certificateExpiryDate;
+
+    @Schema(description = "项目认证费表ID")
+    private Long certificationFeeId;
+
+    @Schema(description = "项目归档表ID")
+    private Long archiveId;
+
+    @Schema(description = "项目邮寄表ID")
+    private Long mailId;
+
+    @Schema(description = "状态")
+    private Integer status;
+
+    @Schema(description = "创建人")
+    private Long createUserId;
+
+    @Schema(description = "创建人姓名")
+    private String createUserName;
+
+    @Schema(description = "创建时间")
+    private LocalDateTime createTime;
+
+    @Schema(description = "更新人")
+    private Long updateUserId;
+
+    @Schema(description = "更新人姓名")
+    private String updateUserName;
+
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
+
 
     @Schema(description = "实验室任务编号")
     private String taskNo;
@@ -72,36 +134,6 @@ public class ProjectLabListVO {
     @Schema(description = "实验室下达任务日期")
     private LocalDate assignTaskDate;
 
-    @Schema(description = "预计完成日期")
-    private LocalDate expectedCompletionDate;
-
-    @Schema(description = "报告完成日期")
-    private LocalDate reportCompletionDate;
-
-    @Schema(description = "进度查询CODE")
-    private String progressCode;
-
-    @Schema(description = "状态")
-    private Integer status;
-
-    @Schema(description = "创建人")
-    private Long createUserId;
-
-    @Schema(description = "创建人姓名")
-    private String createUserName;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新人")
-    private Long updateUserId;
-
-    @Schema(description = "更新人姓名")
-    private String updateUserName;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
-
     @Schema(description = "项目编号")
     private String projectNo;
 
@@ -128,9 +160,6 @@ public class ProjectLabListVO {
 
     @Schema(description = "实验室预警天数")
     private Integer alarmDays;
-
-    @Schema(description = "产品列表")
-    private List<ProjectProductVO> projectProductList;
 
     @Schema(description = "操作节点列表")
     private List<ProjectNodeVO> projectNodeList;

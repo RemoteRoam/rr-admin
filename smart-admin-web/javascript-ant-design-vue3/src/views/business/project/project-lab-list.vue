@@ -57,7 +57,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
@@ -104,13 +104,11 @@
         <ReceiveDataForm ref="receiveDataFormRef" @reloadList="queryData" />
         <PayExperimentFeeForm ref="payExperimentFeeFormRef" @reloadList="queryData" />
         <AssignTaskForm ref="assignTaskFormRef" @reloadList="queryData" />
-        <EstimateCompletionForm ref="estimateCompletionFormRef" @reloadList="queryData" />
-        <ExperimentCheckForm ref="experimentCheckFormRef" @reloadList="queryData" />
 
     </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted, onActivated, computed } from 'vue';
+import { reactive, ref, onMounted, onActivated, computed, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -127,8 +125,6 @@ import SendDataForm from '../common-nodes/send-data/send-data-form.vue';
 import ReceiveDataForm from '../common-nodes/receive-data/receive-data-form.vue';
 import PayExperimentFeeForm from '../common-nodes/pay-experiment-fee/pay-experiment-fee-form.vue';
 import AssignTaskForm from '../common-nodes/assign-task/assign-task-form.vue';
-import EstimateCompletionForm from '../common-nodes/estimate-completion/estimate-completion-form.vue';
-import ExperimentCheckForm from '../common-nodes/experiment-check/experiment-check-form.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
@@ -305,8 +301,20 @@ async function queryData() {
     }
 }
 
+const tableScrollY = ref(600);
+const updateTableScrollY = () => {
+    const headerHeight = 240; // 假设的头部高度，根据实际情况调整
+    const otherElementsHeight = 180; // 其他元素的总高度，根据实际情况调整
+    tableScrollY.value = window.innerHeight - headerHeight - otherElementsHeight;
+};
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateTableScrollY);
+});
 
 onMounted(() => {
+    updateTableScrollY();
+    window.addEventListener('resize', updateTableScrollY);
     getDetail(route.query.projectId);
     queryForm.projectId = route.query.projectId;
     queryForm.projectType = route.query.projectType;
@@ -334,8 +342,6 @@ const sendDataFormRef = ref();
 const receiveDataFormRef = ref();
 const payExperimentFeeFormRef = ref();
 const assignTaskFormRef = ref();
-const estimateCompletionFormRef = ref();
-const experimentCheckFormRef = ref();
 
 
 function showForm() {
@@ -378,10 +384,6 @@ const handleMenuClick = (e, param) => {
         payExperimentFeeFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.assign_task) {
         assignTaskFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.estimate_completion) {
-        estimateCompletionFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.experiment_check) {
-        experimentCheckFormRef.value.show(param, e.key.id);
     }
 
 };

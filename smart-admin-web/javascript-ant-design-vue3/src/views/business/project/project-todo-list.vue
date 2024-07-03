@@ -63,7 +63,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }">
             <template #bodyCell="{ text, record, column }">
 
                 <template v-if="column.dataIndex === 'projectNo'">
@@ -126,7 +126,7 @@
 
 </template>
 <script setup>
-import { reactive, ref, onMounted, computed } from 'vue';
+import { reactive, ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import { useRouter, useRoute } from 'vue-router';
 import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -319,6 +319,8 @@ let route = useRoute();
 const projectType = ref(null); // 定义单独的 projectType 变量
 
 onMounted(() => {
+    updateTableScrollY();
+    window.addEventListener('resize', updateTableScrollY);
     // 获取最后一个"/"之后的值
     const lastSlashIndex = route.path.lastIndexOf('/');
     if (lastSlashIndex !== -1) {
@@ -327,6 +329,20 @@ onMounted(() => {
         queryData();
     }
 
+});
+
+const tableScrollY = ref(600);
+const updateTableScrollY = () => {
+    const headerHeight = 240; // 假设的头部高度，根据实际情况调整
+    const otherElementsHeight = 0; // 其他元素的总高度，根据实际情况调整
+    tableScrollY.value = window.innerHeight - headerHeight - otherElementsHeight;
+};
+
+onMounted(() => {
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateTableScrollY);
 });
 
 const enumName = computed(() => {

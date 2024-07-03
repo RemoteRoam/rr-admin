@@ -78,7 +78,8 @@
         <a-tabs>
             <a-tab-pane key="estimateCompletion" :tab="tabName8">
                 <a-table size="small" :dataSource="tableData8" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
+                    rowKey="id" bordered :loading="tableLoading" :pagination="false"
+                    :scroll="{ x: 2000, y: tableScrollY }">
                     <template #bodyCell="{ text, record, column }">
                         <template v-if="column.dataIndex === 'taskNo'">
                             <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -124,7 +125,8 @@
 
             <a-tab-pane key="experimentCheck" :tab="tabName9">
                 <a-table size="small" :dataSource="tableData9" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
+                    rowKey="id" bordered :loading="tableLoading" :pagination="false"
+                    :scroll="{ x: 2000, y: tableScrollY }">
                     <template #bodyCell="{ text, record, column }">
                         <template v-if="column.dataIndex === 'taskNo'">
                             <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -168,7 +170,8 @@
             </a-tab-pane>
             <a-tab-pane key="labReport" :tab="tabName10">
                 <a-table size="small" :dataSource="tableData10" :columns="columns" @resizeColumn="handleResizeColumn"
-                    rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
+                    rowKey="id" bordered :loading="tableLoading" :pagination="false"
+                    :scroll="{ x: 2000, y: tableScrollY }">
                     <template #bodyCell="{ text, record, column }">
                         <template v-if="column.dataIndex === 'taskNo'">
                             <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -199,10 +202,6 @@
                                     </a>
                                     <template #overlay>
                                         <a-menu @click="handleMenuClick($event, record)">
-                                            <a-menu-item>
-                                                产品列表
-                                            </a-menu-item>
-                                            <a-menu-divider />
                                             <a-menu-item v-for="node in record.projectNodeList" :key="node">
                                                 {{ node.nodeName }}
                                             </a-menu-item>
@@ -223,11 +222,13 @@
         <AssignTaskForm ref="assignTaskFormRef" @reloadList="queryData" />
         <EstimateCompletionForm ref="estimateCompletionFormRef" @reloadList="queryData" />
         <ExperimentCheckForm ref="experimentCheckFormRef" @reloadList="queryData" />
+        <LabReportForm ref="labReportFormRef" @reloadList="queryData" />
+        <SelfDeclarationForm ref="selfDeclarationFormRef" @reloadList="queryData" />
     </a-card>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, getCurrentInstance } from 'vue';
+import { reactive, ref, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
@@ -244,6 +245,8 @@ import PayExperimentFeeForm from '../common-nodes/pay-experiment-fee/pay-experim
 import AssignTaskForm from '../common-nodes/assign-task/assign-task-form.vue';
 import EstimateCompletionForm from '../common-nodes/estimate-completion/estimate-completion-form.vue';
 import ExperimentCheckForm from '../common-nodes/experiment-check/experiment-check-form.vue';
+import LabReportForm from '../common-nodes/lab-report/lab-report-form.vue';
+import SelfDeclarationForm from '../common-nodes/self-declaration/self-declaration-form.vue';
 
 // Columns for the table based on ProjectLabListVO
 const columns = ref([
@@ -255,6 +258,8 @@ const columns = ref([
     { title: '来源分类', dataIndex: 'sourceType', width: 80 },
     { title: '来源', dataIndex: 'sourceName', width: 120 },
     { title: '实验室名称', dataIndex: 'thirdPartyName', width: 120 },
+    { title: '产品名称', dataIndex: 'productName', width: 120 },
+    { title: '产品型号', dataIndex: 'productModel', width: 120 },
     { title: '实验室合同号', dataIndex: 'labContractNo', width: 120 },
     { title: '实验室合同日期', dataIndex: 'labContractDate', width: 120 },
     { title: '实验费金额', dataIndex: 'labContractAmount', width: 100 },
@@ -317,6 +322,8 @@ const payExperimentFeeFormRef = ref();
 const assignTaskFormRef = ref();
 const estimateCompletionFormRef = ref();
 const experimentCheckFormRef = ref();
+const labReportFormRef = ref();
+const selfDeclarationFormRef = ref();
 
 // Query data
 const queryData = async () => {
@@ -385,6 +392,10 @@ const handleMenuClick = (e, param) => {
         estimateCompletionFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.experiment_check) {
         experimentCheckFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.lab_report) {
+        labReportFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.self_declaration) {
+        selfDeclarationFormRef.value.show(param, e.key.id);
     }
 
 };
@@ -395,7 +406,7 @@ const detail = (id) => {
 };
 
 function detailTask(record) {
-    router.push({ path: '/project/lab-detail', query: { id: record.id, customerName: record.customerName, projectType: record.projectType, category: record.category } });
+    router.push({ path: '/project/lab-detail', query: { id: record.taskId, customerName: record.customerName, projectType: record.projectType, category: record.category } });
 }
 
 // Initial data query
@@ -405,6 +416,8 @@ function handleResizeColumn(w, col) {
 
 const type = ref();
 onMounted(() => {
+    updateTableScrollY();
+    window.addEventListener('resize', updateTableScrollY);
     // 获取最后一个"/"之后的值
     const lastSlashIndex = route.path.lastIndexOf('/');
     if (lastSlashIndex !== -1) {
@@ -413,6 +426,18 @@ onMounted(() => {
         queryData();
     }
 
+});
+
+const tableScrollY = ref(600);
+const updateTableScrollY = () => {
+    const headerHeight = 240; // 假设的头部高度，根据实际情况调整
+    const otherElementsHeight = 0; // 其他元素的总高度，根据实际情况调整
+    tableScrollY.value = window.innerHeight - headerHeight - otherElementsHeight;
+
+};
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateTableScrollY);
 });
 </script>
 

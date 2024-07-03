@@ -21,6 +21,18 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="18">
+                    <a-form-item label="预计完成日期" name="expectedCompletionDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.expectedCompletionDate"
+                            style="width: 100%" placeholder="预计完成日期" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="18">
+                    <a-form-item label="报告完成日期" name="reportCompletionDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.reportCompletionDate"
+                            style="width: 100%" placeholder="报告完成日期" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="18">
                     <a-form-item label="实验室上报日期" name="labReportDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labReportDate" style="width: 100%"
                             placeholder="实验室上报日期" />

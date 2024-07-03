@@ -28,7 +28,7 @@ import { reactive, ref, nextTick, h } from 'vue';
 import _ from 'lodash';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
-import { projectLabApi } from '/@/api/business/project/project-lab-api';
+import { projectProductApi } from '/@/api/business/project/project-product-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 import NODE_CONST from '/@/constants/business/project/node-const';
 // import { JumpNodeForm } from '../jump-node/jump-node-form.vue';
@@ -130,7 +130,7 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        await projectLabApi.update(form);
+        await projectProductApi.update(form);
         message.success('操作成功');
         emits('reloadList');
         onClose();

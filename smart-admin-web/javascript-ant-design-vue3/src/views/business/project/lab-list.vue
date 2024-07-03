@@ -98,7 +98,7 @@
         </a-row>
         <!---------- 表格操作行 end ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }">
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
                     <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, getCurrentInstance } from 'vue';
+import { reactive, ref, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
@@ -332,8 +332,20 @@ function handleResizeColumn(w, col) {
     col.width = w;
 }
 
-// Initial data query
+const tableScrollY = ref(600);
+const updateTableScrollY = () => {
+    const headerHeight = 240; // 假设的头部高度，根据实际情况调整
+    const otherElementsHeight = 0; // 其他元素的总高度，根据实际情况调整
+    tableScrollY.value = window.innerHeight - headerHeight - otherElementsHeight;
+};
+
 onMounted(() => {
     queryData();
+    updateTableScrollY();
+    window.addEventListener('resize', updateTableScrollY);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateTableScrollY);
 });
 </script>

@@ -151,18 +151,6 @@
                   placeholder="" disabled />
               </a-form-item>
             </a-col>
-            <a-col :span="8">
-              <a-form-item label="预计完成日期" name="expectedCompletionDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.expectedCompletionDate" style="width: 95%"
-                  placeholder="" disabled />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item label="报告完成日期" name="reportCompletionDate">
-                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.reportCompletionDate" style="width: 95%"
-                  placeholder="" disabled />
-              </a-form-item>
-            </a-col>
           </a-row>
         </a-form>
       </a-tab-pane>
@@ -290,6 +278,16 @@ const columns = ref([
     title: '产品型号',
     dataIndex: 'productModel',
     ellipsis: true,
+  },
+  {
+    title: '预计完成日期',
+    dataIndex: 'expectedCompletionDate',
+    width: 120,
+  },
+  {
+    title: '报告完成日期',
+    dataIndex: 'reportCompletionDate',
+    width: 120,
   },
   {
     title: '实验室上报日期',

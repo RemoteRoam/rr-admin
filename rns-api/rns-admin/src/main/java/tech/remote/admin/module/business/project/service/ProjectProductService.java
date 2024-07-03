@@ -1,12 +1,15 @@
 package tech.remote.admin.module.business.project.service;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.remote.admin.module.business.project.dao.ProjectLabDao;
 import tech.remote.admin.module.business.project.dao.ProjectProductDao;
 import tech.remote.admin.module.business.project.domain.entity.ProjectEntity;
 import tech.remote.admin.module.business.project.domain.entity.ProjectLabEntity;
@@ -27,6 +30,7 @@ import tech.remote.admin.module.business.typenode.service.TypeNodeService;
 import tech.remote.base.common.code.BusinessErrorCode;
 import tech.remote.base.common.enumeration.NodeStatusEnum;
 import tech.remote.base.common.enumeration.ProjectStatusEnum;
+import tech.remote.base.common.enumeration.ProjectTypeEnum;
 import tech.remote.base.common.util.SmartBeanUtil;
 import tech.remote.base.common.util.SmartPageUtil;
 import tech.remote.base.common.domain.ResponseDTO;
@@ -64,6 +68,9 @@ public class ProjectProductService {
     @Resource
     private ProjectManager projectManager;
 
+    @Autowired
+    private ProjectLabDao projectLabDao;
+
     /**
      * 分页查询
      *
@@ -96,6 +103,9 @@ public class ProjectProductService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> add(ProjectProductAddForm addForm) {
         ProjectProductEntity projectProductEntity = SmartBeanUtil.copy(addForm, ProjectProductEntity.class);
+        ProjectEntity projectEntity = projectManager.getById(addForm.getProjectId());
+        ProjectLabEntity projectLabEntity = projectLabDao.selectById(addForm.getTaskId());
+
         projectProductEntity.setStatus(ProjectStatusEnum.DOING.getValue());
         projectProductDao.insert(projectProductEntity);
 
@@ -105,10 +115,25 @@ public class ProjectProductService {
         query2.setProjectType(addForm.getProjectType());
         List<TypeNodeListVO> typeNodeList2 = typeNodeService.getTypeNodes(query2);
         List<ProjectNodeEntity> projectNodeList2 = SmartBeanUtil.copyList(typeNodeList2, ProjectNodeEntity.class);
-        for(ProjectNodeEntity projectNode : projectNodeList2){
+// 遍历和处理 projectNodeList2
+        Iterator<ProjectNodeEntity> iterator = projectNodeList2.iterator();
+
+        while (iterator.hasNext()) {
+            ProjectNodeEntity projectNode = iterator.next();
+
+            if ((projectEntity.getProjectType() == ProjectTypeEnum.PC_CCC.getValue() ||
+                    projectEntity.getProjectType() == ProjectTypeEnum.PC_CERTIFICATION.getValue()) &&
+                    projectEntity.getCategory() == 2 &&
+                    projectLabEntity.getThirdPartyId() == null &&
+                    (projectNode.getNodeId() == 8 || projectNode.getNodeId() == 9 || projectNode.getNodeId() == 10)) {
+                // 移除不符合条件的节点
+                iterator.remove();
+                continue;
+            }
+
+            // 设置节点的属性
             projectNode.setId(null);
             projectNode.setProjectId(addForm.getProjectId());
-//            projectNode.setProjectNo(projectNo);
             projectNode.setTaskId(addForm.getTaskId());
             projectNode.setProductId(projectProductEntity.getId());
             projectNode.setProjectType(addForm.getProjectType());
@@ -116,7 +141,11 @@ public class ProjectProductService {
             projectNode.setCreateUserId(addForm.getCreateUserId());
             projectNode.setCreateUserName(addForm.getCreateUserName());
         }
-        projectNodeManager.saveBatch(projectNodeList2);
+
+        // 批量保存处理后的项目节点
+        if (!projectNodeList2.isEmpty()) {
+            projectNodeManager.saveBatch(projectNodeList2);
+        }
 
         dataTracerService.insert(projectProductEntity.getId(), DataTracerTypeEnum.PROJECT_PRODUCT);
 

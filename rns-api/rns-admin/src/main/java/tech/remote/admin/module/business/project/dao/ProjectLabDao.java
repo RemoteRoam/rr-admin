@@ -37,10 +37,12 @@ public interface ProjectLabDao extends BaseMapper<ProjectLabEntity> {
 
     ProjectLabProgressVO getByCode(@Param("progressCode")String progressCode);
 
+//    办公室待办、实验室任务列表、实验室预警
     List<ProjectLabListVO> selectProjectLabs(Page page, @Param("queryForm") ProjectLabListQueryForm queryForm);
 
     List<ProjectLabExcelVO> selectExcelList(@Param("queryForm") ProjectLabListQueryForm queryForm);
 
-    List<ProjectLabListVO> selectLabsTodo(@Param("queryForm") ProjectLabListQueryForm queryForm);
+//    实验室待办
+    List<ProjectProductListVO> selectLabsTodo(@Param("queryForm") ProjectLabListQueryForm queryForm);
 
 }

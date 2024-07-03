@@ -131,7 +131,7 @@
 
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: 400 }"
+            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }"
             :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
             <template #bodyCell="{ text, record, column }">
 
@@ -193,7 +193,7 @@
     </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 import { SmartLoading } from '/@/components/framework/smart-loading';
 import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
@@ -442,8 +442,22 @@ function onChangeCreateTime(dates, dateStrings) {
     queryForm.createTimeEnd = dateStrings[1];
 }
 
+const tableScrollY = ref(600);
+const updateTableScrollY = () => {
+    const headerHeight = 240; // 假设的头部高度，根据实际情况调整
+    const otherElementsHeight = 180; // 其他元素的总高度，根据实际情况调整
+    tableScrollY.value = window.innerHeight - headerHeight - otherElementsHeight;
+};
 
-onMounted(queryData);
+onMounted(() => {
+    queryData();
+    updateTableScrollY();
+    window.addEventListener('resize', updateTableScrollY);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateTableScrollY);
+});
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();
