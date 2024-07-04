@@ -75,7 +75,7 @@ public class ProjectLabController {
         return ResponseDTO.ok(projectLabService.getProgress(progressCode));
     }
 
-    @Operation(summary = "分页查询 @author cbh")
+    @Operation(summary = "办公室待办、实验室任务列表、实验室预警分页查询 @author cbh")
     @PostMapping("/projectLab/queryLabListPage")
     public ResponseDTO<PageResult<ProjectLabListVO>> queryLabListPage(@RequestBody @Valid ProjectLabListQueryForm queryForm) {
         return ResponseDTO.ok(projectLabService.getProjectLabs(queryForm));

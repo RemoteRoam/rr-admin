@@ -219,7 +219,7 @@
         WHEN l.pay_party = 2 THEN '我方'
         ELSE NULL
         END AS payParty,
-        l.lab_pay_date, l.lab_pay_remark, l.assign_task_date, l.expected_completion_date, l.report_completion_date,
+        l.lab_pay_date, l.lab_pay_remark, l.assign_task_date, p.expected_completion_date, p.report_completion_date,
         p.product_name, p.product_model, p.lab_report_date, p.self_declaration_date, p.certificate_no, p.certificate_send_date, p.certificate_expiry_date,
         a.archive_position,a.archive_date,m.mailing_date,m.tracking_number,
 
@@ -378,19 +378,19 @@
                     where n.node_id = 9 and n.status = 0
                 )
             </if>
-            <if test="queryForm.alarmType == 2">
-                <!--实验室任务客户要求完成日期提前3天预警-->
-                AND t.id in (
-                    select distinct l.project_id
-                    from t_project_lab l
-                    where (
-                        (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))
-                        OR
-                        (l.lab_expected_date IS NULL AND l.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))
-                    )
-                    AND l.status != 2
-                )
-            </if>
+            <!--实验室任务客户要求完成日期提前3天预警-->
+<!--            <if test="queryForm.alarmType == 2">-->
+<!--                AND t.id in (-->
+<!--                    select distinct l.project_id-->
+<!--                    from t_project_lab l-->
+<!--                    where (-->
+<!--                        (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))-->
+<!--                        OR-->
+<!--                        (l.lab_expected_date IS NULL AND l.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))-->
+<!--                    )-->
+<!--                    AND l.status != 2-->
+<!--                )-->
+<!--            </if>-->
             <if test="queryForm.alarmType == 3">
                 <!--工厂审核监督预警，审核时间提前3个月预警-->
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)

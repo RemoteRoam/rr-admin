@@ -48,6 +48,20 @@ public class ProjectProductEntity {
     private String productModel;
 
     /**
+     * 预计完成日期
+     */
+    @DataTracerFieldLabel("预计完成日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate expectedCompletionDate;
+
+    /**
+     * 报告完成日期
+     */
+    @DataTracerFieldLabel("报告完成日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate reportCompletionDate;
+
+    /**
      * 实验室上报日期
      */
     @DataTracerFieldLabel("实验室上报日期")

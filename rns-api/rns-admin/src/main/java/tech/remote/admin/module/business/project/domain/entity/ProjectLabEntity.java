@@ -129,20 +129,6 @@ public class ProjectLabEntity {
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate assignTaskDate;
 
-    /**
-     * 预计完成日期
-     */
-    @DataTracerFieldLabel("预计完成日期")
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private LocalDate expectedCompletionDate;
-
-    /**
-     * 报告完成日期
-     */
-    @DataTracerFieldLabel("报告完成日期")
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private LocalDate reportCompletionDate;
-
     @Schema(description = "进度查询CODE")
     private String progressCode;
 

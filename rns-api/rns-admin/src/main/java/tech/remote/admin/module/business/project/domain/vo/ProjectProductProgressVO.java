@@ -28,6 +28,12 @@ public class ProjectProductProgressVO {
 //    @Schema(description = "实验室上报日期")
 //    private LocalDate labReportDate;
 
+    @Schema(description = "预计完成日期")
+    private LocalDate expectedCompletionDate;
+
+    @Schema(description = "报告完成日期")
+    private LocalDate reportCompletionDate;
+
     @Schema(description = "自我声明日期")
     private LocalDate selfDeclarationDate;
 

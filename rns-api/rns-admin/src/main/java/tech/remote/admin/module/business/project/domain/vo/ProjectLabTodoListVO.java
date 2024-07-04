@@ -30,11 +30,11 @@ public class ProjectLabTodoListVO {
     Integer labReportCount;
 
     @Schema(description = "预计完成待办列表")
-    List<ProjectLabListVO> estimateCompletionList;
+    List<ProjectProductListVO> estimateCompletionList;
 
     @Schema(description = "实验检测待办列表")
-    List<ProjectLabListVO> experimentCheckList;
+    List<ProjectProductListVO> experimentCheckList;
 
     @Schema(description = "实验室上报待办列表")
-    List<ProjectLabListVO> labReportList;
+    List<ProjectProductListVO> labReportList;
 }
