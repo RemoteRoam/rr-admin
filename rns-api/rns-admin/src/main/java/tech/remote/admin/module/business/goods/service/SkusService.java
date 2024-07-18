@@ -77,7 +77,7 @@ public class SkusService {
      * @param idList
      * @return
      */
-    public ResponseDTO<String> batchDelete(List<Integer> idList) {
+    public ResponseDTO<String> batchDelete(List<Long> idList) {
         if (CollectionUtils.isEmpty(idList)){
             return ResponseDTO.ok();
         }
@@ -112,12 +112,28 @@ public class SkusService {
     }
 
     public void updateSkus(GoodsUpdateForm updateForm) {
-        // 先根据goodsId删除所有型号规格数据，然后重新插入
+        // 根据goodsId获取所有型号规格数据，然后根据skuId更新名称字段，插入新增的型号规格数据，删除已删除的型号规格数据
         if (CollectionUtils.isEmpty(updateForm.getSkuList())) {
             return;
         }
-        skusDao.delete(Wrappers.lambdaQuery(SkusEntity.class).eq(SkusEntity::getGoodsId, updateForm.getGoodsId()));
-        this.insertSkus(updateForm.getGoodsId(), updateForm);
+        List<SkusEntity> skusListDB = skusDao.selectList(Wrappers.lambdaQuery(SkusEntity.class).eq(SkusEntity::getGoodsId, updateForm.getGoodsId()));
+        // 对比updateForm.getSkuList()和skusListDB，找出删除的
+        List<Long> skuIdListDB = skusListDB.stream().map(SkusEntity::getSkuId).collect(Collectors.toList());
+        List<Long> skuIdListForm = updateForm.getSkuList().stream().map(SkusUpdateForm::getSkuId).collect(Collectors.toList());
+        List<Long> deleteSkuIdList = skuIdListDB.stream().filter(skuId -> !skuIdListForm.contains(skuId)).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(deleteSkuIdList)) {
+            // 逻辑删除
+            skusDao.batchUpdateDeleted(deleteSkuIdList, true);
+        }
+
+        List<SkusEntity> skusList = updateForm.getSkuList().stream().map(skusUpdateForm -> {
+            SkusEntity skusEntity = SmartBeanUtil.copy(skusUpdateForm, SkusEntity.class);
+            skusEntity.setGoodsId(updateForm.getGoodsId());
+            skusEntity.setCategoryId(updateForm.getCategoryId());
+            return skusEntity;
+        }).collect(Collectors.toList());
+        skusManager.saveOrUpdateBatch(skusList);
+
     }
 
     public List<SkusExcelVO> getExcelExportData(SkusQueryForm queryForm) {

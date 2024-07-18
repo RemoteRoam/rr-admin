@@ -60,6 +60,7 @@ public class SkusManager extends ServiceImpl<SkusDao, SkusEntity> {
                 .map(form -> {
                     SkusEntity skusEntity = skusMap.get(form.getSkuId());
                     skusEntity.setStockQuantity(skusEntity.getStockQuantity() + form.getQuantity());
+                    skusEntity.setWeight(skusEntity.getWeight().add(form.getWeight()));
                     return skusEntity;
                 })
                 .collect(Collectors.toList());

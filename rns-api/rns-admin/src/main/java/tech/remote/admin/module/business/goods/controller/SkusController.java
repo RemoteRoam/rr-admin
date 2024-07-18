@@ -62,7 +62,7 @@ public class SkusController {
 
     @Operation(summary = "批量删除 @author cbh")
     @PostMapping("/skus/batchDelete")
-    public ResponseDTO<String> batchDelete(@RequestBody ValidateList<Integer> idList) {
+    public ResponseDTO<String> batchDelete(@RequestBody ValidateList<Long> idList) {
         return skusService.batchDelete(idList);
     }
 
