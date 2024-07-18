@@ -35,11 +35,11 @@ public interface SkusDao extends BaseMapper<SkusEntity> {
     /**
      * 更新删除状态
      */
-    long updateDeleted(@Param("skuId")Long skuId,@Param("${deletedFlag}")boolean deletedFlag);
+    long updateDeleted(@Param("skuId")Long skuId,@Param("deletedFlag")boolean deletedFlag);
     /**
      * 批量更新删除状态
      */
-    void batchUpdateDeleted(@Param("idList")List<Integer> idList,@Param("${deletedFlag}")boolean deletedFlag);
+    void batchUpdateDeleted(@Param("idList")List<Long> idList,@Param("deletedFlag")boolean deletedFlag);
 
     List<SkusExcelVO> selectExcelList(@Param("queryForm") SkusQueryForm queryForm);
 }

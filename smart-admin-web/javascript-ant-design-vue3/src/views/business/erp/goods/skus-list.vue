@@ -128,7 +128,12 @@ const columns = ref([
     {
         title: '库存数量',
         dataIndex: 'stockQuantity',
-        width: 100,
+        width: 150,
+    },
+    {
+        title: '重量',
+        dataIndex: 'weight',
+        width: 150,
     },
 ]);
 

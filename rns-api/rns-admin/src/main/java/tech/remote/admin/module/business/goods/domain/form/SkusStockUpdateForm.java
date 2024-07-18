@@ -25,4 +25,7 @@ public class SkusStockUpdateForm {
     @Schema(description = "数量，可以为负数，表示减少库存")
     private Integer quantity;
 
+    @Schema(description = "重量")
+    private BigDecimal weight = BigDecimal.ZERO;
+
 }

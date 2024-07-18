@@ -96,7 +96,7 @@ public class GoodsService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> update(GoodsUpdateForm updateForm) {
         // 商品校验
-        ResponseDTO<String> res = this.checkGoods(updateForm);
+        ResponseDTO<String> res = this.checkGoodsUpdate(updateForm);
         if (!res.getOk()) {
             return res;
         }
@@ -117,7 +117,7 @@ public class GoodsService {
     }
 
     /**
-     * 添加/更新 商品校验
+     * 添加 商品校验
      */
     private ResponseDTO<String> checkGoods(GoodsAddForm addForm) {
         // 校验类目id
@@ -129,6 +129,27 @@ public class GoodsService {
         // 校验addForm.skuList里的skuName不能有重复的
         if (CollectionUtils.isNotEmpty(addForm.getSkuList())) {
             Set<String> skuNameSet = addForm.getSkuList().stream().map(SkusAddForm::getSkuName).collect(Collectors.toSet());
+            if (skuNameSet.size() != addForm.getSkuList().size()) {
+                return ResponseDTO.userErrorParam("规格型号名称不能有重复的");
+            }
+        }
+
+        return ResponseDTO.ok();
+    }
+
+    /**
+     * 更新 商品校验
+     */
+    private ResponseDTO<String> checkGoodsUpdate(GoodsUpdateForm addForm) {
+        // 校验类目id
+        Long categoryId = addForm.getCategoryId();
+        Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
+        if (!optional.isPresent() || !CategoryTypeEnum.GOODS.equalsValue(optional.get().getCategoryType())) {
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "商品类目不存在~");
+        }
+        // 校验addForm.skuList里的skuName不能有重复的
+        if (CollectionUtils.isNotEmpty(addForm.getSkuList())) {
+            Set<String> skuNameSet = addForm.getSkuList().stream().map(SkusUpdateForm::getSkuName).collect(Collectors.toSet());
             if (skuNameSet.size() != addForm.getSkuList().size()) {
                 return ResponseDTO.userErrorParam("规格型号名称不能有重复的");
             }
@@ -241,7 +262,8 @@ public class GoodsService {
 
         // 根据goodsId查询skusList
         List<SkusEntity> skusList = skusManager.list(Wrappers.lambdaQuery(SkusEntity.class)
-                .eq(SkusEntity::getGoodsId, id));
+                .eq(SkusEntity::getGoodsId, id)
+                .eq(SkusEntity::getDeletedFlag, 0));
         goodsVO.setSkuList(SmartBeanUtil.copyList(skusList, SkusVO.class));
         return goodsVO;
     }

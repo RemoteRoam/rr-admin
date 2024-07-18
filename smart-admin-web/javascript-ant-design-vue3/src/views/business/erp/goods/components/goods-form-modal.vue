@@ -20,7 +20,7 @@
             <a-input-number v-model:value="record.weight" />
           </template>
           <template v-else-if="column.dataIndex === 'operation'">
-            <a-popconfirm v-if="dataSource.length" title="确认删除?" @confirm="onDelete(record.key)">
+            <a-popconfirm v-if="dataSource.length" title="确认删除?" @confirm="onDelete(record)">
               <a>删除</a>
             </a-popconfirm>
           </template>
@@ -86,6 +86,9 @@ async function detail(id) {
     let result = await goodsApi.detail(id);
     let data = result.data;
     dataSource.value = cloneDeep(data.skuList);
+    dataSource.value.forEach((item, index) => {
+      item.key = index;
+    });
     Object.assign(form, data);
     nextTick(() => {
       formRef.value.clearValidate();
@@ -122,17 +125,23 @@ const dynamicColumns = computed(() => {
 
 const dataSource = ref([{
   key: '1',
+  skuId: undefined,
   skuName: '',
   weight: undefined,
 }]);
 const count = computed(() => dataSource.value.length + 1);
 
-const onDelete = key => {
-  dataSource.value = dataSource.value.filter(item => item.key !== key);
+const onDelete = record => {
+  if (record.stockQuantity > 0) {
+    message.error('该规格型号已有库存，无法删除');
+    return;
+  }
+  dataSource.value = dataSource.value.filter(item => item.key !== record.key);
 };
 const handleAdd = () => {
   const newData = {
     key: `${count.value}`,
+    skuId: undefined,
     skuName: '',
     weight: undefined,
   };
@@ -143,6 +152,7 @@ function onClose() {
   Object.assign(form, formDefault);
   dataSource.value = [{
     key: '1',
+    skuId: undefined,
     skuName: '',
     weight: undefined,
   }];

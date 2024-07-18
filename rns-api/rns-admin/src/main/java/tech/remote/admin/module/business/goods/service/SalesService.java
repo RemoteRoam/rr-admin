@@ -127,6 +127,7 @@ public class SalesService {
                 skusStockUpdateForm.setSkuId(item.getSkuId());
                 // 减库存
                 skusStockUpdateForm.setQuantity(-item.getQuantity());
+                skusStockUpdateForm.setWeight(item.getWeight().negate());
                 skusStockUpdateFormList.add(skusStockUpdateForm);
             });
 

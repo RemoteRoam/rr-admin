@@ -9,7 +9,7 @@
         FROM t_skus s
         LEFT JOIN t_goods g ON s.goods_id = g.goods_id
         LEFT JOIN t_category c ON g.category_id = c.category_id
-        <where>
+        <where> s.deleted_flag = 0
             <!--型号规格ID-->
             <if test="queryForm.skuId != null">
                 AND s.sku_id = #{queryForm.skuId}
@@ -34,7 +34,7 @@
         FROM t_skus s
         LEFT JOIN t_goods g ON s.goods_id = g.goods_id
         LEFT JOIN t_category c ON g.category_id = c.category_id
-        <where>
+        <where> s.deleted_flag = 0
             <!--型号规格ID-->
             <if test="queryForm.skuId != null">
                 AND s.sku_id = #{queryForm.skuId}
