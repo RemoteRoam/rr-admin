@@ -53,6 +53,10 @@ export const PROJECT_CATEGORY_ENUM = {
   ADD: {
     value: 3,
     desc: '增项',
+  },
+  KA: {
+    value: 4,
+    desc: 'KA',
   }
 };
 
@@ -68,6 +72,10 @@ export const LAB_CATEGORY_ENUM = {
   ADD: {
     value: 3,
     desc: '监督抽样',
+  },
+  KY: {
+    value: 4,
+    desc: 'KY',
   }
 };
 

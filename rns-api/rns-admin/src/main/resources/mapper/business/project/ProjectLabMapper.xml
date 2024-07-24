@@ -42,7 +42,8 @@
 <!--    办公室待办、实验室任务列表、实验室预警-->
     <select id="selectProjectLabs" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabListVO">
         SELECT l.*,
-        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id,
+        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id, p.status as projectStatus,
+        n.expectedCompletionDate, n.reportCompletionDate, n.selfDeclarationDate, n.certificateSendDate, n.mailingDate,
         p3.name AS thirdPartyName, c.customer_name AS customerName,
         CASE
         WHEN p.source_type = 1 THEN p2.name
@@ -56,6 +57,19 @@
         LEFT JOIN t_customer c ON p.customer_id = c.customer_id
         LEFT JOIN t_third_party p2 ON p.source_type = 1 AND p.source_id = p2.id
         LEFT JOIN t_employee e ON p.source_type = 2 AND p.source_id = e.employee_id
+        LEFT JOIN (SELECT
+            p.task_id,
+            CASE WHEN COUNT(p.id) = COUNT(p.expected_completion_date) THEN MAX(p.expected_completion_date) ELSE NULL END AS expectedCompletionDate,
+            CASE WHEN COUNT(p.id) = COUNT(p.report_completion_date) THEN MAX(p.report_completion_date) ELSE NULL END AS reportCompletionDate,
+            CASE WHEN COUNT(p.id) = COUNT(p.self_declaration_date) THEN MAX(p.self_declaration_date) ELSE NULL END AS selfDeclarationDate,
+            CASE WHEN COUNT(p.id) = COUNT(p.certificate_send_date) THEN MAX(p.certificate_send_date) ELSE NULL END AS certificateSendDate,
+            CASE WHEN COUNT(p.id) = COUNT(m.mailing_date) THEN MAX(m.mailing_date) ELSE NULL END AS mailingDate
+            FROM
+            t_project_product p
+            LEFT JOIN
+            t_project_mail m ON p.mail_id = m.id
+            GROUP BY
+            p.task_id) AS n ON l.id = n.task_id
         WHERE p.project_type IN (11, 12, 21)
         <if test="queryForm.thirdPartyId != null">AND l.third_party_id = #{queryForm.thirdPartyId}</if>
         <if test="queryForm.projectNo != null and queryForm.projectNo != ''">AND INSTR(p.project_no, #{queryForm.projectNo})</if>
@@ -67,7 +81,7 @@
         <if test="queryForm.operateUserId != null">
             AND l.id IN (SELECT DISTINCT n.task_id FROM t_project_node n WHERE operate_user_id = #{queryForm.operateUserId})
         </if>
-        <if test="queryForm.status != null">AND l.status = #{queryForm.status}</if>
+        <if test="queryForm.status != null">AND p.status = #{queryForm.status}</if>
         <if test="queryForm.labContractNo != null and queryForm.labContractNo != ''">AND INSTR(l.lab_contract_no, #{queryForm.labContractNo})</if>
         <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
@@ -117,9 +131,9 @@
     <select id="selectExcelList"
             resultType="tech.remote.admin.module.business.project.domain.vo.ProjectLabExcelVO">
         SELECT l.*,
-        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id, p.audit_date,
+        p.project_no, p.project_type, p.category, p.customer_id, p.source_type, p.source_id, p.audit_date, p.status as projectStatus,
         p3.name AS thirdPartyName, c.customer_name AS customerName,
-        n.lab_report_date AS labReportDate, n.self_declaration_date AS selfDeclareDate, n.certificate_send_date AS certificateSendDate,n.mailing_date AS mailingDate,
+        n.expected_completion_date,n.report_completion_date,n.lab_report_date AS labReportDate, n.self_declaration_date AS selfDeclareDate, n.certificate_send_date AS certificateSendDate,n.mailing_date AS mailingDate,
         CASE
         WHEN p.source_type = 1 THEN p2.name
         WHEN p.source_type = 2 THEN e.actual_name
@@ -171,6 +185,8 @@
             (SELECT
             pp.id AS product_id,
             pp.task_id,
+            pp.expected_completion_date,
+            pp.report_completion_date,
             pm.mailing_date,
             pp.lab_report_date,
             pp.self_declaration_date,
@@ -199,7 +215,7 @@
         <if test="queryForm.operateUserId != null">
             AND l.id IN (SELECT DISTINCT n.task_id FROM t_project_node n WHERE operate_user_id = #{queryForm.operateUserId})
         </if>
-        <if test="queryForm.status != null">AND l.status = #{queryForm.status}</if>
+        <if test="queryForm.status != null">AND p.status = #{queryForm.status}</if>
         <if test="queryForm.labContractNo != null and queryForm.labContractNo != ''">AND INSTR(l.lab_contract_no, #{queryForm.labContractNo})</if>
         <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>

@@ -118,7 +118,7 @@
                 <template v-else-if="column.dataIndex === 'payParty'">
                     <span>{{ $smartEnumPlugin.getDescByValue('PAY_PARTY_ENUM', text) }}</span>
                 </template>
-                <template v-else-if="column.dataIndex === 'status'">
+                <template v-else-if="column.dataIndex === 'projectStatus'">
                     <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_STATUS_ENUM', text) }}</span>
                 </template>
                 <template v-else-if="column.dataIndex === 'action'">
@@ -185,10 +185,11 @@ import ExperimentCheckForm from '../common-nodes/experiment-check/experiment-che
 // Columns for the table based on ProjectLabListVO
 const columns = ref([
     { title: '实验室任务编号', dataIndex: 'taskNo', fixed: 'left', width: 170 },
+    { title: '客户', dataIndex: 'customerName', fixed: 'left', width: 200 },
+    { title: '状态', dataIndex: 'projectStatus', fixed: 'left', width: 70 },
     { title: '项目编号', dataIndex: 'projectNo', width: 150 },
     { title: '项目类型', dataIndex: 'projectType', width: 120 },
     { title: '项目分类', dataIndex: 'category', width: 80 },
-    { title: '客户', dataIndex: 'customerName', width: 120 },
     { title: '来源分类', dataIndex: 'sourceType', width: 80 },
     { title: '来源', dataIndex: 'sourceName', width: 120 },
     { title: '实验室名称', dataIndex: 'thirdPartyName', width: 120 },
@@ -204,7 +205,9 @@ const columns = ref([
     { title: '实验室下达任务', dataIndex: 'assignTaskDate', width: 120 },
     { title: '预计完成日期', dataIndex: 'expectedCompletionDate', width: 120 },
     { title: '报告完成日期', dataIndex: 'reportCompletionDate', width: 120 },
-    { title: '状态', dataIndex: 'status', width: 70 },
+    { title: '自我声明日期', dataIndex: 'selfDeclarationDate', width: 120 },
+    { title: '证书发送日期', dataIndex: 'certificateSendDate', width: 120 },
+    { title: '邮寄日期', dataIndex: 'mailingDate', width: 120 },
     { title: '创建时间', dataIndex: 'createTime', width: 170 },
     { title: '操作', dataIndex: 'action', fixed: 'right', width: 90 },
 ].map(column => ({ ...column, resizable: true })));
