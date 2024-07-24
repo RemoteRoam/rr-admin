@@ -78,6 +78,15 @@ public class ProjectLabListVO {
     @Schema(description = "报告完成日期")
     private LocalDate reportCompletionDate;
 
+    @Schema(description = "自我声明日期")
+    private LocalDate selfDeclarationDate;
+
+    @Schema(description = "证书发送日期")
+    private LocalDate certificateSendDate;
+
+    @Schema(description = "邮寄日期")
+    private LocalDate mailingDate;
+
     @Schema(description = "进度查询CODE")
     private String progressCode;
 
@@ -104,6 +113,9 @@ public class ProjectLabListVO {
 
     @Schema(description = "项目编号")
     private String projectNo;
+
+    @Schema(description = "项目状态")
+    private Integer projectStatus;
 
     @Schema(description = "项目类型")
     private Integer projectType;
