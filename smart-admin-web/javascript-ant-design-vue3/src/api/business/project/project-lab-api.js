@@ -54,6 +54,13 @@ export const projectLabApi = {
     return postRequest('/projectLab/queryLabTodoList', param);
   },
 
+  /**
+    * 实验室预警分页查询  @author  cbh
+    */
+  queryLabAlarmListPage: (param) => {
+    return postRequest('/projectLab/queryLabAlarmListPage', param);
+  },
+
   // 导出excel @author cbh
   exportExcel: (param) => {
     return postDownload('/projectLab/exportExcel', param);

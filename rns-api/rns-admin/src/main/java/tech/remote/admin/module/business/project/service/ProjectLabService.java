@@ -320,6 +320,7 @@ public class ProjectLabService {
         return excelList;
     }
 
+    // 实验室待办
     public ProjectLabTodoListVO getProjectLabTodoList(ProjectLabListQueryForm queryForm) {
         ProjectLabTodoListVO vo = new ProjectLabTodoListVO();
         queryForm.setNodeId(8);
@@ -374,5 +375,25 @@ public class ProjectLabService {
         vo.setLabReportCount(labReportList.size());
 
         return vo;
+    }
+
+
+    // 实验室预警
+    public PageResult<ProjectProductListVO> getLabsAlarm(ProjectLabListQueryForm queryForm) {
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<ProjectProductListVO> list = projectLabDao.selectLabsAlarm(page, queryForm);
+        if(CollectionUtils.isNotEmpty(list)){
+            for(ProjectProductListVO vo : list){
+                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
+                nodeQueryForm.setProjectId(vo.getProjectId());
+                nodeQueryForm.setProjectType(vo.getProjectType());
+                nodeQueryForm.setTaskId(vo.getTaskId());
+                nodeQueryForm.setProductId(vo.getId());
+                nodeQueryForm.setNodeLevel(3);
+                vo.setProjectNodeList(projectNodeManager.getOperateNodes(nodeQueryForm));
+            }
+        }
+        PageResult<ProjectProductListVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        return pageResult;
     }
 }
