@@ -334,7 +334,7 @@
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
         <!--实验室任务客户要求完成日期提前3天预警,实验室上报时间为空-->
         AND l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-        AND pp.lab_report_date IS NULL
+        AND pp.report_completion_date IS NULL
         ORDER BY alarmDays ASC, l.create_time ASC
     </select>
 </mapper>
