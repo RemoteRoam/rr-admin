@@ -306,7 +306,7 @@ const detail = (id) => {
 };
 
 function detailTask(record) {
-    router.push({ path: '/project/lab-detail', query: { id: record.id, customerName: record.customerName, projectType: record.projectType, category: record.category } });
+    router.push({ path: '/project/lab-detail', query: { id: record.taskId, customerName: record.customerName, projectType: record.projectType, category: record.category } });
 }
 function handleResizeColumn(w, col) {
     col.width = w;
