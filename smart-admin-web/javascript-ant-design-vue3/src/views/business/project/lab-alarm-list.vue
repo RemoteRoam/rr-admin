@@ -133,6 +133,8 @@
         <AssignTaskForm ref="assignTaskFormRef" @reloadList="queryData" />
         <EstimateCompletionForm ref="estimateCompletionFormRef" @reloadList="queryData" />
         <ExperimentCheckForm ref="experimentCheckFormRef" @reloadList="queryData" />
+        <LabReportForm ref="labReportFormRef" @reloadList="queryData" />
+        <SelfDeclarationForm ref="selfDeclarationFormRef" @reloadList="queryData" />
     </a-card>
 </template>
 
@@ -154,6 +156,8 @@ import PayExperimentFeeForm from '../common-nodes/pay-experiment-fee/pay-experim
 import AssignTaskForm from '../common-nodes/assign-task/assign-task-form.vue';
 import EstimateCompletionForm from '../common-nodes/estimate-completion/estimate-completion-form.vue';
 import ExperimentCheckForm from '../common-nodes/experiment-check/experiment-check-form.vue';
+import LabReportForm from '../common-nodes/lab-report/lab-report-form.vue';
+import SelfDeclarationForm from '../common-nodes/self-declaration/self-declaration-form.vue';
 
 // Columns for the table based on ProjectLabListVO
 const columns = ref([
@@ -165,6 +169,8 @@ const columns = ref([
     { title: '来源分类', dataIndex: 'sourceType', width: 80 },
     { title: '来源', dataIndex: 'sourceName', width: 120 },
     { title: '实验室名称', dataIndex: 'thirdPartyName', width: 120 },
+    { title: '产品名称', dataIndex: 'productName', width: 120 },
+    { title: '产品型号', dataIndex: 'productModel', width: 120 },
     { title: '实验室合同号', dataIndex: 'labContractNo', width: 120 },
     { title: '实验室合同日期', dataIndex: 'labContractDate', width: 120 },
     { title: '实验费金额', dataIndex: 'labContractAmount', width: 100 },
@@ -222,12 +228,14 @@ const payExperimentFeeFormRef = ref();
 const assignTaskFormRef = ref();
 const estimateCompletionFormRef = ref();
 const experimentCheckFormRef = ref();
+const labReportFormRef = ref();
+const selfDeclarationFormRef = ref();
 
 // Query data
 const queryData = async () => {
     tableLoading.value = true;
     try {
-        const { data } = await projectLabApi.queryLabListPage(queryForm);
+        const { data } = await projectLabApi.queryLabAlarmListPage(queryForm);
         tableData.value = data.list;
         total.value = data.total;
     } catch (error) {
@@ -284,6 +292,10 @@ const handleMenuClick = (e, param) => {
         estimateCompletionFormRef.value.show(param, e.key.id);
     } else if (e.key.nodeId === NODE_CONST.experiment_check) {
         experimentCheckFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.lab_report) {
+        labReportFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.self_declaration) {
+        selfDeclarationFormRef.value.show(param, e.key.id);
     }
 
 };
