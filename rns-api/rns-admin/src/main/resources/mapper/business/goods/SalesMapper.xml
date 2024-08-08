@@ -80,18 +80,17 @@
         END AS companyStr,
         ca.category_name as categoryName,
         g.goods_name as goodsName,
-        s.sku_name as skuName,
-        i.quantity as quantity,
         i.unit_price as unitPrice,
         i.weight as weight
 
         FROM t_sales t
         left join t_customer c on t.customer_id = c.customer_id
         LEFT JOIN t_employee e ON t.manager_id = e.employee_id
-        LEFT JOIN t_sales_item i on t.id = i.sales_id
+        LEFT JOIN (select sales_id,category_id,goods_id,sum(weight) as weight,max(unit_price) as unit_price
+            from t_sales_item
+            group by sales_id,category_id,goods_id) as i on t.id = i.sales_id
         LEFT JOIN t_category ca on i.category_id = ca.category_id
         LEFT JOIN t_goods g on i.goods_id = g.goods_id
-        LEFT JOIN t_skus s on i.sku_id = s.sku_id
         <where>
             <!--销售单号-->
             <if test="queryForm.salesNo != null and queryForm.salesNo != ''">

@@ -168,6 +168,16 @@ const columns = ref([
         width: 180,
     },
     {
+        title: '合同号',
+        dataIndex: 'contractNo', fixed: 'left',
+        width: 150,
+    },
+    {
+        title: '客户',
+        dataIndex: 'customerName', fixed: 'left',
+        width: 150,
+    },
+    {
         title: '销售类型',
         dataIndex: 'salesType',
         width: 150,
@@ -183,18 +193,8 @@ const columns = ref([
         width: 150,
     },
     {
-        title: '客户',
-        dataIndex: 'customerName',
-        width: 150,
-    },
-    {
         title: '销售经理',
         dataIndex: 'managerName',
-        width: 150,
-    },
-    {
-        title: '合同号',
-        dataIndex: 'contractNo',
         width: 150,
     },
     {

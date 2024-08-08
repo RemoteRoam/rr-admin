@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -17,6 +18,7 @@ import tech.remote.admin.module.business.goods.domain.form.SalesQueryForm;
 import tech.remote.admin.module.business.goods.domain.form.SalesUpdateForm;
 import tech.remote.admin.module.business.goods.domain.form.SkusQueryForm;
 import tech.remote.admin.module.business.goods.domain.vo.*;
+import tech.remote.admin.module.business.goods.service.HeaderStyleStrategy;
 import tech.remote.admin.module.business.goods.service.SalesService;
 import tech.remote.base.common.domain.RequestUser;
 import tech.remote.base.common.domain.ValidateList;
@@ -108,7 +110,7 @@ public class SalesController {
             return;
         }
 
-        String fileName = "销售报表-" + DateUtil.today() + ".xls";
+        String fileName = "销售合同汇总-" + DateUtil.today() + ".xls";
 
         // 设置下载消息头
         SmartResponseUtil.setDownloadFileHeader(response, fileName, null);
@@ -116,6 +118,7 @@ public class SalesController {
         // 下载
         EasyExcel.write(response.getOutputStream(), SalesExcelVO.class)
                 .autoCloseStream(Boolean.FALSE)
+//                .registerWriteHandler(new HeaderStyleStrategy())
                 .sheet("销售")
                 .doWrite(data);
     }
@@ -144,6 +147,7 @@ public class SalesController {
             itemVO.setGoodsName(item.getGoodsName());
             itemVO.setCategoryName(item.getCategoryName());
             itemVO.setSkuName(item.getSkuName());
+            itemVO.setLength(item.getLength());
             itemVO.setWeight(item.getWeight());
             itemVO.setQuantity(item.getQuantity());
             itemVO.setUnitPrice(item.getUnitPrice());
@@ -164,8 +168,8 @@ public class SalesController {
                     .build();
             WriteSheet writeSheet = EasyExcel.writerSheet().build();
 
-
-            excelWriter.fill(items, writeSheet);
+            FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+            excelWriter.fill(items, fillConfig, writeSheet);
             excelWriter.fill(templateVO, writeSheet);
 
             // 设置下载消息头

@@ -83,6 +83,15 @@
         </if>
         <if test="queryForm.status != null">AND p.status = #{queryForm.status}</if>
         <if test="queryForm.labContractNo != null and queryForm.labContractNo != ''">AND INSTR(l.lab_contract_no, #{queryForm.labContractNo})</if>
+        <if test="queryForm.isPaid != null">
+            <if test="queryForm.isPaid == 1">
+                AND l.is_paid = #{queryForm.isPaid}
+            </if>
+            <if test="queryForm.isPaid == 0">
+                AND (l.is_paid = #{queryForm.isPaid} OR l.is_paid is NULL)
+            </if>
+        </if>
+        <if test="queryForm.payParty != null">AND l.pay_party = #{queryForm.payParty}</if>
         <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
 

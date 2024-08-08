@@ -12,11 +12,11 @@
             <a-form-item label="项目分类" class="smart-query-form-item">
                 <template v-if="queryForm.projectType == 21">
                     <SmartEnumSelect width="150px" v-model:value="queryForm.category" enumName="LAB_CATEGORY_ENUM"
-                        placeholder="项目分类" />
+                        placeholder="项目分类" :disabled="!queryForm.projectType" />
                 </template>
                 <template v-else>
                     <SmartEnumSelect width="150px" v-model:value="queryForm.category" enumName="PROJECT_CATEGORY_ENUM"
-                        placeholder="项目分类" />
+                        placeholder="项目分类" :disabled="!queryForm.projectType" />
                 </template>
             </a-form-item>
             <a-form-item label="客户" class="smart-query-form-item">
@@ -52,6 +52,14 @@
             </a-form-item>
             <a-form-item label="实验室合同" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.labContractNo" placeholder="实验室合同" />
+            </a-form-item>
+            <a-form-item label="是否付款" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.isPaid" enumName="FLAG_NUMBER_ENUM"
+                    placeholder="请选择是否付款" />
+            </a-form-item>
+            <a-form-item label="付款方" class="smart-query-form-item">
+                <SmartEnumSelect width="150px" v-model:value="queryForm.payParty" enumName="PAY_PARTY_ENUM"
+                    placeholder="请选择付款方" />
             </a-form-item>
             <a-form-item label="实验费付款日期" class="smart-query-form-item">
                 <a-range-picker v-model:value="labPayDateRange" style="width: 250px" @change="onLabPayDateChange" />
@@ -163,7 +171,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue';
+import { reactive, ref, onMounted, getCurrentInstance, onBeforeUnmount, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
@@ -224,6 +232,8 @@ const queryFormState = {
     status: undefined,
     thirdPartyId: undefined,
     labContractNo: undefined,
+    isPaid: undefined,
+    payParty: undefined,
     labPayDateBegin: undefined,
     labPayDateEnd: undefined,
     productName: undefined,
@@ -350,5 +360,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     window.removeEventListener('resize', updateTableScrollY);
+});
+watch(() => queryForm.projectType, (newVal) => {
+    if (!newVal) {
+        queryForm.category = null;
+    }
 });
 </script>

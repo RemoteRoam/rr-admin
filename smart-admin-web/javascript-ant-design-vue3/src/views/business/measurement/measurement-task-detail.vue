@@ -15,10 +15,10 @@
         <a-descriptions size="small" :column="4">
           <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
           <a-descriptions-item label="仪器名称">{{ detail.instrument }}</a-descriptions-item>
-          <a-descriptions-item label="有效期">{{ detail.expiryDate }}</a-descriptions-item>
-          <a-descriptions-item label="实验费金额">{{ detail.experimentAmount }}</a-descriptions-item>
+          <!-- <a-descriptions-item label="实验费金额">{{ detail.experimentAmount }}</a-descriptions-item> -->
           <a-descriptions-item label="成本价">{{ detail.costAmount }}</a-descriptions-item>
           <a-descriptions-item label="计量日期">{{ detail.measurementDate }}</a-descriptions-item>
+          <a-descriptions-item label="有效期">{{ detail.expiryDate }}</a-descriptions-item>
           <a-descriptions-item label="完成日期">{{ detail.finishDate }}</a-descriptions-item>
           <a-descriptions-item label="创建时间">{{ detail.createTime }}</a-descriptions-item>
           <a-descriptions-item label="创建人">{{ detail.createUserName }}</a-descriptions-item>

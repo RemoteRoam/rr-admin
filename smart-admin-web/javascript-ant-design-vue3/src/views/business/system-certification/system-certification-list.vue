@@ -264,6 +264,11 @@ const columns = ref([
     //     width: 120,
     // },
     {
+        title: '证书数量',
+        dataIndex: 'certificateCount',
+        width: 120,
+    },
+    {
         title: '合同金额',
         dataIndex: 'contractAmount',
         width: 120,

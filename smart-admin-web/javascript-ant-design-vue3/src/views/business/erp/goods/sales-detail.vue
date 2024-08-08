@@ -186,6 +186,11 @@ const columns = ref([
     ellipsis: true,
   },
   {
+    title: '长度',
+    dataIndex: 'length',
+    ellipsis: true,
+  },
+  {
     title: '数量',
     dataIndex: 'quantity',
     width: 120,

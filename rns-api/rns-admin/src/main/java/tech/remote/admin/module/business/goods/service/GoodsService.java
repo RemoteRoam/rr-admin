@@ -128,9 +128,11 @@ public class GoodsService {
         }
         // 校验addForm.skuList里的skuName不能有重复的
         if (CollectionUtils.isNotEmpty(addForm.getSkuList())) {
-            Set<String> skuNameSet = addForm.getSkuList().stream().map(SkusAddForm::getSkuName).collect(Collectors.toSet());
-            if (skuNameSet.size() != addForm.getSkuList().size()) {
-                return ResponseDTO.userErrorParam("规格型号名称不能有重复的");
+            Set<String> skuNameLengthSet = addForm.getSkuList().stream()
+                    .map(sku -> sku.getSkuName() + "_" + sku.getLength())
+                    .collect(Collectors.toSet());
+            if (skuNameLengthSet.size() != addForm.getSkuList().size()) {
+                return ResponseDTO.userErrorParam("规格型号名称和长度的组合不能有重复的");
             }
         }
 
@@ -149,9 +151,11 @@ public class GoodsService {
         }
         // 校验addForm.skuList里的skuName不能有重复的
         if (CollectionUtils.isNotEmpty(addForm.getSkuList())) {
-            Set<String> skuNameSet = addForm.getSkuList().stream().map(SkusUpdateForm::getSkuName).collect(Collectors.toSet());
-            if (skuNameSet.size() != addForm.getSkuList().size()) {
-                return ResponseDTO.userErrorParam("规格型号名称不能有重复的");
+            Set<String> skuNameLengthSet = addForm.getSkuList().stream()
+                    .map(sku -> sku.getSkuName() + "_" + sku.getLength())
+                    .collect(Collectors.toSet());
+            if (skuNameLengthSet.size() != addForm.getSkuList().size()) {
+                return ResponseDTO.userErrorParam("规格型号名称和长度的组合不能有重复的");
             }
         }
 

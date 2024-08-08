@@ -146,13 +146,14 @@
                     on n1.project_id = n.project_id
                     where n.node_id in (13,14) and n.status in (0,1)
                 </if>
+                <!--取证书待办-->
                 <if test="queryForm.toDoTYPE == 4">
                     select distinct n.project_id
                     from t_project_node n
                     inner join (
                         select  distinct project_id, task_id
                         from t_project_node
-                        where project_type in (11,12,21,31) and node_id = 10 and status = 2) as n1
+                        where project_type in (11,12,31) and node_id = 10 and status = 2) as n1
                     on n1.project_id = n.project_id
                     where n.node_id in (11,12,15,16,18,19,20) and n.status in (0,1)
                 </if>
