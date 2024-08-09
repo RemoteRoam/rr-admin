@@ -243,4 +243,12 @@ public class ProjectEntity {
      */
     private LocalDateTime updateTime;
 
+    @DataTracerFieldLabel("产品监督证书到期日")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate certificateExpiryDate;
+
+    @DataTracerFieldLabel("上年度审核日期")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private LocalDate lastYearAuditDate;
+
 }

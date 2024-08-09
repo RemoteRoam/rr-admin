@@ -1,10 +1,13 @@
 package tech.remote.admin.module.business.project.domain.form;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
+import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
  * 项目表 新建表单
@@ -59,4 +62,15 @@ public class ProjectAddForm {
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
+    @Schema(description = "咨询老师")
+    private String consultationTeacher;
+
+    @Schema(description = "审核日期")
+    private LocalDate auditDate;
+
+    @Schema(description = "产品监督证书到期日")
+    private LocalDate certificateExpiryDate;
+
+    @Schema(description = "上年度审核日期")
+    private LocalDate lastYearAuditDate;
 }

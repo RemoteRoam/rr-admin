@@ -137,6 +137,12 @@ public class ProjectUpdateForm {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
+    @Schema(description = "产品监督证书到期日")
+    private LocalDate certificateExpiryDate;
+
+    @Schema(description = "上年度审核日期")
+    private LocalDate lastYearAuditDate;
+
     @Schema(description = "项目节点ID")
     private Long projectNodeId;
 
