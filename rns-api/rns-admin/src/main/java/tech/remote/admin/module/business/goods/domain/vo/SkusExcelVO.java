@@ -26,8 +26,11 @@ public class SkusExcelVO {
     @ExcelProperty("商品名称")
     private String goodsName;
 
-    @ExcelProperty("型号规格名称")
+    @ExcelProperty("型号规格")
     private String skuName;
+
+    @ExcelProperty("长度")
+    private String length;
 
     @ExcelProperty("库存数量")
     private Integer stockQuantity;
