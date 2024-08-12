@@ -115,6 +115,11 @@ const columns = reactive([
         ellipsis: true,
     },
     {
+        title: '长度',
+        dataIndex: 'length',
+        ellipsis: true,
+    },
+    {
         title: '当前库存',
         dataIndex: 'stockQuantity',
         width: 110,

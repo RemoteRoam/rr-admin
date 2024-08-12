@@ -1,5 +1,5 @@
 <template>
-    <a-modal :title="'采购单详情'" width="800px" :open="visibleFlag" @cancel="onClose" :footer="null" :destroyOnClose="true">
+    <a-modal :title="'盘点单详情'" width="800px" :open="visibleFlag" @cancel="onClose" :footer="null" :destroyOnClose="true">
         <a-form :model="form" :label-col="{ span: 6 }" disabled>
 
             <a-row>
@@ -70,6 +70,11 @@ const columns = reactive([
     {
         title: '型号规格',
         dataIndex: 'skuName',
+        ellipsis: true,
+    },
+    {
+        title: '长度',
+        dataIndex: 'length',
         ellipsis: true,
     },
     {

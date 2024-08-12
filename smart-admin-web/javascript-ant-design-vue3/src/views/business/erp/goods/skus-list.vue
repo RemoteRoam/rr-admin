@@ -121,8 +121,13 @@ const columns = ref([
         ellipsis: true,
     },
     {
-        title: '型号规格名称',
+        title: '型号规格',
         dataIndex: 'skuName',
+        ellipsis: true,
+    },
+    {
+        title: '长度',
+        dataIndex: 'length',
         ellipsis: true,
     },
     {
