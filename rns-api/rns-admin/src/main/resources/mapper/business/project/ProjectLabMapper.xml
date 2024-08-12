@@ -128,10 +128,10 @@
             )
         </if>
         <if test="queryForm.alarmType != null and queryForm.alarmType == 2">
-            <!--实验室任务客户要求完成日期提前3天预警-->
-            AND l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-            AND l.status != 2
-            ORDER BY alarmDays ASC, l.create_time DESC
+            <!--实验室任务客户要求完成日期提前7天预警-->
+#             AND l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+#             AND l.status != 2
+#             ORDER BY alarmDays ASC, l.create_time DESC
         </if>
         <if test="queryForm.alarmType == null ">
             order by l.create_time desc
@@ -318,7 +318,10 @@
         WHEN p.source_type = 2 THEN e.actual_name
         ELSE NULL
         END AS sourceName,
-        DATEDIFF(l.lab_expected_date, CURDATE()) AS alarmDays
+        CASE
+            WHEN l.lab_expected_date IS NOT NULL THEN DATEDIFF(l.lab_expected_date, CURDATE())
+            ELSE DATEDIFF(pp.expected_completion_date, CURDATE())
+        END AS alarmDays
         FROM t_project_product pp
         JOIN t_project_lab l ON l.id = pp.task_id
         LEFT JOIN t_project p ON l.project_id = p.id and p.deleted_flag = 0
@@ -341,8 +344,12 @@
         <if test="queryForm.labContractNo != null and queryForm.labContractNo != ''">AND INSTR(l.lab_contract_no, #{queryForm.labContractNo})</if>
         <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
-        <!--实验室任务客户要求完成日期提前3天预警,实验室上报时间为空-->
-        AND l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+        <!--实验室任务客户要求完成日期提前7天预警,实验室上报时间为空-->
+        AND (
+            (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY))
+            OR
+            (l.lab_expected_date IS NULL AND pp.expected_completion_date IS NOT NULL AND pp.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY))
+        )
         AND pp.report_completion_date IS NULL
         ORDER BY alarmDays ASC, l.create_time ASC
     </select>

@@ -15,13 +15,13 @@
                         <SmartEnumSelect width="100%" v-model:value="form.projectType"
                             enumName="PROJECT_TYPE_PRODUCT_ENUM" placeholder="项目类型" />
                     </a-form-item>
-                </a-col> -->
+                </a-col>
                 <a-col :span="24" v-if="form.projectType != 31">
                     <a-form-item label="项目分类" name="category">
                         <SmartEnumSelect width="100%" v-model:value="form.category" :enumName="enumName"
                             placeholder="项目分类" />
                     </a-form-item>
-                </a-col>
+                </a-col> -->
                 <a-col :span="24">
                     <a-form-item label="客户ID" name="customerId">
                         <CustomerSelect width="100%" v-model:value="form.customerId" placeholder="请选择客户" />
@@ -110,8 +110,22 @@ function onChangeSourceType(value) {
 // 是否显示
 const visibleFlag = ref(false);
 
-function show(projectType) {
+function show(projectType, rowData) {
     Object.assign(form, formDefault);
+
+    if (rowData && !_.isEmpty(rowData)) {
+
+        form.customerId = rowData.customerId, //客户ID
+            form.sourceType = rowData.sourceType, //来源分类
+            form.sourceId = rowData.sourceId, //来源ID
+            form.consultationTeacher = rowData.consultationTeacher, //咨询老师
+            form.auditDate = rowData.auditDate, //审核日期
+            form.certificateExpiryDate = rowData.certificateExpiryDate, //证书到期日
+            form.remark = rowData.remark, //备注
+            form.lastYearAuditDate = rowData.auditDate; //上年度审核日期
+        form.auditDate = undefined; //审核日期
+    }
+
     form.projectType = projectType;
     projectTypeGlobal.value = projectType;
     visibleFlag.value = true;

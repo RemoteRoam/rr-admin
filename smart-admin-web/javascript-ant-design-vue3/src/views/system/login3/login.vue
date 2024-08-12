@@ -31,9 +31,9 @@
           <a-input class="captcha-input" v-model:value.trim="loginForm.captchaCode" placeholder="请输入验证码" />
           <img class="captcha-img" :src="captchaBase64Image" @click="getCaptcha" />
         </a-form-item>
-        <!-- <a-form-item>
+        <a-form-item>
           <a-checkbox v-model:checked="rememberPwd">记住密码</a-checkbox>
-        </a-form-item> -->
+        </a-form-item>
         <a-form-item>
           <div class="btn" @click="onLogin">登录</div>
         </a-form-item>
@@ -79,6 +79,14 @@ const formRef = ref();
 const rememberPwd = ref(false);
 
 onMounted(() => {
+
+  const savedLoginName = localStorage.getItem('loginName');
+  const savedLoginPwd = localStorage.getItem('loginPwd');
+  if (savedLoginName && savedLoginPwd) {
+    loginForm.loginName = savedLoginName;
+    loginForm.password = savedLoginPwd;
+    rememberPwd.value = true;
+  }
   document.onkeyup = (e) => {
     if (e.keyCode == 13) {
       onLogin();
@@ -102,6 +110,17 @@ async function onLogin() {
       const res = await loginApi.login(encryptPasswordForm);
       stopRefrestCaptchaInterval();
       localSave(LocalStorageKeyConst.USER_TOKEN, res.data.token ? res.data.token : '');
+
+      if (res.ok) {
+        if (rememberPwd) {
+          localStorage.setItem('loginName', loginForm.loginName);
+          localStorage.setItem('loginPwd', loginForm.password);
+        } else {
+          localStorage.removeItem('loginName');
+          localStorage.removeItem('loginPwd');
+        }
+      }
+
       message.success('登录成功');
       //更新用户信息到pinia
       useUserStore().setUserLoginInfo(res.data);

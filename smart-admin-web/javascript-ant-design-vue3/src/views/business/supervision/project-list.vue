@@ -79,6 +79,12 @@
                     </template>
                     编辑
                 </a-button>
+                <a-button @click="showFormAddTo()" type="primary" size="small">
+                    <template #icon>
+                        <ArrowRightOutlined />
+                    </template>
+                    转监督
+                </a-button>
                 <a-button @click="exportExcel()" type="primary" size="small" v-privilege="'business:project:excel'">
                     <template #icon>
                         <FileExcelOutlined />
@@ -96,7 +102,7 @@
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
             bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio' }">
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, selections: selectedRowsList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
 
                 <template v-if="column.dataIndex === 'projectNo'">
@@ -191,7 +197,7 @@ const columns = ref([
         title: '项目编号',
         dataIndex: 'projectNo',
         fixed: 'left',
-        width: 110,
+        width: 100,
     },
     {
         title: '客户',
@@ -324,7 +330,7 @@ function onChangeSourceType(value) {
 }
 
 let route = useRoute();
-const projectType = ref(null); // 定义单独的 projectType 变量
+const projectType = ref(31); // 定义单独的 projectType 变量
 
 onMounted(() => {
     updateTableScrollY();
@@ -376,6 +382,11 @@ function showFormAdd() {
 }
 
 
+function showFormAddTo() {
+    let rowData = selectedRowsList.value[0];
+    formAddRef.value.show(queryForm.projectType, rowData);
+}
+
 // ---------------------------- 单个删除 ----------------------------
 //确认删除
 function onDelete(data) {
@@ -414,8 +425,11 @@ async function requestDelete(data) {
 // 选择表格行
 const selectedRowKeyList = ref([]);
 
-function onSelectChange(selectedRowKeys) {
+const selectedRowsList = ref([]);
+
+function onSelectChange(selectedRowKeys, selectedRows) {
     selectedRowKeyList.value = selectedRowKeys;
+    selectedRowsList.value = selectedRows;
 }
 
 // 批量删除
