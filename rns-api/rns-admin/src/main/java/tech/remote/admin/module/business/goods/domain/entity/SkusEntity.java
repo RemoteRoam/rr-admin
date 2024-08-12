@@ -41,6 +41,11 @@ public class SkusEntity {
     private String skuName;
 
     /**
+     * 长度
+     */
+    private String length;
+
+    /**
      * 重量
      */
     private BigDecimal weight;

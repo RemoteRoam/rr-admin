@@ -16,6 +16,9 @@
           <template v-if="column.dataIndex === 'skuName'">
             <a-input v-model:value="record.skuName" />
           </template>
+          <template v-if="column.dataIndex === 'length'">
+            <a-input v-model:value="record.length" />
+          </template>
           <template v-if="column.dataIndex === 'weight'">
             <a-input-number v-model:value="record.weight" />
           </template>
@@ -105,7 +108,12 @@ const dynamicColumns = computed(() => {
     {
       title: '规格型号',
       dataIndex: 'skuName',
-      width: '50%',
+      width: '40%',
+    },
+    {
+      title: '长度',
+      dataIndex: 'length',
+      width: '30%',
     },
     {
       title: '操作',
@@ -127,6 +135,7 @@ const dataSource = ref([{
   key: '1',
   skuId: undefined,
   skuName: '',
+  length: undefined,
   weight: undefined,
 }]);
 const count = computed(() => dataSource.value.length + 1);
@@ -143,6 +152,7 @@ const handleAdd = () => {
     key: `${count.value}`,
     skuId: undefined,
     skuName: '',
+    length: undefined,
     weight: undefined,
   };
   dataSource.value.push(newData);
@@ -154,6 +164,7 @@ function onClose() {
     key: '1',
     skuId: undefined,
     skuName: '',
+    length: undefined,
     weight: undefined,
   }];
   visible.value = false;

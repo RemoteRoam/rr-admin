@@ -146,13 +146,14 @@
                     on n1.project_id = n.project_id
                     where n.node_id in (13,14) and n.status in (0,1)
                 </if>
+                <!--取证书待办-->
                 <if test="queryForm.toDoTYPE == 4">
                     select distinct n.project_id
                     from t_project_node n
                     inner join (
                         select  distinct project_id, task_id
                         from t_project_node
-                        where project_type in (11,12,21,31) and node_id = 10 and status = 2) as n1
+                        where project_type in (11,12,31) and node_id = 10 and status = 2) as n1
                     on n1.project_id = n.project_id
                     where n.node_id in (11,12,15,16,18,19,20) and n.status in (0,1)
                 </if>
@@ -425,12 +426,12 @@
             </if>
             <if test="alarmType == 2">
                 <!--实验室任务客户要求完成日期提前3天预警-->
-                AND t.id in (
-                    select distinct l.project_id
-                    from t_project_lab l
-                    where l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-                    AND l.status != 2
-                )
+#                 AND t.id in (
+#                     select distinct l.project_id
+#                     from t_project_lab l
+#                     where l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+#                     AND l.status != 2
+#                 )
             </if>
             <if test="alarmType == 3">
                 <!--工厂审核监督预警，审核时间提前3个月预警-->

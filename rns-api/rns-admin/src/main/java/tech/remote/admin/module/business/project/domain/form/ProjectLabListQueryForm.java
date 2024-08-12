@@ -30,6 +30,11 @@ public class ProjectLabListQueryForm extends PageParam {
     @Schema(description = "实验室合同编号")
     private String labContractNo;
 
+    @Schema(description = "是否付款")
+    private Integer isPaid;
+    @Schema(description = "付款方")
+    private Integer payParty;
+
     private LocalDate labPayDateBegin;
     private LocalDate labPayDateEnd;
     @Schema(description = "产品名称")

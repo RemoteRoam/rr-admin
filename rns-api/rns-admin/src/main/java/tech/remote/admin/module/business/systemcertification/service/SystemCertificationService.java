@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,6 +117,13 @@ public class SystemCertificationService {
         String projectNo = serialNumberService.generate(SerialNumberIdEnum.SYSTEM_CERTIFICATION);
         systemCertificationEntity.setProjectNo(projectNo);
         systemCertificationEntity.setStatus(ProjectStatusEnum.DOING.getValue());
+
+        String category = systemCertificationEntity.getCategory();
+        if(StringUtils.isNotBlank(category)){
+            int count = category.split(",").length;
+            systemCertificationEntity.setCertificateCount(count);
+        }
+
         systemCertificationDao.insert(systemCertificationEntity);
 
         // 获取该类型下的对应节点

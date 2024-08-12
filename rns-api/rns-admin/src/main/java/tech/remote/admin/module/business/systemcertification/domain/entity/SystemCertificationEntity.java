@@ -69,6 +69,9 @@ public class SystemCertificationEntity {
      */
     @DataTracerFieldLabel("认证机构ID")
     private Long thirdPartyId;
+    
+    @DataTracerFieldLabel("证书数量")
+    private Integer certificateCount;
 
     /**
      * 合同号

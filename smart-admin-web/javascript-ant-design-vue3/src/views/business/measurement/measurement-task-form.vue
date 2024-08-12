@@ -26,17 +26,11 @@
                         <a-textarea rows="4" style="width: 100%" v-model:value="form.instrument" placeholder="仪器名称" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="24">
-                    <a-form-item label="有效期" name="expiryDate">
-                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.expiryDate" style="width: 100%"
-                            placeholder="有效期" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="24">
+                <!-- <a-col :span="24">
                     <a-form-item label="实验费金额" name="experimentAmount">
                         <a-input-number style="width: 100%" v-model:value="form.experimentAmount" placeholder="实验费金额" />
                     </a-form-item>
-                </a-col>
+                </a-col> -->
                 <a-col :span="24">
                     <a-form-item label="成本价" name="costAmount">
                         <a-input-number style="width: 100%" v-model:value="form.costAmount" placeholder="成本价" />
@@ -46,6 +40,12 @@
                     <a-form-item label="计量日期" name="measurementDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.measurementDate" style="width: 100%"
                             placeholder="计量日期" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="24">
+                    <a-form-item label="有效期" name="expiryDate">
+                        <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.expiryDate" style="width: 100%"
+                            placeholder="有效期" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="24">

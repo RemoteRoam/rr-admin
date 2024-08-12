@@ -18,7 +18,7 @@ export const PROJECT_TYPE_PRODUCT_ENUM = {
   },
   LAB_PROJECT: {
     value: 21,
-    desc: '实验项目',
+    desc: '试验项目',
   },
   PRODUCT_SUPERVISION: {
     value: 31,
@@ -37,7 +37,7 @@ export const PROJECT_TYPE_LAB_ENUM = {
   },
   LAB_PROJECT: {
     value: 21,
-    desc: '实验项目',
+    desc: '试验项目',
   },
 };
 

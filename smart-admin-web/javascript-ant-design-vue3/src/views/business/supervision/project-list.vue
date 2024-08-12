@@ -1,8 +1,8 @@
 <!--
-  * 体系认证表
+  * 项目表
   *
   * @Author:    cbh
-  * @Date:      2024-04-25 14:53:11
+  * @Date:      2024-05-15 13:54:05
   * @Copyright  Remote Nomad Studio
 -->
 <template>
@@ -12,20 +12,13 @@
             <a-form-item label="项目编号" class="smart-query-form-item">
                 <a-input style="width: 150px" v-model:value="queryForm.projectNo" placeholder="项目编号" />
             </a-form-item>
-            <a-form-item label="项目类型" class="smart-query-form-item">
-                <SmartEnumSelect width="150px" v-model:value="queryForm.projectType" enumName="PROJECT_TYPE_SYSTEM_ENUM"
-                    placeholder="项目类型" />
-            </a-form-item>
-            <a-form-item label="类别" class="smart-query-form-item">
-                <DictSelect width="150px" v-model:value="queryForm.category" keyCode="SYSTEM_CATEGORY"
-                    placeholder="类别" />
-            </a-form-item>
+
             <a-form-item label="客户" class="smart-query-form-item">
                 <CustomerSelect width="200px" v-model:value="queryForm.customerId" placeholder="请选择客户" />
             </a-form-item>
             <a-form-item label="来源分类" class="smart-query-form-item">
                 <SmartEnumSelect width="150px" v-model:value="queryForm.sourceType" enumName="SOURCE_TYPE_ENUM"
-                    placeholder="来源分类" />
+                    @change="onChangeSourceType" placeholder="来源分类" />
             </a-form-item>
             <a-form-item label="来源" class="smart-query-form-item">
 
@@ -45,25 +38,9 @@
                 <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
                     placeholder="状态" />
             </a-form-item>
-            <a-form-item label="认证机构" class="smart-query-form-item">
-                <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择认证机构"
-                    type="THIRD_2" />
+            <a-form-item label="操作人" class="smart-query-form-item">
+                <EmployeeSelect width="150px" v-model:value="queryForm.createUserId" placeholder="请选择内部员工" />
             </a-form-item>
-            <a-form-item label="合同号" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.contractNo" placeholder="合同号" />
-            </a-form-item>
-            <a-form-item label="合同日" class="smart-query-form-item">
-                <a-range-picker v-model:value="queryForm.contractDate" :presets="defaultTimeRanges" style="width: 250px"
-                    @change="onChangeContractDate" />
-            </a-form-item>
-            <a-form-item label="客户预期日期" class="smart-query-form-item">
-                <a-range-picker v-model:value="queryForm.expectedDate" :presets="defaultTimeRanges" style="width: 250px"
-                    @change="onChangeExpectedDate" />
-            </a-form-item>
-            <!-- <a-form-item label="创建人" class="smart-query-form-item">
-                <EmployeeSelect ref="employeeSelect" placeholder="请选择创建人" width="200px"
-                    v-model:value="queryForm.createUserId" :leaveFlag="false" />
-            </a-form-item> -->
             <a-form-item label="创建时间" class="smart-query-form-item">
                 <a-range-picker v-model:value="queryForm.createTime" :presets="defaultTimeRanges" style="width: 250px"
                     @change="onChangeCreateTime" />
@@ -102,26 +79,19 @@
                     </template>
                     编辑
                 </a-button>
-                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION1.value)" type="primary"
-                    size="small">
+                <a-button @click="showFormAddTo()" type="primary" size="small">
                     <template #icon>
                         <ArrowRightOutlined />
                     </template>
                     转监督
                 </a-button>
-                <a-button @click="showFormAddTo(PROJECT_TYPE_SYSTEM_ENUM.RE_CERTIFICATION.value)" type="primary"
-                    size="small">
-                    <template #icon>
-                        <RollbackOutlined />
-                    </template>
-                    再认证
-                </a-button>
-                <a-button @click="exportExcel()" type="primary" size="small" v-privilege="'business:system:excel'">
+                <a-button @click="exportExcel()" type="primary" size="small" v-privilege="'business:project:excel'">
                     <template #icon>
                         <FileExcelOutlined />
                     </template>
                     导出数据
                 </a-button>
+
             </div>
             <div class="smart-table-setting-block">
                 <TableOperator v-model="columns" :tableId="null" :refresh="queryData" />
@@ -132,14 +102,14 @@
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
             bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }"
-            :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange, type: 'radio', selections: selectedRowsList }">
+            :row-selection="{ selectedRowKeys: selectedRowKeyList, selections: selectedRowsList, onChange: onSelectChange, type: 'radio' }">
             <template #bodyCell="{ text, record, column }">
 
                 <template v-if="column.dataIndex === 'projectNo'">
                     <a @click="detail(record.id)">{{ record.projectNo }}</a>
                 </template>
                 <template v-if="column.dataIndex === 'projectType'">
-                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_SYSTEM_ENUM', text) }}</span>
+                    <span>{{ $smartEnumPlugin.getDescByValue('PROJECT_TYPE_PRODUCT_ENUM', text) }}</span>
                 </template>
                 <template v-if="column.dataIndex === 'sourceType'">
                     <span>{{ $smartEnumPlugin.getDescByValue('SOURCE_TYPE_ENUM', text) }}</span>
@@ -149,13 +119,13 @@
                 </template>
                 <template v-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
-                        <a-dropdown v-if="record.systemCertificationNodeList.length > 0">
+                        <a-dropdown v-if="record.projectNodeList.length > 0">
                             <a class="ant-dropdown-link" @click.prevent>
                                 节点操作
                             </a>
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
-                                    <a-menu-item v-for="node in record.systemCertificationNodeList" :key="node">
+                                    <a-menu-item v-for="node in record.projectNodeList" :key="node">
                                         {{ node.nodeName }}
                                     </a-menu-item>
                                 </a-menu>
@@ -176,102 +146,73 @@
                 :show-total="(total) => `共${total}条`" />
         </div>
 
-        <SystemCertificationForm ref="formRef" @reloadList="queryData" />
-        <SystemCertificationFormAdd ref="formAddRef" @reloadList="queryData" />
+        <ProjectForm ref="formRef" @reloadList="queryData" />
+        <ProjectFormAdd ref="formAddRef" @reloadList="queryData" />
         <FirstPaymentForm ref="firstPaymentRef" @reloadList="queryData" />
-        <SubmitDataForm ref="submitDataFormRef" @reloadList="queryData" />
-        <ReviewPlanForm ref="reviewPlanFormRef" @reloadList="queryData" />
-        <SubmitPaperForm ref="submitPaperFormRef" @reloadList="queryData" />
-        <AssessmentDateForm ref="assessmentDateFormRef" @reloadList="queryData" />
-        <RectificationDateForm ref="rectificationDateFormRef" @reloadList="queryData" />
-        <SystemCertificateForm ref="systemCertificateFormRef" @reloadList="queryData" />
         <FinalPaymentForm ref="finalPaymentFormRef" @reloadList="queryData" />
         <InvoiceForm ref="invoiceFormRef" @reloadList="queryData" />
-        <MailForm ref="mailFormRef" @reloadList="queryData" />
-        <PreDataTransferForm ref="preDataTransferFormRef" @reloadList="queryData" />
-        <SystemFileTransferForm ref="systemFileTransferFormRef" @reloadList="queryData" />
+        <FactoryAuditTaskForm ref="factoryAuditTaskFormRef" @reloadList="queryData" />
+        <FactoryAuditForm ref="factoryAuditFormRef" @reloadList="queryData" />
+        <CorrectionForm ref="correctionFormRef" @reloadList="queryData" />
+        <SubmitCertificationFeeForm ref="submitCertificationFeeFormRef" @reloadList="queryData" />
+        <ArchiveForm ref="archiveFormRef" @reloadList="queryData" />
+        <ProjectMailForm ref="projectMailFormRef" @reloadList="queryData" />
+        <SamplingTestForm ref="samplingTestFormRef" @reloadList="queryData" />
+
     </a-card>
+
 </template>
 <script setup>
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
+import { reactive, ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { message, Modal } from 'ant-design-vue';
+import { useRouter, useRoute } from 'vue-router';
 import { SmartLoading } from '/@/components/framework/smart-loading';
-import { systemCertificationApi } from '/@/api/business/project/system-certification-api';
+import { projectApi } from '/@/api/business/project/project-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
-import { PROJECT_TYPE_SYSTEM_ENUM } from '/@/constants/business/project/system-certification-const';
 import { smartSentry } from '/@/lib/smart-sentry';
-import { useRouter } from 'vue-router';
 import TableOperator from '/@/components/support/table-operator/index.vue';
 import { defaultTimeRanges } from '/@/lib/default-time-ranges';
-import SystemCertificationForm from './system-certification-form.vue';
-import SystemCertificationFormAdd from './system-certification-form-add.vue';
+import NODE_CONST from '/@/constants/business/project/node-const';
+import ProjectForm from './project-form.vue';
+import ProjectFormAdd from './project-form-add.vue';
 import SmartEnumSelect from '/@/components/framework/smart-enum-select/index.vue';
 import CustomerSelect from '/@/components/business/project/customer-select/index.vue';
 import ThirdPartySelect from '/@/components/business/project/third-party-select/index.vue';
 import EmployeeSelect from '/@/components/system/employee-select/index.vue';
-import DictSelect from '/@/components/support/dict-select/index.vue';
 import FirstPaymentForm from '../common-nodes/first-payment/first-payment-form.vue';
-import SubmitDataForm from './nodes/submit-data/submit-data-form.vue';
-import NODE_CONST from '/@/constants/business/project/node-const';
-import ReviewPlanForm from './nodes/review-plan/review-plan-form.vue';
-import SubmitPaperForm from './nodes/submit-paper/submit-paper-form.vue';
-import AssessmentDateForm from './nodes/assessment-date/assessment-date-form.vue';
-import RectificationDateForm from './nodes/rectification-date/rectification-date-form.vue';
-import SystemCertificateForm from './nodes/system-certificate/system-certificate-form.vue';
 import FinalPaymentForm from '../common-nodes/final-payment/final-payment-form.vue';
 import InvoiceForm from '../common-nodes/invoice/invoice-form.vue';
-import MailForm from '../common-nodes/mail/mail-form.vue';
-import PreDataTransferForm from './nodes/pre-data-transfer/pre-data-transfer-form.vue';
-import SystemFileTransferForm from './nodes/system-file-transfer/system-file-transfer-form.vue';
-
+import FactoryAuditTaskForm from '../common-nodes/factory-audit-task/factory-audit-task-form.vue';
+import FactoryAuditForm from '../common-nodes/factory-audit/factory-audit-form.vue';
+import CorrectionForm from '../common-nodes/correction/correction-form.vue';
+import SubmitCertificationFeeForm from '../common-nodes/submit-certification-fee/submit-certification-fee-form.vue';
+import ArchiveForm from '../common-nodes/archive/archive-form.vue';
+import ProjectMailForm from '../common-nodes/project-mail/project-mail-form.vue';
+import SamplingTestForm from '../common-nodes/sampling-test/sampling-test-form.vue';
 // ---------------------------- 表格列 ----------------------------
 
 const columns = ref([
 
     {
         title: '项目编号',
-        dataIndex: 'projectNo', fixed: 'left',
-        width: 150,
-    },
-    {
-        title: '项目类型',
-        dataIndex: 'projectType',
-        width: 140,
-    },
-    {
-        title: '类别',
-        dataIndex: 'category',
-        width: 110,
+        dataIndex: 'projectNo',
+        fixed: 'left',
+        width: 100,
     },
     {
         title: '客户',
         dataIndex: 'customerName',
-        width: 120,
-    },
-    {
-        title: '认证机构',
-        dataIndex: 'thirdPartyName',
         width: 150,
     },
-    // {
-    //     title: '合同号',
-    //     dataIndex: 'contractNo',
-    //     width: 120,
-    // },
-    // {
-    //     title: '合同日',
-    //     dataIndex: 'contractDate',
-    //     width: 120,
-    // },
     {
-        title: '证书数量',
-        dataIndex: 'certificateCount',
-        width: 120,
+        title: '来源分类',
+        dataIndex: 'sourceType',
+        width: 70,
     },
     {
-        title: '合同金额',
-        dataIndex: 'contractAmount',
-        width: 120,
+        title: '来源',
+        dataIndex: 'sourceName',
+        width: 100,
     },
     // {
     //     title: '首款金额',
@@ -284,95 +225,50 @@ const columns = ref([
     //     width: 120,
     // },
     // {
-    //     title: '资料上报日期',
-    //     dataIndex: 'dataReportDate',
+    //     title: '审核任务时间',
+    //     dataIndex: 'auditTaskDate',
     //     width: 120,
     // },
-    {
-        title: '审核老师',
-        dataIndex: 'auditTeacher',
-        width: 120,
-    },
-    {
-        title: '审核开始日期',
-        dataIndex: 'auditDate',
-        width: 150,
-    },
-    {
-        title: '审核结束日期',
-        dataIndex: 'auditDateEnd',
-        width: 150,
-    },
+    // {
+    //     title: '审核老师',
+    //     dataIndex: 'auditTeacher',
+    //     width: 120,
+    // },
     {
         title: '咨询老师',
         dataIndex: 'consultationTeacher',
-        width: 120,
+        width: 80,
     },
-    // {
-    //     title: '交卷日期',
-    //     dataIndex: 'submissionDate',
-    //     width: 120,
-    // },
-    // {
-    //     title: '评定日期',
-    //     dataIndex: 'assessmentDate',
-    //     width: 120,
-    // },
+    {
+        title: '审核日期',
+        dataIndex: 'auditDate',
+        width: 80,
+    },
+    {
+        title: '上年度审核日期',
+        dataIndex: 'lastYearAuditDate',
+        width: 80,
+    },
     // {
     //     title: '整改日期',
     //     dataIndex: 'rectificationDate',
     //     width: 120,
     // },
     {
-        title: '证书发送日期',
-        dataIndex: 'certificateSendDate',
-        width: 160,
-    },
-    // {
-    //     title: '证书有效期截止日期',
-    //     dataIndex: 'certificateExpiryDate',
-    //     width: 120,
-    // },
-    // {
-    //     title: '尾款金额',
-    //     dataIndex: 'finalPaymentAmount',
-    //     width: 120,
-    // },
-    // {
-    //     title: '尾款收款日期',
-    //     dataIndex: 'finalPaymentDate',
-    //     width: 120,
-    // },
-    // {
-    //     title: '开票日期',
-    //     dataIndex: 'invoiceDate',
-    //     width: 120,
-    // },
-    // {
-    //     title: '发票金额',
-    //     dataIndex: 'invoiceAmount',
-    //     width: 120,
-    // },
-    {
-        title: '邮寄日期',
-        dataIndex: 'mailingDate',
-        width: 150,
-    },
-    {
         title: '状态',
         dataIndex: 'status',
-        width: 90,
+        width: 120,
     },
     {
         title: '创建时间',
         dataIndex: 'createTime',
-        width: 120,
+        width: 170,
     },
     {
         title: '操作',
         dataIndex: 'action',
         fixed: 'right',
-        width: 120,
+        width: 90,
     },
 ].map(column => ({ ...column, resizable: true })));
 
@@ -380,20 +276,11 @@ const columns = ref([
 
 const queryFormState = {
     projectNo: undefined, //项目编号
-    projectType: undefined, //项目类型
-    category: undefined, //项目分类
+    projectType: 31, //项目类型
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID
     status: undefined, //状态
-    thirdPartyId: undefined, //认证机构ID
-    contractNo: undefined, //合同号
-    contractDate: [], //合同日
-    contractDateBegin: undefined, //合同日 开始
-    contractDateEnd: undefined, //合同日 结束
-    expectedDate: [], //客户预期日期
-    expectedDateBegin: undefined, //客户预期日期 开始
-    expectedDateEnd: undefined, //客户预期日期 结束
     createUserId: undefined, //创建人
     createTime: [], //创建时间
     createTimeBegin: undefined, //创建时间 开始
@@ -415,6 +302,7 @@ function resetQuery() {
     let pageSize = queryForm.pageSize;
     Object.assign(queryForm, queryFormState);
     queryForm.pageSize = pageSize;
+    queryForm.projectType = projectType.value;
     queryData();
 }
 
@@ -422,7 +310,7 @@ function resetQuery() {
 async function queryData() {
     tableLoading.value = true;
     try {
-        let queryResult = await systemCertificationApi.queryPage(queryForm);
+        let queryResult = await projectApi.queryPage(queryForm);
         tableData.value = queryResult.data.list;
         total.value = queryResult.data.total;
     } catch (e) {
@@ -432,20 +320,24 @@ async function queryData() {
     }
 }
 
-function onChangeContractDate(dates, dateStrings) {
-    queryForm.contractDateBegin = dateStrings[0];
-    queryForm.contractDateEnd = dateStrings[1];
-}
-
-function onChangeExpectedDate(dates, dateStrings) {
-    queryForm.expectedDateBegin = dateStrings[0];
-    queryForm.expectedDateEnd = dateStrings[1];
-}
-
 function onChangeCreateTime(dates, dateStrings) {
     queryForm.createTimeBegin = dateStrings[0];
     queryForm.createTimeEnd = dateStrings[1];
 }
+// -------------------  监听数据变化 -------------------
+function onChangeSourceType(value) {
+    queryForm.sourceId = null;
+}
+
+let route = useRoute();
+const projectType = ref(31); // 定义单独的 projectType 变量
+
+onMounted(() => {
+    updateTableScrollY();
+    window.addEventListener('resize', updateTableScrollY);
+
+    queryData();
+});
 
 const tableScrollY = ref(600);
 const updateTableScrollY = () => {
@@ -454,42 +346,28 @@ const updateTableScrollY = () => {
     tableScrollY.value = window.innerHeight - headerHeight - otherElementsHeight;
 };
 
-onMounted(() => {
-    queryData();
-    updateTableScrollY();
-    window.addEventListener('resize', updateTableScrollY);
-});
-
 onBeforeUnmount(() => {
     window.removeEventListener('resize', updateTableScrollY);
+});
+
+const enumName = computed(() => {
+    return projectType.value == 21 ? 'LAB_CATEGORY_ENUM' : 'PROJECT_CATEGORY_ENUM';
 });
 
 // ---------------------------- 添加/修改 ----------------------------
 const formRef = ref();
 const formAddRef = ref();
+
 const firstPaymentRef = ref();
-const submitDataFormRef = ref();
-const reviewPlanFormRef = ref();
-const submitPaperFormRef = ref();
-const assessmentDateFormRef = ref();
-const rectificationDateFormRef = ref();
-const systemCertificateFormRef = ref();
 const finalPaymentFormRef = ref();
 const invoiceFormRef = ref();
-const mailFormRef = ref();
-const preDataTransferFormRef = ref();
-const systemFileTransferFormRef = ref();
-
-function showFormAdd() {
-    formAddRef.value.show();
-}
-
-function showFormAddTo(projectType) {
-    let rowData = selectedRowsList.value[0];
-    rowData.projectType = projectType;
-    rowData.id = undefined;
-    formAddRef.value.show(rowData);
-}
+const factoryAuditTaskFormRef = ref();
+const factoryAuditFormRef = ref();
+const correctionFormRef = ref();
+const submitCertificationFeeFormRef = ref();
+const archiveFormRef = ref();
+const projectMailFormRef = ref();
+const samplingTestFormRef = ref();
 
 function showForm() {
     if (selectedRowKeyList.value.length === 1) {
@@ -499,33 +377,15 @@ function showForm() {
     }
 }
 
-const handleMenuClick = (e, param) => {
-    if (e.key.nodeId === NODE_CONST.first_payment) {
-        firstPaymentRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.submit_data) {
-        submitDataFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.review_plan) {
-        reviewPlanFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.submit_paper) {
-        submitPaperFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.assessment_date) {
-        assessmentDateFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.rectification_date) {
-        rectificationDateFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.certificate) {
-        systemCertificateFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.final_payment) {
-        finalPaymentFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.invoice) {
-        invoiceFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.mail) {
-        mailFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.pre_data_transfer) {
-        preDataTransferFormRef.value.show(param, e.key.id);
-    } else if (e.key.nodeId === NODE_CONST.system_file_transfer) {
-        systemFileTransferFormRef.value.show(param, e.key.id);
-    }
-};
+function showFormAdd() {
+    formAddRef.value.show(queryForm.projectType);
+}
+
+
+function showFormAddTo() {
+    let rowData = selectedRowsList.value[0];
+    formAddRef.value.show(queryForm.projectType, rowData);
+}
 
 // ---------------------------- 单个删除 ----------------------------
 //确认删除
@@ -550,7 +410,7 @@ async function requestDelete(data) {
         let deleteForm = {
             goodsIdList: selectedRowKeyList.value,
         };
-        await systemCertificationApi.delete(data.id);
+        await projectApi.delete(data.id);
         message.success('删除成功');
         queryData();
     } catch (e) {
@@ -564,28 +424,13 @@ async function requestDelete(data) {
 
 // 选择表格行
 const selectedRowKeyList = ref([]);
+
 const selectedRowsList = ref([]);
-const toSupervision = ref(true);
-const reCertification = ref(true);
 
-function onSelectChange(selectedRowKeys, selections) {
+function onSelectChange(selectedRowKeys, selectedRows) {
     selectedRowKeyList.value = selectedRowKeys;
-    selectedRowsList.value = selections;
-    if (selectedRowsList.value.length == 1) {
-        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.INITIALIZATION.value) {
-            toSupervision.value = false;
-        }
-        if (selectedRowsList.value[0].projectType == PROJECT_TYPE_SYSTEM_ENUM.SUPERVISION1.value) {
-            reCertification.value = false;
-        }
-    } else {
-        toSupervision.value = true;
-        reCertification.value = true;
-    }
-
+    selectedRowsList.value = selectedRows;
 }
-
-
 
 // 批量删除
 function confirmBatchDelete() {
@@ -606,7 +451,7 @@ function confirmBatchDelete() {
 async function requestBatchDelete() {
     try {
         SmartLoading.show();
-        await systemCertificationApi.batchDelete(selectedRowKeyList.value);
+        await projectApi.batchDelete(selectedRowKeyList.value);
         message.success('删除成功');
         queryData();
     } catch (e) {
@@ -615,6 +460,33 @@ async function requestBatchDelete() {
         SmartLoading.hide();
     }
 }
+
+
+const handleMenuClick = (e, param) => {
+
+    if (e.key.nodeId === NODE_CONST.first_payment) {
+        firstPaymentRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.final_payment) {
+        finalPaymentFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.invoice) {
+        invoiceFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.factory_audit_task) {
+        factoryAuditTaskFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.factory_audit) {
+        factoryAuditFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.non_conformity_correction) {
+        correctionFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.submit_certification_fee) {
+        submitCertificationFeeFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.archive) {
+        archiveFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.mail) {
+        projectMailFormRef.value.show(param, e.key.id);
+    } else if (e.key.nodeId === NODE_CONST.sampling_test) {
+        samplingTestFormRef.value.show(param, e.key.id);
+    }
+
+};
 function handleResizeColumn(w, col) {
     col.width = w;
 }
@@ -622,12 +494,11 @@ function handleResizeColumn(w, col) {
 let router = useRouter();
 
 function detail(id) {
-    router.push({ path: '/system-certification/detail', query: { id: id } });
+    router.push({ path: '/project/supervision/detail', query: { id: id } });
 }
 
 // --------------------------- 导出 ---------------------------
 async function exportExcel() {
-    await systemCertificationApi.exportExcel(queryForm);
+    await projectApi.exportExcel(queryForm);
 }
-
 </script>

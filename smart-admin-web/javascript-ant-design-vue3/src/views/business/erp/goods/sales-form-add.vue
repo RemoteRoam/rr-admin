@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal :title="form.id ? '编辑' : '添加'" width="800px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal :title="form.id ? '编辑' : '添加'" width="900px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 7 }">
             <a-row :gutter="16">
@@ -256,6 +256,11 @@ const columns = reactive([
     {
         title: '型号规格',
         dataIndex: 'skuName',
+        ellipsis: true,
+    },
+    {
+        title: '长度',
+        dataIndex: 'length',
         ellipsis: true,
     },
     {

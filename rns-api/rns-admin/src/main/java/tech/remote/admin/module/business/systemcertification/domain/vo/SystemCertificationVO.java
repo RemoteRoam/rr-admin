@@ -57,6 +57,9 @@ public class SystemCertificationVO {
     @Schema(description = "认证机构")
     private String thirdPartyName;
 
+    @Schema(description = "证书数量")
+    private Integer certificateCount;
+
     @Schema(description = "合同号")
     private String contractNo;
 

@@ -14,8 +14,8 @@
           <template v-if="column.dataIndex === 'skuName'">
             <a-input v-model:value="record.skuName" />
           </template>
-          <template v-if="column.dataIndex === 'weight'">
-            <a-input-number v-model:value="record.weight" />
+          <template v-if="column.dataIndex === 'length'">
+            <a-input v-model:value="record.length" />
           </template>
         </template>
       </a-table>
@@ -60,7 +60,7 @@ let form = reactive({ ...formDefault });
 const dataSource = ref([{
   key: '1',
   skuName: '',
-  weight: undefined,
+  length: undefined,
 }]);
 
 // 是否展示抽屉
@@ -94,16 +94,21 @@ const dynamicColumns = computed(() => {
     {
       title: '规格型号',
       dataIndex: 'skuName',
-      width: '50%',
+      width: '40%',
+    },
+    {
+      title: '长度',
+      dataIndex: 'length',
+      width: '30%',
     },
   ];
 
-  if (form.categoryId === 1) {
-    baseColumns.splice(1, 0, {
-      title: '重量',
-      dataIndex: 'weight',
-    });
-  }
+  // if (form.categoryId === 1) {
+  //   baseColumns.splice(1, 0, {
+  //     title: '重量',
+  //     dataIndex: 'weight',
+  //   });
+  // }
 
   return baseColumns;
 });
