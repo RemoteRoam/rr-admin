@@ -34,6 +34,10 @@
                         type="THIRD_3" />
                 </template>
             </a-form-item>
+
+            <a-form-item label="咨询老师" class="smart-query-form-item">
+                <a-input width="150px" v-model:value="queryForm.consultationTeacher" placeholder="咨询老师" />
+            </a-form-item>
             <a-form-item label="状态" class="smart-query-form-item">
                 <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
                     placeholder="状态" />
@@ -280,6 +284,7 @@ const queryFormState = {
     customerId: undefined, //客户ID
     sourceType: undefined, //来源分类
     sourceId: undefined, //来源ID
+    consultationTeacher: undefined, //咨询老师
     status: undefined, //状态
     createUserId: undefined, //创建人
     createTime: [], //创建时间

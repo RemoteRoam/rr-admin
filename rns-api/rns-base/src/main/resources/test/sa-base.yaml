@@ -1,9 +1,9 @@
 spring:
   # 数据库连接信息
   datasource:
-    url: jdbc:p6spy:mysql://127.0.0.1:3306/smart_admin_v3?autoReconnect=true&useServerPreparedStmts=false&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    url: jdbc:p6spy:mysql://59.110.140.88:3306/smart_admin_v3?autoReconnect=true&useServerPreparedStmts=false&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
-    password: Java@1024
+    password: Remote2024
     initial-size: 2
     min-idle: 2
     max-active: 10
@@ -71,7 +71,7 @@ file:
   storage:
     mode: local
     local:
-      upload-path: /home/smart_admin_v3/upload/   #文件上传目录
+      upload-path: /tmp/smart_admin_v3/upload/   #文件上传目录
       url-prefix:
     cloud:
       region: oss-cn-qingdao

@@ -46,4 +46,7 @@ public class ProjectQueryForm extends PageParam{
     @Schema(description = "创建时间")
     private LocalDate createTimeEnd;
 
+
+    @Schema(description = "咨询老师")
+    private String consultationTeacher;
 }

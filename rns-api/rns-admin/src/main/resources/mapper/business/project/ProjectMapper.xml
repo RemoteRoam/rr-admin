@@ -62,6 +62,10 @@
             <if test="queryForm.createTimeEnd != null">
                 AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
             </if>
+            <!--咨询老师-->
+            <if test="queryForm.consultationTeacher != null and queryForm.consultationTeacher != ''">
+                AND INSTR(t.consultation_teacher,#{queryForm.consultationTeacher})
+            </if>
         </where>
         order by t.create_time desc
     </select>

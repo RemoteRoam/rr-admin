@@ -130,7 +130,7 @@
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
                                     <a-menu-item v-if="record.projectType != 31">
-                                        实验室任务
+                                        试验室任务
                                     </a-menu-item>
                                     <a-menu-divider v-if="record.projectType != 31" />
                                     <a-menu-item v-for="node in record.projectNodeList" :key="node">

@@ -61,10 +61,6 @@ import LocalStorageKeyConst from '/@/constants/local-storage-key-const.js';
 //--------------------- 登录表单 ---------------------------------
 
 const loginForm = reactive({
-  loginName: 'admin',
-  password: '',
-  captchaCode: '',
-  captchaUuid: '',
   loginDevice: LOGIN_DEVICE_ENUM.PC.value,
 });
 const rules = {
