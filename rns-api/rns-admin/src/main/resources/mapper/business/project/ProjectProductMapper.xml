@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tech.remote.admin.module.business.project.dao.ProjectProductDao">
+    <update id="updateCertificationFeeIdById">
+        UPDATE t_project_product
+        SET certification_fee_id = #{certificationFeeId}
+        WHERE id = #{id}
+    </update>
+    <update id="updateArchiveIdById">
+        UPDATE t_project_product
+        SET archive_id = #{archiveId}
+        WHERE id = #{id}
+    </update>
+    <update id="updateMailIdById">
+        UPDATE t_project_product
+        SET mail_id = #{mailId}
+        WHERE id = #{id}
+    </update>
 
     <!-- 分页查询 -->
     <select id="queryPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectProductVO">

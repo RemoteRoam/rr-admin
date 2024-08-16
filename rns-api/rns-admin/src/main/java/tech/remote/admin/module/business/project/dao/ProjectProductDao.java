@@ -34,4 +34,10 @@ public interface ProjectProductDao extends BaseMapper<ProjectProductEntity> {
 
 
     List<ProjectProductProgressVO> list(@Param("projectId")Long projectId, @Param("taskId")Long taskId);
+
+    void updateCertificationFeeIdById(ProjectProductEntity productEntity);
+
+    void updateArchiveIdById(ProjectProductEntity productEntity);
+
+    void updateMailIdById(ProjectProductEntity productEntity);
 }

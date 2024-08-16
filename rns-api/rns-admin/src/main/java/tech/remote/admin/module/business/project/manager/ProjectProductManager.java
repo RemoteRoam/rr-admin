@@ -17,4 +17,15 @@ import org.springframework.stereotype.Service;
 public class ProjectProductManager extends ServiceImpl<ProjectProductDao, ProjectProductEntity> {
 
 
+    public void updateCertificationFeeIdById(ProjectProductEntity productEntity) {
+        baseMapper.updateCertificationFeeIdById(productEntity);
+    }
+
+    public void updateArchiveIdById(ProjectProductEntity productEntity) {
+        baseMapper.updateArchiveIdById(productEntity);
+    }
+
+    public void updateMailIdById(ProjectProductEntity productEntity) {
+        baseMapper.updateMailIdById(productEntity);
+    }
 }

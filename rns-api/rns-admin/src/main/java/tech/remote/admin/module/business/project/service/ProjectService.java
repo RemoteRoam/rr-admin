@@ -246,7 +246,7 @@ public class ProjectService {
                 productEntity.setId(productId);
                 productEntity.setCertificationFeeId(projectCertificationFee.getId());
 
-                projectProductManager.updateById(productEntity);
+                projectProductManager.updateCertificationFeeIdById(productEntity);
             }
 
             List<ProjectProductVO> allProducts = getAllProduct(updateForm.getId());
@@ -270,7 +270,7 @@ public class ProjectService {
                 productEntity.setId(productId);
                 productEntity.setArchiveId(projectArchive.getId());
 
-                projectProductManager.updateById(productEntity);
+                projectProductManager.updateArchiveIdById(productEntity);
             }
 
             List<ProjectProductVO> allProducts = getAllProduct(updateForm.getId());
@@ -294,7 +294,7 @@ public class ProjectService {
                 productEntity.setId(productId);
                 productEntity.setMailId(projectMail.getId());
 
-                projectProductManager.updateById(productEntity);
+                projectProductManager.updateMailIdById(productEntity);
             }
 
             List<ProjectProductVO> allProducts = getAllProduct(updateForm.getId());
