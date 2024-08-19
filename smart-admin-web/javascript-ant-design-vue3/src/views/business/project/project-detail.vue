@@ -113,7 +113,7 @@
           </a-row>
           <a-row>
             <a-col :span="8" v-if="detail.projectType === 31">
-              <a-form-item label="抽检实验完成日期" name="samplingTestDate">
+              <a-form-item label="抽检试验完成日期" name="samplingTestDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.samplingTestDate" style="width: 95%"
                   placeholder="" disabled />
               </a-form-item>
@@ -233,7 +233,7 @@
           <!---------- 表格 end ----------->
         </div>
       </a-tab-pane>
-      <a-tab-pane key="labtask" tab="实验室任务">
+      <a-tab-pane key="labtask" tab="试验室任务">
         <!---------- 表格 begin ----------->
         <a-table size="small" :dataSource="tableData" :columns="columns" rowKey="id" bordered :loading="tableLoading"
           :pagination="false">
@@ -347,28 +347,28 @@ const columns = ref([
   //     ellipsis: true,
   // },
   {
-    title: '实验室任务编号',
+    title: '试验室任务编号',
     dataIndex: 'taskNo',
     width: 170,
   },
   {
-    title: '实验室',
+    title: '试验室',
     dataIndex: 'thirdPartyName',
     width: 150,
   },
   {
-    title: '实验室合同号',
+    title: '试验室合同号',
     dataIndex: 'labContractNo',
     width: 120,
   },
   {
-    title: '实验室合同日期',
+    title: '试验室合同日期',
     dataIndex: 'labContractDate',
     ellipsis: true,
     width: 120,
   },
   {
-    title: '实验费金额',
+    title: '试验费金额',
     dataIndex: 'labContractAmount',
     width: 90,
   },
@@ -378,7 +378,7 @@ const columns = ref([
     width: 130,
   },
   // {
-  //     title: '实验合同备注',
+  //     title: '试验合同备注',
   //     dataIndex: 'labContractRemark',
   //     ellipsis: true,
   // },
@@ -403,17 +403,17 @@ const columns = ref([
   //     ellipsis: true,
   // },
   // {
-  //     title: '实验费付款日期',
+  //     title: '试验费付款日期',
   //     dataIndex: 'labPayDate',
   //     ellipsis: true,
   // },
   // {
-  //     title: '实验费备注',
+  //     title: '试验费备注',
   //     dataIndex: 'labPayRemark',
   //     ellipsis: true,
   // },
   {
-    title: '实验室下达任务日期',
+    title: '试验室下达任务日期',
     dataIndex: 'assignTaskDate',
     width: 150,
   },

@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 项目实验室任务表 分页查询表单
+ * 项目试验室任务表 分页查询表单
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -21,7 +21,7 @@ public class ProjectLabQueryForm extends PageParam{
     @Schema(description = "项目类型")
     private Integer projectType;
 
-    @Schema(description = "三方机构ID（实验室ID）")
+    @Schema(description = "三方机构ID（试验室ID）")
     private Long thirdPartyId;
 
 }

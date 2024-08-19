@@ -1,11 +1,11 @@
 <!--
   * 通知  详情 （员工）
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-08-21 19:52:43 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <a-card size="small">
@@ -110,23 +110,28 @@ function print() {
   flex: 1;
   overflow: hidden;
 }
+
 .file-list {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+
   .file-item {
     display: block;
     margin-right: 10px;
   }
 }
+
 .visible-list {
   display: flex;
   flex-wrap: wrap;
+
   .visible-item {
     margin-right: 10px;
     color: #666;
   }
 }
+
 .content-header {
   .content-header-title {
     margin: 10px 0px;
@@ -134,17 +139,20 @@ function print() {
     font-weight: bold;
     text-align: center;
   }
+
   .content-header-info {
     margin: 10px 0px;
     font-size: 14px;
     color: #888;
     text-align: center;
+
     span {
       margin: 0 10px;
       cursor: pointer;
     }
   }
 }
+
 .content-html {
   img {
     max-width: 100%;

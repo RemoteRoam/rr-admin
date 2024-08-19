@@ -11,9 +11,9 @@
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验室上报日期" name="labReportDate">
+                    <a-form-item label="试验室上报日期" name="labReportDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labReportDate" style="width: 95%"
-                            placeholder="实验室上报日期" />
+                            placeholder="试验室上报日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -80,7 +80,7 @@ const formDefault = {
     nodeId: NODE_CONST.assign_task, //节点ID
     nodeStatus: 0, //节点状态
     passReason: undefined, //跳过原因
-    labReportDate: undefined, //实验室上报日期
+    labReportDate: undefined, //试验室上报日期
 };
 
 let form = reactive({ ...formDefault });

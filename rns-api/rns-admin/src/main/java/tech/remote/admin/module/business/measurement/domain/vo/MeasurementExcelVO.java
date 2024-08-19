@@ -35,7 +35,7 @@ public class MeasurementExcelVO {
     @ExcelProperty("负责人")
     private String managerName;
 
-    @ExcelProperty("实验室名称")
+    @ExcelProperty("试验室名称")
     private String thirdPartyName;
 
     @ExcelProperty("仪器名称")
@@ -45,7 +45,7 @@ public class MeasurementExcelVO {
     @ExcelProperty("有效期")
     private LocalDate expiryDate;
 
-    @ExcelProperty("实验费金额")
+    @ExcelProperty("试验费金额")
     private BigDecimal experimentAmount;
 
     @ExcelProperty("成本价")

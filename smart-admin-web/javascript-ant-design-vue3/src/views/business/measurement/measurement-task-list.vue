@@ -1,5 +1,5 @@
 <!--
-  * 仪器计量实验室任务表
+  * 仪器计量试验室任务表
   *
   * @Author:    cbh
   * @Date:      2024-05-07 14:44:51
@@ -109,7 +109,7 @@ const columns = ref([
     //     ellipsis: true,
     // },
     {
-        title: '实验室任务编号',
+        title: '试验室任务编号',
         dataIndex: 'taskNo',
         ellipsis: true,
         width: 170,
@@ -120,7 +120,7 @@ const columns = ref([
     //     ellipsis: true,
     // },
     {
-        title: '实验室',
+        title: '试验室',
         dataIndex: 'thirdPartyName',
         ellipsis: true,
     },
@@ -130,7 +130,7 @@ const columns = ref([
         ellipsis: true,
     },
     // {
-    //     title: '实验费金额',
+    //     title: '试验费金额',
     //     dataIndex: 'experimentAmount',
     //     ellipsis: true,
     // },

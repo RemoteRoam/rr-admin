@@ -31,7 +31,7 @@ public class ProjectProductEntity {
     private Long projectId;
 
     /**
-     * 实验室任务ID
+     * 试验室任务ID
      */
     private Long taskId;
 
@@ -62,9 +62,9 @@ public class ProjectProductEntity {
     private LocalDate reportCompletionDate;
 
     /**
-     * 实验室上报日期
+     * 试验室上报日期
      */
-    @DataTracerFieldLabel("实验室上报日期")
+    @DataTracerFieldLabel("试验室上报日期")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate labReportDate;
 

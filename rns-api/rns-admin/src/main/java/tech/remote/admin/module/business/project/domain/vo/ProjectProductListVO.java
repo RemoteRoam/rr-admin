@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 实验室待办、预警 列表VO
+ * 试验室待办、预警 列表VO
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -28,7 +28,7 @@ public class ProjectProductListVO {
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "实验室任务ID")
+    @Schema(description = "试验室任务ID")
     private Long taskId;
 
     @Schema(description = "产品名称")
@@ -43,7 +43,7 @@ public class ProjectProductListVO {
     @Schema(description = "报告完成日期")
     private LocalDate reportCompletionDate;
 
-    @Schema(description = "实验室上报日期")
+    @Schema(description = "试验室上报日期")
     private LocalDate labReportDate;
 
     @Schema(description = "自我声明日期")
@@ -89,28 +89,28 @@ public class ProjectProductListVO {
     private LocalDateTime updateTime;
 
 
-    @Schema(description = "实验室任务编号")
+    @Schema(description = "试验室任务编号")
     private String taskNo;
 
-    @Schema(description = "三方机构ID（实验室ID）")
+    @Schema(description = "三方机构ID（试验室ID）")
     private Long thirdPartyId;
 
-    @Schema(description = "实验室名称")
+    @Schema(description = "试验室名称")
     private String thirdPartyName;
 
-    @Schema(description = "实验室合同号")
+    @Schema(description = "试验室合同号")
     private String labContractNo;
 
-    @Schema(description = "实验室合同日期")
+    @Schema(description = "试验室合同日期")
     private LocalDate labContractDate;
 
-    @Schema(description = "实验费金额")
+    @Schema(description = "试验费金额")
     private BigDecimal labContractAmount;
 
     @Schema(description = "客户要求完成日期")
     private LocalDate labExpectedDate;
 
-    @Schema(description = "实验合同备注")
+    @Schema(description = "试验合同备注")
     private String labContractRemark;
 
     @Schema(description = "资料发送日期")
@@ -125,13 +125,13 @@ public class ProjectProductListVO {
     @Schema(description = "付款方(客户/我方)")
     private Integer payParty;
 
-    @Schema(description = "实验费付款日期")
+    @Schema(description = "试验费付款日期")
     private LocalDate labPayDate;
 
-    @Schema(description = "实验费备注")
+    @Schema(description = "试验费备注")
     private String labPayRemark;
 
-    @Schema(description = "实验室下达任务日期")
+    @Schema(description = "试验室下达任务日期")
     private LocalDate assignTaskDate;
 
     @Schema(description = "项目编号")
@@ -158,7 +158,7 @@ public class ProjectProductListVO {
     @Schema(description = "来源")
     private String sourceName;
 
-    @Schema(description = "实验室预警天数")
+    @Schema(description = "试验室预警天数")
     private Integer alarmDays;
 
     @Schema(description = "操作节点列表")

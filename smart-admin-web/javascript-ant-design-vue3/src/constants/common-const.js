@@ -1,11 +1,11 @@
 /*
  * 通用常量
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-06 19:57:29
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 
 export const PAGE_SIZE = 10;

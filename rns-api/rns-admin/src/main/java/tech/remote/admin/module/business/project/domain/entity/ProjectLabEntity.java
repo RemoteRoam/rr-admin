@@ -12,7 +12,7 @@ import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldBigDe
 import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
- * 项目实验室任务表 实体类
+ * 项目试验室任务表 实体类
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -35,33 +35,33 @@ public class ProjectLabEntity {
     private Long projectId;
 
     /**
-     * 实验室任务编号
+     * 试验室任务编号
      */
     private String taskNo;
 
     /**
-     * 三方机构ID（实验室ID）
+     * 三方机构ID（试验室ID）
      */
     private Long thirdPartyId;
 
     /**
-     * 实验室合同号
+     * 试验室合同号
      */
-    @DataTracerFieldLabel("实验室合同号")
+    @DataTracerFieldLabel("试验室合同号")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String labContractNo;
 
     /**
-     * 实验室合同日期
+     * 试验室合同日期
      */
-    @DataTracerFieldLabel("实验室合同日期")
+    @DataTracerFieldLabel("试验室合同日期")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate labContractDate;
 
     /**
-     * 实验费金额
+     * 试验费金额
      */
-    @DataTracerFieldLabel("实验费金额")
+    @DataTracerFieldLabel("试验费金额")
     @DataTracerFieldBigDecimal
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal labContractAmount;
@@ -74,9 +74,9 @@ public class ProjectLabEntity {
     private LocalDate labExpectedDate;
 
     /**
-     * 实验合同备注
+     * 试验合同备注
      */
-    @DataTracerFieldLabel("实验合同备注")
+    @DataTracerFieldLabel("试验合同备注")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String labContractRemark;
 
@@ -109,23 +109,23 @@ public class ProjectLabEntity {
     private Integer payParty;
 
     /**
-     * 实验费付款日期
+     * 试验费付款日期
      */
-    @DataTracerFieldLabel("实验费付款日期")
+    @DataTracerFieldLabel("试验费付款日期")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate labPayDate;
 
     /**
-     * 实验费备注
+     * 试验费备注
      */
-    @DataTracerFieldLabel("实验费备注")
+    @DataTracerFieldLabel("试验费备注")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String labPayRemark;
 
     /**
-     * 实验室下达任务日期
+     * 试验室下达任务日期
      */
-    @DataTracerFieldLabel("实验室下达任务日期")
+    @DataTracerFieldLabel("试验室下达任务日期")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate assignTaskDate;
 

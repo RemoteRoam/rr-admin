@@ -42,7 +42,7 @@ public class ProjectToDoQueryForm extends PageParam{
     @Schema(description = "创建时间")
     private LocalDate createTimeEnd;
 
-    @Schema(description = "待办类型：1 办公室待办，2 实验室待办，3 审核待办，4 取证书待办，5 尾款待办")
+    @Schema(description = "待办类型：1 办公室待办，2 试验室待办，3 审核待办，4 取证书待办，5 尾款待办")
     private Integer toDoType;
 
 

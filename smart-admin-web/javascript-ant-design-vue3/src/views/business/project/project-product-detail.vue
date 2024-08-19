@@ -4,7 +4,7 @@
 -->
 <template>
   <div class="detail-header">
-    <a-page-header :title="'实验室任务编号(' + detail.taskNo + ')'">
+    <a-page-header :title="'试验室任务编号(' + detail.taskNo + ')'">
 
       <div>
         <a-descriptions size="small" :column="4">
@@ -13,12 +13,12 @@
             detail.projectType) }}</a-descriptions-item>
           <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue(enumName,
             detail.category) }}</a-descriptions-item>
-          <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
+          <a-descriptions-item label="试验室">{{ detail.thirdPartyName }}</a-descriptions-item>
           <a-descriptions-item label="产品名称">{{ detail.productName }}</a-descriptions-item>
           <a-descriptions-item label="产品型号">{{ detail.productModel }}</a-descriptions-item>
           <a-descriptions-item label="预计完成日期">{{ detail.expectedCompletionDate }}</a-descriptions-item>
           <a-descriptions-item label="报告完成日期">{{ detail.reportCompletionDate }}</a-descriptions-item>
-          <a-descriptions-item label="实验室上报日期">{{ detail.labReportDate }}</a-descriptions-item>
+          <a-descriptions-item label="试验室上报日期">{{ detail.labReportDate }}</a-descriptions-item>
           <a-descriptions-item label="自我声明日期">{{ detail.selfDeclarationDate }}</a-descriptions-item>
           <a-descriptions-item label="证书编号">{{ detail.certificateNo }}</a-descriptions-item>
           <a-descriptions-item label="证书发送日期">{{ detail.certificateSendDate }}</a-descriptions-item>

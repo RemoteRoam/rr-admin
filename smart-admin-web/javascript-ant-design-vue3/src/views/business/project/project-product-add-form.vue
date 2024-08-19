@@ -73,7 +73,7 @@ const formRef = ref();
 const formDefault = {
     projectId: undefined, //项目ID
     projectType: undefined, //项目类型
-    taskId: undefined, //实验室任务ID
+    taskId: undefined, //试验室任务ID
     productName: undefined, //产品名称
     productModel: undefined, //产品型号
 };

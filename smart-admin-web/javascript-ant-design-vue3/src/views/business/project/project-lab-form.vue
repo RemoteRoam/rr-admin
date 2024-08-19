@@ -1,5 +1,5 @@
 <!--
-  * 项目实验室任务表
+  * 项目试验室任务表
   *
   * @Author:    cbh
   * @Date:      2024-05-15 13:19:26
@@ -11,39 +11,39 @@
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ style: { width: '150px' } }">
             <a-row>
                 <a-col :span="8">
-                    <a-form-item label="实验室任务编号" name="taskNo">
-                        <a-input style="width: 95%" v-model:value="form.taskNo" placeholder="实验室任务编号" disabled />
+                    <a-form-item label="试验室任务编号" name="taskNo">
+                        <a-input style="width: 95%" v-model:value="form.taskNo" placeholder="试验室任务编号" disabled />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="实验室" name="thirdPartyId">
-                        <ThirdPartySelect width="95%" v-model:value="form.thirdPartyId" placeholder="请选择实验室"
+                    <a-form-item label="试验室" name="thirdPartyId">
+                        <ThirdPartySelect width="95%" v-model:value="form.thirdPartyId" placeholder="请选择试验室"
                             type="THIRD_1" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="8">
-                    <a-form-item label="实验室合同号" name="labContractNo">
-                        <a-input style="width: 95%" v-model:value="form.labContractNo" placeholder="实验室合同号" />
+                    <a-form-item label="试验室合同号" name="labContractNo">
+                        <a-input style="width: 95%" v-model:value="form.labContractNo" placeholder="试验室合同号" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="实验室合同日期" name="labContractDate">
+                    <a-form-item label="试验室合同日期" name="labContractDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labContractDate" style="width: 95%"
-                            placeholder="实验室合同日期" />
+                            placeholder="试验室合同日期" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="实验费金额" name="labContractAmount">
-                        <a-input-number style="width: 95%" v-model:value="form.labContractAmount" placeholder="实验费金额" />
+                    <a-form-item label="试验费金额" name="labContractAmount">
+                        <a-input-number style="width: 95%" v-model:value="form.labContractAmount" placeholder="试验费金额" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="16">
-                    <a-form-item label="实验合同备注" name="labContractRemark">
-                        <a-textarea style="width: 95%" v-model:value="form.labContractRemark" placeholder="实验合同备注" />
+                    <a-form-item label="试验合同备注" name="labContractRemark">
+                        <a-textarea style="width: 95%" v-model:value="form.labContractRemark" placeholder="试验合同备注" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -83,9 +83,9 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="8">
-                    <a-form-item label="实验费付款日期" name="labPayDate">
+                    <a-form-item label="试验费付款日期" name="labPayDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labPayDate" style="width: 95%"
-                            placeholder="实验费付款日期" />
+                            placeholder="试验费付款日期" />
                     </a-form-item>
 
                 </a-col>
@@ -93,8 +93,8 @@
             </a-row>
             <a-row>
                 <a-col :span="16">
-                    <a-form-item label="实验费备注" name="labPayRemark">
-                        <a-textarea style="width: 95%" v-model:value="form.labPayRemark" placeholder="实验费备注" />
+                    <a-form-item label="试验费备注" name="labPayRemark">
+                        <a-textarea style="width: 95%" v-model:value="form.labPayRemark" placeholder="试验费备注" />
                     </a-form-item>
 
                 </a-col>
@@ -102,9 +102,9 @@
             </a-row>
             <a-row>
                 <a-col :span="8">
-                    <a-form-item label="实验室下达任务日期" name="assignTaskDate">
+                    <a-form-item label="试验室下达任务日期" name="assignTaskDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.assignTaskDate" style="width: 95%"
-                            placeholder="实验室下达任务日期" />
+                            placeholder="试验室下达任务日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -173,20 +173,20 @@ const formRef = ref();
 const formDefault = {
     id: undefined, //编号
     projectId: undefined, //项目ID
-    taskNo: undefined, //实验室任务编号
-    thirdPartyId: undefined, //三方机构ID（实验室ID）
-    labContractNo: undefined, //实验室合同号
-    labContractDate: undefined, //实验室合同日期
-    labContractAmount: undefined, //实验费金额
+    taskNo: undefined, //试验室任务编号
+    thirdPartyId: undefined, //三方机构ID（试验室ID）
+    labContractNo: undefined, //试验室合同号
+    labContractDate: undefined, //试验室合同日期
+    labContractAmount: undefined, //试验费金额
     labExpectedDate: undefined, //客户要求完成日期
-    labContractRemark: undefined, //实验合同备注
+    labContractRemark: undefined, //试验合同备注
     dataSendDate: undefined, //资料发送日期
     dataReceiveDate: undefined, //资料接收日期
     isPaid: undefined, //是否付款
     payParty: undefined, //付款方(客户/我方)
-    labPayDate: undefined, //实验费付款日期
-    labPayRemark: undefined, //实验费备注
-    assignTaskDate: undefined, //实验室下达任务日期
+    labPayDate: undefined, //试验费付款日期
+    labPayRemark: undefined, //试验费备注
+    assignTaskDate: undefined, //试验室下达任务日期
     expectedCompletionDate: undefined, //预计完成日期
     reportCompletionDate: undefined, //报告完成日期
     createUserId: undefined, //创建人

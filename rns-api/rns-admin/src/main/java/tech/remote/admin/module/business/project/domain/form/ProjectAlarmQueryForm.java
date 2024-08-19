@@ -41,7 +41,7 @@ public class ProjectAlarmQueryForm extends PageParam{
     @Schema(description = "创建时间")
     private LocalDate createTimeEnd;
 
-    @Schema(description = "预警类型：1 客户合同预期完成时间预警，2 实验室任务预警，3 工厂审核监督预警，4 不符合项整改预警")
+    @Schema(description = "预警类型：1 客户合同预期完成时间预警，2 试验室任务预警，3 工厂审核监督预警，4 不符合项整改预警")
     private Integer alarmType;
 
 

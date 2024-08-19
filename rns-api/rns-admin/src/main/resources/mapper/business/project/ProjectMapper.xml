@@ -159,7 +159,7 @@
                         from t_project_node
                         where project_type in (11,12,31) and node_id = 10 and status = 2) as n1
                     on n1.project_id = n.project_id
-                    where n.node_id in (11,12,15,16,18,19,20) and n.status in (0,1)
+                    where n.node_id in (11,12,15,16,19,20) and n.status in (0,1)
                 </if>
                 <if test="queryForm.toDoTYPE == 5">
                     select distinct n.project_id
@@ -383,7 +383,7 @@
                     where n.node_id = 9 and n.status = 0
                 )
             </if>
-            <!--实验室任务客户要求完成日期提前3天预警-->
+            <!--试验室任务客户要求完成日期提前3天预警-->
 <!--            <if test="queryForm.alarmType == 2">-->
 <!--                AND t.id in (-->
 <!--                    select distinct l.project_id-->
@@ -429,7 +429,7 @@
                 AND t.status != 2
             </if>
             <if test="alarmType == 2">
-                <!--实验室任务客户要求完成日期提前3天预警-->
+                <!--试验室任务客户要求完成日期提前3天预警-->
 #                 AND t.id in (
 #                     select distinct l.project_id
 #                     from t_project_lab l

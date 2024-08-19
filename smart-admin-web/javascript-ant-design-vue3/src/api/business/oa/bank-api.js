@@ -5,7 +5,7 @@
  * @Date:      2022-09-03 21:42:08
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 import { postRequest, getRequest } from '/@/lib/axios';
 

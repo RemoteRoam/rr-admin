@@ -33,9 +33,9 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="18">
-                    <a-form-item label="实验室上报日期" name="labReportDate">
+                    <a-form-item label="试验室上报日期" name="labReportDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labReportDate" style="width: 100%"
-                            placeholder="实验室上报日期" />
+                            placeholder="试验室上报日期" />
                     </a-form-item>
                 </a-col>
                 <a-col :span="18">
@@ -123,10 +123,10 @@ const formRef = ref();
 const formDefault = {
     id: undefined, //编号
     projectId: undefined, //项目ID
-    taskId: undefined, //实验室任务ID
+    taskId: undefined, //试验室任务ID
     productName: undefined, //产品名称
     productModel: undefined, //产品型号
-    labReportDate: undefined, //实验室上报日期
+    labReportDate: undefined, //试验室上报日期
     selfDeclarationDate: undefined, //自我声明日期
     certificateNo: undefined, //证书编号
     certificateSendDate: undefined, //证书发送日期

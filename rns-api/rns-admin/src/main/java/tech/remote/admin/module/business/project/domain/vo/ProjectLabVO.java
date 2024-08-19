@@ -10,7 +10,7 @@ import lombok.Data;
 import tech.remote.admin.module.business.projectnode.domain.vo.ProjectNodeVO;
 
 /**
- * 项目实验室任务表 列表VO
+ * 项目试验室任务表 列表VO
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -27,28 +27,28 @@ public class ProjectLabVO {
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "实验室任务编号")
+    @Schema(description = "试验室任务编号")
     private String taskNo;
 
-    @Schema(description = "三方机构ID（实验室ID）")
+    @Schema(description = "三方机构ID（试验室ID）")
     private Long thirdPartyId;
 
-    @Schema(description = "实验室名称")
+    @Schema(description = "试验室名称")
     private String thirdPartyName;
 
-    @Schema(description = "实验室合同号")
+    @Schema(description = "试验室合同号")
     private String labContractNo;
 
-    @Schema(description = "实验室合同日期")
+    @Schema(description = "试验室合同日期")
     private LocalDate labContractDate;
 
-    @Schema(description = "实验费金额")
+    @Schema(description = "试验费金额")
     private BigDecimal labContractAmount;
 
     @Schema(description = "客户要求完成日期")
     private LocalDate labExpectedDate;
 
-    @Schema(description = "实验合同备注")
+    @Schema(description = "试验合同备注")
     private String labContractRemark;
 
     @Schema(description = "资料发送日期")
@@ -63,13 +63,13 @@ public class ProjectLabVO {
     @Schema(description = "付款方(客户/我方)")
     private Integer payParty;
 
-    @Schema(description = "实验费付款日期")
+    @Schema(description = "试验费付款日期")
     private LocalDate labPayDate;
 
-    @Schema(description = "实验费备注")
+    @Schema(description = "试验费备注")
     private String labPayRemark;
 
-    @Schema(description = "实验室下达任务日期")
+    @Schema(description = "试验室下达任务日期")
     private LocalDate assignTaskDate;
 
 //    @Schema(description = "预计完成日期")

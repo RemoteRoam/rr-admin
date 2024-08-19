@@ -6,7 +6,7 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="实验检测" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="试验检测" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
@@ -86,7 +86,7 @@ const formDefault = {
 let form = reactive({ ...formDefault });
 
 const rules = {
-    // id: [{ required: true, message: '编号 必填' }],
+    reportCompletionDate: [{ required: true, message: '报告完成日期必填' }],
 };
 
 // 点击确定，验证表单

@@ -1,28 +1,22 @@
 <!--
   *  意见反馈提交弹窗 
   *
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-09-06 20:40:16 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
-  <a-modal :open="visible" title="意见反馈" :closable="false" :maskClosable="true" >
+  <a-modal :open="visible" title="意见反馈" :closable="false" :maskClosable="true">
     <a-form :labelCol="{ span: 6 }">
       <a-form-item label="我要吐槽/建议：">
-        <a-textarea v-model:value="form.feedbackContent" placeholder="请输入让您不满意的点，我们争取做到更好～" :rows="3"/>
+        <a-textarea v-model:value="form.feedbackContent" placeholder="请输入让您不满意的点，我们争取做到更好～" :rows="3" />
       </a-form-item>
       <a-form-item label="反馈图片：">
-        <Upload
-            accept=".jpg,.jpeg,.png,.gif"
-            :maxUploadSize="3"
-            buttonText="点击上传反馈图片"
-            :default-file-list="form.feedbackAttachment || []"
-            listType="picture-card"
-            @change="changeAttachment"
-            :folder="FILE_FOLDER_TYPE_ENUM.FEEDBACK.value"
-        />
+        <Upload accept=".jpg,.jpeg,.png,.gif" :maxUploadSize="3" buttonText="点击上传反馈图片"
+          :default-file-list="form.feedbackAttachment || []" listType="picture-card" @change="changeAttachment"
+          :folder="FILE_FOLDER_TYPE_ENUM.FEEDBACK.value" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -46,26 +40,26 @@ defineExpose({
 
 const visible = ref(false);
 
-function show () {
+function show() {
   Object.assign(form, formDefault);
   console.log(form)
   visible.value = true;
 }
 
-function hide () {
+function hide() {
   visible.value = false;
 }
 
 const formDefault = {
-  feedbackContent:'',
+  feedbackContent: '',
   feedbackAttachment: ''
 }
 const form = reactive({ ...formDefault });
 
-async function submit () {
+async function submit() {
   try {
     SmartLoading.show();
-    if(!form.feedbackContent){
+    if (!form.feedbackContent) {
       message.warn('请填写具体内容');
       return;
     }
@@ -79,7 +73,7 @@ async function submit () {
   }
 }
 
-function changeAttachment (fileList) {
+function changeAttachment(fileList) {
   form.feedbackAttachment = fileList;
 }
 </script>

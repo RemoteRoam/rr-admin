@@ -4,7 +4,7 @@
 -->
 <template>
   <div class="detail-header">
-    <a-page-header :title="'实验室任务编号(' + detail.taskNo + ')'">
+    <a-page-header :title="'试验室任务编号(' + detail.taskNo + ')'">
 
       <div>
         <a-descriptions size="small" :column="4">
@@ -55,12 +55,12 @@
         <a-form :label-col="{ style: { width: '150px' } }">
           <a-row>
             <a-col :span="8">
-              <a-form-item label="实验室任务编号" name="taskNo">
+              <a-form-item label="试验室任务编号" name="taskNo">
                 <a-input style="width: 95%" v-model:value="detail.taskNo" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item label="实验室" name="thirdPartyId">
+              <a-form-item label="试验室" name="thirdPartyId">
                 <ThirdPartySelect width="95%" v-model:value="detail.thirdPartyId" placeholder="" type="THIRD_1"
                   disabled />
               </a-form-item>
@@ -68,25 +68,25 @@
           </a-row>
           <a-row>
             <a-col :span="8">
-              <a-form-item label="实验室合同号" name="labContractNo">
+              <a-form-item label="试验室合同号" name="labContractNo">
                 <a-input style="width: 95%" v-model:value="detail.labContractNo" placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item label="实验室合同日期" name="labContractDate">
+              <a-form-item label="试验室合同日期" name="labContractDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labContractDate" style="width: 95%"
                   placeholder="" disabled />
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item label="实验费金额" name="labContractAmount">
+              <a-form-item label="试验费金额" name="labContractAmount">
                 <a-input-number style="width: 95%" v-model:value="detail.labContractAmount" placeholder="" disabled />
               </a-form-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="16">
-              <a-form-item label="实验合同备注" name="labContractRemark">
+              <a-form-item label="试验合同备注" name="labContractRemark">
                 <a-textarea style="width: 95%" v-model:value="detail.labContractRemark" placeholder="" disabled />
               </a-form-item>
             </a-col>
@@ -127,7 +127,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item label="实验费付款日期" name="labPayDate">
+              <a-form-item label="试验费付款日期" name="labPayDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.labPayDate" style="width: 95%"
                   placeholder="" disabled />
               </a-form-item>
@@ -137,7 +137,7 @@
           </a-row>
           <a-row>
             <a-col :span="16">
-              <a-form-item label="实验费备注" name="labPayRemark">
+              <a-form-item label="试验费备注" name="labPayRemark">
                 <a-textarea style="width: 95%" v-model:value="detail.labPayRemark" placeholder="" disabled />
               </a-form-item>
 
@@ -146,7 +146,7 @@
           </a-row>
           <a-row>
             <a-col :span="8">
-              <a-form-item label="实验室下达任务日期" name="assignTaskDate">
+              <a-form-item label="试验室下达任务日期" name="assignTaskDate">
                 <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="detail.assignTaskDate" style="width: 95%"
                   placeholder="" disabled />
               </a-form-item>
@@ -265,7 +265,7 @@ const columns = ref([
   //   ellipsis: true,
   // },
   // {
-  //   title: '实验室任务ID',
+  //   title: '试验室任务ID',
   //   dataIndex: 'taskId',
   //   ellipsis: true,
   // },
@@ -290,7 +290,7 @@ const columns = ref([
     width: 120,
   },
   {
-    title: '实验室上报日期',
+    title: '试验室上报日期',
     dataIndex: 'labReportDate',
     ellipsis: true,
   },

@@ -1,5 +1,5 @@
 <!--
-  * 项目实验室任务表
+  * 项目试验室任务表
   *
   * @Author:    cbh
   * @Date:      2024-05-15 13:19:26
@@ -11,8 +11,8 @@
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 5 }">
             <a-row>
                 <a-col :span="16">
-                    <a-form-item label="实验室" name="thirdPartyId">
-                        <ThirdPartySelect width="95%" v-model:value="form.thirdPartyId" placeholder="请选择实验室"
+                    <a-form-item label="试验室" name="thirdPartyId">
+                        <ThirdPartySelect width="95%" v-model:value="form.thirdPartyId" placeholder="请选择试验室"
                             type="THIRD_1" />
                     </a-form-item>
                 </a-col>
@@ -90,7 +90,7 @@ const formRef = ref();
 const formDefault = {
     projectId: undefined, //项目ID
     projectType: undefined, //项目类型
-    thirdPartyId: undefined, //三方机构ID（实验室ID）
+    thirdPartyId: undefined, //三方机构ID（试验室ID）
     products: [], //产品列表
 
 };

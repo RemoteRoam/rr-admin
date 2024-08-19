@@ -10,7 +10,7 @@ import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldBigDe
 import tech.remote.base.module.support.datatracer.annoation.DataTracerFieldLabel;
 
 /**
- * 仪器计量实验室任务表 实体类
+ * 仪器计量试验室任务表 实体类
  *
  * @Author cbh
  * @Date 2024-05-07 14:44:51
@@ -28,7 +28,7 @@ public class MeasurementTaskEntity {
     private Long id;
 
     /**
-     * 实验室任务编号
+     * 试验室任务编号
      */
     private String taskNo;
 
@@ -38,7 +38,7 @@ public class MeasurementTaskEntity {
     private Long projectId;
 
     /**
-     * 三方机构ID（实验室ID）
+     * 三方机构ID（试验室ID）
      */
     private Long thirdPartyId;
 
@@ -57,9 +57,9 @@ public class MeasurementTaskEntity {
     private LocalDate expiryDate;
 
     /**
-     * 实验费金额
+     * 试验费金额
      */
-    @DataTracerFieldLabel("实验费金额")
+    @DataTracerFieldLabel("试验费金额")
     @DataTracerFieldBigDecimal
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private BigDecimal experimentAmount;

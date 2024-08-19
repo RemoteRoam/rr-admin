@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
- * 仪器计量实验室任务表 Controller
+ * 仪器计量试验室任务表 Controller
  *
  * @Author cbh
  * @Date 2024-05-07 14:44:51

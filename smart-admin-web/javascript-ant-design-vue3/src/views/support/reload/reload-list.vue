@@ -1,11 +1,11 @@
 <!--
   * reload
   *
-  * @Author:    1024创新实验室-主任：卓大
+  * @Author:    YY Studio
   * @Date:      2022-07-21 21:55:12
   * @Wechat:    zhuda1024
   * @Email:     lab1024@163.com
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+  * @Copyright  YY Studio
 -->
 <template>
   <a-card size="small" :bordered="false" :hoverable="true">
@@ -25,30 +25,23 @@
 · 用于执行某些后门代码
 · 用于进行Java热加载（前提是类结构不发生变化）
 · 其他不能重启服务的应用
-</pre
-        >
+</pre>
       </template>
     </a-alert>
 
     <a-row justify="end">
-      <TableOperator class="smart-margin-bottom5 smart-margin-top5" v-model="columns" :tableId="TABLE_ID_CONST.SUPPORT.RELOAD" :refresh="ajaxQuery" />
+      <TableOperator class="smart-margin-bottom5 smart-margin-top5" v-model="columns"
+        :tableId="TABLE_ID_CONST.SUPPORT.RELOAD" :refresh="ajaxQuery" />
     </a-row>
 
-    <a-table
-      size="small"
-      bordered
-      class="smart-margin-top10"
-      :dataSource="tableData"
-      :loading="tableLoading"
-      :columns="columns"
-      rowKey="tag"
-      :pagination="false"
-    >
+    <a-table size="small" bordered class="smart-margin-top10" :dataSource="tableData" :loading="tableLoading"
+      :columns="columns" rowKey="tag" :pagination="false">
       <template #bodyCell="{ record, column }">
         <template v-if="column.dataIndex === 'action'">
           <div class="smart-table-operate">
             <a-button @click="doReload(record.tag)" v-privilege="'support:reload:execute'" type="link">执行</a-button>
-            <a-button @click="showResultList(record.tag)" v-privilege="'support:reload:result'" type="link">查看结果</a-button>
+            <a-button @click="showResultList(record.tag)" v-privilege="'support:reload:result'"
+              type="link">查看结果</a-button>
           </div>
         </template>
       </template>
@@ -59,75 +52,75 @@
   </a-card>
 </template>
 <script setup>
-  import { onMounted, ref } from 'vue';
-  import DoReloadForm from './do-reload-form-modal.vue';
-  import ReloadResultList from './reload-result-list.vue';
-  import { reloadApi } from '/@/api/support/reload-api';
-  import { smartSentry } from '/@/lib/smart-sentry';
-  import TableOperator from '/@/components/support/table-operator/index.vue';
-  import { TABLE_ID_CONST } from '/@/constants/support/table-id-const';
+import { onMounted, ref } from 'vue';
+import DoReloadForm from './do-reload-form-modal.vue';
+import ReloadResultList from './reload-result-list.vue';
+import { reloadApi } from '/@/api/support/reload-api';
+import { smartSentry } from '/@/lib/smart-sentry';
+import TableOperator from '/@/components/support/table-operator/index.vue';
+import { TABLE_ID_CONST } from '/@/constants/support/table-id-const';
 
-  //------------------------ 表格渲染 ---------------------
+//------------------------ 表格渲染 ---------------------
 
-  const columns = ref([
-    {
-      title: '标签',
-      dataIndex: 'tag',
-      width: 200,
-    },
-    {
-      title: '运行标识',
-      dataIndex: 'identification',
-    },
-    {
-      title: '参数',
-      dataIndex: 'args',
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'updateTime',
-      width: 150,
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      width: 150,
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      fixed: 'right',
-      width: 150,
-    },
-  ]);
+const columns = ref([
+  {
+    title: '标签',
+    dataIndex: 'tag',
+    width: 200,
+  },
+  {
+    title: '运行标识',
+    dataIndex: 'identification',
+  },
+  {
+    title: '参数',
+    dataIndex: 'args',
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updateTime',
+    width: 150,
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'createTime',
+    width: 150,
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    fixed: 'right',
+    width: 150,
+  },
+]);
 
-  const tableLoading = ref(false);
-  const tableData = ref([]);
+const tableLoading = ref(false);
+const tableData = ref([]);
 
-  async function ajaxQuery() {
-    try {
-      tableLoading.value = true;
-      let res = await reloadApi.queryList();
-      tableData.value = res.data;
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      tableLoading.value = false;
-    }
+async function ajaxQuery() {
+  try {
+    tableLoading.value = true;
+    let res = await reloadApi.queryList();
+    tableData.value = res.data;
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    tableLoading.value = false;
   }
+}
 
-  onMounted(ajaxQuery);
+onMounted(ajaxQuery);
 
-  // ------------------------------ 表格操作列： 执行 reload ------------------------------
-  const doReloadForm = ref();
-  function doReload(tag) {
-    doReloadForm.value.showModal(tag);
-  }
+// ------------------------------ 表格操作列： 执行 reload ------------------------------
+const doReloadForm = ref();
+function doReload(tag) {
+  doReloadForm.value.showModal(tag);
+}
 
-  // ------------------------------ 表格操作列： 查看执行结果 ------------------------------
+// ------------------------------ 表格操作列： 查看执行结果 ------------------------------
 
-  const reloadResultList = ref();
-  function showResultList(tag) {
-    reloadResultList.value.showModal(tag);
-  }
+const reloadResultList = ref();
+function showResultList(tag) {
+  reloadResultList.value.showModal(tag);
+}
 </script>

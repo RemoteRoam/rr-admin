@@ -3,30 +3,30 @@
         <template #formContent>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验室合同号" name="labContractNo">
-                        <a-input style="width: 95%" v-model:value="form.labContractNo" placeholder="实验室合同号" />
+                    <a-form-item label="试验室合同号" name="labContractNo">
+                        <a-input style="width: 95%" v-model:value="form.labContractNo" placeholder="试验室合同号" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验室合同日期" name="labContractDate">
+                    <a-form-item label="试验室合同日期" name="labContractDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labContractDate" style="width: 95%"
-                            placeholder="实验室合同日期" />
+                            placeholder="试验室合同日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验费金额" name="labContractAmount">
-                        <a-input-number style="width: 95%" v-model:value="form.labContractAmount" placeholder="实验费金额" />
+                    <a-form-item label="试验费金额" name="labContractAmount">
+                        <a-input-number style="width: 95%" v-model:value="form.labContractAmount" placeholder="试验费金额" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验合同备注" name="labContractRemark">
-                        <a-textarea style="width: 95%" v-model:value="form.labContractRemark" placeholder="实验合同备注" />
+                    <a-form-item label="试验合同备注" name="labContractRemark">
+                        <a-textarea style="width: 95%" v-model:value="form.labContractRemark" placeholder="试验合同备注" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -69,30 +69,30 @@ defineExpose({
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 8 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验室合同号" name="labContractNo">
-                        <a-input style="width: 95%" v-model:value="form.labContractNo" placeholder="实验室合同号" />
+                    <a-form-item label="试验室合同号" name="labContractNo">
+                        <a-input style="width: 95%" v-model:value="form.labContractNo" placeholder="试验室合同号" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验室合同日期" name="labContractDate">
+                    <a-form-item label="试验室合同日期" name="labContractDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labContractDate" style="width: 95%"
-                            placeholder="实验室合同日期" />
+                            placeholder="试验室合同日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验费金额" name="labContractAmount">
-                        <a-input-number style="width: 95%" v-model:value="form.labContractAmount" placeholder="实验费金额" />
+                    <a-form-item label="试验费金额" name="labContractAmount">
+                        <a-input-number style="width: 95%" v-model:value="form.labContractAmount" placeholder="试验费金额" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验合同备注" name="labContractRemark">
-                        <a-textarea style="width: 95%" v-model:value="form.labContractRemark" placeholder="实验合同备注" />
+                    <a-form-item label="试验合同备注" name="labContractRemark">
+                        <a-textarea style="width: 95%" v-model:value="form.labContractRemark" placeholder="试验合同备注" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -153,17 +153,17 @@ function onClose() {
 const formRef = ref();
 
 const formDefault = {
-    id: undefined, //实验室任务ID
+    id: undefined, //试验室任务ID
     projectId: undefined, //项目类型
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
     nodeId: NODE_CONST.enter_contract, //节点ID
     nodeStatus: undefined, //节点状态
     passReason: undefined, //跳过原因
-    labContractNo: undefined, //实验合同号
-    labContractDate: undefined, //实验合同日期
-    labContractAmount: undefined, //实验合同金额
-    labContractRemark: undefined, //实验合同备注
+    labContractNo: undefined, //试验合同号
+    labContractDate: undefined, //试验合同日期
+    labContractAmount: undefined, //试验合同金额
+    labContractRemark: undefined, //试验合同备注
 };
 
 let form = reactive({ ...formDefault });

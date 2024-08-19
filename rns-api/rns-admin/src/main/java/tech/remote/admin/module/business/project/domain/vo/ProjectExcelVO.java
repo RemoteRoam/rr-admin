@@ -59,22 +59,22 @@ public class ProjectExcelVO {
     @ExcelProperty("首款收款日期")
     private LocalDate firstPaymentDate;
 
-    @ExcelProperty("实验室名称")
+    @ExcelProperty("试验室名称")
     private String thirdPartyName;
 
-    @ExcelProperty("实验室合同号")
+    @ExcelProperty("试验室合同号")
     private String labContractNo;
 
-    @ExcelProperty("实验室合同日期")
+    @ExcelProperty("试验室合同日期")
     private LocalDate labContractDate;
 
-    @ExcelProperty("实验费金额")
+    @ExcelProperty("试验费金额")
     private BigDecimal labContractAmount;
 
     @ExcelProperty("客户要求完成日期")
     private LocalDate labExpectedDate;
 
-    @ExcelProperty("实验合同备注")
+    @ExcelProperty("试验合同备注")
     private String labContractRemark;
 
     @ExcelProperty("资料发送日期")
@@ -83,19 +83,19 @@ public class ProjectExcelVO {
     @ExcelProperty("资料接收日期")
     private LocalDate dataReceiveDate;
 
-    @ExcelProperty("实验费是否付款")
+    @ExcelProperty("试验费是否付款")
     private String isPaid;
 
-    @ExcelProperty("实验费付款方")
+    @ExcelProperty("试验费付款方")
     private String payParty;
 
-    @ExcelProperty("实验费付款日期")
+    @ExcelProperty("试验费付款日期")
     private LocalDate labPayDate;
 
-    @ExcelProperty("实验费备注")
+    @ExcelProperty("试验费备注")
     private String labPayRemark;
 
-    @ExcelProperty("实验室下达任务日期")
+    @ExcelProperty("试验室下达任务日期")
     private LocalDate assignTaskDate;
 
     @ExcelProperty("预计完成日期")
@@ -111,7 +111,7 @@ public class ProjectExcelVO {
     @ExcelProperty("产品型号")
     private String productModel;
 
-    @ExcelProperty("实验室上报日期")
+    @ExcelProperty("试验室上报日期")
     private LocalDate labReportDate;
 
     @ExcelProperty("自我声明日期")
@@ -168,7 +168,7 @@ public class ProjectExcelVO {
     @ExcelProperty("整改日期")
     private LocalDate rectificationDate;
 
-    @ExcelProperty("抽检实验完成日期")
+    @ExcelProperty("抽检试验完成日期")
     private LocalDate samplingTestDate;
 
     @ExcelProperty("尾款金额")

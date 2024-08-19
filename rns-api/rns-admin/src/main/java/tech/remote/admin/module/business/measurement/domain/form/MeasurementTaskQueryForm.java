@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 仪器计量实验室任务表 分页查询表单
+ * 仪器计量试验室任务表 分页查询表单
  *
  * @Author cbh
  * @Date 2024-05-07 14:44:51

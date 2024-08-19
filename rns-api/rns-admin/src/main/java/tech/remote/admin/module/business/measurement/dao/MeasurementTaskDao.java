@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 /**
- * 仪器计量实验室任务表 Dao
+ * 仪器计量试验室任务表 Dao
  *
  * @Author cbh
  * @Date 2024-05-07 14:44:51

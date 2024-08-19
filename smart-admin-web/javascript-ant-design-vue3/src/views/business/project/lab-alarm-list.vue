@@ -46,14 +46,14 @@
                 <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
                     placeholder="请选择状态" />
             </a-form-item>
-            <a-form-item label="实验室" class="smart-query-form-item">
-                <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择实验室"
+            <a-form-item label="试验室" class="smart-query-form-item">
+                <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择试验室"
                     type="THIRD_1" />
             </a-form-item>
-            <a-form-item label="实验室合同" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.labContractNo" placeholder="实验室合同" />
+            <a-form-item label="试验室合同" class="smart-query-form-item">
+                <a-input style="width: 150px" v-model:value="queryForm.labContractNo" placeholder="试验室合同" />
             </a-form-item>
-            <a-form-item label="实验费付款日期" class="smart-query-form-item">
+            <a-form-item label="试验费付款日期" class="smart-query-form-item">
                 <a-range-picker v-model:value="labPayDateRange" style="width: 250px" @change="onLabPayDateChange" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
@@ -161,27 +161,27 @@ import SelfDeclarationForm from '../common-nodes/self-declaration/self-declarati
 
 // Columns for the table based on ProjectLabListVO
 const columns = ref([
-    { title: '实验室任务编号', dataIndex: 'taskNo', fixed: 'left', width: 170 },
+    { title: '试验室任务编号', dataIndex: 'taskNo', fixed: 'left', width: 170 },
     { title: '项目编号', dataIndex: 'projectNo', width: 150 },
     { title: '项目类型', dataIndex: 'projectType', width: 120 },
     { title: '项目分类', dataIndex: 'category', width: 80 },
     { title: '客户', dataIndex: 'customerName', width: 120 },
     { title: '来源分类', dataIndex: 'sourceType', width: 80 },
     { title: '来源', dataIndex: 'sourceName', width: 120 },
-    { title: '实验室名称', dataIndex: 'thirdPartyName', width: 120 },
+    { title: '试验室名称', dataIndex: 'thirdPartyName', width: 120 },
     { title: '产品名称', dataIndex: 'productName', width: 120 },
     { title: '产品型号', dataIndex: 'productModel', width: 120 },
-    { title: '实验室合同号', dataIndex: 'labContractNo', width: 120 },
-    { title: '实验室合同日期', dataIndex: 'labContractDate', width: 120 },
-    { title: '实验费金额', dataIndex: 'labContractAmount', width: 100 },
+    { title: '试验室合同号', dataIndex: 'labContractNo', width: 120 },
+    { title: '试验室合同日期', dataIndex: 'labContractDate', width: 120 },
+    { title: '试验费金额', dataIndex: 'labContractAmount', width: 100 },
     { title: '客户要求完成日期', dataIndex: 'labExpectedDate', width: 130 },
     { title: '预警天数', dataIndex: 'alarmDays', width: 80 },
     { title: '资料发送日期', dataIndex: 'dataSendDate', width: 120 },
     { title: '资料接收日期', dataIndex: 'dataReceiveDate', width: 120 },
     { title: '是否付款', dataIndex: 'isPaid', width: 80 },
     { title: '付款方', dataIndex: 'payParty', width: 80 },
-    { title: '实验费付款日期', dataIndex: 'labPayDate', width: 120 },
-    { title: '实验室下达任务', dataIndex: 'assignTaskDate', width: 120 },
+    { title: '试验费付款日期', dataIndex: 'labPayDate', width: 120 },
+    { title: '试验室下达任务', dataIndex: 'assignTaskDate', width: 120 },
     { title: '预计完成日期', dataIndex: 'expectedCompletionDate', width: 120 },
     { title: '报告完成日期', dataIndex: 'reportCompletionDate', width: 120 },
     { title: '状态', dataIndex: 'status', width: 70 },

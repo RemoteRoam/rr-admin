@@ -1,5 +1,5 @@
 <!--
-  * 项目实验室任务表
+  * 项目试验室任务表
   *
   * @Author:    cbh
   * @Date:      2024-05-15 13:19:26
@@ -139,28 +139,28 @@ const columns = ref([
     //     width: 120,
     // },
     {
-        title: '实验室任务编号',
+        title: '试验室任务编号',
         dataIndex: 'taskNo',
         width: 170,
     },
     {
-        title: '实验室',
+        title: '试验室',
         dataIndex: 'thirdPartyName',
         width: 150,
     },
     {
-        title: '实验室合同号',
+        title: '试验室合同号',
         dataIndex: 'labContractNo',
         width: 120,
     },
     {
-        title: '实验室合同日期',
+        title: '试验室合同日期',
         dataIndex: 'labContractDate',
         width: 120,
         width: 120,
     },
     {
-        title: '实验费金额',
+        title: '试验费金额',
         dataIndex: 'labContractAmount',
         width: 90,
     },
@@ -170,7 +170,7 @@ const columns = ref([
         width: 130,
     },
     // {
-    //     title: '实验合同备注',
+    //     title: '试验合同备注',
     //     dataIndex: 'labContractRemark',
     //     width: 120,
     // },
@@ -195,17 +195,17 @@ const columns = ref([
     //     width: 120,
     // },
     // {
-    //     title: '实验费付款日期',
+    //     title: '试验费付款日期',
     //     dataIndex: 'labPayDate',
     //     width: 120,
     // },
     // {
-    //     title: '实验费备注',
+    //     title: '试验费备注',
     //     dataIndex: 'labPayRemark',
     //     width: 120,
     // },
     {
-        title: '实验室下达任务日期',
+        title: '试验室下达任务日期',
         dataIndex: 'assignTaskDate',
         width: 150,
     },
@@ -262,7 +262,7 @@ const columns = ref([
 const queryFormState = {
     projectId: undefined, //项目ID
     projectType: undefined, //项目类型
-    thirdPartyId: undefined, //三方机构ID（实验室ID）
+    thirdPartyId: undefined, //三方机构ID（试验室ID）
     pageNum: 1,
     pageSize: 10,
 };

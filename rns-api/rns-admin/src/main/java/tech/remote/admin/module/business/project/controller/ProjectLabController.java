@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 项目实验室任务表 Controller
+ * 项目试验室任务表 Controller
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -75,20 +75,20 @@ public class ProjectLabController {
         return ResponseDTO.ok(projectLabService.getProgress(progressCode));
     }
 
-    @Operation(summary = "办公室待办、实验室任务列表分页查询 @author cbh")
+    @Operation(summary = "办公室待办、试验室任务列表分页查询 @author cbh")
     @PostMapping("/projectLab/queryLabListPage")
     public ResponseDTO<PageResult<ProjectLabListVO>> queryLabListPage(@RequestBody @Valid ProjectLabListQueryForm queryForm) {
         return ResponseDTO.ok(projectLabService.getProjectLabs(queryForm));
     }
 
 
-    @Operation(summary = "实验室待办查询 @author cbh")
+    @Operation(summary = "试验室待办查询 @author cbh")
     @PostMapping("/projectLab/queryLabTodoList")
     public ResponseDTO<ProjectLabTodoListVO> queryLabTodoList(@RequestBody @Valid ProjectLabListQueryForm queryForm) {
         return ResponseDTO.ok(projectLabService.getProjectLabTodoList(queryForm));
     }
 
-    @Operation(summary = "实验室预警分页查询 @author cbh")
+    @Operation(summary = "试验室预警分页查询 @author cbh")
     @PostMapping("/projectLab/queryLabAlarmListPage")
     public ResponseDTO<PageResult<ProjectProductListVO>> queryLabAlarmListPage(@RequestBody @Valid ProjectLabListQueryForm queryForm) {
         return ResponseDTO.ok(projectLabService.getLabsAlarm(queryForm));
@@ -115,4 +115,28 @@ public class ProjectLabController {
                 .sheet(projectTypeName)
                 .doWrite(data);
     }
+
+    @Operation(summary = "导出 @author cbh")
+    @PostMapping("/projectLab/exportLabProductExcel")
+    public void exportLabProductExcel(@RequestBody @Valid ProjectLabListQueryForm queryForm, HttpServletResponse response) throws IOException {
+        List<ProjectLabProductExcelVO> data = projectLabService.getLabProductExcelExportData(queryForm);
+        if (CollectionUtils.isEmpty(data)) {
+            SmartResponseUtil.write(response, ResponseDTO.userErrorParam("暂无数据"));
+            return;
+        }
+
+        String projectTypeName = "试验项目表";
+        String fileName = projectTypeName + "-" + DateUtil.today() + ".xls";
+
+        // 设置下载消息头
+        SmartResponseUtil.setDownloadFileHeader(response, fileName, null);
+
+        // 下载
+        EasyExcel.write(response.getOutputStream(), ProjectLabProductExcelVO.class)
+                .autoCloseStream(Boolean.FALSE)
+                .sheet(projectTypeName)
+                .doWrite(data);
+    }
+
+//
 }

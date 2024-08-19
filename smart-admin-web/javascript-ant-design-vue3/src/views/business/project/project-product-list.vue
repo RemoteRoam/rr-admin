@@ -7,7 +7,7 @@
 -->
 <template>
     <div class="detail-header">
-        <a-page-header :title="'实验室任务编号(' + detail.taskNo + ')'">
+        <a-page-header :title="'试验室任务编号(' + detail.taskNo + ')'">
 
             <div>
                 <a-descriptions size="small" :column="4">
@@ -16,7 +16,7 @@
                         detail.projectType) }}</a-descriptions-item>
                     <a-descriptions-item label="项目分类">{{ $smartEnumPlugin.getDescByValue(enumName,
                         detail.category) }}</a-descriptions-item>
-                    <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
+                    <a-descriptions-item label="试验室">{{ detail.thirdPartyName }}</a-descriptions-item>
 
                 </a-descriptions>
             </div>
@@ -126,7 +126,7 @@ const columns = ref([
     //     width: 120,
     // },
     // {
-    //     title: '实验室任务ID',
+    //     title: '试验室任务ID',
     //     dataIndex: 'taskId',
     //     width: 120,
     // },
@@ -151,7 +151,7 @@ const columns = ref([
         width: 120,
     },
     {
-        title: '实验室上报日期',
+        title: '试验室上报日期',
         dataIndex: 'labReportDate',
         width: 120,
     },
@@ -238,7 +238,7 @@ const columns = ref([
 const queryFormState = {
     projectId: undefined, //项目ID
     projectType: undefined, // 项目类型
-    taskId: undefined, //实验室任务ID
+    taskId: undefined, //试验室任务ID
     pageNum: 1,
     pageSize: 10,
 };

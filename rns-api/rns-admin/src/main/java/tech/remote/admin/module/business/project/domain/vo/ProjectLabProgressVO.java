@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 项目实验室进度VO
+ * 项目试验室进度VO
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -29,7 +29,7 @@ public class ProjectLabProgressVO {
     @Schema(description = "客户名称")
     private String customerName;
 
-    @Schema(description = "实验室名称")
+    @Schema(description = "试验室名称")
     private String thirdPartyName;
 
 //    @Schema(description = "资料发送日期")
@@ -38,10 +38,10 @@ public class ProjectLabProgressVO {
     @Schema(description = "资料接收日期")
     private LocalDate dataReceiveDate;
 
-    @Schema(description = "实验费付款日期")
+    @Schema(description = "试验费付款日期")
     private LocalDate labPayDate;
 
-//    @Schema(description = "实验室下达任务日期")
+//    @Schema(description = "试验室下达任务日期")
 //    private LocalDate assignTaskDate;
 
 //    @Schema(description = "预计完成日期")

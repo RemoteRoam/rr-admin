@@ -1,11 +1,11 @@
 /*
  * reload (内存热加载、钩子等)
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-03 21:57:19
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 import { postRequest, getRequest } from '/src/lib/axios';
 

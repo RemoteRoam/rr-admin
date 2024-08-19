@@ -24,7 +24,7 @@ public class ProjectProductUpdateForm {
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "实验室任务ID")
+    @Schema(description = "试验室任务ID")
     private Long taskId;
 
     @Schema(description = "产品名称")
@@ -39,7 +39,7 @@ public class ProjectProductUpdateForm {
     @Schema(description = "报告完成日期")
     private LocalDate reportCompletionDate;
 
-    @Schema(description = "实验室上报日期")
+    @Schema(description = "试验室上报日期")
     private LocalDate labReportDate;
 
     @Schema(description = "自我声明日期")

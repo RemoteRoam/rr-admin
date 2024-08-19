@@ -1,11 +1,11 @@
 /*
  *  菜单表格列
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-05-12 19:46:11
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 import { ref } from 'vue';
 export const columns = ref([

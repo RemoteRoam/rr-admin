@@ -1,26 +1,17 @@
 <!--
   * 企业列表 下拉选择框 
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-08-26 19:16:24 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
   *
 -->
 <template>
-  <a-select
-    v-model:value="selectValue"
-    :style="`width: ${width}`"
-    :placeholder="props.placeholder"
-    :showSearch="true"
-    :allowClear="true"
-    :size="size"
-    @change="handleChange"
-    :disabled="disabled"
-    :mode="multiple ? 'multiple' : ''"
-    optionFilterProp="label"
-  >
+  <a-select v-model:value="selectValue" :style="`width: ${width}`" :placeholder="props.placeholder" :showSearch="true"
+    :allowClear="true" :size="size" @change="handleChange" :disabled="disabled" :mode="multiple ? 'multiple' : ''"
+    optionFilterProp="label">
     <a-select-option v-for="item in dataList" :key="item.id" :label="item.name">
       {{ item.name }}
     </a-select-option>
@@ -28,57 +19,57 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, watch } from 'vue';
-  import { thirdPartyApi } from '/@/api/business/third/third-party-api';
+import { onMounted, ref, watch } from 'vue';
+import { thirdPartyApi } from '/@/api/business/third/third-party-api';
 
-  const props = defineProps({
-    value: [Number, String, Object],
-    width: {
-      type: String,
-      default: '200px',
-    },
-    placeholder: {
-      type: String,
-      default: '请选择',
-    },
-    size: {
-      type: String,
-      default: 'default',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    type: {
-      type: String,
-    },
-  });
-  const emit = defineEmits(['update:value', 'change']);
+const props = defineProps({
+  value: [Number, String, Object],
+  width: {
+    type: String,
+    default: '200px',
+  },
+  placeholder: {
+    type: String,
+    default: '请选择',
+  },
+  size: {
+    type: String,
+    default: 'default',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  type: {
+    type: String,
+  },
+});
+const emit = defineEmits(['update:value', 'change']);
 
-  const selectValue = ref(props.value);
+const selectValue = ref(props.value);
 
-  // 箭头value变化
-  watch(
-    () => props.value,
-    (newValue) => {
-      selectValue.value = newValue;
-    }
-  );
-
-  function handleChange(value) {
-    emit('update:value', value);
-    emit('change', value);
+// 箭头value变化
+watch(
+  () => props.value,
+  (newValue) => {
+    selectValue.value = newValue;
   }
+);
 
-  const dataList = ref([]);
+function handleChange(value) {
+  emit('update:value', value);
+  emit('change', value);
+}
 
-  async function queryData() {
-    let res = await thirdPartyApi.queryList(props.type);
-    dataList.value = res.data;
-  }
-  onMounted(queryData);
+const dataList = ref([]);
+
+async function queryData() {
+  let res = await thirdPartyApi.queryList(props.type);
+  dataList.value = res.data;
+}
+onMounted(queryData);
 </script>

@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 /**
- * 项目实验室任务表 Dao
+ * 项目试验室任务表 Dao
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -37,15 +37,20 @@ public interface ProjectLabDao extends BaseMapper<ProjectLabEntity> {
 
     ProjectLabProgressVO getByCode(@Param("progressCode")String progressCode);
 
-    //    办公室待办、实验室任务列表、
+    //    办公室待办、试验室任务列表、
     List<ProjectLabListVO> selectProjectLabs(Page page, @Param("queryForm") ProjectLabListQueryForm queryForm);
 
     List<ProjectLabExcelVO> selectExcelList(@Param("queryForm") ProjectLabListQueryForm queryForm);
 
-    //    实验室待办
-    List<ProjectProductListVO> selectLabsTodo(@Param("queryForm") ProjectLabListQueryForm queryForm);
+    //    试验室待办
+    List<ProjectProductListVO> selectLabsTodo(Page page, @Param("queryForm") ProjectLabListQueryForm queryForm);
 
-    //    实验室预警
+    //    试验室待办总数
+    Long selectLabsTodoCount(@Param("queryForm") ProjectLabListQueryForm queryForm);
+
+    //    试验室预警
     List<ProjectProductListVO> selectLabsAlarm(Page page, @Param("queryForm") ProjectLabListQueryForm queryForm);
+
+    List<ProjectLabProductExcelVO> selectLabProductExcelList(@Param("queryForm") ProjectLabListQueryForm queryForm);
 
 }

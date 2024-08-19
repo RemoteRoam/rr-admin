@@ -25,7 +25,7 @@ public class ProjectProductProgressVO {
     @Schema(description = "产品型号")
     private String productModel;
 
-//    @Schema(description = "实验室上报日期")
+//    @Schema(description = "试验室上报日期")
 //    private LocalDate labReportDate;
 
     @Schema(description = "预计完成日期")

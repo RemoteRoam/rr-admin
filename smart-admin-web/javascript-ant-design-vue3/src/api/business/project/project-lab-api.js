@@ -1,5 +1,5 @@
 /**
- * 项目实验室任务表 api 封装
+ * 项目试验室任务表 api 封装
  *
  * @Author:    cbh
  * @Date:      2024-05-15 13:19:26
@@ -35,7 +35,7 @@ export const projectLabApi = {
     return getRequest(`/projectLab/get/${id}`);
   },
 
-  // 获取实验室项目进度 @author cbh
+  // 获取试验室项目进度 @author cbh
   getProgress: (progressCode) => {
     return getRequest(`/project/getProgress/${progressCode}`);
   },
@@ -48,14 +48,14 @@ export const projectLabApi = {
   },
 
   /**
-    * 实验室待办查询  @author  cbh
+    * 试验室待办查询  @author  cbh
     */
   queryLabTodoList: (param) => {
     return postRequest('/projectLab/queryLabTodoList', param);
   },
 
   /**
-    * 实验室预警分页查询  @author  cbh
+    * 试验室预警分页查询  @author  cbh
     */
   queryLabAlarmListPage: (param) => {
     return postRequest('/projectLab/queryLabAlarmListPage', param);
@@ -64,5 +64,10 @@ export const projectLabApi = {
   // 导出excel @author cbh
   exportExcel: (param) => {
     return postDownload('/projectLab/exportExcel', param);
+  },
+
+  // 导出试验项目excel @Author cbh
+  exportLabProductExcel: (param) => {
+    return postDownload('/projectLab/exportLabProductExcel', param);
   },
 };

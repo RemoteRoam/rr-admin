@@ -1,5 +1,5 @@
 <template>
-    <a-modal title="实验费付款" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="试验费付款" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
@@ -20,16 +20,16 @@
             </a-row>
             <a-row v-if="form.isPaid">
                 <a-col :span="24">
-                    <a-form-item label="实验费付款日期" name="labPayDate">
+                    <a-form-item label="试验费付款日期" name="labPayDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.labPayDate" style="width: 95%"
-                            placeholder="实验费付款日期" />
+                            placeholder="试验费付款日期" />
                     </a-form-item>
                 </a-col>
             </a-row>
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="实验费备注" name="labPayRemark">
-                        <a-textarea style="width: 95%" v-model:value="form.labPayRemark" placeholder="实验费备注" />
+                    <a-form-item label="试验费备注" name="labPayRemark">
+                        <a-textarea style="width: 95%" v-model:value="form.labPayRemark" placeholder="试验费备注" />
                     </a-form-item>
                 </a-col>
             </a-row>
@@ -92,7 +92,7 @@ function onClose() {
 const formRef = ref();
 
 const formDefault = {
-    id: undefined, //实验室任务ID
+    id: undefined, //试验室任务ID
     projectId: undefined, //项目类型
     projectType: undefined, //项目类型
     projectNodeId: undefined, //项目节点ID
@@ -101,8 +101,8 @@ const formDefault = {
     passReason: undefined, //跳过原因
     isPaid: 0, //是否付款
     payParty: undefined, //付款方
-    labPayDate: undefined, //实验费付款日期
-    labPayRemark: undefined, //实验费备注
+    labPayDate: undefined, //试验费付款日期
+    labPayRemark: undefined, //试验费备注
 };
 
 let form = reactive({ ...formDefault });

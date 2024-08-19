@@ -1,5 +1,5 @@
 <!--
-  * 项目实验室任务表
+  * 项目试验室任务表
   *
   * @Author:    cbh
   * @Date:      2024-05-15 13:19:26
@@ -70,7 +70,7 @@ const columns = ref([
     //     width: 120,
     // },
     // {
-    //     title: '实验室任务ID',
+    //     title: '试验室任务ID',
     //     dataIndex: 'taskId',
     //     width: 120,
     // },
@@ -85,7 +85,7 @@ const columns = ref([
         width: 120,
     },
     // {
-    //     title: '实验室上报日期',
+    //     title: '试验室上报日期',
     //     dataIndex: 'labReportDate',
     //     width: 120,
     // },

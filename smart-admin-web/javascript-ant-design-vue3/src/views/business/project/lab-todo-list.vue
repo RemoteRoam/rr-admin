@@ -46,14 +46,14 @@
                 <SmartEnumSelect width="150px" v-model:value="queryForm.status" enumName="PROJECT_STATUS_ENUM"
                     placeholder="请选择状态" />
             </a-form-item>
-            <a-form-item label="实验室" class="smart-query-form-item">
-                <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择实验室"
+            <a-form-item label="试验室" class="smart-query-form-item">
+                <ThirdPartySelect width="150px" v-model:value="queryForm.thirdPartyId" placeholder="请选择试验室"
                     type="THIRD_1" />
             </a-form-item>
-            <a-form-item label="实验室合同" class="smart-query-form-item">
-                <a-input style="width: 150px" v-model:value="queryForm.labContractNo" placeholder="实验室合同" />
+            <a-form-item label="试验室合同" class="smart-query-form-item">
+                <a-input style="width: 150px" v-model:value="queryForm.labContractNo" placeholder="试验室合同" />
             </a-form-item>
-            <a-form-item label="实验费付款日期" class="smart-query-form-item">
+            <a-form-item label="试验费付款日期" class="smart-query-form-item">
                 <a-range-picker v-model:value="labPayDateRange" style="width: 250px" @change="onLabPayDateChange" />
             </a-form-item>
             <a-form-item class="smart-query-form-item">
@@ -75,7 +75,7 @@
 
     <!-- Data Table -->
     <a-card size="small" :bordered="false" :hoverable="true">
-        <a-tabs>
+        <a-tabs @change="handleTabChange">
             <a-tab-pane key="estimateCompletion" :tab="tabName8">
                 <a-table size="small" :dataSource="tableData8" :columns="columns" @resizeColumn="handleResizeColumn"
                     rowKey="id" bordered :loading="tableLoading" :pagination="false"
@@ -120,6 +120,13 @@
                         </template>
                     </template>
                 </a-table>
+
+                <div class="smart-query-table-page">
+                    <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+                        :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum"
+                        v-model:pageSize="queryForm.pageSize" :total="total" @change="queryData"
+                        @showSizeChange="queryData" :show-total="total => `共${total}条`" />
+                </div>
 
             </a-tab-pane>
 
@@ -167,6 +174,13 @@
                         </template>
                     </template>
                 </a-table>
+
+                <div class="smart-query-table-page">
+                    <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+                        :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum"
+                        v-model:pageSize="queryForm.pageSize" :total="total" @change="queryData"
+                        @showSizeChange="queryData" :show-total="total => `共${total}条`" />
+                </div>
             </a-tab-pane>
             <a-tab-pane key="labReport" :tab="tabName10">
                 <a-table size="small" :dataSource="tableData10" :columns="columns" @resizeColumn="handleResizeColumn"
@@ -212,6 +226,13 @@
                         </template>
                     </template>
                 </a-table>
+
+                <div class="smart-query-table-page">
+                    <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+                        :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum"
+                        v-model:pageSize="queryForm.pageSize" :total="total" @change="queryData"
+                        @showSizeChange="queryData" :show-total="total => `共${total}条`" />
+                </div>
             </a-tab-pane>
         </a-tabs>
 
@@ -250,26 +271,26 @@ import SelfDeclarationForm from '../common-nodes/self-declaration/self-declarati
 
 // Columns for the table based on ProjectLabListVO
 const columns = ref([
-    { title: '实验室任务编号', dataIndex: 'taskNo', fixed: 'left', width: 170 },
+    { title: '试验室任务编号', dataIndex: 'taskNo', fixed: 'left', width: 170 },
     { title: '项目编号', dataIndex: 'projectNo', width: 150 },
     { title: '项目类型', dataIndex: 'projectType', width: 120 },
     { title: '项目分类', dataIndex: 'category', width: 80 },
     { title: '客户', dataIndex: 'customerName', width: 120 },
     { title: '来源分类', dataIndex: 'sourceType', width: 80 },
     { title: '来源', dataIndex: 'sourceName', width: 120 },
-    { title: '实验室名称', dataIndex: 'thirdPartyName', width: 120 },
+    { title: '试验室名称', dataIndex: 'thirdPartyName', width: 120 },
     { title: '产品名称', dataIndex: 'productName', width: 120 },
     { title: '产品型号', dataIndex: 'productModel', width: 120 },
-    { title: '实验室合同号', dataIndex: 'labContractNo', width: 120 },
-    { title: '实验室合同日期', dataIndex: 'labContractDate', width: 120 },
-    { title: '实验费金额', dataIndex: 'labContractAmount', width: 100 },
+    { title: '试验室合同号', dataIndex: 'labContractNo', width: 120 },
+    { title: '试验室合同日期', dataIndex: 'labContractDate', width: 120 },
+    { title: '试验费金额', dataIndex: 'labContractAmount', width: 100 },
     { title: '客户要求完成日期', dataIndex: 'labExpectedDate', width: 130 },
     { title: '资料发送日期', dataIndex: 'dataSendDate', width: 120 },
     { title: '资料接收日期', dataIndex: 'dataReceiveDate', width: 120 },
     { title: '是否付款', dataIndex: 'isPaid', width: 80 },
     { title: '付款方', dataIndex: 'payParty', width: 80 },
-    { title: '实验费付款日期', dataIndex: 'labPayDate', width: 120 },
-    { title: '实验室下达任务', dataIndex: 'assignTaskDate', width: 120 },
+    { title: '试验费付款日期', dataIndex: 'labPayDate', width: 120 },
+    { title: '试验室下达任务', dataIndex: 'assignTaskDate', width: 120 },
     { title: '预计完成日期', dataIndex: 'expectedCompletionDate', width: 120 },
     { title: '报告完成日期', dataIndex: 'reportCompletionDate', width: 120 },
     { title: '状态', dataIndex: 'status', width: 70 },
@@ -294,6 +315,7 @@ const queryFormState = {
     pageNum: 1,
     pageSize: 10,
     toDoType: undefined,
+    nodeId: 8, //节点ID：8预计完成 9试验检测 10试验室上报
 };
 
 // Reactive query form
@@ -328,15 +350,26 @@ const selfDeclarationFormRef = ref();
 // Query data
 const queryData = async () => {
     tableLoading.value = true;
+    tableData8.value = [];
+    tableData9.value = [];
+    tableData10.value = [];
     try {
         const { data } = await projectLabApi.queryLabTodoList(queryForm);
-        tableData8.value = data.estimateCompletionList;
+        if (data.estimateCompletionList) {
+            tableData8.value = data.estimateCompletionList.list;
+            total.value = data.estimateCompletionList.total;
+        }
         tabName8.value = `预计完成时间(${data.estimateCompletionCount})`;
-        tableData9.value = data.experimentCheckList;
+        if (data.experimentCheckList) {
+            tableData9.value = data.experimentCheckList.list;
+            total.value = data.experimentCheckList.total;
+        }
         tabName9.value = `报告完成时间(${data.experimentCheckCount})`;
-        tableData10.value = data.labReportList;
+        if (data.labReportList) {
+            tableData10.value = data.labReportList.list;
+            total.value = data.labReportList.total;
+        }
         tabName10.value = `试验室上报时间(${data.labReportCount})`;
-        total.value = data.total;
     } catch (error) {
         console.error(error);
     } finally {
@@ -439,6 +472,22 @@ const updateTableScrollY = () => {
 onBeforeUnmount(() => {
     window.removeEventListener('resize', updateTableScrollY);
 });
+
+const handleTabChange = (activeKey) => {
+    console.log('Active tab changed to:', activeKey);
+    // Add your custom logic here
+    queryForm.pageNum = 1;
+    queryForm.pageSize = 10;
+    if (activeKey == 'estimateCompletion') {
+        queryForm.nodeId = 8;
+    } else if (activeKey == 'experimentCheck') {
+        queryForm.nodeId = 9;
+    } else if (activeKey == 'labReport') {
+        queryForm.nodeId = 10;
+    }
+    queryData();
+};
+
 </script>
 
 <style scoped>

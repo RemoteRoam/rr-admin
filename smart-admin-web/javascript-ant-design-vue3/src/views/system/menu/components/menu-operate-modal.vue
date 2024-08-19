@@ -1,21 +1,15 @@
 <!--
   * 菜单 表单弹窗
   *
-  * @Author:    1024创新实验室-主任：卓大
+  * @Author:    YY Studio
   * @Date:      2022-06-12 20:11:39
   * @Wechat:    zhuda1024
   * @Email:     lab1024@163.com
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+  * @Copyright  YY Studio
 -->
 <template>
-  <a-drawer
-    :body-style="{ paddingBottom: '80px' }"
-    :maskClosable="true"
-    :title="form.menuId ? '编辑' : '添加'"
-    :open="visible"
-    :width="600"
-    @close="onClose"
-  >
+  <a-drawer :body-style="{ paddingBottom: '80px' }" :maskClosable="true" :title="form.menuId ? '编辑' : '添加'"
+    :open="visible" :width="600" @close="onClose">
     <a-form ref="formRef" :labelCol="{ span: labelColSpan }" :labelWrap="true" :model="form" :rules="rules">
       <a-form-item label="菜单类型" name="menuType">
         <a-radio-group v-model:value="form.menuType" button-style="solid">
@@ -104,186 +98,186 @@
   </a-drawer>
 </template>
 <script setup>
-  import { message } from 'ant-design-vue';
-  import _ from 'lodash';
-  import { computed, nextTick, reactive, ref } from 'vue';
-  import MenuTreeSelect from './menu-tree-select.vue';
-  import { menuApi } from '/@/api/system/menu-api';
-  import IconSelect from '/@/components/framework/icon-select/index.vue';
-  import { MENU_DEFAULT_PARENT_ID, MENU_PERMS_TYPE_ENUM, MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
-  import { smartSentry } from '/@/lib/smart-sentry';
-  import { SmartLoading } from '/@/components/framework/smart-loading';
+import { message } from 'ant-design-vue';
+import _ from 'lodash';
+import { computed, nextTick, reactive, ref } from 'vue';
+import MenuTreeSelect from './menu-tree-select.vue';
+import { menuApi } from '/@/api/system/menu-api';
+import IconSelect from '/@/components/framework/icon-select/index.vue';
+import { MENU_DEFAULT_PARENT_ID, MENU_PERMS_TYPE_ENUM, MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
+import { smartSentry } from '/@/lib/smart-sentry';
+import { SmartLoading } from '/@/components/framework/smart-loading';
 
-  // ----------------------- 以下是字段定义 emits props ------------------------
-  // emit
-  const emit = defineEmits(['reloadList']);
+// ----------------------- 以下是字段定义 emits props ------------------------
+// emit
+const emit = defineEmits(['reloadList']);
 
-  // ----------------------- 展开、隐藏编辑窗口 ------------------------
+// ----------------------- 展开、隐藏编辑窗口 ------------------------
 
-  // 是否展示抽屉
-  const visible = ref(false);
+// 是否展示抽屉
+const visible = ref(false);
 
-  const labelColSpan = computed(() => {
-    if (form.menuType === MENU_TYPE_ENUM.POINTS.value) {
-      return 6;
+const labelColSpan = computed(() => {
+  if (form.menuType === MENU_TYPE_ENUM.POINTS.value) {
+    return 6;
+  }
+  return 4;
+});
+
+const contextMenuTreeSelect = ref();
+const parentMenuTreeSelect = ref();
+
+//展开编辑窗口
+async function showDrawer(rowData) {
+  Object.assign(form, formDefault);
+  if (rowData && !_.isEmpty(rowData)) {
+    Object.assign(form, rowData);
+    if (form.parentId === MENU_DEFAULT_PARENT_ID) {
+      form.parentId = null;
     }
-    return 4;
+  }
+  visible.value = true;
+  refreshParentAndContext();
+}
+
+function refreshParentAndContext() {
+  nextTick(() => {
+    if (contextMenuTreeSelect.value) {
+      contextMenuTreeSelect.value.queryMenuTree();
+    }
+    if (parentMenuTreeSelect.value) {
+      parentMenuTreeSelect.value.queryMenuTree();
+    }
   });
+}
 
-  const contextMenuTreeSelect = ref();
-  const parentMenuTreeSelect = ref();
+// 隐藏窗口
+function onClose() {
+  Object.assign(form, formDefault);
+  formRef.value.resetFields();
+  visible.value = false;
+}
 
-  //展开编辑窗口
-  async function showDrawer(rowData) {
-    Object.assign(form, formDefault);
-    if (rowData && !_.isEmpty(rowData)) {
-      Object.assign(form, rowData);
-      if (form.parentId === MENU_DEFAULT_PARENT_ID) {
-        form.parentId = null;
-      }
-    }
-    visible.value = true;
-    refreshParentAndContext();
+// ----------------------- form表单相关操作 ------------------------
+
+const formRef = ref();
+const formDefault = {
+  menuId: undefined,
+  menuName: undefined,
+  menuType: MENU_TYPE_ENUM.CATALOG.value,
+  icon: undefined,
+  parentId: undefined,
+  path: undefined,
+  permsType: MENU_PERMS_TYPE_ENUM.SA_TOKEN.value,
+  webPerms: undefined,
+  apiPerms: undefined,
+  sort: undefined,
+  visibleFlag: true,
+  cacheFlag: true,
+  component: undefined,
+  contextMenuId: undefined,
+  disabledFlag: false,
+  frameFlag: false,
+  frameUrl: undefined,
+};
+let form = reactive({ ...formDefault });
+
+function continueResetForm() {
+  refreshParentAndContext();
+  const menuType = form.menuType;
+  const parentId = form.parentId;
+  const webPerms = form.webPerms;
+  Object.assign(form, formDefault);
+  formRef.value.resetFields();
+  form.menuType = menuType;
+  form.parentId = parentId;
+  // 移除最后一个：后面的内容
+  if (webPerms && webPerms.lastIndexOf(':')) {
+    form.webPerms = webPerms.substring(0, webPerms.lastIndexOf(':') + 1);
   }
+}
 
-  function refreshParentAndContext() {
-    nextTick(() => {
-      if (contextMenuTreeSelect.value) {
-        contextMenuTreeSelect.value.queryMenuTree();
-      }
-      if (parentMenuTreeSelect.value) {
-        parentMenuTreeSelect.value.queryMenuTree();
-      }
-    });
-  }
+const rules = {
+  menuType: [{ required: true, message: '菜单类型不能为空' }],
+  permsType: [{ required: true, message: '权限类型不能为空' }],
+  menuName: [
+    { required: true, message: '菜单名称不能为空' },
+    { max: 20, message: '菜单名称不能大于20个字符', trigger: 'blur' },
+  ],
+  frameUrl: [
+    { required: true, message: '外链地址不能为空' },
+    { max: 500, message: '外链地址不能大于500个字符', trigger: 'blur' },
+  ],
+  path: [
+    { required: true, message: '路由地址不能为空' },
+    { max: 100, message: '路由地址不能大于100个字符', trigger: 'blur' },
+  ],
+};
 
-  // 隐藏窗口
-  function onClose() {
-    Object.assign(form, formDefault);
-    formRef.value.resetFields();
-    visible.value = false;
-  }
-
-  // ----------------------- form表单相关操作 ------------------------
-
-  const formRef = ref();
-  const formDefault = {
-    menuId: undefined,
-    menuName: undefined,
-    menuType: MENU_TYPE_ENUM.CATALOG.value,
-    icon: undefined,
-    parentId: undefined,
-    path: undefined,
-    permsType: MENU_PERMS_TYPE_ENUM.SA_TOKEN.value,
-    webPerms: undefined,
-    apiPerms: undefined,
-    sort: undefined,
-    visibleFlag: true,
-    cacheFlag: true,
-    component: undefined,
-    contextMenuId: undefined,
-    disabledFlag: false,
-    frameFlag: false,
-    frameUrl: undefined,
-  };
-  let form = reactive({ ...formDefault });
-
-  function continueResetForm() {
-    refreshParentAndContext();
-    const menuType = form.menuType;
-    const parentId = form.parentId;
-    const webPerms = form.webPerms;
-    Object.assign(form, formDefault);
-    formRef.value.resetFields();
-    form.menuType = menuType;
-    form.parentId = parentId;
-    // 移除最后一个：后面的内容
-    if (webPerms && webPerms.lastIndexOf(':')) {
-      form.webPerms = webPerms.substring(0, webPerms.lastIndexOf(':') + 1);
-    }
-  }
-
-  const rules = {
-    menuType: [{ required: true, message: '菜单类型不能为空' }],
-    permsType: [{ required: true, message: '权限类型不能为空' }],
-    menuName: [
-      { required: true, message: '菜单名称不能为空' },
-      { max: 20, message: '菜单名称不能大于20个字符', trigger: 'blur' },
-    ],
-    frameUrl: [
-      { required: true, message: '外链地址不能为空' },
-      { max: 500, message: '外链地址不能大于500个字符', trigger: 'blur' },
-    ],
-    path: [
-      { required: true, message: '路由地址不能为空' },
-      { max: 100, message: '路由地址不能大于100个字符', trigger: 'blur' },
-    ],
-  };
-
-  function validateForm(formRef) {
-    return new Promise((resolve) => {
-      formRef
-        .validate()
-        .then(() => {
-          resolve(true);
-        })
-        .catch(() => {
-          resolve(false);
-        });
-    });
-  }
-
-  const onSubmit = async (continueFlag) => {
-    let validateFormRes = await validateForm(formRef.value);
-    if (!validateFormRes) {
-      message.error('参数验证错误，请仔细填写表单数据!');
-      return;
-    }
-    SmartLoading.show();
-    try {
-      let params = _.cloneDeep(form);
-      // 若无父级ID 默认设置为0
-      if (!params.parentId) {
-        params.parentId = 0;
-      }
-      if (params.menuId) {
-        await menuApi.updateMenu(params);
-      } else {
-        await menuApi.addMenu(params);
-      }
-      message.success(`${params.menuId ? '修改' : '添加'}成功`);
-      if (continueFlag) {
-        continueResetForm();
-      } else {
-        onClose();
-      }
-      emit('reloadList');
-    } catch (error) {
-      smartSentry.captureError(error);
-    } finally {
-      SmartLoading.hide();
-    }
-  };
-
-  function selectIcon(icon) {
-    form.icon = icon;
-  }
-
-  // ----------------------- 以下是暴露的方法内容 ------------------------
-  defineExpose({
-    showDrawer,
+function validateForm(formRef) {
+  return new Promise((resolve) => {
+    formRef
+      .validate()
+      .then(() => {
+        resolve(true);
+      })
+      .catch(() => {
+        resolve(false);
+      });
   });
+}
+
+const onSubmit = async (continueFlag) => {
+  let validateFormRes = await validateForm(formRef.value);
+  if (!validateFormRes) {
+    message.error('参数验证错误，请仔细填写表单数据!');
+    return;
+  }
+  SmartLoading.show();
+  try {
+    let params = _.cloneDeep(form);
+    // 若无父级ID 默认设置为0
+    if (!params.parentId) {
+      params.parentId = 0;
+    }
+    if (params.menuId) {
+      await menuApi.updateMenu(params);
+    } else {
+      await menuApi.addMenu(params);
+    }
+    message.success(`${params.menuId ? '修改' : '添加'}成功`);
+    if (continueFlag) {
+      continueResetForm();
+    } else {
+      onClose();
+    }
+    emit('reloadList');
+  } catch (error) {
+    smartSentry.captureError(error);
+  } finally {
+    SmartLoading.hide();
+  }
+};
+
+function selectIcon(icon) {
+  form.icon = icon;
+}
+
+// ----------------------- 以下是暴露的方法内容 ------------------------
+defineExpose({
+  showDrawer,
+});
 </script>
 <style lang="less" scoped>
-  .footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #e9e9e9;
-    padding: 10px 16px;
-    background: #fff;
-    text-align: left;
-    z-index: 1;
-  }
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #e9e9e9;
+  padding: 10px 16px;
+  background: #fff;
+  text-align: left;
+  z-index: 1;
+}
 </style>

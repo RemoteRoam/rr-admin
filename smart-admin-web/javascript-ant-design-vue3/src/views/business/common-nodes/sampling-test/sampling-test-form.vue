@@ -6,14 +6,14 @@
   * @Copyright  Remote Nomad Studio
 -->
 <template>
-    <a-modal title="抽检实验" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
+    <a-modal title="抽检试验" width="600px" :open="visibleFlag" @cancel="onClose" :maskClosable="false"
         :destroyOnClose="true">
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="{ span: 6 }">
             <a-row>
                 <a-col :span="24">
-                    <a-form-item label="抽检实验完成日期" name="samplingTestDate">
+                    <a-form-item label="抽检试验完成日期" name="samplingTestDate">
                         <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="form.samplingTestDate"
-                            style="width: 100%" placeholder="抽检实验完成日期" />
+                            style="width: 100%" placeholder="抽检试验完成日期" />
                     </a-form-item>
                 </a-col>
             </a-row>

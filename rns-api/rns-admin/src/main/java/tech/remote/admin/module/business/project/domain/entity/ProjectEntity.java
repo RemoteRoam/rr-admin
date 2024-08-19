@@ -153,9 +153,9 @@ public class ProjectEntity {
     private String rectificationContent;
 
     /**
-     * 抽检实验完成日期 samplingTestDate
+     * 抽检试验完成日期 samplingTestDate
      */
-    @DataTracerFieldLabel("抽检实验完成日期")
+    @DataTracerFieldLabel("抽检试验完成日期")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate samplingTestDate;
 

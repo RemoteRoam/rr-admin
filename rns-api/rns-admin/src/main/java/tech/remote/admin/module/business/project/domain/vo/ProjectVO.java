@@ -90,7 +90,7 @@ public class ProjectVO {
     @Schema(description = "整改日期")
     private LocalDate rectificationDate;
 
-    @Schema(description = "抽检实验完成日期")
+    @Schema(description = "抽检试验完成日期")
     private LocalDate samplingTestDate;
 
     @Schema(description = "尾款金额")
@@ -138,7 +138,7 @@ public class ProjectVO {
     @Schema(description = "上年度审核日期")
     private LocalDate lastYearAuditDate;
 
-    @Schema(description = "实验室任务列表")
+    @Schema(description = "试验室任务列表")
     private List<ProjectLabVO> projectLabList;
 
     @Schema(description = "操作节点列表")

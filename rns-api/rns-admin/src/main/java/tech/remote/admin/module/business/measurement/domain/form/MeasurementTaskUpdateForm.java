@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * 仪器计量实验室任务表 更新表单
+ * 仪器计量试验室任务表 更新表单
  *
  * @Author cbh
  * @Date 2024-05-07 14:44:51
@@ -23,13 +23,13 @@ public class MeasurementTaskUpdateForm {
     @NotNull(message = "编号 不能为空")
     private Long id;
 
-    @Schema(description = "实验室任务编号")
+    @Schema(description = "试验室任务编号")
     private String taskNo;
 
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "三方机构ID（实验室ID）")
+    @Schema(description = "三方机构ID（试验室ID）")
     private Long thirdPartyId;
 
     @Schema(description = "仪器名称")
@@ -38,7 +38,7 @@ public class MeasurementTaskUpdateForm {
     @Schema(description = "有效期")
     private LocalDate expiryDate;
 
-    @Schema(description = "实验费金额")
+    @Schema(description = "试验费金额")
     private BigDecimal experimentAmount;
 
     @Schema(description = "成本价")

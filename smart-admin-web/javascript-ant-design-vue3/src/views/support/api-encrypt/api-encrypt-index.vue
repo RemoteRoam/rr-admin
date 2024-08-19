@@ -1,9 +1,9 @@
 <!--
   * 接口加密、解密
   *
-  * @Author:    1024创新实验室-主任-卓大
+  * @Author:    YY Studio
   * @Date:      2023-10-17 22:02:37
-  * @Copyright  1024创新实验室
+  * @Copyright  YY Studio
 -->
 <template>
   <a-alert closable>
@@ -18,15 +18,12 @@
 - 前端请看：/lib/encrypt.js、/lib/axios.js  /api/support/api-encrypt/api-encrypt-api.js 等文件
 - 后端请看：@ApiEncrypt 和 @ApiDecrypt 注解，具体请看 sa-common项目中的 net.lab1024.sa.common.module.support.apiencrypt 包
 - demo请看：前端：/views/support/api-encrypt 目录，后端 请看：sa-admin项目的：net.lab1024.sa.admin.module.system.support.AdminApiEncryptController
-</pre
-      >
+</pre>
     </template>
   </a-alert>
   <br />
-  <a-alert
-    message="当前加密算法为：SM2，若想改为 AES，前端请修改 'lib/encrypt.js'文件中的EncryptObject，后端请修改 ApiEncryptService 的实现类"
-    type="error"
-  />
+  <a-alert message="当前加密算法为：SM2，若想改为 AES，前端请修改 'lib/encrypt.js'文件中的EncryptObject，后端请修改 ApiEncryptService 的实现类"
+    type="error" />
   <br />
   <!---------- 请求参数加密 begin ----------->
   <a-card title="一、请求加密 Demo">
@@ -139,100 +136,100 @@
   <!---------- 返回结果解密 end ----------->
 </template>
 <script setup>
-  import { reactive, ref } from 'vue';
-  import { encryptApi } from '/@/api/support/api-encrypt-api';
-  import { encryptData } from '/@/lib/encrypt';
+import { reactive, ref } from 'vue';
+import { encryptApi } from '/@/api/support/api-encrypt-api';
+import { encryptData } from '/@/lib/encrypt';
 
-  // ---------------------------- 第一种：请求参数加密 ----------------------------
+// ---------------------------- 第一种：请求参数加密 ----------------------------
 
-  //请求参数加密
-  const requestEncryptForm = reactive({
-    age: 100, // 年龄
-    name: '卓大', //姓名
-  });
+//请求参数加密
+const requestEncryptForm = reactive({
+  age: 100, // 年龄
+  name: '卓大', //姓名
+});
 
-  // 参数字符串
-  const requestEncryptFormStr = ref('');
-  // 参数字符串 加密
-  const requestEncryptFormEncryptStr = ref('');
-  // 返回结果
-  const requestEncryptResponse = ref('');
+// 参数字符串
+const requestEncryptFormStr = ref('');
+// 参数字符串 加密
+const requestEncryptFormEncryptStr = ref('');
+// 返回结果
+const requestEncryptResponse = ref('');
 
-  async function testRequestEncrypt() {
-    // 参数加密
-    requestEncryptFormStr.value = JSON.stringify(requestEncryptForm);
-    requestEncryptFormEncryptStr.value = encryptData(requestEncryptForm);
+async function testRequestEncrypt() {
+  // 参数加密
+  requestEncryptFormStr.value = JSON.stringify(requestEncryptForm);
+  requestEncryptFormEncryptStr.value = encryptData(requestEncryptForm);
 
-    // 发送请求
-    const result = await encryptApi.testRequestEncrypt(requestEncryptForm);
-    requestEncryptResponse.value = JSON.stringify(result.data);
-  }
+  // 发送请求
+  const result = await encryptApi.testRequestEncrypt(requestEncryptForm);
+  requestEncryptResponse.value = JSON.stringify(result.data);
+}
 
-  // ---------------------------- 第二种：返回结果解密 ----------------------------
+// ---------------------------- 第二种：返回结果解密 ----------------------------
 
-  const responseEncryptForm = reactive({
-    age: 100, // 年龄
-    name: '卓大', //姓名
-  });
+const responseEncryptForm = reactive({
+  age: 100, // 年龄
+  name: '卓大', //姓名
+});
 
-  const responseEncryptFormStr = ref('');
-  const responseEncryptStr = ref('');
-  const responseStr = ref('');
+const responseEncryptFormStr = ref('');
+const responseEncryptStr = ref('');
+const responseStr = ref('');
 
-  async function testResponseEncrypt() {
-    responseEncryptFormStr.value = JSON.stringify(responseEncryptForm);
-    const result = await encryptApi.testResponseEncrypt(responseEncryptForm);
-    responseEncryptStr.value = result.encryptData;
-    responseStr.value = JSON.stringify(result.data);
-  }
+async function testResponseEncrypt() {
+  responseEncryptFormStr.value = JSON.stringify(responseEncryptForm);
+  const result = await encryptApi.testResponseEncrypt(responseEncryptForm);
+  responseEncryptStr.value = result.encryptData;
+  responseStr.value = JSON.stringify(result.data);
+}
 
-  // ---------------------------- 第三种：请求加密、返回解密 ----------------------------
+// ---------------------------- 第三种：请求加密、返回解密 ----------------------------
 
-  const form = reactive({
-    age: 100, // 年龄
-    name: '卓大', //姓名
-  });
+const form = reactive({
+  age: 100, // 年龄
+  name: '卓大', //姓名
+});
 
-  const formStr = ref('');
-  const formEncryptStr = ref('');
-  const responseEncrypt = ref('');
-  const responseDecryptStr = ref('');
+const formStr = ref('');
+const formEncryptStr = ref('');
+const responseEncrypt = ref('');
+const responseDecryptStr = ref('');
 
-  async function testBoth() {
-    formStr.value = JSON.stringify(form);
-    formEncryptStr.value = encryptData(form);
-    const result = await encryptApi.testDecryptAndEncrypt(form);
-    responseEncrypt.value = result.encryptData;
-    responseDecryptStr.value = JSON.stringify(result.data);
-  }
+async function testBoth() {
+  formStr.value = JSON.stringify(form);
+  formEncryptStr.value = encryptData(form);
+  const result = await encryptApi.testDecryptAndEncrypt(form);
+  responseEncrypt.value = result.encryptData;
+  responseDecryptStr.value = JSON.stringify(result.data);
+}
 
-  // ---------------------------- 第四种：测试数组 ----------------------------
+// ---------------------------- 第四种：测试数组 ----------------------------
 
-  const arrayForm = reactive([
-    {
-      age: 1, // 年龄
-      name: '卓1', //姓名
-    },
-    {
-      age: 2, // 年龄
-      name: '卓2', //姓名
-    },
-    {
-      age: 3, // 年龄
-      name: '卓3', //姓名
-    },
-  ]);
+const arrayForm = reactive([
+  {
+    age: 1, // 年龄
+    name: '卓1', //姓名
+  },
+  {
+    age: 2, // 年龄
+    name: '卓2', //姓名
+  },
+  {
+    age: 3, // 年龄
+    name: '卓3', //姓名
+  },
+]);
 
-  const arrayFormStr = ref('');
-  const arrayFormEncryptStr = ref('');
-  const arrayFormResponseEncrypt = ref('');
-  const arrayFormResponseDecryptStr = ref('');
+const arrayFormStr = ref('');
+const arrayFormEncryptStr = ref('');
+const arrayFormResponseEncrypt = ref('');
+const arrayFormResponseDecryptStr = ref('');
 
-  async function testArray() {
-    arrayFormStr.value = JSON.stringify(arrayForm);
-    arrayFormEncryptStr.value = encryptData(arrayForm);
-    const result = await encryptApi.testArray(arrayForm);
-    arrayFormResponseEncrypt.value = result.encryptData;
-    arrayFormResponseDecryptStr.value = JSON.stringify(result.data);
-  }
+async function testArray() {
+  arrayFormStr.value = JSON.stringify(arrayForm);
+  arrayFormEncryptStr.value = encryptData(arrayForm);
+  const result = await encryptApi.testArray(arrayForm);
+  arrayFormResponseEncrypt.value = result.encryptData;
+  arrayFormResponseDecryptStr.value = JSON.stringify(result.data);
+}
 </script>

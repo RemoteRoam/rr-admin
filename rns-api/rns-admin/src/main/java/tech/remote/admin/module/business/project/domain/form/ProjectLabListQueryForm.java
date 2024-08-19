@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class ProjectLabListQueryForm extends PageParam {
-    @Schema(description = "三方机构ID（实验室ID）")
+    @Schema(description = "三方机构ID（试验室ID）")
     private Long thirdPartyId;
     @Schema(description = "项目编号")
     private String projectNo;
@@ -27,7 +27,7 @@ public class ProjectLabListQueryForm extends PageParam {
     private Long operateUserId;
     @Schema(description = "状态")
     private Integer status;
-    @Schema(description = "实验室合同编号")
+    @Schema(description = "试验室合同编号")
     private String labContractNo;
 
     @Schema(description = "是否付款")
@@ -42,12 +42,12 @@ public class ProjectLabListQueryForm extends PageParam {
     @Schema(description = "产品型号")
     private String productModel;
 
-    @Schema(description = "待办类型：1 办公室待办，2 实验室待办")
+    @Schema(description = "待办类型：1 办公室待办，2 试验室待办")
     private Integer toDoType;
 
-    @Schema(description = "预警类型：2 实验室任务预警")
+    @Schema(description = "预警类型：2 试验室任务预警")
     private Integer alarmType;
 
-    @Schema(description = "节点ID：8预计完成 9实验检测 10试验室上报")
+    @Schema(description = "节点ID：8预计完成 9试验检测 10试验室上报")
     private Integer nodeId;
 }

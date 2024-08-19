@@ -1,21 +1,21 @@
 <!--
   * 仪器计量 详情
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-08-15 20:15:49
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <div class="detail-header">
-    <a-page-header :title="'仪器计量实验室任务(' + detail.taskNo + ')'">
+    <a-page-header :title="'仪器计量试验室任务(' + detail.taskNo + ')'">
 
       <div>
         <a-descriptions size="small" :column="4">
-          <a-descriptions-item label="实验室">{{ detail.thirdPartyName }}</a-descriptions-item>
+          <a-descriptions-item label="试验室">{{ detail.thirdPartyName }}</a-descriptions-item>
           <a-descriptions-item label="仪器名称">{{ detail.instrument }}</a-descriptions-item>
-          <!-- <a-descriptions-item label="实验费金额">{{ detail.experimentAmount }}</a-descriptions-item> -->
+          <!-- <a-descriptions-item label="试验费金额">{{ detail.experimentAmount }}</a-descriptions-item> -->
           <a-descriptions-item label="成本价">{{ detail.costAmount }}</a-descriptions-item>
           <a-descriptions-item label="计量日期">{{ detail.measurementDate }}</a-descriptions-item>
           <a-descriptions-item label="有效期">{{ detail.expiryDate }}</a-descriptions-item>

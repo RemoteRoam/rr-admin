@@ -23,7 +23,7 @@ public class MeasurementNodeUpdateForm {
     @Schema(description = "项目ID")
     private Long projectId;
 
-    @Schema(description = "实验室任务ID")
+    @Schema(description = "试验室任务ID")
     private Long taskId;
 
     @Schema(description = "节点ID")

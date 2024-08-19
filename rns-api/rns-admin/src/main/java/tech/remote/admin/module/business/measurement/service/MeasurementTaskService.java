@@ -36,7 +36,7 @@ import tech.remote.base.module.support.serialnumber.service.SerialNumberService;
 import javax.annotation.Resource;
 
 /**
- * 仪器计量实验室任务表 Service
+ * 仪器计量试验室任务表 Service
  *
  * @Author cbh
  * @Date 2024-05-07 14:44:51

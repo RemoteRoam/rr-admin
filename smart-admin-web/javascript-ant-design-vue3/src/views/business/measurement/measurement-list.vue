@@ -96,7 +96,7 @@
                             <template #overlay>
                                 <a-menu @click="handleMenuClick($event, record)">
                                     <a-menu-item>
-                                        实验室任务
+                                        试验室任务
                                     </a-menu-item>
                                     <a-menu-divider />
                                     <a-menu-item v-for="node in record.measurementNodeList" :key="node">

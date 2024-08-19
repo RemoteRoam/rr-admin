@@ -1,11 +1,11 @@
 /*
  * 所有路由入口
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-06 20:52:26
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 import { homeRouters } from './system/home';
 import { loginRouters } from './system/login';
@@ -16,8 +16,8 @@ import ProjectProgress from '/@/views/business/external/project-progress.vue';
 
 export const routerArray = [
     ...loginRouters,
-     ...homeRouters, 
-    ...helpDocRouters, 
+    ...homeRouters,
+    ...helpDocRouters,
     { path: '/project/progress', name: '项目进度', component: ProjectProgress },
     { path: '/:pathMatch(.*)*', name: '404', component: NotFound },
     { path: '/403', name: '403', component: NoPrivilege }

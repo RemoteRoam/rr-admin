@@ -30,7 +30,7 @@ public class MeasurementNodeEntity {
     private Long projectId;
 
     /**
-     * 实验室任务ID
+     * 试验室任务ID
      */
     private Long taskId;
 

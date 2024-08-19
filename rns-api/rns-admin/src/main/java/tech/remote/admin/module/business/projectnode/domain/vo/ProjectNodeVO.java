@@ -28,7 +28,7 @@ public class ProjectNodeVO {
     @Schema(description = "项目类型")
     private Integer projectType;
 
-    @Schema(description = "实验室任务ID")
+    @Schema(description = "试验室任务ID")
     private Long taskId;
 
     @Schema(description = "产品ID")

@@ -1,5 +1,5 @@
 <!--
-  * 仪器计量实验室任务表
+  * 仪器计量试验室任务表
   *
   * @Author:    cbh
   * @Date:      2024-05-07 14:44:51
@@ -17,8 +17,8 @@
                     </a-form-item>
                 </a-col>
                 <a-col :span="24">
-                    <a-form-item label="实验室" name="thirdPartyId">
-                        <ThirdPartySelect width="100%" v-model:value="form.thirdPartyId" placeholder="请选择实验室"
+                    <a-form-item label="试验室" name="thirdPartyId">
+                        <ThirdPartySelect width="100%" v-model:value="form.thirdPartyId" placeholder="请选择试验室"
                             type="THIRD_1" />
                     </a-form-item>
                 </a-col>
@@ -28,8 +28,8 @@
                     </a-form-item>
                 </a-col>
                 <!-- <a-col :span="24">
-                    <a-form-item label="实验费金额" name="experimentAmount">
-                        <a-input-number style="width: 100%" v-model:value="form.experimentAmount" placeholder="实验费金额" />
+                    <a-form-item label="试验费金额" name="experimentAmount">
+                        <a-input-number style="width: 100%" v-model:value="form.experimentAmount" placeholder="试验费金额" />
                     </a-form-item>
                 </a-col> -->
                 <a-col :span="24">
@@ -102,12 +102,12 @@ const formRef = ref();
 
 const formDefault = {
     id: undefined, //编号
-    taskNo: undefined, //实验室任务编号
+    taskNo: undefined, //试验室任务编号
     projectId: undefined, //项目ID
-    thirdPartyId: undefined, //三方机构ID（实验室ID）
+    thirdPartyId: undefined, //三方机构ID（试验室ID）
     instrument: undefined, //仪器名称
     expiryDate: undefined, //有效期
-    experimentAmount: undefined, //实验费金额
+    experimentAmount: undefined, //试验费金额
     costAmount: undefined, //成本价
     measurementDate: undefined, //计量日期
     finishDate: undefined, //完成日期
@@ -127,7 +127,7 @@ let form = reactive({ ...formDefault });
 
 const rules = {
     // id: [{ required: true, message: '编号 必填' }],
-    // taskNo: [{ required: true, message: '实验室任务编号 必填' }],
+    // taskNo: [{ required: true, message: '试验室任务编号 必填' }],
 };
 
 // 点击确定，验证表单

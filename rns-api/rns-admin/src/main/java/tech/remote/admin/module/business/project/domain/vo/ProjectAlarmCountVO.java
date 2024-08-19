@@ -20,7 +20,7 @@ public class ProjectAlarmCountVO {
     @Schema(description = "客户合同预期完成时间预警")
     private Integer expectedDateAlarm;
 
-    @Schema(description = "实验室任务预警")
+    @Schema(description = "试验室任务预警")
     private Integer labExpectedDateAlarm;
 
     @Schema(description = "工厂审核监督预警")

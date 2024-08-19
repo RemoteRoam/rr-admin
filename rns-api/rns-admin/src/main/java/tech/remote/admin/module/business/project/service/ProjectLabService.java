@@ -48,7 +48,7 @@ import tech.remote.base.module.support.serialnumber.service.SerialNumberService;
 import javax.annotation.Resource;
 
 /**
- * 项目实验室任务表 Service
+ * 项目试验室任务表 Service
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26
@@ -297,7 +297,7 @@ public class ProjectLabService {
         return vo;
     }
 
-//    办公室待办、实验室任务列表、实验室预警
+//    办公室待办、试验室任务列表、试验室预警
     public PageResult<ProjectLabListVO> getProjectLabs(ProjectLabListQueryForm queryForm) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<ProjectLabListVO> list = projectLabDao.selectProjectLabs(page, queryForm);
@@ -320,13 +320,19 @@ public class ProjectLabService {
         return excelList;
     }
 
-    // 实验室待办
+
+    public List<ProjectLabProductExcelVO> getLabProductExcelExportData(ProjectLabListQueryForm queryForm) {
+        List<ProjectLabProductExcelVO> excelList = projectLabDao.selectLabProductExcelList(queryForm);
+        return excelList;
+    }
+
+    // 试验室待办
     public ProjectLabTodoListVO getProjectLabTodoList(ProjectLabListQueryForm queryForm) {
         ProjectLabTodoListVO vo = new ProjectLabTodoListVO();
-        queryForm.setNodeId(8);
-        List<ProjectProductListVO> estimateCompletionList = projectLabDao.selectLabsTodo(queryForm);
-        if(CollectionUtils.isNotEmpty(estimateCompletionList)){
-            for(ProjectProductListVO projectLab : estimateCompletionList){
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<ProjectProductListVO> productListVOS = projectLabDao.selectLabsTodo(page, queryForm);
+        if(CollectionUtils.isNotEmpty(productListVOS)){
+            for(ProjectProductListVO projectLab : productListVOS){
                 ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
                 nodeQueryForm.setProjectId(projectLab.getProjectId());
                 nodeQueryForm.setProjectType(projectLab.getProjectType());
@@ -337,48 +343,32 @@ public class ProjectLabService {
                 projectLab.setProjectNodeList(projectNodeList);
             }
         }
-        vo.setEstimateCompletionList(estimateCompletionList);
-        vo.setEstimateCompletionCount(estimateCompletionList.size());
+        PageResult<ProjectProductListVO> pageResult = SmartPageUtil.convert2PageResult(page, productListVOS);
+        if(queryForm.getNodeId().equals(8)){
+            vo.setEstimateCompletionList(pageResult);
+        } else if(queryForm.getNodeId().equals(9)){
+            vo.setExperimentCheckList(pageResult);
+        } else if(queryForm.getNodeId().equals(10)){
+            vo.setLabReportList(pageResult);
+        }
+
+        queryForm.setNodeId(8);
+        Long count8 = projectLabDao.selectLabsTodoCount(queryForm);
+        vo.setEstimateCompletionCount(count8);
 
         queryForm.setNodeId(9);
-        List<ProjectProductListVO> experimentCheckList = projectLabDao.selectLabsTodo(queryForm);
-        if(CollectionUtils.isNotEmpty(experimentCheckList)){
-            for(ProjectProductListVO projectLab : experimentCheckList){
-                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
-                nodeQueryForm.setProjectId(projectLab.getProjectId());
-                nodeQueryForm.setProjectType(projectLab.getProjectType());
-                nodeQueryForm.setTaskId(projectLab.getTaskId());
-                nodeQueryForm.setProductId(projectLab.getId());
-                nodeQueryForm.setNodeLevel(3);
-                List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
-                projectLab.setProjectNodeList(projectNodeList);
-            }
-        }
-        vo.setExperimentCheckList(experimentCheckList);
-        vo.setExperimentCheckCount(experimentCheckList.size());
+        Long count9 = projectLabDao.selectLabsTodoCount(queryForm);
+        vo.setExperimentCheckCount(count9);
 
         queryForm.setNodeId(10);
-        List<ProjectProductListVO> labReportList = projectLabDao.selectLabsTodo(queryForm);
-        if(CollectionUtils.isNotEmpty(labReportList)){
-            for(ProjectProductListVO projectLab : labReportList){
-                ProjectNodeQueryForm nodeQueryForm = new ProjectNodeQueryForm();
-                nodeQueryForm.setProjectId(projectLab.getProjectId());
-                nodeQueryForm.setProjectType(projectLab.getProjectType());
-                nodeQueryForm.setTaskId(projectLab.getTaskId());
-                nodeQueryForm.setProductId(projectLab.getId());
-                nodeQueryForm.setNodeLevel(3);
-                List<ProjectNodeVO> projectNodeList = projectNodeManager.getOperateNodes(nodeQueryForm);
-                projectLab.setProjectNodeList(projectNodeList);
-            }
-        }
-        vo.setLabReportList(labReportList);
-        vo.setLabReportCount(labReportList.size());
+        Long count10 = projectLabDao.selectLabsTodoCount(queryForm);
+        vo.setLabReportCount(count10);
 
         return vo;
     }
 
 
-    // 实验室预警
+    // 试验室预警
     public PageResult<ProjectProductListVO> getLabsAlarm(ProjectLabListQueryForm queryForm) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<ProjectProductListVO> list = projectLabDao.selectLabsAlarm(page, queryForm);

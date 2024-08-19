@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * 项目实验室任务表  Manager
+ * 项目试验室任务表  Manager
  *
  * @Author cbh
  * @Date 2024-05-15 13:19:26

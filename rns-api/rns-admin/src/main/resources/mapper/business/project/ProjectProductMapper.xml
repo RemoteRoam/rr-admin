@@ -27,7 +27,7 @@
             <if test="queryForm.projectId != null">
                 AND t_project_product.project_id = #{queryForm.projectId}
             </if>
-            <!--实验室任务ID-->
+            <!--试验室任务ID-->
             <if test="queryForm.taskId != null">
                 AND t_project_product.task_id = #{queryForm.taskId}
             </if>
