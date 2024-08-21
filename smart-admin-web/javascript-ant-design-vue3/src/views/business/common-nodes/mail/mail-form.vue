@@ -96,7 +96,7 @@ const formDefault = {
 let form = reactive({ ...formDefault });
 
 const rules = {
-    // id: [{ required: true, message: '编号 必填' }],
+    // mailingDate: [{ required: true, message: '邮寄日期必填' }],
 };
 
 // 点击确定，验证表单
@@ -148,8 +148,6 @@ async function save(nodeStatus) {
     SmartLoading.show();
     form.nodeStatus = nodeStatus;
     try {
-        // console.log('enum', $smartEnumPlugin.getDescByValue('NODE_STATUS_ENUM', text))
-        console.log('form', form);
         if (form.projectType < 40) {
             await projectApi.update(form);
         } else if (isProjectTypeInEnum(form.projectType)) {

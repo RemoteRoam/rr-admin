@@ -479,6 +479,7 @@
         p3.name as thirdPartyName,
         l.lab_contract_no as labContractNo,
         p.product_name as productName,
+        p.product_model as productModel,
         l.lab_contract_date as labContractDate,
 
         CASE

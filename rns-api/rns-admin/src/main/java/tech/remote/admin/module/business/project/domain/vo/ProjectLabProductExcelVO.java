@@ -46,6 +46,9 @@ public class ProjectLabProductExcelVO {
     @ExcelProperty("产品名称")
     private String productName;
 
+    @ExcelProperty("产品型号")
+    private String productModel;
+
     @ExcelProperty("试验室合同日期")
     @ColumnWidth(19)
     private LocalDate labContractDate;
