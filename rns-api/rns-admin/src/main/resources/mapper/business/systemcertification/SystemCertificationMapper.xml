@@ -286,13 +286,14 @@
                 <!--体系审核到期预警，审核日期提前3个月预警-->
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                 AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
+                order by t.audit_date desc
             </if>
             <if test="queryForm.alarmType == 6">
                 <!--证书有效期预警，证书有效期截止日期提前3个月预警-->
                 AND t.certificate_expiry_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                 AND t.certificate_expiry_date &gt; CURDATE()
+                order by t.certificate_expiry_date desc
             </if>
         </where>
-        order by t.create_time desc
     </select>
 </mapper>

@@ -101,7 +101,7 @@
                 </template>
                 <template v-else-if="column.dataIndex === 'action'">
                     <div class="smart-table-operate">
-                        <a-dropdown>
+                        <a-dropdown v-if="record.projectNodeList && record.projectNodeList.length > 0">
                             <a class="ant-dropdown-link" @click.prevent>
                                 节点操作
                             </a>
@@ -184,6 +184,7 @@ const columns = ref([
     { title: '试验室下达任务', dataIndex: 'assignTaskDate', width: 120 },
     { title: '预计完成日期', dataIndex: 'expectedCompletionDate', width: 120 },
     { title: '报告完成日期', dataIndex: 'reportCompletionDate', width: 120 },
+    { title: '证书有效期', dataIndex: 'certificateExpiryDate', width: 120 },
     { title: '状态', dataIndex: 'status', width: 70 },
     { title: '创建时间', dataIndex: 'createTime', width: 170 },
     { title: '操作', dataIndex: 'action', fixed: 'right', width: 90 },

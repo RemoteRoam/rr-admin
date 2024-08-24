@@ -341,12 +341,12 @@ const columns = ref([
         dataIndex: 'createTime',
         width: 120,
     },
-    {
-        title: '操作',
-        dataIndex: 'action',
-        fixed: 'right',
-        width: 120,
-    },
+    //{
+    //    title: '操作',
+    //    dataIndex: 'action',
+    //    fixed: 'right',
+    //    width: 120,
+    //},
 ].map(column => ({ ...column, resizable: true })));
 
 // ---------------------------- 查询数据表单和方法 ----------------------------

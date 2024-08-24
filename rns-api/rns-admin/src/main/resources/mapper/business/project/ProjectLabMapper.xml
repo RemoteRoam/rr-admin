@@ -432,14 +432,24 @@
         <if test="queryForm.labContractNo != null and queryForm.labContractNo != ''">AND INSTR(l.lab_contract_no, #{queryForm.labContractNo})</if>
         <if test="queryForm.labPayDateBegin != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &gt;= #{queryForm.labPayDateBegin}</if>
         <if test="queryForm.labPayDateEnd != null">AND DATE_FORMAT(l.lab_pay_date, '%Y-%m-%d') &lt;= #{queryForm.labPayDateEnd}</if>
-        <!--试验室任务客户要求完成日期提前7天预警,试验室上报时间为空-->
-        AND (
+
+        <if test="queryForm.alarmType != null and queryForm.alarmType == 2">
+            <!-- 试验室任务客户要求完成日期提前7天预警,试验室上报时间为空，
+            客户要求时间为空时，用预计完成时间判断 -->
+            AND (
             (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY))
             OR
             (l.lab_expected_date IS NULL AND pp.expected_completion_date IS NOT NULL AND pp.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY))
-        )
-        AND pp.report_completion_date IS NULL
-        ORDER BY alarmDays ASC, l.create_time ASC
+            )
+            AND pp.report_completion_date IS NULL
+            ORDER BY alarmDays ASC, l.create_time ASC
+        </if>
+        <if test="queryForm.alarmType != null and queryForm.alarmType == 8">
+            <!--证书有效期预警，证书有效期截止日期提前3个月预警-->
+            AND pp.certificate_expiry_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+            AND pp.certificate_expiry_date &gt; CURDATE()
+            order by pp.certificate_expiry_date desc
+        </if>
     </select>
 
 
