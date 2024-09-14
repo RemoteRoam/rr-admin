@@ -57,6 +57,10 @@ export const PROJECT_CATEGORY_ENUM = {
   KA: {
     value: 4,
     desc: 'KA',
+  },
+  MA: {
+    value: 5,
+    desc: 'MA',
   }
 };
 
