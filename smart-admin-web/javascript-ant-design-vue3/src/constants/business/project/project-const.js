@@ -80,6 +80,10 @@ export const LAB_CATEGORY_ENUM = {
   KY: {
     value: 4,
     desc: 'KY',
+  },
+  CE: {
+    value: 5,
+    desc: 'CE',
   }
 };
 
