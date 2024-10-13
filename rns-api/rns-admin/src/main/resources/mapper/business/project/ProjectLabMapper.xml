@@ -172,6 +172,7 @@
         WHEN p.project_type = 21 and p.category = 2 THEN '型式'
         WHEN p.project_type = 21 and p.category = 3 THEN '监督抽样'
         WHEN p.project_type = 21 and p.category = 4 THEN 'KY'
+        WHEN t.project_type = 21 and t.category = 5 THEN 'CE'
         WHEN p.project_type = 31 THEN ''
         ELSE NULL
         END AS categoryName,
@@ -486,6 +487,7 @@
         WHEN t.project_type = 21 and t.category = 2 THEN '型式'
         WHEN t.project_type = 21 and t.category = 3 THEN '监督抽样'
         WHEN t.project_type = 21 and t.category = 4 THEN 'KY'
+        WHEN t.project_type = 21 and t.category = 5 THEN 'CE'
         WHEN t.project_type = 31 THEN ''
         ELSE NULL
         END AS categoryName,
