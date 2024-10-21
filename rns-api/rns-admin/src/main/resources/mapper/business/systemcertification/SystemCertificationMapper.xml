@@ -44,6 +44,10 @@
             <if test="queryForm.sourceId != null">
                 AND t.source_id = #{queryForm.sourceId}
             </if>
+            <!-- 咨询老师 -->
+            <if test="queryForm.consultationTeacher != null">
+                AND t.consultation_teacher = #{queryForm.consultationTeacher}
+            </if>
             <!--状态-->
             <if test="queryForm.status != null">
                 AND t.status = #{queryForm.status}
@@ -169,6 +173,10 @@
             <!--来源ID-->
             <if test="queryForm.sourceId != null">
                 AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!-- 咨询老师 -->
+            <if test="queryForm.consultationTeacher != null">
+                AND t.consultation_teacher = #{queryForm.consultationTeacher}
             </if>
             <!--认证机构ID-->
             <if test="queryForm.thirdPartyId != null">
