@@ -112,8 +112,8 @@
             </div>
         </a-row>
         <!---------- 表格操作行 end ----------->
-        <a-table size="small" :dataSource="tableData" :columns="columns" @resizeColumn="handleResizeColumn" rowKey="id"
-            bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }">
+        <a-table size="small" :dataSource="tableData" :columns="filteredColumns" @resizeColumn="handleResizeColumn"
+            rowKey="id" bordered :loading="tableLoading" :pagination="false" :scroll="{ x: 2000, y: tableScrollY }">
             <template #bodyCell="{ text, record, column }">
                 <template v-if="column.dataIndex === 'taskNo'">
                     <a @click="detailTask(record)">{{ record.taskNo }}</a>
@@ -178,7 +178,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, getCurrentInstance, onBeforeUnmount, watch } from 'vue';
+import { reactive, ref, onMounted, getCurrentInstance, onBeforeUnmount, watch, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { projectLabApi } from '/@/api/business/project/project-lab-api';
 import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
@@ -227,6 +227,14 @@ const columns = ref([
     { title: '操作', dataIndex: 'action', fixed: 'right', width: 90 },
 ].map(column => ({ ...column, resizable: true })));
 
+const filteredColumns = computed(() => {
+    if (queryForm.projectType === 21) {
+        return columns.value.filter(column =>
+            column.dataIndex !== 'selfDeclarationDate' && column.dataIndex !== 'certificateSendDate'
+        );
+    }
+    return columns.value;
+});
 
 // Query form state
 const queryFormState = {
