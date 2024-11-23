@@ -228,6 +228,7 @@ public class ProjectProductService {
         }
 
         projectProductDao.deleteById(id);
+        projectNodeManager.deleteByProductId(id);
         return ResponseDTO.ok();
     }
 

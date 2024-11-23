@@ -76,4 +76,10 @@ public class ProjectNodeManager extends ServiceImpl<ProjectNodeDao, ProjectNodeE
         return true;
     }
 
+    public void deleteByProductId(Long productId) {
+        LambdaQueryWrapper<ProjectNodeEntity> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(ProjectNodeEntity::getProductId, productId);
+        baseMapper.delete(wrapper);
+    }
+
 }
