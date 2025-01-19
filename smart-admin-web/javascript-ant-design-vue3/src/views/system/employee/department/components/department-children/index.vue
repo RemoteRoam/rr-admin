@@ -1,11 +1,11 @@
 <!--
   * 当前所选部门的子部门 人员管理右上半部分
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-08-08 20:46:18
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <a-card class="child-dept-container">
@@ -28,31 +28,34 @@
   </a-card>
 </template>
 <script setup>
-  import emitter from '../../department-mitt';
+import emitter from '../../department-mitt';
 
-  const props = defineProps({
-    breadcrumb: Array,
-    selectedDepartmentChildren: Array,
-  });
+const props = defineProps({
+  breadcrumb: Array,
+  selectedDepartmentChildren: Array,
+});
 
-  function selectTree(id) {
-    emitter.emit('selectTree', id);
-  }
+function selectTree(id) {
+  emitter.emit('selectTree', id);
+}
 </script>
 <style scoped lang="less">
-  :deep(.ant-list-item) {
-    padding: 6px 0px;
+:deep(.ant-list-item) {
+  padding: 6px 0px;
+}
+
+.child-dept-container {
+  .department-list-box {
+    margin-top: 20px;
   }
-  .child-dept-container {
-    .department-list-box {
-      margin-top: 20px;
-    }
-    .department-list {
-      height: 170px;
-      overflow-y: auto;
-    }
-    .department-item {
-      cursor: pointer;
-    }
+
+  .department-list {
+    height: 170px;
+    overflow-y: auto;
   }
+
+  .department-item {
+    cursor: pointer;
+  }
+}
 </style>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.project.dao.ProjectDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+        t.*, c.customer_name as customerName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                        AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--状态-->
+            <if test="queryForm.status != null">
+                AND t.status = #{queryForm.status}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                    SELECT distinct n.project_id
+                    from t_project_node n
+                    where n.project_type = #{queryForm.projectType} and operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            <!--咨询老师-->
+            <if test="queryForm.consultationTeacher != null and queryForm.consultationTeacher != ''">
+                AND INSTR(t.consultation_teacher,#{queryForm.consultationTeacher})
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+
+    <!-- 待办分页查询 -->
+    <select id="queryToDoPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.source_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_project_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            AND t.id in (
+                <if test="queryForm.toDoTYPE == 1">
+                    select distinct project_id
+                    from t_project_node
+                    where project_type in (11,12,21) and node_id in (3,4,5,6,7) and status in (0,1)
+                </if>
+                <if test="queryForm.toDoTYPE == 2">
+                    select distinct n.project_id
+                    from t_project_node n
+                    inner join (
+                        select  distinct project_id, task_id
+                        from t_project_node
+                        where project_type in (11,12,21) and node_id = 7 and status = 2) as n1
+                    on n1.project_id = n.project_id and n1.task_id = n.task_id
+                    where n.node_id in (8,9,10) and n.status in (0,1)
+                </if>
+                <if test="queryForm.toDoTYPE == 3">
+                    select distinct n.project_id
+                    from t_project_node n
+                    inner join (
+                        select  distinct project_id, task_id
+                        from t_project_node
+                        where project_type in (12,31) and node_id = 12 and status = 2) as n1
+                    on n1.project_id = n.project_id
+                    where n.node_id in (13,14) and n.status in (0,1)
+                </if>
+                <!--取证书待办-->
+                <if test="queryForm.toDoTYPE == 4">
+                    select distinct n.project_id
+                    from t_project_node n
+                    inner join (
+                        select  distinct project_id, task_id
+                        from t_project_node
+                        where project_type in (11,12,31) and node_id = 10 and status = 2) as n1
+                    on n1.project_id = n.project_id
+                    where n.node_id in (11,12,15,16,19,20) and n.status in (0,1)
+                </if>
+                <if test="queryForm.toDoTYPE == 5">
+                    select distinct n.project_id
+                    from t_project_node n
+                    inner join (
+                        select  distinct project_id, task_id
+                        from t_project_node
+                        where project_type in (11,12,21,31) and node_id = 19 and status in (1,2)) as n1
+                    on n1.project_id = n.project_id
+                    where n.node_id = 17 and n.status in (0,1)
+                </if>
+            )
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <update id="batchUpdateDeleted">
+        update t_project set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_project set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+
+    <select id="getDetail" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+            t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+            CASE
+                WHEN t.source_type = 1 THEN p2.name
+                WHEN t.source_type = 2 THEN e.actual_name
+                ELSE NULL
+                END AS sourceName
+        FROM t_project t
+                 left join t_customer c on t.customer_id = c.customer_id
+                 left join t_third_party p1 on t.source_id = p1.id
+                 LEFT JOIN
+             t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+                 LEFT JOIN
+             t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        where t.id = #{id}
+    </select>
+
+    <!-- 导出 -->
+    <select id="selectExcelList" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectExcelVO">
+        SELECT
+        t.*, c.customer_name as customerName,
+        l.third_party_id,p3.name as thirdPartyName, l.lab_contract_no, l.lab_contract_date, l.lab_contract_amount, l.lab_expected_date, l.lab_contract_remark, l.data_send_date, l.data_receive_date,
+
+        CASE
+        WHEN l.is_paid = 1 THEN '是'
+        WHEN l.is_paid = 0 THEN '否'
+        ELSE NULL
+        END AS isPaid,
+
+        CASE
+        WHEN l.pay_party = 1 THEN '客户'
+        WHEN l.pay_party = 2 THEN '我方'
+        ELSE NULL
+        END AS payParty,
+        l.lab_pay_date, l.lab_pay_remark, l.assign_task_date, p.expected_completion_date, p.report_completion_date,
+        p.product_name, p.product_model, p.lab_report_date, p.self_declaration_date, p.certificate_no, p.certificate_send_date, p.certificate_expiry_date,
+        a.archive_position,a.archive_date,m.mailing_date,m.tracking_number,
+
+        CASE
+        WHEN f.is_paid = 1 THEN '是'
+        WHEN f.is_paid = 0 THEN '否'
+        ELSE NULL
+        END AS feeIsPaid,
+
+        CASE
+        WHEN f.pay_party = 1 THEN '客户'
+        WHEN f.pay_party = 2 THEN '我方'
+        ELSE NULL
+        END AS feePayParty,
+        f.pay_date,f.pay_remark,
+        CASE
+        WHEN t.project_type = 11 THEN 'CCC自我声明'
+        WHEN t.project_type = 12 THEN '产品认证'
+        WHEN t.project_type = 21 THEN '试验项目'
+        WHEN t.project_type = 31 THEN '产品监督'
+        ELSE NULL
+        END AS projectTypeName,
+        CASE
+        WHEN t.project_type = 11 and t.category = 1 THEN '初始'
+        WHEN t.project_type = 11 and t.category = 2 THEN '变更'
+        WHEN t.project_type = 11 and t.category = 3 THEN '增项'
+        WHEN t.project_type = 11 and t.category = 4 THEN 'KA'
+        WHEN t.project_type = 11 and t.category = 5 THEN 'MA'
+        WHEN t.project_type = 12 and t.category = 1 THEN '初始'
+        WHEN t.project_type = 12 and t.category = 2 THEN '变更'
+        WHEN t.project_type = 12 and t.category = 3 THEN '增项'
+        WHEN t.project_type = 12 and t.category = 4 THEN 'KA'
+        WHEN t.project_type = 12 and t.category = 5 THEN 'MA'
+        WHEN t.project_type = 21 and t.category = 1 THEN '委托'
+        WHEN t.project_type = 21 and t.category = 2 THEN '型式'
+        WHEN t.project_type = 21 and t.category = 3 THEN '监督抽样'
+        WHEN t.project_type = 21 and t.category = 4 THEN 'KY'
+        WHEN t.project_type = 21 and t.category = 5 THEN 'CE'
+        WHEN t.project_type = 31 THEN ''
+        ELSE NULL
+        END AS categoryName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        LEFT JOIN t_project_lab l on t.id = l.project_id
+        left join t_third_party p3 on l.third_party_id = p3.id
+        left join t_project_product p on t.id = p.project_id and l.id = p.task_id
+        left join t_project_archive a on p.archive_id = a.id
+        left join t_project_mail m on p.mail_id = m.id
+        left join t_project_certification_fee f on p.certification_fee_id = f.id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_project_node n
+                where n.project_type = #{queryForm.projectType} and operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.id, l.id, p.id
+    </select>
+
+    <!-- 预警分页查询 -->
+    <select id="queryAlarmPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_project t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.source_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_project_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            <if test="queryForm.alarmType == 1">
+                <!--客户合同预期完成时间提前10天预警-->
+                AND t.expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+                AND t.status != 2
+                and t.id in (
+                    select distinct n.project_id
+                    from t_project_node n
+                    where n.node_id = 9 and n.status = 0
+                )
+            </if>
+            <!--试验室任务客户要求完成日期提前3天预警-->
+<!--            <if test="queryForm.alarmType == 2">-->
+<!--                AND t.id in (-->
+<!--                    select distinct l.project_id-->
+<!--                    from t_project_lab l-->
+<!--                    where (-->
+<!--                        (l.lab_expected_date IS NOT NULL AND l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))-->
+<!--                        OR-->
+<!--                        (l.lab_expected_date IS NULL AND l.expected_completion_date &lt;= DATE_ADD(CURDATE(), INTERVAL 3 DAY))-->
+<!--                    )-->
+<!--                    AND l.status != 2-->
+<!--                )-->
+<!--            </if>-->
+            <if test="queryForm.alarmType == 3">
+                <!--工厂审核监督预警，审核时间提前3个月预警-->
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
+            </if>
+            <if test="queryForm.alarmType == 4">
+                <!--工厂审核不符合项整改预警，审核日期之后，超过30天还没有整改的话预警。-->
+                AND t.id in (
+                    SELECT distinct n.project_id
+                    FROM t_project p
+                    left join t_project_node n on p.id = n.project_id
+                    WHERE DATE_ADD(p.audit_date, INTERVAL 30 DAY) &lt;=  CURDATE()
+                    and n.node_id = 14 and n.status = 0
+                )
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+
+    <!-- 预警数量查询 -->
+    <select id="queryAlarmCount" resultType="Integer">
+        SELECT
+        count(1)
+        FROM t_project t
+        <where>
+            t.deleted_flag = 0
+            <if test="alarmType == 1">
+                <!--客户合同预期完成时间提前10天预警-->
+                AND t.expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 10 DAY)
+                AND t.status != 2
+            </if>
+            <if test="alarmType == 2">
+                <!--试验室任务客户要求完成日期提前3天预警-->
+#                 AND t.id in (
+#                     select distinct l.project_id
+#                     from t_project_lab l
+#                     where l.lab_expected_date &lt;= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+#                     AND l.status != 2
+#                 )
+            </if>
+            <if test="alarmType == 3">
+                <!--工厂审核监督预警，审核时间提前3个月预警-->
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
+            </if>
+            <if test="alarmType == 4">
+                <!--工厂审核不符合项整改预警，审核日期之后，超过30天还没有整改的话预警。-->
+                AND t.id in (
+                    SELECT distinct n.project_id
+                    FROM t_project p
+                    left join t_project_node n on p.id = n.project_id
+                    WHERE DATE_ADD(p.audit_date, INTERVAL 30 DAY) &lt;=  CURDATE()
+                    and n.node_id = 14 and n.status = 0
+                )
+            </if>
+        </where>
+    </select>
+</mapper>

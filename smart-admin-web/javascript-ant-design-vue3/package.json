@@ -2,8 +2,8 @@
   "name": "smartadmin",
   "version": "3.0.0",
   "author": {
-    "name": "1024创新实验室（1024lab）",
-    "email": "lab1024@163.com",
+    "name": "远游软件工作室",
+    "email": "qqq@163.com",
     "url": "https://www.1024lab.net"
   },
   "license": "MIT",
@@ -39,6 +39,7 @@
     "v-viewer": "~1.6.4",
     "vue": "3.3.13",
     "vue-i18n": "9.10.2",
+    "vue-qr": "^4.0.9",
     "vue-router": "4.3.0",
     "vue3-json-viewer": "2.2.2"
   },

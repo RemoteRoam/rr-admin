@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.customer.dao.CustomerDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.customer.domain.vo.CustomerVO">
+        SELECT
+        *
+        FROM t_customer
+        <where>
+            deleted_flag = 0
+            <!--客户名称-->
+            <if test="queryForm.customerName != null and queryForm.customerName != ''">
+                AND INSTR(t_customer.customer_name,#{queryForm.customerName})
+            </if>
+            <!--客户类型-->
+            <if test="queryForm.type != null">
+                AND t_customer.type = #{queryForm.type}
+            </if>
+            <!--客户级别-->
+            <if test="queryForm.customerLevel != null">
+                AND t_customer.customer_level = #{queryForm.customerLevel}
+            </if>
+            <!--联系人-->
+            <if test="queryForm.contact != null and queryForm.contact != ''">
+                        AND (INSTR(t_customer.contact,#{queryForm.contact}) OR INSTR(t_customer.contact_second,#{queryForm.contact}) OR INSTR(t_customer.contact_third,#{queryForm.contact}))
+            </if>
+            <!--联系人电话-->
+            <if test="queryForm.contactPhone != null and queryForm.contactPhone != ''">
+                        AND (INSTR(t_customer.contact_phone,#{queryForm.contactPhone}) OR INSTR(t_customer.contact_second_phone,#{queryForm.contactPhone}) OR INSTR(t_customer.contact_third_phone,#{queryForm.contactPhone}))
+            </if>
+            <!--省份-->
+            <if test="queryForm.province != null and queryForm.province != ''">
+                AND t_customer.province = #{queryForm.province}
+            </if>
+            <!--市-->
+            <if test="queryForm.city != null and queryForm.city != ''">
+                AND t_customer.city = #{queryForm.city}
+            </if>
+            <!--区县-->
+            <if test="queryForm.district != null and queryForm.district != ''">
+                AND t_customer.district = #{queryForm.district}
+            </if>
+            <!--工厂省份-->
+            <if test="queryForm.factoryProvince != null and queryForm.factoryProvince != ''">
+                AND t_customer.factory_province = #{queryForm.factoryProvince}
+            </if>
+            <!--工厂市-->
+            <if test="queryForm.factoryCity != null and queryForm.factoryCity != ''">
+                AND t_customer.factory_city = #{queryForm.factoryCity}
+            </if>
+            <!--工厂区县-->
+            <if test="queryForm.factoryDistrict != null and queryForm.factoryDistrict != ''">
+                AND t_customer.factory_district = #{queryForm.factoryDistrict}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t_customer.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t_customer.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t_customer.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="batchUpdateDeleted">
+        update t_customer set deleted_flag = #{deletedFlag}
+        where customer_id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_customer set deleted_flag = #{deletedFlag}
+        where customer_id = #{customerId}
+    </update>
+
+    <select id="getGrandTotal" parameterType="java.lang.Long" resultType="tech.remote.admin.module.business.customer.domain.vo.GrandTotalResult">
+        SELECT SUM(total_amount) AS grand_total_amount, SUM(total_count) AS grand_total_count
+        FROM (
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_project
+                 WHERE customer_id = #{customerId}
+
+                 UNION ALL
+
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_system_certification
+                 WHERE customer_id = #{customerId}
+
+                 UNION ALL
+
+                 SELECT SUM(payment_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_measurement
+                 WHERE customer_id = #{customerId}
+                 UNION ALL
+
+                 SELECT SUM(contract_amount) AS total_amount, COUNT(1) AS total_count
+                 FROM t_sales
+                 WHERE customer_id = #{customerId}
+             ) AS combined_totals
+    </select>
+</mapper>

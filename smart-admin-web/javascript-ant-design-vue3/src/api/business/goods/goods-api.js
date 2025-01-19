@@ -5,7 +5,7 @@
  * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  */
-import {postRequest, getRequest, getDownload} from '/@/lib/axios';
+import { postRequest, getRequest, getDownload } from '/@/lib/axios';
 
 export const goodsApi = {
   // 添加商品 @author zhuoda
@@ -30,12 +30,20 @@ export const goodsApi = {
   },
 
   // 导入 @author 卓大
-  importGoods : (file) =>{
-    return postRequest('/goods/importGoods',file);
+  importGoods: (file) => {
+    return postRequest('/goods/importGoods', file);
   },
 
   // 导出 @author 卓大
-  exportGoods : () =>{
+  exportGoods: () => {
     return getDownload('/goods/exportGoods');
-  }
+  },
+
+  // 查询详情 @author cbh
+  detail: (id) => {
+    return getRequest(`/goods/get/${id}`);
+  },
+  queryList: (categoryId) => {
+    return getRequest(`/goods/list/${categoryId}`);
+  },
 };

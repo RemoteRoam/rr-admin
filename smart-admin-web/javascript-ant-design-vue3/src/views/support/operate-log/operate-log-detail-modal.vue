@@ -1,11 +1,11 @@
 <!--
   * 操作记录 详情
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-06-02 20:23:08 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <a-modal :open="visible" title="请求详情" width="60%" :footer="null" @cancel="close">
@@ -52,86 +52,89 @@
 </template>
 
 <script setup>
-  import { reactive, ref } from 'vue';
-  import { JsonViewer } from 'vue3-json-viewer';
-  import { operateLogApi } from '/@/api/support/operate-log-api';
-  import { smartSentry } from '/@/lib/smart-sentry';
-  import { SmartLoading } from '/@/components/framework/smart-loading';
+import { reactive, ref } from 'vue';
+import { JsonViewer } from 'vue3-json-viewer';
+import { operateLogApi } from '/@/api/support/operate-log-api';
+import { smartSentry } from '/@/lib/smart-sentry';
+import { SmartLoading } from '/@/components/framework/smart-loading';
 
-  defineExpose({
-    show,
+defineExpose({
+  show,
+});
+
+const visible = ref(false);
+
+function show(operateLogId) {
+  visible.value = true;
+  clear(detail);
+  getDetail(operateLogId);
+}
+
+const clear = (info) => {
+  const keys = Object.keys(info);
+  let obj = {};
+  keys.forEach((item) => {
+    obj[item] = '';
   });
+  Object.assign(info, obj);
+};
 
-  const visible = ref(false);
+function close() {
+  visible.value = false;
+}
 
-  function show(operateLogId) {
-    visible.value = true;
-    clear(detail);
-    getDetail(operateLogId);
+let detail = reactive({
+  param: '',
+  url: '',
+});
+async function getDetail(operateLogId) {
+  try {
+    SmartLoading.show();
+    let res = await operateLogApi.detail(operateLogId);
+    detail = Object.assign(detail, res.data);
+  } catch (e) {
+    smartSentry.captureError(e);
+  } finally {
+    SmartLoading.hide();
   }
-
-  const clear = (info) => {
-    const keys = Object.keys(info);
-    let obj = {};
-    keys.forEach((item) => {
-      obj[item] = '';
-    });
-    Object.assign(info, obj);
-  };
-
-  function close() {
-    visible.value = false;
-  }
-
-  let detail = reactive({
-    param: '',
-    url: '',
-  });
-  async function getDetail(operateLogId) {
-    try {
-      SmartLoading.show();
-      let res = await operateLogApi.detail(operateLogId);
-      detail = Object.assign(detail, res.data);
-    } catch (e) {
-      smartSentry.captureError(e);
-    } finally {
-      SmartLoading.hide();
-    }
-  }
+}
 </script>
 
 <style scoped lang="less">
-  .detail-title {
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  .info-box {
-    border-bottom: 1px solid #f0f0f0;
-    padding: 10px 8px;
-  }
-  .detail-info {
-    .ant-col {
-      line-height: 1.46;
-      margin-bottom: 12px;
-      padding-right: 5px;
-    }
-  }
-  .detail-right-title {
-    text-align: right;
-    color: grey;
-  }
+.detail-title {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-  :deep(.ant-modal-body) {
-    padding: 10px !important;
-  }
+.info-box {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 10px 8px;
+}
 
-  .detail-right {
-    padding-left: 5px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: right;
-    float: right;
+.detail-info {
+  .ant-col {
+    line-height: 1.46;
+    margin-bottom: 12px;
+    padding-right: 5px;
   }
+}
+
+.detail-right-title {
+  text-align: right;
+  color: grey;
+}
+
+:deep(.ant-modal-body) {
+  padding: 10px !important;
+}
+
+.detail-right {
+  padding-left: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: right;
+  float: right;
+}
 </style>

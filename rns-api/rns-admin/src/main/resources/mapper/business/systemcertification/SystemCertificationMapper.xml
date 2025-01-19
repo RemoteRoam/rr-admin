@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.systemcertification.dao.SystemCertificationDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+            WHEN t.source_type = 1 THEN p2.name
+            WHEN t.source_type = 2 THEN e.actual_name
+            ELSE NULL
+        END AS sourceName
+        FROM t_system_certification t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.third_party_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND INSTR(t.category,#{queryForm.category})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!-- 咨询老师 -->
+            <if test="queryForm.consultationTeacher != null and queryForm.consultationTeacher != ''">
+                AND INSTR(t.consultation_teacher,#{queryForm.consultationTeacher})
+            </if>
+            <!--状态-->
+            <if test="queryForm.status != null">
+                AND t.status = #{queryForm.status}
+            </if>
+            <!--认证机构ID-->
+            <if test="queryForm.thirdPartyId != null">
+                AND t.third_party_id = #{queryForm.thirdPartyId}
+            </if>
+            <!--合同号-->
+            <if test="queryForm.contractNo != null">
+                AND t.contract_no = #{queryForm.contractNo}
+            </if>
+            <!--合同日-->
+            <if test="queryForm.contractDateBegin != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &gt;= #{queryForm.contractDateBegin}
+            </if>
+            <if test="queryForm.contractDateEnd != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &lt;= #{queryForm.contractDateEnd}
+            </if>
+            <!--客户预期日期-->
+            <if test="queryForm.expectedDateBegin != null">
+                AND DATE_FORMAT(t.expected_date, '%Y-%m-%d') &gt;= #{queryForm.expectedDateBegin}
+            </if>
+            <if test="queryForm.expectedDateEnd != null">
+                AND DATE_FORMAT(t.expected_date, '%Y-%m-%d') &lt;= #{queryForm.expectedDateEnd}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+
+
+    <update id="batchUpdateDeleted">
+        update t_system_certification set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_system_certification set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+
+
+    <!-- 根据ID获取详情 -->
+    <select id="getDetail" resultType="tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_system_certification t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.third_party_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        where t.id = #{id}
+    </select>
+    <select id="selectExcelList"
+            resultType="tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationExcelVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName,
+        CASE
+        WHEN t.project_type = 41 THEN '体系初始'
+        WHEN t.project_type = 421 THEN '体系监督一'
+        WHEN t.project_type = 422 THEN '体系监督二'
+        WHEN t.project_type = 43 THEN '再认证'
+        WHEN t.project_type = 44 THEN '扩项'
+        WHEN t.project_type = 45 THEN '产品认证'
+        ELSE NULL
+        END AS projectTypeName
+        FROM t_system_certification t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.third_party_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!-- 咨询老师 -->
+            <if test="queryForm.consultationTeacher != null and queryForm.consultationTeacher != ''">
+                AND INSTR(t.consultation_teacher,#{queryForm.consultationTeacher})
+            </if>
+            <!--认证机构ID-->
+            <if test="queryForm.thirdPartyId != null">
+                AND t.third_party_id = #{queryForm.thirdPartyId}
+            </if>
+            <!--合同号-->
+            <if test="queryForm.contractNo != null">
+                AND t.contract_no = #{queryForm.contractNo}
+            </if>
+            <!--合同日-->
+            <if test="queryForm.contractDateBegin != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &gt;= #{queryForm.contractDateBegin}
+            </if>
+            <if test="queryForm.contractDateEnd != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &lt;= #{queryForm.contractDateEnd}
+            </if>
+            <!--客户预期日期-->
+            <if test="queryForm.expectedDateBegin != null">
+                AND DATE_FORMAT(t.expected_date, '%Y-%m-%d') &gt;= #{queryForm.expectedDateBegin}
+            </if>
+            <if test="queryForm.expectedDateEnd != null">
+                AND DATE_FORMAT(t.expected_date, '%Y-%m-%d') &lt;= #{queryForm.expectedDateEnd}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.id
+    </select>
+
+    <!-- 预警分页查询 -->
+    <select id="queryAlarmPage" resultType="tech.remote.admin.module.business.systemcertification.domain.vo.SystemCertificationVO">
+        SELECT
+        t.*, c.customer_name as customerName, p1.name as thirdPartyName,
+        CASE
+        WHEN t.source_type = 1 THEN p2.name
+        WHEN t.source_type = 2 THEN e.actual_name
+        ELSE NULL
+        END AS sourceName
+        FROM t_system_certification t
+        left join t_customer c on t.customer_id = c.customer_id
+        left join t_third_party p1 on t.third_party_id = p1.id
+        LEFT JOIN
+        t_third_party p2 ON t.source_type = 1 AND t.source_id = p2.id
+        LEFT JOIN
+        t_employee e ON t.source_type = 2 AND t.source_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t.project_type = #{queryForm.projectType}
+            </if>
+            <!--项目分类-->
+            <if test="queryForm.category != null">
+                AND t.category = #{queryForm.category}
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--来源分类-->
+            <if test="queryForm.sourceType != null">
+                AND t.source_type = #{queryForm.sourceType}
+            </if>
+            <!--来源ID-->
+            <if test="queryForm.sourceId != null">
+                AND t.source_id = #{queryForm.sourceId}
+            </if>
+            <!--认证机构ID-->
+            <if test="queryForm.thirdPartyId != null">
+                AND t.third_party_id = #{queryForm.thirdPartyId}
+            </if>
+            <!--合同号-->
+            <if test="queryForm.contractNo != null">
+                AND t.contract_no = #{queryForm.contractNo}
+            </if>
+            <!--合同日-->
+            <if test="queryForm.contractDateBegin != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &gt;= #{queryForm.contractDateBegin}
+            </if>
+            <if test="queryForm.contractDateEnd != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &lt;= #{queryForm.contractDateEnd}
+            </if>
+            <!--客户预期日期-->
+            <if test="queryForm.expectedDateBegin != null">
+                AND DATE_FORMAT(t.expected_date, '%Y-%m-%d') &gt;= #{queryForm.expectedDateBegin}
+            </if>
+            <if test="queryForm.expectedDateEnd != null">
+                AND DATE_FORMAT(t.expected_date, '%Y-%m-%d') &lt;= #{queryForm.expectedDateEnd}
+            </if>
+            <!--创建人-->
+            <if test="queryForm.createUserId != null">
+                AND t.create_user_id = #{queryForm.createUserId}
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            <if test="queryForm.alarmType == 5">
+                <!--体系审核到期预警，审核日期提前3个月预警-->
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                AND DATE_ADD(t.audit_date, INTERVAL 1 YEAR) &gt; CURDATE()
+                order by t.audit_date desc
+            </if>
+            <if test="queryForm.alarmType == 6">
+                <!--证书有效期预警，证书有效期截止日期提前3个月预警-->
+                AND t.certificate_expiry_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                AND t.certificate_expiry_date &gt; CURDATE()
+                order by t.certificate_expiry_date desc
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,11 +1,11 @@
 /*
  *  keep-alive
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-06 20:39:54
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -18,7 +18,7 @@ export function smartKeepAlive() {
   const keepAliveIncludes = computed(() => {
     return useUserStore().keepAliveIncludes || [];
   });
-  
+
   // ----------------------- iframe相关 -----------------------
 
   // 当前路由是否为不需要缓存的iframe页面

@@ -1,11 +1,11 @@
 <!--
   * 图标 选择
   *
-  * @Author:    1024创新实验室-主任：卓大
+  * @Author:    YY Studio
   * @Date:      2022-09-01 23:14:49
   * @Wechat:    zhuda1024
   * @Email:     lab1024@163.com
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+  * @Copyright  YY Studio
 -->
 <template>
   <div>
@@ -39,95 +39,97 @@
 </template>
 
 <script setup>
-  import * as VueIcon from '@ant-design/icons-vue';
-  import { computed, ref, watch } from 'vue';
-  import _ from 'lodash';
+import * as VueIcon from '@ant-design/icons-vue';
+import { computed, ref, watch } from 'vue';
+import _ from 'lodash';
 
-  //线框风格图标数组
-  const outlinedIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'outlined'));
-  //实底风格图标数组
-  const filledIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'filled'));
-  //双色风格图标数组
-  const twoToneIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'twotone'));
+//线框风格图标数组
+const outlinedIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'outlined'));
+//实底风格图标数组
+const filledIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'filled'));
+//双色风格图标数组
+const twoToneIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'twotone'));
 
-  // ------------ 显示/隐藏 ------------
-  const visible = ref(false);
+// ------------ 显示/隐藏 ------------
+const visible = ref(false);
 
-  // ------------ 展开更多 ------------
-  const SHOW_MORE_LENGTH = 35;
-  const showMoreIndex = ref(SHOW_MORE_LENGTH);
-  function showMore() {
-    showMoreIndex.value = -1;
+// ------------ 展开更多 ------------
+const SHOW_MORE_LENGTH = 35;
+const showMoreIndex = ref(SHOW_MORE_LENGTH);
+function showMore() {
+  showMoreIndex.value = -1;
+}
+
+// ------------ 图标展示与搜索 ------------
+
+const iconStyle = ref('outlined');
+const selectIconArray = ref([...outlinedIconArray]);
+
+const iconLoopArray = computed(() => {
+  return _.slice(selectIconArray.value, 0, showMoreIndex.value);
+});
+
+watch(iconStyle, (newValue, oldValue) => {
+  updateSelectIconArray();
+});
+
+let searchValue = ref('');
+function updateSelectIconArray() {
+  let tempArray = null;
+  if (iconStyle.value === 'outlined') {
+    tempArray = outlinedIconArray;
+  } else if (iconStyle.value === 'filled') {
+    tempArray = filledIconArray;
+  } else {
+    tempArray = twoToneIconArray;
+  }
+  if (!searchValue.value) {
+    selectIconArray.value = tempArray;
+  } else {
+    selectIconArray.value = tempArray.filter((e) => e.toLowerCase().includes(searchValue.value.toLowerCase()));
   }
 
-  // ------------ 图标展示与搜索 ------------
-
-  const iconStyle = ref('outlined');
-  const selectIconArray = ref([...outlinedIconArray]);
-
-  const iconLoopArray = computed(() => {
-    return _.slice(selectIconArray.value, 0, showMoreIndex.value);
-  });
-
-  watch(iconStyle, (newValue, oldValue) => {
-    updateSelectIconArray();
-  });
-
-  let searchValue = ref('');
-  function updateSelectIconArray() {
-    let tempArray = null;
-    if (iconStyle.value === 'outlined') {
-      tempArray = outlinedIconArray;
-    } else if (iconStyle.value === 'filled') {
-      tempArray = filledIconArray;
-    } else {
-      tempArray = twoToneIconArray;
-    }
-    if (!searchValue.value) {
-      selectIconArray.value = tempArray;
-    } else {
-      selectIconArray.value = tempArray.filter((e) => e.toLowerCase().includes(searchValue.value.toLowerCase()));
-    }
-
-    if (selectIconArray.value.length > SHOW_MORE_LENGTH) {
-      showMoreIndex.value = SHOW_MORE_LENGTH;
-    }
+  if (selectIconArray.value.length > SHOW_MORE_LENGTH) {
+    showMoreIndex.value = SHOW_MORE_LENGTH;
   }
+}
 
-  // ------------ 对外抛出选择图标事件 ------------
-  const emit = defineEmits(['updateIcon']);
-  function handleClick(icon) {
-    visible.value = false;
-    emit('updateIcon', icon);
-  }
+// ------------ 对外抛出选择图标事件 ------------
+const emit = defineEmits(['updateIcon']);
+function handleClick(icon) {
+  visible.value = false;
+  emit('updateIcon', icon);
+}
 </script>
 
 <style scoped lang="less">
-  .icon-box {
-    overflow: auto;
-    font-size: 20px;
-    width: 410px;
-    height: 300px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: flex-start;
-  }
+.icon-box {
+  overflow: auto;
+  font-size: 20px;
+  width: 410px;
+  height: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: flex-start;
+}
 
-  .icon-content {
-    width: 45px;
-    height: 40px;
+.icon-content {
+  width: 45px;
+  height: 40px;
+  margin: 5px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+
+  .more-icon {
+    font-size: 14px;
     margin: 5px;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    .more-icon {
-      font-size: 14px;
-      margin: 5px;
-    }
   }
-  .icon-content:hover {
-    background: #1890ff;
-  }
+}
+
+.icon-content:hover {
+  background: #1890ff;
+}
 </style>

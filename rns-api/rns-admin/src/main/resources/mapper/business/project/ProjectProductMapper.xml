@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.project.dao.ProjectProductDao">
+    <update id="updateCertificationFeeIdById">
+        UPDATE t_project_product
+        SET certification_fee_id = #{certificationFeeId}
+        WHERE id = #{id}
+    </update>
+    <update id="updateArchiveIdById">
+        UPDATE t_project_product
+        SET archive_id = #{archiveId}
+        WHERE id = #{id}
+    </update>
+    <update id="updateMailIdById">
+        UPDATE t_project_product
+        SET mail_id = #{mailId}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.project.domain.vo.ProjectProductVO">
+        SELECT
+        *
+        FROM t_project_product
+        <where>
+            <!--项目ID-->
+            <if test="queryForm.projectId != null">
+                AND t_project_product.project_id = #{queryForm.projectId}
+            </if>
+            <!--试验室任务ID-->
+            <if test="queryForm.taskId != null">
+                AND t_project_product.task_id = #{queryForm.taskId}
+            </if>
+            <if test="queryForm.certificationFeeId != null">
+                AND t_project_product.certification_fee_id = #{queryForm.certificationFeeId}
+            </if>
+            <if test="queryForm.archiveId != null">
+                AND t_project_product.archive_id = #{queryForm.archiveId}
+            </if>
+            <if test="queryForm.mailId != null">
+                AND t_project_product.mail_id = #{queryForm.mailId}
+            </if>
+        </where>
+    </select>
+    <select id="list"
+            resultType="tech.remote.admin.module.business.project.domain.vo.ProjectProductProgressVO">
+        SELECT
+            p.*, c.pay_date as payDate, m.tracking_number as trackingNumber
+        FROM t_project_product p
+        left join t_project_certification_fee c on p.certification_fee_id = c.id
+        left join t_project_mail m on p.mail_id = m.id
+        where p.project_id = #{projectId} and p.task_id = #{taskId}
+    </select>
+
+
+</mapper>

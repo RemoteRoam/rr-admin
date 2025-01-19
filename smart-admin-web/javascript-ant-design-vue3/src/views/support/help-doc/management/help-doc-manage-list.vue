@@ -1,11 +1,11 @@
 <!--
   * 帮助文档 管理
   * 
-  * @Author:    1024创新实验室-主任：卓大
+  * @Author:    YY Studio
   * @Date:      2022-07-21 21:55:12
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <div class="height100">
@@ -23,33 +23,34 @@
   </div>
 </template>
 <script setup>
-  import _ from 'lodash';
-  import { computed, ref } from 'vue';
-  import HelpDocCatalogTree from './components/help-doc-catalog-tree.vue';
-  import HelpDocList from './components/help-doc-list.vue';
+import _ from 'lodash';
+import { computed, ref } from 'vue';
+import HelpDocCatalogTree from './components/help-doc-catalog-tree.vue';
+import HelpDocList from './components/help-doc-list.vue';
 
-  const helpDocCatalogTreeRef = ref();
+const helpDocCatalogTreeRef = ref();
 
-  // 当前选中的目录id
-  const selectedHelpDocCatalogId = computed(() => {
-    if (helpDocCatalogTreeRef.value) {
-      let selectedKeys = helpDocCatalogTreeRef.value.selectedKeys;
-      return _.isEmpty(selectedKeys) ? null : selectedKeys[0];
-    }
-    return null;
-  });
+// 当前选中的目录id
+const selectedHelpDocCatalogId = computed(() => {
+  if (helpDocCatalogTreeRef.value) {
+    let selectedKeys = helpDocCatalogTreeRef.value.selectedKeys;
+    return _.isEmpty(selectedKeys) ? null : selectedKeys[0];
+  }
+  return null;
+});
 </script>
 <style scoped lang="less">
-  .height100 {
-    height: 100%;
-  }
-  .help-doc-box {
-    display: flex;
-    flex-direction: column;
+.height100 {
+  height: 100%;
+}
 
-    .employee {
-      flex-grow: 2;
-      margin-top: 10px;
-    }
+.help-doc-box {
+  display: flex;
+  flex-direction: column;
+
+  .employee {
+    flex-grow: 2;
+    margin-top: 10px;
   }
+}
 </style>

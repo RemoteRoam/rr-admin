@@ -1,11 +1,11 @@
 <!--
   * 消息通知
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-09-06 20:17:18 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 
 <template>
@@ -70,46 +70,46 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import { BellOutlined } from '@ant-design/icons-vue';
+import { ref } from 'vue';
+import { BellOutlined } from '@ant-design/icons-vue';
 
-  defineExpose({ showMessage });
+defineExpose({ showMessage });
 
-  function showMessage() {
-    show.value = true;
+function showMessage() {
+  show.value = true;
+}
+
+const loading = ref(false);
+const show = ref(false);
+
+const fetchMessage = () => {
+  if (loading.value) {
+    loading.value = false;
+    return;
   }
-
-  const loading = ref(false);
-  const show = ref(false);
-
-  const fetchMessage = () => {
-    if (loading.value) {
-      loading.value = false;
-      return;
-    }
-    loading.value = true;
-    setTimeout(() => {
-      loading.value = false;
-    }, 700);
-  };
+  loading.value = true;
+  setTimeout(() => {
+    loading.value = false;
+  }, 700);
+};
 </script>
 
 <style lang="less">
-  .header-notice {
-    display: inline-block;
-    transition: all 0.3s;
+.header-notice {
+  display: inline-block;
+  transition: all 0.3s;
 
-    span {
-      vertical-align: initial;
-    }
-
-    .notice-badge {
-      color: inherit;
-    }
+  span {
+    vertical-align: initial;
   }
 
-  .dropdown-tabs {
-    background-color: @base-bg-color;
-    border-radius: 4px;
+  .notice-badge {
+    color: inherit;
   }
+}
+
+.dropdown-tabs {
+  background-color: @base-bg-color;
+  border-radius: 4px;
+}
 </style>

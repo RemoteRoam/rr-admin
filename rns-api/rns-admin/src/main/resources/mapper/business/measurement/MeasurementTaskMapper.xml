@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.measurement.dao.MeasurementTaskDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementTaskVO">
+        SELECT
+        t.*,p1.name as thirdPartyName
+        FROM t_measurement_task t
+        left join t_third_party p1 on t.third_party_id = p1.id
+        <where>
+            <!--项目ID-->
+            <if test="queryForm.projectId != null">
+                AND t.project_id = #{queryForm.projectId}
+            </if>
+        </where>
+    </select>
+    <select id="getDetail"
+            resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementTaskVO">
+        SELECT
+            t.*,p1.name as thirdPartyName
+        FROM t_measurement_task t
+                 left join t_third_party p1 on t.third_party_id = p1.id
+        WHERE t.id = #{id}
+    </select>
+
+
+</mapper>

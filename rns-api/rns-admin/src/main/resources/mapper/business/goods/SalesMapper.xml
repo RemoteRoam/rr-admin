@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.goods.dao.SalesDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.goods.domain.vo.SalesVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName
+        FROM t_sales t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        <where>
+            <!--销售单号-->
+            <if test="queryForm.salesNo != null and queryForm.salesNo != ''">
+                        AND INSTR(t.sales_no,#{queryForm.salesNo})
+            </if>
+            <!--销售类型-->
+            <if test="queryForm.salesType != null">
+                AND t.sales_type = #{queryForm.salesType}
+            </if>
+            <!--销售公司-->
+            <if test="queryForm.company != null">
+                AND t.company = #{queryForm.company}
+            </if>
+            <!--供货厂家-->
+            <if test="queryForm.supplier != null and queryForm.supplier != ''">
+                        AND INSTR(t.supplier,#{queryForm.supplier})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--销售经理ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--合同号-->
+            <if test="queryForm.contractNo != null and queryForm.contractNo != ''">
+                        AND INSTR(t.contract_no,#{queryForm.contractNo})
+            </if>
+            <!--合同日-->
+            <if test="queryForm.contractDateBegin != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &gt;= #{queryForm.contractDateBegin}
+            </if>
+            <if test="queryForm.contractDateEnd != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &lt;= #{queryForm.contractDateEnd}
+            </if>
+            <if test="queryForm.hasReceivedPayment != null and queryForm.hasReceivedPayment">
+                and t.received_payment_amount &gt; 0
+            </if>
+            <if test="queryForm.hasReceivedPayment != null and !queryForm.hasReceivedPayment">
+                and t.received_payment_amount is null
+            </if>
+        </where>
+        ORDER BY t.create_time DESC
+
+    </select>
+    <select id="detail" resultType="tech.remote.admin.module.business.goods.domain.vo.SalesVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName
+        FROM t_sales t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        where t.id = #{id}
+    </select>
+    <select id="getExcelExportData"
+            resultType="tech.remote.admin.module.business.goods.domain.vo.SalesExcelVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName,
+
+        CASE
+        WHEN t.sales_type = 1 THEN '厂家'
+        WHEN t.sales_type = 0 THEN '库存'
+        ELSE NULL
+        END AS salesTypeStr,
+        CASE
+        WHEN t.company = 1 THEN '天传诚通新能源科技（天津）有限公司'
+        WHEN t.company = 2 THEN '天津天传诚通科技发展有限公司'
+        ELSE NULL
+        END AS companyStr,
+        ca.category_name as categoryName,
+        g.goods_name as goodsName,
+        i.unit_price as unitPrice,
+        i.weight as weight
+
+        FROM t_sales t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        LEFT JOIN (select sales_id,category_id,goods_id,sum(weight) as weight,max(unit_price) as unit_price
+            from t_sales_item
+            group by sales_id,category_id,goods_id) as i on t.id = i.sales_id
+        LEFT JOIN t_category ca on i.category_id = ca.category_id
+        LEFT JOIN t_goods g on i.goods_id = g.goods_id
+        <where>
+            <!--销售单号-->
+            <if test="queryForm.salesNo != null and queryForm.salesNo != ''">
+                AND INSTR(t.sales_no,#{queryForm.salesNo})
+            </if>
+            <!--销售类型-->
+            <if test="queryForm.salesType != null">
+                AND t.sales_type = #{queryForm.salesType}
+            </if>
+            <!--销售公司-->
+            <if test="queryForm.company != null">
+                AND t.company = #{queryForm.company}
+            </if>
+            <!--供货厂家-->
+            <if test="queryForm.supplier != null and queryForm.supplier != ''">
+                AND INSTR(t.supplier,#{queryForm.supplier})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--销售经理ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--合同号-->
+            <if test="queryForm.contractNo != null and queryForm.contractNo != ''">
+                AND INSTR(t.contract_no,#{queryForm.contractNo})
+            </if>
+            <!--合同日-->
+            <if test="queryForm.contractDateBegin != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &gt;= #{queryForm.contractDateBegin}
+            </if>
+            <if test="queryForm.contractDateEnd != null">
+                AND DATE_FORMAT(t.contract_date, '%Y-%m-%d') &lt;= #{queryForm.contractDateEnd}
+            </if>
+            <if test="queryForm.hasReceivedPayment != null and queryForm.hasReceivedPayment">
+                and t.received_payment_amount &gt; 0
+            </if>
+            <if test="queryForm.hasReceivedPayment != null and !queryForm.hasReceivedPayment">
+                and t.received_payment_amount is null
+            </if>
+        </where>
+        ORDER BY t.create_time
+    </select>
+
+
+    <update id="batchUpdateDeleted">
+        update t_sales set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_sales set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+</mapper>

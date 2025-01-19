@@ -1,11 +1,11 @@
 /*
  * 通用常量
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-06 19:57:29
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 
 export const PAGE_SIZE = 10;
@@ -17,6 +17,9 @@ export const PAGE_PATH_LOGIN = '/login';
 
 //404页面名字
 export const PAGE_PATH_404 = '/404';
+
+//外部页面名字
+export const PAGE_PATH_PROGRESS = '/project/progress';
 
 export const showTableTotal = function (total) {
   return `共${total}条`;
@@ -53,7 +56,7 @@ export const USER_TYPE_ENUM = {
     value: 1,
     desc: '员工',
   },
-  
+
 };
 
 export const DATA_TYPE_ENUM = {
@@ -65,6 +68,92 @@ export const DATA_TYPE_ENUM = {
     value: 10,
     desc: '加密',
   },
-  
+
 };
 
+export const SOURCE_TYPE_ENUM = {
+  EXTERNAL: {
+    value: 1,
+    desc: '外部',
+  },
+  INTERNAL: {
+    value: 2,
+    desc: '内部',
+  },
+
+};
+
+export const PAY_PARTY_ENUM = {
+  EXTERNAL: {
+    value: 1,
+    desc: '客户',
+  },
+  INTERNAL: {
+    value: 2,
+    desc: '我方',
+  },
+
+};
+
+
+export const NODE_STATUS_ENUM = {
+  INIT: {
+    value: 0,
+    desc: '未开始',
+  },
+  DOING: {
+    value: 1,
+    desc: '处理中',
+  },
+  OK: {
+    value: 2,
+    desc: '完成',
+  },
+  JUMP: {
+    value: 3,
+    desc: '跳过',
+  },
+
+};
+
+
+export const PROJECT_STATUS_ENUM = {
+  // INIT: {
+  //   value: 0,
+  //   desc: '未开始',
+  // },
+  DOING: {
+    value: 1,
+    desc: '处理中',
+  },
+  DONE: {
+    value: 2,
+    desc: '已完成',
+  },
+
+};
+
+
+export const SALES_TYPE_ENUM = {
+  INVENTORY: {
+    value: 0,
+    desc: '库存',
+  },
+  MANUFACTURER: {
+    value: 1,
+    desc: '厂家',
+  },
+
+};
+
+
+export const SALES_COMPANY_ENUM = {
+  TCCTXNY: {
+    value: 1,
+    desc: '天传诚通新能源科技（天津）有限公司',
+  },
+  TCCT: {
+    value: 2,
+    desc: '天津天传诚通科技发展有限公司',
+  },
+};

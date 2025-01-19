@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.measurement.dao.MeasurementNodeDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementNodeVO">
+        SELECT
+        *
+        FROM t_measurement_node
+        <where>
+            <!--项目ID-->
+            <if test="queryForm.projectId != null">
+                AND t_measurement_node.project_id = #{queryForm.projectId}
+            </if>
+            <!--试验室任务ID-->
+            <if test="queryForm.taskId != null">
+                AND t_measurement_node.task_id = #{queryForm.taskId}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

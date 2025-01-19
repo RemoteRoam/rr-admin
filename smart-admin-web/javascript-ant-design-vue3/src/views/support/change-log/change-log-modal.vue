@@ -3,7 +3,7 @@
   *
   * @Author:    卓大
   * @Date:      2022-09-26 14:53:50
-  * @Copyright  1024创新实验室
+  * @Copyright  YY Studio
 -->
 <template>
   <a-modal title="更新日志" width="700px" :open="visibleFlag" @cancel="onClose">
@@ -22,23 +22,23 @@
   </a-modal>
 </template>
 <script setup>
-  import { ref } from 'vue';
+import { ref } from 'vue';
 
-  const visibleFlag = ref(false);
-  const content = ref('');
-  const link = ref('');
+const visibleFlag = ref(false);
+const content = ref('');
+const link = ref('');
 
-  function show(changeLog) {
-    content.value = changeLog.content;
-    link.value = changeLog.link;
-    visibleFlag.value = true;
-  }
+function show(changeLog) {
+  content.value = changeLog.content;
+  link.value = changeLog.link;
+  visibleFlag.value = true;
+}
 
-  function onClose() {
-    visibleFlag.value = false;
-  }
+function onClose() {
+  visibleFlag.value = false;
+}
 
-  defineExpose({
-    show,
-  });
+defineExpose({
+  show,
+});
 </script>

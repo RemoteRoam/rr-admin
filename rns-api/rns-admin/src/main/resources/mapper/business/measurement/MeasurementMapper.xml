@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.measurement.dao.MeasurementDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName
+        FROM t_measurement t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                        AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--负责人ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--状态-->
+            <if test="queryForm.status != null">
+                AND t.status = #{queryForm.status}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_measurement_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+
+    <!-- 预警分页查询 -->
+    <select id="queryAlarmPage" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName
+        FROM t_measurement t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--负责人ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_measurement_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+            <if test="queryForm.alarmTYPE == 7">
+                <!--仪器计量日期提前1个月预警-->
+                AND t.id in (
+                    select distinct m.project_id
+                    from t_measurement_task m
+                    where m.measurement_date &lt;=  DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+                    and m.measurement_date > CURDATE()
+                )
+            </if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <select id="getDetail" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementVO">
+        SELECT
+            t.*, c.customer_name as customerName, e.actual_name as managerName
+        FROM t_measurement t
+                 left join t_customer c on t.customer_id = c.customer_id
+                 LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        where t.id = #{id}
+    </select>
+
+
+    <update id="batchUpdateDeleted">
+        update t_measurement set deleted_flag = #{deletedFlag}
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDeleted">
+        update t_measurement set deleted_flag = #{deletedFlag}
+        where id = #{id}
+    </update>
+
+    <!-- 导出excel -->
+    <select id="selectExcelList" resultType="tech.remote.admin.module.business.measurement.domain.vo.MeasurementExcelVO">
+        SELECT
+        t.*, c.customer_name as customerName, e.actual_name as managerName,mt.*,p1.name as thirdPartyName
+        FROM t_measurement t
+        left join t_customer c on t.customer_id = c.customer_id
+        LEFT JOIN t_employee e ON t.manager_id = e.employee_id
+        left join t_measurement_task mt on t.id = mt.project_id
+        left join t_third_party p1 on mt.third_party_id = p1.id
+        <where>
+            t.deleted_flag = 0
+            <!--项目编号-->
+            <if test="queryForm.projectNo != null and queryForm.projectNo != ''">
+                AND INSTR(t.project_no,#{queryForm.projectNo})
+            </if>
+            <!--客户ID-->
+            <if test="queryForm.customerId != null">
+                AND t.customer_id = #{queryForm.customerId}
+            </if>
+            <!--负责人ID-->
+            <if test="queryForm.managerId != null">
+                AND t.manager_id = #{queryForm.managerId}
+            </if>
+            <!--操作人-->
+            <if test="queryForm.createUserId != null">
+                AND t.id in (
+                SELECT distinct n.project_id
+                from t_measurement_node n
+                where operate_user_id = #{queryForm.createUserId}
+                )
+            </if>
+            <!--创建时间-->
+            <if test="queryForm.createTimeBegin != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= #{queryForm.createTimeBegin}
+            </if>
+            <if test="queryForm.createTimeEnd != null">
+                AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= #{queryForm.createTimeEnd}
+            </if>
+        </where>
+        order by t.id, mt.id
+    </select>
+</mapper>

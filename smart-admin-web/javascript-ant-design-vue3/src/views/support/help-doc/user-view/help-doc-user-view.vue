@@ -1,11 +1,11 @@
 <!--
   * 帮助文档详情
   * 
-  * @Author:    1024创新实验室-主任：卓大
+  * @Author:    YY Studio
   * @Date:      2022-07-21 21:55:12
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <a-card size="small" :bordered="false">
@@ -27,7 +27,9 @@
       <!--endprint-->
     </div>
     <a-divider v-if="helpDocDetail.attachment && helpDocDetail.attachment.length > 0" />
-    <div v-if="helpDocDetail.attachment && helpDocDetail.attachment.length > 0">附件：<FilePreview :fileList="helpDocDetail.attachment" /></div>
+    <div v-if="helpDocDetail.attachment && helpDocDetail.attachment.length > 0">附件：
+      <FilePreview :fileList="helpDocDetail.attachment" />
+    </div>
   </a-card>
 
   <a-card title="阅读记录" size="small" class="smart-margin-top10" :bordered="false">
@@ -103,23 +105,28 @@ function print() {
   flex: 1;
   overflow: hidden;
 }
+
 .file-list {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+
   .file-item {
     display: block;
     margin-right: 10px;
   }
 }
+
 .visible-list {
   display: flex;
   flex-wrap: wrap;
+
   .visible-item {
     margin-right: 10px;
     color: #666;
   }
 }
+
 .content-header {
   .content-header-title {
     margin: 10px 0px;
@@ -127,22 +134,26 @@ function print() {
     font-weight: bold;
     text-align: center;
   }
+
   .content-header-info {
     margin: 10px 0px;
     font-size: 14px;
     color: #888;
     text-align: center;
+
     span {
       margin: 0 10px;
       cursor: pointer;
     }
   }
 }
+
 .content-html {
   margin-top: 30px;
   padding: 0 8px;
   line-height: 28px;
-    font-size: 14px;
+  font-size: 14px;
+
   img {
     max-width: 100%;
   }

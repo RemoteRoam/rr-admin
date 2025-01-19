@@ -1,11 +1,11 @@
 <!--
   * 通知  查看记录
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-08-21 19:52:43 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <div>
@@ -35,7 +35,8 @@
         </a-form-item>
       </a-row>
     </a-form>
-    <a-table rowKey="employeeId" :columns="tableColumns" :dataSource="tableData" :pagination="false" :loading="tableLoading" size="small" bordered>
+    <a-table rowKey="employeeId" :columns="tableColumns" :dataSource="tableData" :pagination="false"
+      :loading="tableLoading" size="small" bordered>
       <template #bodyCell="{ column, record, text }">
         <template v-if="column.dataIndex === 'employeeName'"> {{ text }}({{ record.departmentName }}) </template>
         <template v-if="column.dataIndex === 'firstIp'"> {{ text }} ({{ record.firstDevice }}) </template>
@@ -43,19 +44,10 @@
       </template>
     </a-table>
     <div class="smart-query-table-page">
-      <a-pagination
-        showSizeChanger
-        showQuickJumper
-        show-less-items
-        :pageSizeOptions="PAGE_SIZE_OPTIONS"
-        :defaultPageSize="queryForm.pageSize"
-        v-model:current="queryForm.pageNum"
-        v-model:pageSize="queryForm.pageSize"
-        :total="total"
-        @change="queryViewRecord"
-        @showSizeChange="queryViewRecord"
-        :show-total="(total) => `共${total}条`"
-      />
+      <a-pagination showSizeChanger showQuickJumper show-less-items :pageSizeOptions="PAGE_SIZE_OPTIONS"
+        :defaultPageSize="queryForm.pageSize" v-model:current="queryForm.pageNum" v-model:pageSize="queryForm.pageSize"
+        :total="total" @change="queryViewRecord" @showSizeChange="queryViewRecord"
+        :show-total="(total) => `共${total}条`" />
     </div>
   </div>
 </template>

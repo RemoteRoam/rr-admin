@@ -1,18 +1,18 @@
 /*
  * 路由
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-06 20:52:04
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 import nProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { nextTick } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { routerArray } from './routers';
-import { PAGE_PATH_404, PAGE_PATH_LOGIN } from '/@/constants/common-const';
+import { PAGE_PATH_404, PAGE_PATH_LOGIN, PAGE_PATH_PROGRESS } from '/@/constants/common-const';
 import { HOME_PAGE_NAME } from '/@/constants/system/home-const';
 import SmartLayout from '../layout/index.vue';
 import { useUserStore } from '/@/store/modules/system/user';
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
   nProgress.start();
 
   // 公共页面，任何时候都可以跳转
-  if (to.path === PAGE_PATH_404 || to.path === PAGE_PATH_LOGIN) {
+  if (to.path === PAGE_PATH_404 || to.path === PAGE_PATH_LOGIN || to.path === PAGE_PATH_PROGRESS) {
     next();
     return;
   }

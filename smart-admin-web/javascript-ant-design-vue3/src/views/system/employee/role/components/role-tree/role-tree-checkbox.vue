@@ -1,11 +1,11 @@
 <!--
   * 角色 
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-09-12 22:34:00 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
   *
 -->
 <template>
@@ -22,28 +22,28 @@
   </div>
 </template>
 <script setup>
-  import { ref, watch } from 'vue';
-  import { useRoleStore } from '/@/store/modules/system/role';
-  import RoleTreeMenu from '../role-tree/role-tree-menu.vue';
+import { ref, watch } from 'vue';
+import { useRoleStore } from '/@/store/modules/system/role';
+import RoleTreeMenu from '../role-tree/role-tree-menu.vue';
 
-  let props = defineProps({
-    tree: {
-      type: Array,
-      default: [],
-    },
-  });
-  defineEmits(['update:value']);
+let props = defineProps({
+  tree: {
+    type: Array,
+    default: [],
+  },
+});
+defineEmits(['update:value']);
 
-  let roleStore = useRoleStore();
-  let checkedData = ref();
-  watch(
-    () => roleStore.checkedData,
-    (e) => (checkedData.value = e),
-    {
-      deep: true,
-    }
-  );
+let roleStore = useRoleStore();
+let checkedData = ref();
+watch(
+  () => roleStore.checkedData,
+  (e) => (checkedData.value = e),
+  {
+    deep: true,
+  }
+);
 </script>
 <style scoped lang="less">
-  @import './index.less';
+@import './index.less';
 </style>

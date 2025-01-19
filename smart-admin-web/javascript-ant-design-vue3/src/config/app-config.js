@@ -1,11 +1,11 @@
 /*
  * 应用默认配置
  *
- * @Author:    1024创新实验室-主任：卓大
+ * @Author:    YY Studio
  * @Date:      2022-09-03 22:07:01
  * @Wechat:    zhuda1024
  * @Email:     lab1024@163.com
- * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012
+ * @Copyright  YY Studio
  */
 export const appDefaultConfig = {
   // i18n 语言选择
@@ -27,11 +27,11 @@ export const appDefaultConfig = {
   // 页脚
   footerFlag: true,
   // 帮助文档
-  helpDocFlag: true,
+  helpDocFlag: false,
   // 水印
   watermarkFlag: true,
   // 网站名称
-  websiteName: 'SmartAdmin 3.X',
+  websiteName: '天传樱科管理后台',
   // 主题颜色
   primaryColor: 'red',
   // 紧凑

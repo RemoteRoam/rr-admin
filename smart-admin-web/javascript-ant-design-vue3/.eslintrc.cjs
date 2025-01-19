@@ -16,6 +16,15 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12, // 默认情况下，ESLint使用的是ECMAScript5语法，此处我们设置的选项是 es12
     sourceType: 'module', // 指定js导入的方式
+    parser: {
+      js: '@babel/eslint-parser',
+      jsx: '@babel/eslint-parser',
+
+      ts: '@typescript-eslint/parser',
+      tsx: '@typescript-eslint/parser',
+
+      // Leave the template parser unspecified, so that it could be determined by `<script lang="...">`
+    },
   },
   extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:vue/base'],
   globals: {

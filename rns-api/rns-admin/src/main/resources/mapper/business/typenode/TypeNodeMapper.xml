@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.remote.admin.module.business.typenode.dao.TypeNodeDao">
+
+    <!-- 分页查询 -->
+    <select id="queryPage" resultType="tech.remote.admin.module.business.typenode.domain.vo.TypeNodeVO">
+        SELECT
+        *
+        FROM t_type_node
+        <where>
+            <!--项目类型-->
+            <if test="queryForm.projectType != null">
+                AND t_type_node.project_type = #{queryForm.projectType}
+            </if>
+        </where>
+    </select>
+
+    <select id="list" resultType="tech.remote.admin.module.business.typenode.domain.vo.TypeNodeListVO">
+        select
+            t.id,
+            t.project_type,
+            t.node_id,
+            n.node_code,
+            n.node_name,
+            n.node_level,
+            t.node_sort
+        from t_type_node t, t_node n
+        where t.node_id = n.id
+          and t.project_type = #{query.projectType}
+        <if test="query.nodeLevel != null">
+          and n.node_level = #{query.nodeLevel}
+        </if>
+        order by t.node_sort
+    </select>
+
+</mapper>

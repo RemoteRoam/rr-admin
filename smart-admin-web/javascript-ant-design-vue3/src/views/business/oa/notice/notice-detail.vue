@@ -1,11 +1,11 @@
 <!--
   * 通知  详情
   * 
-  * @Author:    1024创新实验室-主任：卓大 
+  * @Author:    YY Studio 
   * @Date:      2022-08-21 19:52:43 
   * @Wechat:    zhuda1024 
   * @Email:     lab1024@163.com 
-  * @Copyright  1024创新实验室 （ https://1024lab.net ），Since 2012 
+  * @Copyright  YY Studio 
 -->
 <template>
   <a-card style="margin-bottom: 15px" size="small">
@@ -25,7 +25,8 @@
       <a-descriptions-item label="删除状态">{{ noticeDetail.deletedFlag ? '已删除' : '未删除' }}</a-descriptions-item>
       <a-descriptions-item v-if="!$lodash.isEmpty(noticeDetail.attachment)" label="附件">
         <div class="file-list">
-          <a class="file-item" v-for="item in noticeDetail.attachment" :key="item.fileId" @click="onPrevFile(item)">{{ item.fileName }}</a>
+          <a class="file-item" v-for="item in noticeDetail.attachment" :key="item.fileId" @click="onPrevFile(item)">{{
+            item.fileName }}</a>
         </div>
       </a-descriptions-item>
       <a-descriptions-item label="可见范围" :span="2">
@@ -119,23 +120,28 @@ function onPrevFile(fileItem) {
   flex: 1;
   overflow: hidden;
 }
+
 .file-list {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+
   .file-item {
     display: block;
     margin-right: 10px;
   }
 }
+
 .visible-list {
   display: flex;
   flex-wrap: wrap;
+
   .visible-item {
     margin-right: 10px;
     color: #666;
   }
 }
+
 .content-html {
   img {
     max-width: 100%;
